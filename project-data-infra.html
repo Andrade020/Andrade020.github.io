@@ -52,19 +52,27 @@
 
     <div class="detail-section">
         <h2>Data sources integrated</h2>
+        <p>Two production DAGs handle ingestion: <strong>porto_auto</strong> (custodian data) and <strong>dag_macro_data_downloader</strong> (public macro sources) — 13 sources in total.</p>
         <ul class="feature-list">
-            <li><strong>Vórtx Custodian</strong> — daily portfolio positions, cash flow projections, and asset master data (FIDC)</li>
-            <li><strong>Qore Risk System</strong> — aging reports, risk metrics, and portfolio analytics</li>
-            <li><strong>B3</strong> — reference rates (DI, IPCA, SELIC), curve data, and benchmark prices</li>
-            <li><strong>BACEN / BCB</strong> — macro indicators via API (SELIC, IPCA, USD/BRL)</li>
-            <li><strong>PDF Documents</strong> — 5,000+ Bank Credit Notes (CCBs) extracted automatically</li>
-            <li><strong>Internal Sources</strong> — manual credit analysis, risk classifications, portfolio decisions</li>
+            <li><strong>Vórtx Custodian API · CARTEIRA</strong> — daily fund portfolio positions, asset master data, and FIDC quota balances</li>
+            <li><strong>Vórtx Custodian API · DOCS</strong> — credit document registry and CCB metadata</li>
+            <li><strong>Vórtx Custodian API · DEMONSTRATIVO_CAIXA</strong> — daily cash flow statements per sub-fund</li>
+            <li><strong>Vórtx Custodian API · EXTRATO_BANCARIO</strong> — bank account transaction history</li>
+            <li><strong>CVM</strong> — regulatory filings and FIDC registrations via open data portal</li>
+            <li><strong>BCB / BACEN</strong> — SELIC target rate, DI projections, FX rates, and macro series</li>
+            <li><strong>IBGE</strong> — inflation indices (IPCA, INPC) and national accounts data</li>
+            <li><strong>Tesouro Direto</strong> — government bond reference prices and yield curves</li>
+            <li><strong>CAGED</strong> — formal employment data for macroeconomic context</li>
+            <li><strong>TSE</strong> — public electoral and political data</li>
+            <li><strong>INMET</strong> — historical climate and weather data</li>
+            <li><strong>B3</strong> — DI futures curve data, reference rates, and benchmark prices for fixed income pricing</li>
+            <li><strong>CCB PDF Documents</strong> — 5,000+ Bank Credit Notes extracted automatically by the PDF pipeline</li>
         </ul>
     </div>
 
     <div class="detail-section">
         <h2>Pipeline architecture</h2>
-        <p>All pipelines are orchestrated by Apache Airflow running in Docker. DAGs are versioned in Git alongside the rest of the codebase. Each pipeline runs on a schedule (daily at 07:00) and is idempotent — safe to re-run on failure.</p>
+        <p>All pipelines are orchestrated by Apache Airflow running in Docker. DAGs are versioned in Git alongside the rest of the codebase. Each pipeline runs on a daily schedule and is idempotent — safe to re-run on failure. An intelligent backfill system detects missing business days and automatically recovers data gaps without duplicating records, handling weekends, Brazilian holidays, and API outages gracefully.</p>
         <div class="code-block">Data Sources → Airflow DAGs → Structured Storage → Risk Dashboard
                                     ↓
                           PDF Extraction Pipeline
@@ -88,7 +96,7 @@
 
     <div class="detail-section">
         <h2>Internal dashboard</h2>
-        <p>A web application (FastAPI backend + React frontend) consumed by the investment team and portfolio managers. Provides interactive views of portfolio positions, risk metrics, and aging analysis — replacing manual Excel workflows.</p>
+        <p>A Flask + Jinja2 internal web application consumed by the investment team and portfolio managers. Three dedicated views cover the fund's operational needs: <strong>Posição de Ativos</strong> (live portfolio positions with pricing and risk metrics), <strong>Cotas</strong> (daily NAV and fund quota tracking), and <strong>Adm Mudanças</strong> (administrative change log for positions, classifications, and renegotiations) — replacing manual Excel workflows entirely.</p>
     </div>
 
     <div class="detail-section">
@@ -98,8 +106,8 @@
             <span class="tag">Apache Airflow</span>
             <span class="tag">Docker</span>
             <span class="tag">PostgreSQL / SQLite</span>
-            <span class="tag">FastAPI</span>
-            <span class="tag">React</span>
+            <span class="tag">Flask</span>
+            <span class="tag">Jinja2</span>
             <span class="tag">pandas</span>
             <span class="tag">pdfplumber</span>
             <span class="tag">scikit-learn</span>

@@ -54,7 +54,7 @@
             <div class="taglines">
                 <p>Data Engineer</p>
                 <p>MSc Applied Mathematics</p>
-                <p>Building from scratch</p>
+                <p>One engineer. Entire stack.</p>
             </div>
         </div>
         <div>
@@ -65,25 +65,26 @@
             <div class="bio">
                 <p>
                     I am a <strong>Data Engineer</strong> specializing in <strong>Financial Risk</strong> and
-                    <strong>Credit Analytics</strong>. I joined Porto Real Asset as the first data professional and
-                    built the entire data infrastructure from scratch — from version control to production pipelines
-                    that deliver daily risk reports to the investment team.
+                    <strong>Credit Analytics</strong>. I joined Porto Real Asset as the first — and only — data
+                    professional and built the entire infrastructure from scratch: 2 production Airflow DAGs
+                    integrating 13 data sources, delivering daily risk reports to the investment team.
                 </p>
                 <p>
-                    My work spans the full data lifecycle: ingestion, transformation, storage, and delivery. I have
-                    built automated pipelines processing 1.5 GB+ datasets, extraction systems for 5,000+ PDF
-                    documents, and ML models for credit risk explainability using SHAP.
+                    The pipelines consume 4 Vórtx custodian API streams (fund positions, cash flows, documents,
+                    bank statements) and 9 public macro feeds (CVM, BCB, IBGE, Tesouro Direto, CAGED, INMET,
+                    and others). Results are surfaced through a <strong>Flask + Jinja2</strong> internal dashboard
+                    with three operational views: portfolio positions, fund quotas, and administrative controls.
+                </p>
+                <p>
+                    Alongside the pipelines: a PDF extraction system for 5,000+ Bank Credit Notes (CCBs), ML
+                    credit risk models with SHAP explainability, and a fixed income pricing library following
+                    ANBIMA conventions — all running in production.
                 </p>
                 <p>
                     I hold a <strong>Master's degree in Applied Mathematics</strong> from
                     <a href="https://emap.fgv.br/" target="_blank">FGV EMAp</a>, where my research focused on
                     estimation of spatiotemporal Poisson processes with missing location data — now
                     <a href="publications.html">published in Nature Scientific Reports</a>.
-                </p>
-                <p>
-                    Stack: <strong>Python</strong>, <strong>SQL</strong>, <strong>Apache Airflow</strong>,
-                    <strong>Docker</strong>, <strong>Linux</strong>. Domain expertise in FIDCs, fixed income
-                    pricing, and credit risk analysis.
                 </p>
             </div>
         </div>
@@ -93,20 +94,20 @@
         <h2>Impact Metrics</h2>
         <div class="metrics-grid">
             <div class="metric-card">
-                <span class="metric-number">1.5 GB+</span>
-                <span class="metric-label">Datasets Processed Daily</span>
+                <span class="metric-number">13</span>
+                <span class="metric-label">Integrated Data Sources</span>
             </div>
             <div class="metric-card">
                 <span class="metric-number">5,000+</span>
-                <span class="metric-label">PDFs Extracted Automatically</span>
+                <span class="metric-label">CCBs Auto-Extracted</span>
             </div>
             <div class="metric-card">
-                <span class="metric-number">30+</span>
-                <span class="metric-label">Data Fields per Document</span>
+                <span class="metric-number">2</span>
+                <span class="metric-label">Production Airflow DAGs</span>
             </div>
             <div class="metric-card">
-                <span class="metric-number">100%</span>
-                <span class="metric-label">Infrastructure Built from Scratch</span>
+                <span class="metric-number">1</span>
+                <span class="metric-label">Engineer Who Built It All</span>
             </div>
         </div>
     </section>
@@ -133,7 +134,7 @@
         <div class="experience-item">
             <h3>Data Engineer | Risk Analytics</h3>
             <p class="experience-meta">Porto Real Asset · Feb 2025 – Present · Remote</p>
-            <p>First data professional at a credit asset manager. Built complete data infrastructure from scratch: ETL pipelines with Airflow, large-scale PDF extraction from CCBs, ML models for default risk analysis with SHAP explainability, internal risk reporting dashboard, and financial calculators for Brazilian fixed income pricing.</p>
+            <p>First data professional at a credit asset manager. Designed and built the entire data infrastructure: 2 production Airflow DAGs integrating 13 sources (4 Vórtx custodian API streams + 9 macro feeds), automated PDF extraction for 5,000+ CCBs, ML credit risk models with SHAP explainability, a Flask + Jinja2 internal dashboard, and fixed income pricing calculators following ANBIMA conventions.</p>
         </div>
         <div class="experience-item">
             <h3>Lab Technician Intern</h3>
@@ -184,7 +185,7 @@
             </div>
             <div class="skill-category">
                 <h3>Infrastructure</h3>
-                <p>Linux, Docker, Git, GitHub, FastAPI</p>
+                <p>Linux, Docker, Git, GitHub, Flask</p>
             </div>
             <div class="skill-category">
                 <h3>Finance Domain</h3>
