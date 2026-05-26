@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Teoria · Ferramentas e Fundamentos · Macro Dinâmica</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+  <style>
+    :root {
+      --bg:#f7f4ef; --surface:#ffffff; --surface-2:#f2ede5;
+      --border:#e4dcd0; --border-light:#cfc6ba;
+      --accent:#ad5f2b; --accent-dim:#c8854d; --accent-glow:rgba(173,95,43,0.08);
+      --teal:#2e7d72; --teal-dim:#4a9d92; --teal-glow:rgba(46,125,114,0.07);
+      --green:#3a7a50; --green-glow:rgba(58,122,80,0.07);
+      --text:#1a1510; --text-muted:#6b5b4a; --text-dim:#b0a090;
+      --radius:8px; --radius-sm:5px;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;font-size:16px;}
+
+    /* ── Nav ── */
+    .top-nav{position:sticky;top:0;z-index:100;background:rgba(247,244,239,0.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:52px;}
+    .nav-title{font-family:'Crimson Pro',serif;font-size:1rem;color:var(--accent);}
+    .nav-toc{display:flex;gap:1.4rem;list-style:none;}
+    .nav-toc a{font-size:0.73rem;color:var(--text-dim);text-decoration:none;font-family:'Inter',sans-serif;transition:color 0.15s;}
+    .nav-toc a:hover{color:var(--accent);}
+
+    /* ── Intro ── */
+    .intro{max-width:700px;margin:0 auto;padding:4.5rem 2rem 2.5rem;}
+    .intro-eyebrow{font-size:0.67rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);margin-bottom:1.1rem;}
+    .intro h1{font-family:'Crimson Pro',serif;font-size:clamp(2rem,4vw,2.8rem);font-weight:400;color:var(--text);line-height:1.2;margin-bottom:1.2rem;}
+    .intro-body{font-family:'Crimson Pro',serif;font-size:1.07rem;color:var(--text-muted);line-height:1.88;max-width:560px;}
+    .intro-body p+p{margin-top:0.8rem;}
+    .intro-divider{width:36px;height:1px;background:var(--border-light);margin:2rem 0;}
+    .toc-list{list-style:none;display:flex;flex-direction:column;gap:0.3rem;}
+    .toc-item{display:flex;gap:0.75rem;align-items:baseline;}
+    .toc-num{font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--accent);width:1.2rem;flex-shrink:0;}
+    .toc-link{font-family:'Crimson Pro',serif;font-size:1rem;color:var(--text-muted);text-decoration:none;border-bottom:1px solid transparent;transition:border-color 0.15s,color 0.15s;}
+    .toc-link:hover{color:var(--accent);border-bottom-color:var(--accent-dim);}
+    .toc-part{font-family:'Inter',sans-serif;font-size:0.62rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-dim);padding:0.6rem 0 0.2rem;border-top:1px solid var(--border);margin-top:0.4rem;}
+
+    /* ── Part divider ── */
+    .part-banner{max-width:700px;margin:4rem auto 0;padding:0 2rem;}
+    .part-inner{background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--accent);border-radius:var(--radius);padding:1.5rem 1.8rem;}
+    .part-label{font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--accent-dim);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:0.4rem;}
+    .part-title{font-family:'Crimson Pro',serif;font-size:1.6rem;color:var(--text);font-weight:400;line-height:1.25;margin-bottom:0.5rem;}
+    .part-desc{font-family:'Crimson Pro',serif;font-size:1rem;color:var(--text-muted);line-height:1.8;max-width:520px;}
+
+    /* ── Section ── */
+    .section{max-width:700px;margin:0 auto;padding:0 2rem;}
+    .section-header{padding:3rem 0 1.6rem;border-top:1px solid var(--border);}
+    .section-num{font-family:'JetBrains Mono',monospace;font-size:0.67rem;color:var(--accent);margin-bottom:0.3rem;display:block;}
+    .section-header h2{font-family:'Crimson Pro',serif;font-size:1.45rem;font-weight:400;color:var(--text);}
+    .prose{font-family:'Crimson Pro',serif;font-size:1.06rem;color:var(--text-muted);line-height:1.87;}
+    .prose p+p{margin-top:0.75rem;}
+    .prose strong{color:var(--text);font-weight:600;}
+
+    /* ── Call-out boxes ── */
+    .box{border-radius:var(--radius-sm);padding:1rem 1.2rem;margin:1.1rem 0;overflow:hidden;}
+    .box-label{font-family:'Inter',sans-serif;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.15em;display:block;margin-bottom:0.35rem;}
+    .box-body{font-family:'Crimson Pro',serif;font-size:1.02rem;line-height:1.82;}
+    .box-body p+p{margin-top:0.6rem;}
+
+    /* Theorem (amber) */
+    .box-thm{background:#fdf6ef;border:1px solid rgba(173,95,43,0.2);border-left:3px solid var(--accent);}
+    .box-thm .box-label{color:var(--accent);}
+    .box-thm .box-body{color:var(--text);}
+
+    /* Intuition (teal) */
+    .box-int{background:var(--teal-glow);border:1px solid rgba(46,125,114,0.2);border-left:3px solid var(--teal);}
+    .box-int .box-label{color:var(--teal);}
+    .box-int .box-body{color:var(--text-muted);}
+
+    /* Example (green) */
+    .box-ex{background:var(--green-glow);border:1px solid rgba(58,122,80,0.2);border-left:3px solid var(--green);}
+    .box-ex .box-label{color:var(--green);}
+    .box-ex .box-body{color:var(--text-muted);}
+
+    /* Rule (neutral warm) */
+    .box-rule{background:var(--surface-2);border:1px solid var(--border);border-left:3px solid var(--border-light);}
+    .box-rule .box-label{color:var(--text-dim);}
+    .box-rule .box-body{color:var(--text);}
+
+    /* ── Equations ── */
+    .eq{margin:1rem 0;text-align:center;overflow-x:auto;padding:0.3rem 0;}
+    .eq .katex-display{margin:0;}
+    .eq-inline{display:inline;}
+
+    /* ── Light derivation block ── */
+    .deriv{background:#faf8f4;border:1px solid var(--border);border-left:3px solid var(--accent-dim);border-radius:var(--radius-sm);margin:0.9rem 0;padding:0.9rem 1.2rem;}
+    .dline{font-family:'Crimson Pro',serif;font-size:1.01rem;color:var(--text-muted);line-height:1.82;padding:0.28rem 0;}
+    .dline+.dline{border-top:1px dashed var(--border);}
+    .dline.comment{font-style:italic;color:var(--text-dim);font-size:0.93em;}
+    .dline.result{color:var(--text);font-weight:600;border-top:1px solid var(--border-light) !important;padding-top:0.45rem;}
+    .deriv .eq{margin:0.45rem 0;}
+
+    /* ── Numerical accuracy table ── */
+    .num-table{width:100%;border-collapse:collapse;font-family:'JetBrains Mono',monospace;font-size:0.81rem;margin:0.8rem 0;}
+    .num-table th{text-align:center;padding:0.35rem 0.7rem;font-family:'Inter',sans-serif;font-size:0.61rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--text-dim);border-bottom:2px solid var(--border);font-weight:500;}
+    .num-table td{text-align:center;padding:0.42rem 0.7rem;border-bottom:1px dashed var(--border);color:var(--text-muted);}
+    .num-table tr:last-child td{border-bottom:none;}
+    .num-table .hi{color:var(--accent);}
+    .num-table .ok{color:var(--green);}
+    /* ── Solution label ── */
+    .sol-label{font-size:0.6rem;text-transform:uppercase;letter-spacing:0.14em;color:var(--teal);font-family:'Inter',sans-serif;display:block;margin:0.75rem 0 0.25rem;}
+
+    /* ── Rules table ── */
+    .rule-table{width:100%;border-collapse:collapse;margin:1.1rem 0;font-family:'Crimson Pro',serif;font-size:0.98rem;}
+    .rule-table th{text-align:left;padding:0.45rem 0.8rem;font-family:'Inter',sans-serif;font-size:0.64rem;text-transform:uppercase;letter-spacing:0.13em;color:var(--text-dim);border-bottom:2px solid var(--border);font-weight:500;}
+    .rule-table td{padding:0.55rem 0.8rem;border-bottom:1px dashed var(--border);vertical-align:top;line-height:1.6;}
+    .rule-table tr:last-child td{border-bottom:none;}
+    .rule-table .rn{font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--accent);white-space:nowrap;}
+    .rule-table .rf{color:var(--text);}
+    .rule-table .re{color:var(--text-muted);font-size:0.9rem;}
+
+    /* ── Figure ── */
+    .fig-wrap{margin:1.4rem auto;display:block;max-width:420px;}
+    .fig-caption{text-align:center;font-family:'Crimson Pro',serif;font-style:italic;font-size:0.88rem;color:var(--text-dim);margin-top:0.4rem;}
+
+    /* ── Takeaway ── */
+    .takeaway{background:var(--surface);border:1px solid var(--border);border-top:2px solid var(--accent);border-radius:var(--radius);padding:1.1rem 1.3rem;margin:1.5rem 0;}
+    .takeaway-label{font-size:0.6rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--accent);font-family:'Inter',sans-serif;margin-bottom:0.4rem;display:block;}
+    .takeaway p{font-family:'Crimson Pro',serif;font-size:1.02rem;color:var(--text);line-height:1.82;}
+
+    /* ── Connection banner ── */
+    .conn{background:var(--teal-glow);border:1px solid rgba(46,125,114,0.2);border-radius:var(--radius-sm);padding:0.8rem 1.1rem;margin:1.2rem 0;display:flex;gap:0.8rem;align-items:flex-start;}
+    .conn-icon{color:var(--teal);font-size:0.72rem;font-family:'JetBrains Mono',monospace;white-space:nowrap;padding-top:0.08rem;}
+    .conn-text{font-family:'Crimson Pro',serif;font-size:0.96rem;color:var(--text-muted);line-height:1.75;}
+    .conn-text strong{color:var(--teal);}
+
+    /* ── Footer ── */
+    .page-footer{max-width:700px;margin:5rem auto 0;padding:2rem 2rem 4rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;font-size:0.76rem;color:var(--text-dim);flex-wrap:wrap;gap:0.5rem;}
+
+    @media(max-width:640px){
+      .top-nav{padding:0 1.2rem;}
+      .nav-toc{display:none;}
+      .intro,.section,.part-banner{padding-left:1.2rem;padding-right:1.2rem;}
+    }
+  </style>
+</head>
+<div id="back-nav-lab" style="position:fixed;top:12px;left:16px;z-index:9999;"><a href="lab.html" style="color:#94a3b8;text-decoration:none;font-family:monospace;font-size:12px;background:rgba(15,23,42,0.85);padding:4px 10px;border-radius:20px;border:1px solid rgba(56,189,248,0.3);backdrop-filter:blur(8px);transition:color 0.2s;">← Lab</a></div><body>
+
+<nav class="top-nav">
+  <span class="nav-title">Teoria · Macroeconomia Dinâmica</span>
+  <ul class="nav-toc">
+    <li><a href="#parte1">Ferramentas Matemáticas</a></li>
+    <li><a href="#parte2">Teoria Econômica</a></li>
+  </ul>
+</nav>
+
+<div class="intro">
+  <p class="intro-eyebrow">Macroeconomia Avançada · Material de Apoio</p>
+  <h1>Fundamentos Teóricos<br>da Lista II</h1>
+  <div class="intro-body">
+    <p>Esta aula cobre os instrumentos que estão por baixo dos exercícios. A Parte I trata das ferramentas matemáticas: a desigualdade de Jensen e a técnica de log-linearização. A Parte II trata da teoria econômica: poupança precaucionária, a equação de Euler, o modelo RBC e as propriedades do modelo de Romer.</p>
+    <p>As duas partes são independentes. Se você já domina a matemática, vá direto à Parte II. Se a teoria estiver clara mas a mecânica das derivações for o problema, fique na Parte I.</p>
+  </div>
+  <div class="intro-divider"></div>
+  <ul class="toc-list">
+    <li class="toc-part">Parte I · Ferramentas Matemáticas</li>
+    <li class="toc-item"><span class="toc-num">1</span><a class="toc-link" href="#s1">Desigualdade de Jensen</a></li>
+    <li class="toc-item"><span class="toc-num">2</span><a class="toc-link" href="#s2">Log-Linearização: fundamentos</a></li>
+    <li class="toc-item"><span class="toc-num">3</span><a class="toc-link" href="#s3">Regras práticas de log-linearização</a></li>
+    <li class="toc-item"><span class="toc-num">3b</span><a class="toc-link" href="#s3b">Aproximações: catálogo e acurácia</a></li>
+    <li class="toc-item"><span class="toc-num">3c</span><a class="toc-link" href="#s3c">Exercícios de fixação · Parte I</a></li>
+    <li class="toc-part">Parte II · Teoria Econômica</li>
+    <li class="toc-item"><span class="toc-num">4</span><a class="toc-link" href="#s4">Poupança precaucionária</a></li>
+    <li class="toc-item"><span class="toc-num">5</span><a class="toc-link" href="#s5">Trajetória de crescimento equilibrado e Euler</a></li>
+    <li class="toc-item"><span class="toc-num">6</span><a class="toc-link" href="#s6">O modelo RBC: mecanismo e limites</a></li>
+    <li class="toc-item"><span class="toc-num">7</span><a class="toc-link" href="#s7">O modelo de Romer: por que as propriedades surgem</a></li>
+  </ul>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     PARTE I
+══════════════════════════════════════════════ -->
+<div id="parte1" class="part-banner">
+  <div class="part-inner">
+    <p class="part-label">Parte I</p>
+    <p class="part-title">Ferramentas Matemáticas</p>
+    <p class="part-desc">Dois instrumentos que aparecem repetidamente na macro dinâmica: a desigualdade de Jensen e a técnica de log-linearização. Entender a mecânica torna os exercícios transparentes.</p>
+  </div>
+</div>
+
+<!-- ─── SEÇÃO 1: Jensen ─── -->
+<div id="s1" class="section">
+  <div class="section-header">
+    <span class="section-num">1</span>
+    <h2>Desigualdade de Jensen</h2>
+  </div>
+
+  <div class="prose">
+    <p>A desigualdade de Jensen é um dos resultados mais usados em teoria da decisão sob incerteza. Em uma linha: <strong>o valor esperado de uma função não-linear de uma variável aleatória não é igual à função aplicada ao valor esperado.</strong> A direção da desigualdade depende da curvatura da função.</p>
+  </div>
+
+  <div class="box box-thm" style="margin-top:1.3rem;">
+    <span class="box-label">Teorema de Jensen</span>
+    <div class="box-body">
+      <p>Seja $f$ uma função mensurável e $X$ uma variável aleatória. Então:</p>
+      <div class="eq">$$f \text{ convexa} \;\Rightarrow\; \mathbb{E}[f(X)] \;\geq\; f(\mathbb{E}[X])$$</div>
+      <div class="eq">$$f \text{ côncava} \;\Rightarrow\; \mathbb{E}[f(X)] \;\leq\; f(\mathbb{E}[X])$$</div>
+      <p>A igualdade vale quando $f$ é linear, ou quando $X$ é constante (sem aleatoriedade).</p>
+    </div>
+  </div>
+
+  <div class="box box-int" style="margin-top:1rem;">
+    <span class="box-label">Intuição geométrica</span>
+    <div class="box-body">
+      <p>Para uma função convexa: a corda entre quaisquer dois pontos fica <em>acima</em> da curva. O valor esperado $\mathbb{E}[f(X)]$ é a média dos valores na curva, que corresponde a um ponto na corda. A função avaliada na média, $f(\mathbb{E}[X])$, é um ponto na curva. Como a corda fica acima da curva, a esperança da função supera a função da esperança.</p>
+    </div>
+  </div>
+
+  <div class="fig-wrap">
+    <svg viewBox="0 0 300 195" style="width:100%;display:block;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);" aria-label="Desigualdade de Jensen: função convexa">
+      <!-- Axes -->
+      <line x1="28" y1="170" x2="278" y2="170" stroke="#cfc6ba" stroke-width="1.5"/>
+      <line x1="28" y1="12" x2="28" y2="170" stroke="#cfc6ba" stroke-width="1.5"/>
+      <!-- Axis labels -->
+      <text x="280" y="174" font-size="11" fill="#b0a090" font-family="Inter, sans-serif">r</text>
+      <text x="15" y="11" font-size="11" fill="#b0a090" font-family="Inter, sans-serif">g</text>
+      <!-- Convex curve: M 60 141 Q 150 138 240 20 -->
+      <path d="M 60 141 Q 150 138 240 20" stroke="#ad5f2b" stroke-width="2.5" fill="none"/>
+      <!-- Chord from A=(60,141) to B=(240,20) -->
+      <line x1="60" y1="141" x2="240" y2="20" stroke="#2e7d72" stroke-width="1.8" stroke-dasharray="6,3"/>
+      <!-- Vertical dotted line at x=150 -->
+      <line x1="150" y1="80" x2="150" y2="170" stroke="#cfc6ba" stroke-width="1" stroke-dasharray="3,3"/>
+      <!-- Points A and B on curve -->
+      <circle cx="60" cy="141" r="3.5" fill="#ad5f2b"/>
+      <circle cx="240" cy="20" r="3.5" fill="#ad5f2b"/>
+      <!-- Point on chord at x=150: y=80.5 -->
+      <circle cx="150" cy="81" r="4" fill="#2e7d72"/>
+      <!-- Point on curve at x=150: ~y=109 -->
+      <circle cx="150" cy="109" r="4" fill="#ad5f2b"/>
+      <!-- Gap arrow -->
+      <line x1="155" y1="84" x2="155" y2="105" stroke="#6b5b4a" stroke-width="1.2" marker-end="url(#arr)"/>
+      <defs>
+        <marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 Z" fill="#6b5b4a"/>
+        </marker>
+      </defs>
+      <!-- Labels on chart -->
+      <text x="163" y="79" font-size="10" fill="#2e7d72" font-family="Crimson Pro, serif">E[g(r)]</text>
+      <text x="163" y="115" font-size="10" fill="#ad5f2b" font-family="Crimson Pro, serif">g(E[r])</text>
+      <text x="162" y="95" font-size="9" fill="#6b5b4a" font-family="Crimson Pro, serif" font-style="italic">gap de Jensen</text>
+      <!-- x-axis ticks -->
+      <line x1="60"  y1="168" x2="60"  y2="172" stroke="#b0a090" stroke-width="1.5"/>
+      <line x1="150" y1="168" x2="150" y2="172" stroke="#b0a090" stroke-width="1.5"/>
+      <line x1="240" y1="168" x2="240" y2="172" stroke="#b0a090" stroke-width="1.5"/>
+      <text x="53"  y="182" font-size="10" fill="#b0a090" font-family="JetBrains Mono, monospace">r₁</text>
+      <text x="137" y="182" font-size="10" fill="#b0a090" font-family="JetBrains Mono, monospace">E[r]</text>
+      <text x="233" y="182" font-size="10" fill="#b0a090" font-family="JetBrains Mono, monospace">r₂</text>
+      <!-- Legend -->
+      <line x1="35" y1="22" x2="55" y2="22" stroke="#ad5f2b" stroke-width="2.5"/>
+      <text x="58" y="26" font-size="9" fill="#ad5f2b" font-family="Crimson Pro, serif">função g(r)  (convexa)</text>
+      <line x1="35" y1="38" x2="55" y2="38" stroke="#2e7d72" stroke-width="1.8" stroke-dasharray="6,3"/>
+      <text x="58" y="42" font-size="9" fill="#2e7d72" font-family="Crimson Pro, serif">corda entre g(r₁) e g(r₂)</text>
+    </svg>
+    <p class="fig-caption">Para $g$ convexa: a corda entre dois pontos fica acima da curva. O valor esperado de $g(r)$ (ponto verde na corda) supera $g$ do valor esperado de $r$ (ponto laranja na curva).</p>
+  </div>
+
+  <div class="prose">
+    <p>O critério prático para saber se uma função é convexa é verificar o sinal da segunda derivada:</p>
+  </div>
+
+  <div class="box box-rule" style="margin-top:0.8rem;">
+    <span class="box-label">Critério da segunda derivada</span>
+    <div class="box-body">
+      <p>$f''(x) \geq 0$ para todo $x$ no domínio $\Leftrightarrow$ $f$ é convexa. <br>
+         $f''(x) \leq 0$ para todo $x$ no domínio $\Leftrightarrow$ $f$ é côncava.</p>
+    </div>
+  </div>
+
+  <div class="prose" style="margin-top:1rem;">
+    <p>Exemplos relevantes para os exercícios desta lista:</p>
+  </div>
+
+  <table class="rule-table" style="margin-top:0.8rem;">
+    <thead>
+      <tr><th>Função</th><th>$f''(x)$</th><th>Curvatura</th><th>Jensen</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="rf">$f(x) = \ln x$</td>
+        <td class="rf">$-1/x^2 < 0$</td>
+        <td>côncava</td>
+        <td class="re">$\mathbb{E}[\ln X] \leq \ln \mathbb{E}[X]$</td>
+      </tr>
+      <tr>
+        <td class="rf">$f(x) = 1/x$</td>
+        <td class="rf">$2/x^3 > 0$</td>
+        <td>convexa</td>
+        <td class="re">$\mathbb{E}[1/X] \geq 1/\mathbb{E}[X]$</td>
+      </tr>
+      <tr>
+        <td class="rf">$f(x) = e^x$</td>
+        <td class="rf">$e^x > 0$</td>
+        <td>convexa</td>
+        <td class="re">$\mathbb{E}[e^X] \geq e^{\mathbb{E}[X]}$</td>
+      </tr>
+      <tr>
+        <td class="rf">$f(x) = x^2$</td>
+        <td class="rf">$2 > 0$</td>
+        <td>convexa</td>
+        <td class="re">$\mathbb{E}[X^2] \geq (\mathbb{E}[X])^2$ (variância $\geq 0$)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="conn">
+    <span class="conn-icon">→ Q1</span>
+    <span class="conn-text">Na questão Q1, a função relevante é $\varphi(r) = (1+r)/[Y_2-(1+r)C_1]$. Calculando $\varphi''(r) = 2Y_2 C_1/[Y_2-(1+r)C_1]^3 > 0$: convexa. Portanto $\mathbb{E}[\varphi(r)] > \varphi(\mathbb{E}[r])$, o que gera o efeito de <strong>poupança precaucionária</strong>.</span>
+  </div>
+
+  <div class="takeaway">
+    <span class="takeaway-label">Para fixar</span>
+    <p>Certeza equivalência (ou seja, $\mathbb{E}[f(X)] = f(\mathbb{E}[X])$) só vale quando $f$ é linear. Funções de utilidade são não-lineares por construção. Quando a função objetivo do agente é não-linear numa variável estocástica, o valor esperado da variável não resume tudo o que o agente precisa saber. A variância importa, e a direção do efeito é dada pelo sinal de $f''$.</p>
+  </div>
+</div>
+
+<!-- ─── SEÇÃO 2: Log-Linearização Fundamentos ─── -->
+<div id="s2" class="section">
+  <div class="section-header">
+    <span class="section-num">2</span>
+    <h2>Log-Linearização: Fundamentos</h2>
+  </div>
+
+  <div class="prose">
+    <p>Modelos macroeconômicos dinâmicos são sistemas de equações não-lineares. As condições de ótimo (Euler, intratemporal, restrição de recursos) envolvem produtos, razões e potências de variáveis endógenas. Esses sistemas raramente têm solução analítica.</p>
+    <p>A log-linearização transforma esse sistema num sistema linear em <em>desvios percentuais logarítmicos</em> em relação a uma trajetória de referência. Um sistema linear pode ser resolvido com álgebra, não com análise de equações diferenciais não-lineares.</p>
+    <p>O custo: a approximação é local. Ela é boa perto da trajetória de referência e se deteriora quanto mais longe dela o sistema se afasta.</p>
+  </div>
+
+  <div class="box box-int">
+    <span class="box-label">Por que logaritmos especificamente?</span>
+    <div class="box-body">
+      <p>Porque as equações macroeconômicas são frequentemente <em>multiplicativas</em>: Cobb-Douglas ($Y = AK^\alpha N^{1-\alpha}$), condição de Euler ($c_t = \beta(1+r)c_{t+1}$), balança de pagamentos. Tomar logaritmos transforma produtos em somas, razões em diferenças, e potências em múltiplos. Isso converte relações não-lineares multiplicativas em relações lineares.</p>
+    </div>
+  </div>
+
+  <div class="prose" style="margin-top:1.2rem;">
+    <p><strong>A substituição fundamental.</strong> Para qualquer variável positiva $X_t$ que cresce ao longo de uma trajetória $\bar{X}_t$, define-se o desvio logarítmico:</p>
+  </div>
+  <div class="eq">$$\tilde{X}_t \;\equiv\; \ln X_t - \ln \bar{X}_t \;=\; \ln\!\left(\frac{X_t}{\bar{X}_t}\right)$$</div>
+  <div class="prose">
+    <p>Portanto $X_t = \bar{X}_t\,e^{\tilde{X}_t}$. Para desvios pequenos ($|\tilde{X}_t| \ll 1$), usa-se a aproximação de primeira ordem:</p>
+  </div>
+  <div class="eq">$$e^{\tilde{X}_t} \approx 1 + \tilde{X}_t \quad\Longrightarrow\quad X_t \approx \bar{X}_t(1 + \tilde{X}_t)$$</div>
+  <div class="prose">
+    <p>Esta é a aproximação de Taylor de primeira ordem de $e^x$ em torno de $x=0$. O erro é de ordem $\tilde{X}_t^2$, que é pequeno quando o desvio é pequeno.</p>
+  </div>
+
+  <div class="box box-thm">
+    <span class="box-label">Procedimento padrão</span>
+    <div class="box-body">
+      <p><strong>1.</strong> Substitua $X_t = \bar{X}_t(1+\tilde{X}_t)$ em cada variável da equação.</p>
+      <p><strong>2.</strong> Expanda o produto. Descarte termos de segunda ordem (produtos de dois $\tilde{X}$).</p>
+      <p><strong>3.</strong> Use o fato de que a trajetória de referência $\bar{X}_t$ satisfaz a mesma equação. Isso cancela os termos de nível e deixa só os termos em $\tilde{X}$.</p>
+      <p><strong>4.</strong> Para termos não-multiplicativos como $\ln(1-n_t)$, use uma expansão de Taylor em torno de $\bar{n}$.</p>
+    </div>
+  </div>
+
+  <div class="box box-ex" style="margin-top:1rem;">
+    <span class="box-label">Exemplo mínimo: $Z_t = X_t \cdot Y_t$</span>
+    <div class="box-body">
+      <p>Substituindo:</p>
+      <div class="eq">$$\bar{Z}(1+\tilde{Z}_t) = \bar{X}(1+\tilde{X}_t)\cdot\bar{Y}(1+\tilde{Y}_t) = \bar{X}\bar{Y}\bigl(1+\tilde{X}_t+\tilde{Y}_t+\underbrace{\tilde{X}_t\tilde{Y}_t}_{\approx\,0}\bigr)$$</div>
+      <p>Como $\bar{Z} = \bar{X}\bar{Y}$ na trajetória de referência, cancelamos e obtemos: $\tilde{Z}_t = \tilde{X}_t + \tilde{Y}_t$. Produto vira soma nos desvios logarítmicos.</p>
+    </div>
+  </div>
+
+  <div class="takeaway">
+    <span class="takeaway-label">Para fixar</span>
+    <p>Log-linearizar não é simplesmente "tomar logaritmo da equação". É uma expansão de Taylor de primeira ordem em torno da trajetória de referência, expressa em desvios percentuais. O resultado é um sistema linear cujos coeficientes são os parâmetros do modelo avaliados no estado estacionário (ou na BGP).</p>
+  </div>
+</div>
+
+<!-- ─── SEÇÃO 3: Regras Práticas ─── -->
+<div id="s3" class="section">
+  <div class="section-header">
+    <span class="section-num">3</span>
+    <h2>Regras Práticas de Log-Linearização</h2>
+  </div>
+
+  <div class="prose">
+    <p>As cinco regras abaixo cobrem virtualmente todas as situações que aparecem em modelos macroeconômicos padrão. As três primeiras seguem diretamente das propriedades do logaritmo. A quarta (somas) é onde mais se erra. A quinta (expressões $(1-X)$) aparece sempre que há trabalho e lazer.</p>
+  </div>
+
+  <table class="rule-table">
+    <thead>
+      <tr><th></th><th>Expressão original</th><th>Log-linearizada</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="rn">R1</td>
+        <td class="rf">$Z_t = X_t \cdot Y_t$</td>
+        <td class="rf">$\tilde{Z}_t = \tilde{X}_t + \tilde{Y}_t$</td>
+      </tr>
+      <tr>
+        <td class="rn">R2</td>
+        <td class="rf">$Z_t = X_t / Y_t$</td>
+        <td class="rf">$\tilde{Z}_t = \tilde{X}_t - \tilde{Y}_t$</td>
+      </tr>
+      <tr>
+        <td class="rn">R3</td>
+        <td class="rf">$Z_t = X_t^\alpha$</td>
+        <td class="rf">$\tilde{Z}_t = \alpha\,\tilde{X}_t$</td>
+      </tr>
+      <tr>
+        <td class="rn">R4</td>
+        <td class="rf">$Z_t = a\,X_t + b\,Y_t$</td>
+        <td class="rf">$\tilde{Z}_t = s_X\,\tilde{X}_t + s_Y\,\tilde{Y}_t$ <br><span style="font-size:0.88em;color:var(--text-dim);">onde $s_X = a\bar{X}/\bar{Z}$, $s_Y = b\bar{Y}/\bar{Z}$ (shares de SS)</span></td>
+      </tr>
+      <tr>
+        <td class="rn">R5</td>
+        <td class="rf">$Z_t = 1 - X_t$</td>
+        <td class="rf">$\tilde{Z}_t = -\dfrac{\bar{X}}{1-\bar{X}}\,\tilde{X}_t$</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="prose" style="margin-top:0.5rem;">
+    <p><strong>Derivação da Regra R4 (somas).</strong> Este é o caso mais trabalhoso. Defina $\bar{s}_X \equiv a\bar{X}/\bar{Z}$ e $\bar{s}_Y \equiv b\bar{Y}/\bar{Z}$. Note que $\bar{s}_X + \bar{s}_Y = 1$.</p>
+  </div>
+
+  <div class="deriv">
+    <p class="dline comment">Substituir $X_t = \bar{X}(1+\tilde{X}_t)$ e $Y_t = \bar{Y}(1+\tilde{Y}_t)$ em $Z_t = aX_t + bY_t$:</p>
+    <div class="eq">$$\bar{Z}(1+\tilde{Z}_t) \;=\; a\bar{X}(1+\tilde{X}_t) + b\bar{Y}(1+\tilde{Y}_t)$$</div>
+    <p class="dline">Expandindo e usando $\bar{Z} = a\bar{X}+b\bar{Y}$ do SS (os termos de nível se cancelam):</p>
+    <div class="eq">$$\bar{Z}\,\tilde{Z}_t \;=\; a\bar{X}\,\tilde{X}_t + b\bar{Y}\,\tilde{Y}_t$$</div>
+    <p class="dline">Dividir por $\bar{Z}$ e definir $s_X \equiv a\bar{X}/\bar{Z}$, $s_Y \equiv b\bar{Y}/\bar{Z}$:</p>
+    <div class="eq">$$\tilde{Z}_t \;=\; s_X\,\tilde{X}_t + s_Y\,\tilde{Y}_t$$</div>
+  </div>
+
+  <div class="prose">
+    <p><strong>Derivação da Regra R5 (complemento).</strong> Aparece em $\ln(1-n_t)$, que não é um produto ou potência.</p>
+  </div>
+
+  <div class="deriv">
+    <p class="dline comment">Expandir $\ln(1-n_t)$ em torno de $\bar{n}$ via Taylor de primeira ordem:</p>
+    <div class="eq">$$\ln(1-n_t) \;\approx\; \ln(1-\bar{n}) + \frac{d}{dn}\bigl[\ln(1-n)\bigr]\Big|_{n=\bar{n}}\!\cdot(n_t-\bar{n})$$</div>
+    <div class="eq">$$= \ln(1-\bar{n}) \;-\; \frac{1}{1-\bar{n}}\,(n_t-\bar{n})$$</div>
+    <p class="dline">Como $n_t - \bar{n} \approx \bar{n}\,\tilde{n}_t$ para desvios em log, substituir:</p>
+    <div class="eq">$$\ln(1-n_t) \;\approx\; \ln(1-\bar{n}) \;-\; \frac{\bar{n}}{1-\bar{n}}\,\tilde{n}_t$$</div>
+    <p class="dline">Subtrair o valor de SS para obter o desvio logarítmico de $(1-n_t)$:</p>
+    <div class="eq">$$\widetilde{(1-n_t)} \;\equiv\; \ln(1-n_t)-\ln(1-\bar{n}) \;\approx\; -\frac{\bar{n}}{1-\bar{n}}\,\tilde{n}_t$$</div>
+  </div>
+
+  <div class="box box-ex">
+    <span class="box-label">Aplicação combinada: Cobb-Douglas</span>
+    <div class="box-body">
+      <p>Para $Y_t = A_t K_t^\alpha (\eta N_t)^{1-\alpha}$, aplicando R1, R2, R3:</p>
+      <div class="eq">$$\tilde{Y}_t = \tilde{A}_t + \alpha\,\tilde{K}_t + (1-\alpha)\,\tilde{N}_t + (1-\alpha)\,\tilde{\eta}_t$$</div>
+      <p>Se $N_t$ cresce deterministicamente (sem desvio: $\tilde{N}_t=0$) e $\eta_t$ é constante ($\tilde{\eta}_t=0$):</p>
+      <div class="eq">$$\tilde{Y}_t = \tilde{A}_t + \alpha\,\tilde{K}_t$$</div>
+      <p>Este é o resultado que aparece implicitamente na prova da Q8.</p>
+    </div>
+  </div>
+
+  <div class="conn">
+    <span class="conn-icon">→ Q2–Q5</span>
+    <span class="conn-text"><strong>Q2</strong> usa R4 (identidade nacional é uma soma). <strong>Q3</strong> e <strong>Q4</strong> usam R2 (razões) e o logaritmo direto de ambos os lados. <strong>Q5</strong> combina R1, R2 e R5 (o lazer $1-n_t$ exige R5).</span>
+  </div>
+</div>
+
+<!-- ─── SEÇÃO 3b: Aproximações ─── -->
+<div id="s3b" class="section">
+  <div class="section-header">
+    <span class="section-num">3b</span>
+    <h2>Aproximações de Primeira Ordem: catálogo e acurácia</h2>
+  </div>
+
+  <div class="prose">
+    <p>Log-linearizar requer usar repetidamente quatro ou cinco aproximações de primeira ordem. Elas não são "truques" — são truncamentos da série de Taylor em torno de um ponto de referência. Saber de onde vêm permite julgar quando são válidas e quando o erro já é relevante.</p>
+    <p>Todas valem para desvios <strong>pequenos</strong> do ponto de referência; o erro residual é de ordem quadrática nesse desvio.</p>
+  </div>
+
+  <table class="rule-table" style="margin-top:1rem;">
+    <thead>
+      <tr><th>#</th><th>Aproximação</th><th>Origem</th><th>Erro residual</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="rn">A1</td>
+        <td class="rf">$e^x \approx 1+x$</td>
+        <td>Taylor de $e^x$ em $x=0$</td>
+        <td class="re">$+x^2/2 + O(x^3)$</td>
+      </tr>
+      <tr>
+        <td class="rn">A2</td>
+        <td class="rf">$\ln(1+x) \approx x$</td>
+        <td>Taylor de $\ln(1+x)$ em $x=0$</td>
+        <td class="re">$-x^2/2 + O(x^3)$</td>
+      </tr>
+      <tr>
+        <td class="rn">A3</td>
+        <td class="rf">$(1+a)(1+b) \approx 1+a+b$</td>
+        <td>Descarta o produto $ab$ (segunda ordem)</td>
+        <td class="re">$ab$</td>
+      </tr>
+      <tr>
+        <td class="rn">A4</td>
+        <td class="rf">$(1+x)^\alpha \approx 1+\alpha x$</td>
+        <td>A1 $\circ$ A2 via $e^{\alpha\ln(1+x)}$</td>
+        <td class="re">$\alpha(\alpha-1)x^2/2$</td>
+      </tr>
+      <tr>
+        <td class="rn">A5</td>
+        <td class="rf">$\ln\mathbb{E}[X] \approx \mathbb{E}[\ln X]$</td>
+        <td>Taylor de $\ln X$ em torno de $\mathbb{E}[X]$</td>
+        <td class="re">$+\tfrac{1}{2}\sigma^2_{\text{rel}}$ (gap de Jensen)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="prose" style="margin-top:1.2rem;">
+    <p><strong>Derivação de A1, A2, A3 e A4.</strong> A série de Taylor de $e^x$ em torno de $x=0$ é a mais fundamental; as demais derivam dela por composição.</p>
+  </div>
+
+  <div class="deriv">
+    <p class="dline comment">A1 — Taylor de $e^x$:</p>
+    <div class="eq">$$e^x = 1 + x + \frac{x^2}{2!} + \frac{x^3}{3!} + \cdots \;\;\approx\;\; 1+x \quad\text{(descarta } x^2/2 \text{ e superiores)}$$</div>
+    <p class="dline">A2 — consequência direta: se $y = 1+x$ (com $x$ pequeno), então $e^{\ln y}=y$. Aplicar A1 a $\ln y$:</p>
+    <div class="eq">$$y \approx 1+\ln y \;\;\Rightarrow\;\; \ln y \approx y-1 \;\;\Rightarrow\;\; \ln(1+x) \approx x$$</div>
+    <p class="dline">A3 — produto de dois desvios: $(1+a)(1+b) = 1+a+b+\underbrace{ab}_{\text{segunda ordem}} \approx 1+a+b$.</p>
+    <p class="dline result">A4 — composição A1$\circ$A2: $(1+x)^\alpha = e^{\alpha\ln(1+x)} \overset{A2}{\approx} e^{\alpha x} \overset{A1}{\approx} 1+\alpha x$. (Regra R3 da seção anterior usa isso implicitamente.)</p>
+  </div>
+
+  <div class="prose" style="margin-top:1.2rem;">
+    <p><strong>Derivação de A5.</strong> Esta é a mais delicada: permite mover o logaritmo para dentro do operador de esperança. Escreva $X = \mu(1+\varepsilon)$ com $\mu = \mathbb{E}[X]$ e $\mathbb{E}[\varepsilon]=0$. Expanda $\ln X$ em série de Taylor de segunda ordem em torno de $\mu$:</p>
+  </div>
+
+  <div class="deriv">
+    <p class="dline comment">Taylor de $\ln X$ em torno de $\mu = \mathbb{E}[X]$:</p>
+    <div class="eq">$$\ln X \;\approx\; \ln\mu + \frac{X-\mu}{\mu} - \frac{(X-\mu)^2}{2\mu^2}$$</div>
+    <p class="dline">Tomar expectativa. O termo linear desaparece ($\mathbb{E}[X-\mu]=0$):</p>
+    <div class="eq">$$\mathbb{E}[\ln X] \;\approx\; \ln\mu - \frac{\mathbb{E}[(X-\mu)^2]}{2\mu^2} = \ln\mathbb{E}[X] - \frac{1}{2}\sigma^2_{\text{rel}}$$</div>
+    <p class="dline">Rearranjar:</p>
+    <div class="eq">$$\ln\mathbb{E}[X] \;\approx\; \mathbb{E}[\ln X] + \frac{1}{2}\sigma^2_{\text{rel}} \qquad \text{onde} \quad \sigma^2_{\text{rel}} \equiv \frac{\text{Var}(X)}{(\mathbb{E}[X])^2}$$</div>
+    <p class="dline result">A primeira ordem descarta $\sigma^2_{\text{rel}}$: $\ln\mathbb{E}[X] \approx \mathbb{E}[\ln X]$. O gap $+\frac{1}{2}\sigma^2_{\text{rel}} > 0$ é o gap de Jensen para $\ln$ côncava: $\ln\mathbb{E}[X] \geq \mathbb{E}[\ln X]$ é exato, e a aproximação é boa quando a variância relativa é pequena.</p>
+  </div>
+
+  <div class="box box-int" style="margin-top:1rem;">
+    <span class="box-label">Quando A5 aparece no curso</span>
+    <div class="box-body">
+      <p>Na log-linearização da equação de Euler (Q3), o passo crítico é $\ln\mathbb{E}_t\!\left[\tfrac{1+r_{t+1}}{c_{t+1}}\right] \approx \mathbb{E}_t\!\left[\ln\tfrac{1+r_{t+1}}{c_{t+1}}\right]$. A justificativa é que os desvios cíclicos são percentualmente pequenos ($\sigma^2_{\text{rel}} \approx 0$ na perturbação de primeira ordem). Em modelos de segunda ordem, o termo $\tfrac{1}{2}\sigma^2_{\text{rel}}$ gera um prêmio de risco na Euler — um tema central em macro-finanças que a log-linearização padrão não captura.</p>
+    </div>
+  </div>
+
+  <div class="prose" style="margin-top:1.2rem;">
+    <p><strong>Acurácia numérica de A1 e A2.</strong> Desvios de 1–5% (típicos de flutuações macroeconômicas) geram erros abaixo de 0.12% para A1 e abaixo de 2.5% para A2. Desvios de 20–30% (ordens de grandeza de crises severas) já implicam erros relevantes.</p>
+  </div>
+
+  <table class="num-table">
+    <thead>
+      <tr>
+        <th>$x$</th>
+        <th>$e^x$ exato</th><th>$1+x$ (A1)</th><th>erro A1</th>
+        <th>$\ln(1{+}x)$ exato</th><th>$x$ (A2)</th><th>erro A2</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>0.01</td><td>1.01005</td><td>1.01000</td><td class="ok">0.005%</td><td>0.00995</td><td>0.01000</td><td class="ok">0.50%</td></tr>
+      <tr><td>0.02</td><td>1.02020</td><td>1.02000</td><td class="ok">0.020%</td><td>0.01980</td><td>0.02000</td><td class="ok">1.01%</td></tr>
+      <tr><td>0.05</td><td>1.05127</td><td>1.05000</td><td class="ok">0.121%</td><td>0.04879</td><td>0.05000</td><td class="ok">2.45%</td></tr>
+      <tr><td>0.10</td><td>1.10517</td><td>1.10000</td><td>0.469%</td><td>0.09531</td><td>0.10000</td><td>4.88%</td></tr>
+      <tr><td>0.20</td><td>1.22140</td><td>1.20000</td><td class="hi">1.783%</td><td>0.18232</td><td>0.20000</td><td class="hi">9.69%</td></tr>
+      <tr><td>0.30</td><td>1.34986</td><td>1.30000</td><td class="hi">3.693%</td><td>0.26236</td><td>0.30000</td><td class="hi">14.4%</td></tr>
+    </tbody>
+  </table>
+
+  <div class="takeaway">
+    <span class="takeaway-label">Regra prática</span>
+    <p>Para $|x| \leq 0.05$: A1 tem erro abaixo de 0.12%, A2 abaixo de 2.5% — suficiente para calibração padrão. Para $|x| \leq 0.10$: A1 ainda razoável (0.5%), A2 já com 5%. Acima de 15–20%, a log-linearização pode distorcer conclusões quantitativas, e métodos de perturbação de segunda ordem ou soluções numéricas completas passam a ser necessários.</p>
+  </div>
+</div>
+
+<!-- ─── SEÇÃO 3c: Exercícios ─── -->
+<div id="s3c" class="section">
+  <div class="section-header">
+    <span class="section-num">3c</span>
+    <h2>Exercícios de Fixação · Parte I</h2>
+  </div>
+
+  <div class="prose">
+    <p>Cinco exercícios para consolidar as regras R1–R5 e as aproximações A1–A5. Os três primeiros são mecânicos. Os dois últimos exigem combinar mais de uma regra ou lidar com a aproximação A5 numericamente.</p>
+  </div>
+
+  <!-- E1 -->
+  <div class="box box-ex" style="margin-top:1.2rem;">
+    <span class="box-label">E1 · Acurácia numérica de A1</span>
+    <div class="box-body">
+      <p>Para cada valor de $x$ abaixo, calcule $e^x$ (exato) e compare com $1+x$ (A1). Compute o erro percentual relativo $|e^x-(1+x)|/e^x \times 100\%$.</p>
+      <div class="eq">$$x \;\in\; \{0.02,\; 0.10,\; 0.25,\; -0.05\}$$</div>
+      <p>Acima de qual valor de $|x|$ o erro de A1 ultrapassa 1%?</p>
+    </div>
+  </div>
+  <span class="sol-label">Solução</span>
+  <div class="deriv">
+    <table class="num-table">
+      <thead><tr><th>$x$</th><th>$e^x$ exato</th><th>$1+x$</th><th>erro</th></tr></thead>
+      <tbody>
+        <tr><td>0.02</td><td>1.02020</td><td>1.02000</td><td class="ok">0.020%</td></tr>
+        <tr><td>0.10</td><td>1.10517</td><td>1.10000</td><td>0.469%</td></tr>
+        <tr><td>0.25</td><td>1.28403</td><td>1.25000</td><td class="hi">2.72%</td></tr>
+        <tr><td>−0.05</td><td>0.95123</td><td>0.95000</td><td class="ok">0.129%</td></tr>
+      </tbody>
+    </table>
+    <p class="dline result">A1 ultrapassa 1% para $|x| \gtrsim 0.14$. Note que o erro é simétrico: A1 subestima $e^x$ para $x>0$ e superestima $|e^x|$ para $x<0$, sempre pela mesma ordem $x^2/2$.</p>
+  </div>
+
+  <!-- E2 -->
+  <div class="box box-ex" style="margin-top:1.2rem;">
+    <span class="box-label">E2 · Cobb-Douglas (R1 + R3)</span>
+    <div class="box-body">
+      <p>Log-linearize $Y_t = A_t K_t^\alpha$ onde $A_t$ é um choque de tecnologia e $K_t$ é o capital. Expresse $\tilde{Y}_t$ em função de $\tilde{A}_t$ e $\tilde{K}_t$.</p>
+    </div>
+  </div>
+  <span class="sol-label">Solução</span>
+  <div class="deriv">
+    <p class="dline comment">Aplicar R1 ao produto $A_t \cdot K_t^\alpha$ e R3 à potência $K_t^\alpha$:</p>
+    <div class="eq">$$\tilde{Y}_t = \widetilde{A_t K_t^\alpha} \overset{R1}{=} \tilde{A}_t + \widetilde{K_t^\alpha} \overset{R3}{=} \tilde{A}_t + \alpha\tilde{K}_t$$</div>
+    <p class="dline result">$\tilde{Y}_t = \tilde{A}_t + \alpha\tilde{K}_t$. Um choque de 1% em $A$ eleva $Y$ em 1%; um choque de 1% em $K$ eleva $Y$ em $\alpha \approx 0.33\%$ (participação do capital na renda).</p>
+  </div>
+
+  <!-- E3 -->
+  <div class="box box-ex" style="margin-top:1.2rem;">
+    <span class="box-label">E3 · Restrição de recursos (R4, soma com sinal negativo)</span>
+    <div class="box-body">
+      <p>Log-linearize a restrição de acumulação de capital $K_{t+1} = Y_t - C_t$ (depreciação 100%). Exprima $\tilde{K}_{t+1}$ em função de $\tilde{Y}_t$ e $\tilde{C}_t$. Defina a taxa de poupança de estado estacionário $\hat{s} \equiv \bar{K}/\bar{Y}$.</p>
+    </div>
+  </div>
+  <span class="sol-label">Solução</span>
+  <div class="deriv">
+    <p class="dline comment">Substituir $K_{t+1} = \bar{K}(1+\tilde{K}_{t+1})$ etc.:</p>
+    <div class="eq">$$\bar{K}(1+\tilde{K}_{t+1}) = \bar{Y}(1+\tilde{Y}_t) - \bar{C}(1+\tilde{C}_t)$$</div>
+    <p class="dline">Usar SS $\bar{K} = \bar{Y}-\bar{C}$ para cancelar os termos de nível:</p>
+    <div class="eq">$$\bar{K}\,\tilde{K}_{t+1} = \bar{Y}\,\tilde{Y}_t - \bar{C}\,\tilde{C}_t$$</div>
+    <p class="dline">Dividir por $\bar{K}$ e usar $\hat{s}=\bar{K}/\bar{Y}$, $\bar{C}/\bar{K} = (1-\hat{s})/\hat{s}$:</p>
+    <div class="eq">$$\hat{s}\,\tilde{K}_{t+1} = \tilde{Y}_t - (1-\hat{s})\,\tilde{C}_t$$</div>
+    <p class="dline result">Notar que os pesos das variáveis do lado direito são os <em>shares de estado estacionário</em> (análogo ao resultado de R4). Em particular: se $\hat{s}=\alpha\beta=0.33$ (Romer simplificado), $1-\hat{s}=0.67$.</p>
+  </div>
+
+  <!-- E4 -->
+  <div class="box box-ex" style="margin-top:1.2rem;">
+    <span class="box-label">E4 · Lazer (R5)</span>
+    <div class="box-body">
+      <p>Log-linearize $\ell_t = 1-n_t$ onde $n_t \in (0,1)$ é a fração de tempo trabalhada e $\ell_t$ é o lazer. Exprima $\tilde{\ell}_t$ em função de $\tilde{n}_t$. Para a calibração padrão $\bar{n}=1/3$, qual é o valor numérico do coeficiente?</p>
+    </div>
+  </div>
+  <span class="sol-label">Solução</span>
+  <div class="deriv">
+    <p class="dline comment">Aplicar R5 diretamente com $\bar{X} = \bar{n}$, $1-\bar{X} = 1-\bar{n} = \bar{\ell}$:</p>
+    <div class="eq">$$\tilde{\ell}_t = -\frac{\bar{n}}{1-\bar{n}}\,\tilde{n}_t$$</div>
+    <p class="dline">Para $\bar{n}=1/3$: coeficiente $= (1/3)/(2/3) = 1/2$. Logo $\tilde{\ell}_t = -\tfrac{1}{2}\tilde{n}_t$.</p>
+    <p class="dline result">Intuição: se o trabalho sobe 1% acima da tendência (de $33\%$ para $33.33\%$ do tempo), o lazer cai $0.5\%$ acima da tendência (de $67\%$ para $66.67\%$). A assimetria do coeficiente vem do fato de que o ponto de referência para o lazer ($\bar{\ell}=2/3$) é maior que o do trabalho ($\bar{n}=1/3$).</p>
+  </div>
+
+  <!-- E5 -->
+  <div class="box box-ex" style="margin-top:1.2rem;">
+    <span class="box-label">E5 · Verificação numérica de A5</span>
+    <div class="box-body">
+      <p>Suponha que $r_t$ assuma os valores $0\%$ ou $10\%$ com igual probabilidade (logo $\mathbb{E}[r_t]=5\%$, $\text{Var}(r_t)=0.0025$).</p>
+      <p>(a) Calcule $\ln\mathbb{E}[1+r_t]$. &nbsp;&nbsp; (b) Calcule $\mathbb{E}[\ln(1+r_t)]$. &nbsp;&nbsp; (c) Compute a diferença $(a)-(b)$ e verifique se ela é coerente com $\tfrac{1}{2}\sigma^2_{\text{rel}}$, onde $\sigma^2_{\text{rel}} = \text{Var}(1+r_t)/(\mathbb{E}[1+r_t])^2$. &nbsp;&nbsp; (d) O que acontece com a diferença se o spread for $20\text{p.p.}$ em vez de $10\text{p.p.}$ (mantendo a média)?</p>
+    </div>
+  </div>
+  <span class="sol-label">Solução</span>
+  <div class="deriv">
+    <p class="dline comment">Dados: $1+r_t \in \{1.00,\;1.10\}$ com prob $1/2$ cada. $\mathbb{E}[1+r_t]=1.05$, $\text{Var}(1+r_t)=0.0025$.</p>
+    <p class="dline">(a) $\ln\mathbb{E}[1+r_t] = \ln 1.05 = 0.04879$</p>
+    <p class="dline">(b) $\mathbb{E}[\ln(1+r_t)] = \tfrac{1}{2}(\ln 1.00 + \ln 1.10) = \tfrac{1}{2}(0 + 0.09531) = 0.04766$</p>
+    <p class="dline">(c) Gap $= 0.04879 - 0.04766 = 0.00113$. Previsto: $\tfrac{1}{2}\sigma^2_{\text{rel}} = \tfrac{1}{2}\times 0.0025/(1.05)^2 = \tfrac{1}{2}\times 0.00227 = 0.00113$ ✓</p>
+    <div class="eq">$$\text{(d) Spread de 20p.p.:} \quad 1+r_t \in \{1.00, 1.20\},\;\mathbb{E}=1.10,\;\text{Var}=0.01$$</div>
+    <p class="dline">Gap exato: $\ln 1.10 - \tfrac{1}{2}(\ln 1.00+\ln 1.20) = 0.09531 - 0.09116 = 0.00415$. Previsto: $\tfrac{1}{2}\times 0.01/(1.10)^2 = 0.00413$ ✓</p>
+    <p class="dline result">Quando o spread dobra (de 10 para 20p.p.), a diferença quadruplica (de $0.00113$ para $0.00415$). Isso reflete o caráter de segunda ordem do gap: ele cresce com $\sigma^2$, não com $\sigma$.</p>
+  </div>
+
+  <div class="conn">
+    <span class="conn-icon">→ Q3</span>
+    <span class="conn-text">E5 é a versão numérica do passo central na log-linearização da Euler. A diferença entre $\ln\mathbb{E}[X]$ e $\mathbb{E}[\ln X]$ é pequena quando os desvios cíclicos são pequenos — justamente a hipótese implícita na perturbação de primeira ordem.</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     PARTE II
+══════════════════════════════════════════════ -->
+<div id="parte2" class="part-banner" style="margin-top:2rem;">
+  <div class="part-inner">
+    <p class="part-label">Parte II</p>
+    <p class="part-title">Teoria Econômica</p>
+    <p class="part-desc">O que está por trás dos modelos. Cada seção explica um mecanismo econômico e conecta ao exercício correspondente na lista.</p>
+  </div>
+</div>
+
+<!-- ─── SEÇÃO 4: Poupança Precaucionária ─── -->
+<div id="s4" class="section">
+  <div class="section-header">
+    <span class="section-num">4</span>
+    <h2>Poupança Precaucionária</h2>
+  </div>
+
+  <div class="prose">
+    <p>Por que um indivíduo poupar mais do que o necessário para suavizar o consumo? A hipótese de renda permanente diz que, sob certeza ou com mercados completos, o agente usa toda a informação disponível para suavizar o consumo ao longo da vida. A poupança serve apenas para transferir recursos entre períodos, não como seguro.</p>
+    <p>Mas quando há <strong>incerteza que não pode ser segurada</strong>, surge um motivo adicional para poupar: a precaução. O agente acumula um "colchão" de ativos para se proteger contra estados futuros adversos. Esse mecanismo tem nome na literatura: <em>poupança precaucionária</em>.</p>
+  </div>
+
+  <div class="box box-int">
+    <span class="box-label">Certeza equivalência e quando ela falha</span>
+    <div class="box-body">
+      <p>A certeza equivalência é a propriedade de que um agente age como se os valores aleatórios fossem iguais às suas médias. Ela vale exatamente quando a função objetivo é quadrática (linear nas utilidades marginais). Para uma função de utilidade com curvatura maior, a certeza equivalência falha.</p>
+      <p>Formalmente: certeza equivalência vale $\Leftrightarrow$ $u'''(c) = 0$. Com utilidade log, $u'''(c) = 2/c^3 > 0$. Portanto, a log falha a certeza equivalência na direção da <em>prudência</em>.</p>
+    </div>
+  </div>
+
+  <div class="prose" style="margin-top:1rem;">
+    <p><strong>O papel da terceira derivada.</strong> Kimball (1990) mostrou que a grandeza relevante para a poupança precaucionária é o <em>coeficiente de prudência absoluta</em>: $-u'''(c)/u''(c)$. Para a utilidade log, $u'' = -1/c^2$ e $u''' = 2/c^3$, dando prudência absoluta $= 2/c > 0$.</p>
+    <p>Mais prudência implica mais poupança precaucionária em resposta à incerteza. O resultado não depende de qual é a fonte de incerteza: pode ser a taxa de juros (como em Q1), a renda futura, ou a duração da vida.</p>
+  </div>
+
+  <div class="box box-thm">
+    <span class="box-label">Condição necessária e suficiente para poupança precaucionária</span>
+    <div class="box-body">
+      <p>Um aumento na incerteza sobre qualquer variável aleatória que afeta o consumo futuro <em>reduz</em> o consumo presente (aumenta a poupança) se e somente se a função de utilidade tiver $u''' > 0$. Para $u = \ln c$, essa condição é satisfeita. Para utilidade quadrática ($u'' = $ cte, $u''' = 0$), a poupança não responde à incerteza.</p>
+    </div>
+  </div>
+
+  <div class="prose" style="margin-top:1rem;">
+    <p><strong>Conexão com Jensen.</strong> A equação de Euler com taxa de juros estocástica é $1/C_1 = \mathbb{E}[(1+r)/C_2]$. O lado direito é a esperança de $\varphi(r) = (1+r)/[Y_2-(1+r)C_1]$, que é convexa em $r$. Por Jensen: $\mathbb{E}[\varphi(r)] > \varphi(\mathbb{E}[r])$. Isso força $C_1$ para baixo quando a variância de $r$ aumenta — mesmo que a média não mude.</p>
+  </div>
+
+  <div class="conn">
+    <span class="conn-icon">→ Q1</span>
+    <span class="conn-text">Q1 formaliza exatamente esse mecanismo. Mas atenção ao contexto de 2008: <strong>o mecanismo dominante não era incerteza sobre $r$, mas sobre renda futura</strong> (risco de desemprego, desvalorização de ativos). Para isso, precisaríamos de um modelo com renda estocástica e mercados incompletos.</span>
+  </div>
+</div>
+
+<!-- ─── SEÇÃO 5: BGP e Euler ─── -->
+<div id="s5" class="section">
+  <div class="section-header">
+    <span class="section-num">5</span>
+    <h2>Trajetória de Crescimento Equilibrado e a Equação de Euler</h2>
+  </div>
+
+  <div class="prose">
+    <p><strong>O que é a BGP.</strong> Uma trajetória de crescimento equilibrado (Balanced Growth Path, BGP) é uma solução particular do modelo em que as variáveis crescem a taxas constantes. Em modelos neoclássicos com crescimento exógeno de tecnologia, a BGP tem: produto, consumo e capital crescendo à mesma taxa $g$; horas trabalhadas constantes; taxa de juros real constante.</p>
+    <p>A BGP é o ponto de referência para a log-linearização. Quando escrevemos $\tilde{X}_t = \ln X_t - \ln \bar{X}_t$, a barra denota o valor de $X$ <em>sobre a BGP</em> no período $t$. Os desvios $\tilde{X}_t$ medem o quanto a variável se afasta temporariamente de sua trajetória tendencial.</p>
+  </div>
+
+  <div class="box box-int">
+    <span class="box-label">Por que não expandir em torno do estado estacionário em nível?</span>
+    <div class="box-body">
+      <p>Em modelos com crescimento ($g > 0$), as variáveis nunca param de crescer. Não há nível fixo em torno do qual expandir. A saída é trabalhar com variáveis <em>normalizadas</em> (por exemplo, em per capita ou per effective worker), que si têm estado estacionário. A log-linearização então mede desvios em relação ao estado estacionário dessas variáveis normalizadas, o que é equivalente a medir desvios em relação à BGP para as variáveis em nível.</p>
+    </div>
+  </div>
+
+  <div class="prose" style="margin-top:1.2rem;">
+    <p><strong>A equação de Euler.</strong> A Euler é a condição de ótimo intertemporal do consumidor. Ela diz: no ótimo, o consumidor é indiferente entre consumir uma unidade a mais hoje ou poupar, investir e consumir o retorno amanhã. Com utilidade log $u(c) = \ln c$:</p>
+  </div>
+  <div class="eq">$$\frac{1}{c_t} = \beta\,\mathbb{E}_t\!\left[\frac{1+r_{t+1}}{c_{t+1}}\right]$$</div>
+  <div class="prose">
+    <p>Esta equação rege como o consumo evolui ao longo do tempo. Log-linearizada (ver Q3), ela vira:</p>
+  </div>
+  <div class="eq">$$\tilde{c}_t = \mathbb{E}_t[\tilde{c}_{t+1}] - \mathbb{E}_t[\tilde{r}_{t+1}]$$</div>
+  <div class="prose">
+    <p>Leitura: o consumo hoje fica abaixo do consumo esperado amanhã quando a taxa de retorno esperada está alta. O coeficiente é 1 porque a EIS (elasticidade intertemporal de substituição) é 1 para a log-utilidade. Para CRRA com parâmetro $\sigma$, a EIS é $1/\sigma$ e o coeficiente seria $1/\sigma$.</p>
+  </div>
+
+  <div class="box box-thm">
+    <span class="box-label">A EIS e o debate empírico</span>
+    <div class="box-body">
+      <p>A elasticidade intertemporal de substituição mede quanto o consumidor está disposto a alterar o perfil temporal do consumo em resposta a mudanças na taxa de juros. Estimativas vão de 0.1 a 2 dependendo do método e da amostra. EIS baixa: taxa de juros move pouco o consumo; política monetária tem efeito real limitado via canal intertemporal. EIS alta: política monetária mais poderosa. O consenso atual da literatura empírica sugere EIS entre 0.3 e 0.7, abaixo do valor 1 implícito na log-utilidade.</p>
+    </div>
+  </div>
+
+  <div class="conn">
+    <span class="conn-icon">→ Q3</span>
+    <span class="conn-text">Q3 pede a log-linearização desta Euler. O resultado $\tilde{c}_t = \mathbb{E}_t[\tilde{c}_{t+1}] - \mathbb{E}_t[\tilde{r}_{t+1}]$ é a equação de movimento do consumo no modelo linearizado. O coeficiente de 1 na frente de $\tilde{r}$ é diretamente a <strong>EIS do modelo com log-utilidade</strong>.</span>
+  </div>
+</div>
+
+<!-- ─── SEÇÃO 6: RBC ─── -->
+<div id="s6" class="section">
+  <div class="section-header">
+    <span class="section-num">6</span>
+    <h2>O Modelo RBC: Mecanismo e Limites</h2>
+  </div>
+
+  <div class="prose">
+    <p>Um modelo RBC (Real Business Cycle) é uma extensão do modelo neoclássico de crescimento para incorporar flutuações. Os ingredientes básicos: famílias que maximizam utilidade intertemporal, firmas que maximizam lucro, mercados competitivos que limpam em todo período, e choques exógenos de produtividade.</p>
+  </div>
+
+  <div class="box box-int">
+    <span class="box-label">O mecanismo de propagação de um choque positivo de TFP</span>
+    <div class="box-body">
+      <p><strong>1. Impacto imediato:</strong> $A_t$ sobe $\Rightarrow$ $Y_t = A_t K_t^\alpha (\eta N_t)^{1-\alpha}$ sobe para qualquer nível de trabalho e capital dados.</p>
+      <p><strong>2. Mercado de trabalho:</strong> o salário real $w_t = (1-\alpha)Y_t/(\eta N_t)$ sobe. Trabalhadores respondem trabalhando mais (efeito substituição intertemporal do trabalho domina o efeito renda quando a persistência do choque é alta).</p>
+      <p><strong>3. Mercado de capital:</strong> o retorno ao capital sobe, induzindo mais poupança e mais investimento. Via Euler, o consumo sobe gradualmente ao longo do tempo.</p>
+      <p><strong>4. Persistência:</strong> se $A_t$ segue um AR(1) com $\rho$ alto, o choque persiste. Capital acumulado hoje alimenta produto amanhã, criando dinâmica de ciclo que parece com os dados.</p>
+    </div>
+  </div>
+
+  <div class="prose" style="margin-top:1.1rem;">
+    <p><strong>O que o modelo reproduce bem e o que ele não reproduce.</strong></p>
+  </div>
+
+  <table class="rule-table">
+    <thead>
+      <tr><th>Dimensão</th><th>Dados EUA</th><th>Modelo RBC</th><th>Avaliação</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="rf">$\sigma_I/\sigma_Y$</td>
+        <td>≈ 3.15</td>
+        <td>≈ 3.28</td>
+        <td class="re" style="color:var(--green);">bom</td>
+      </tr>
+      <tr>
+        <td class="rf">$\sigma_C/\sigma_Y$</td>
+        <td>≈ 0.72</td>
+        <td>≈ 0.32</td>
+        <td class="re" style="color:var(--accent);">subestima</td>
+      </tr>
+      <tr>
+        <td class="rf">$\sigma_H/\sigma_Y$</td>
+        <td>≈ 1.09</td>
+        <td>≈ 0.38</td>
+        <td class="re" style="color:var(--accent);">falha grave</td>
+      </tr>
+      <tr>
+        <td class="rf">Persistência do ciclo</td>
+        <td>alta</td>
+        <td>alta (via $\rho_A$)</td>
+        <td class="re" style="color:var(--green);">adequado</td>
+      </tr>
+      <tr>
+        <td class="rf">Efeitos reais da moeda</td>
+        <td>evidentes</td>
+        <td>inexistentes</td>
+        <td class="re" style="color:var(--accent);">falha estrutural</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="prose" style="margin-top:0.5rem;">
+    <p><strong>Por que as horas trabalhadas falham tanto.</strong> No modelo RBC, os trabalhadores ajustam as horas em resposta a variações no salário real ao longo do tempo (substituição intertemporal). Mas evidências microeconômicas mostram que a elasticidade intertemporal do trabalho no nível individual é baixa: as pessoas não trabalham muito mais quando o salário sobe temporariamente. O modelo precisa de uma elasticidade alta para reproduzir a volatilidade das horas, mas os dados individuais não suportam isso.</p>
+    <p>A extensão de Hansen (1985) com trabalho indivisível (ou-trabalha-ou-não-trabalha) resolve parcialmente o problema, gerando elasticidade agregada alta mesmo com elasticidade individual baixa. Mas isso requer um mercado de seguros implícito que é difícil de justificar.</p>
+  </div>
+
+  <div class="conn">
+    <span class="conn-icon">→ Q6, Q7</span>
+    <span class="conn-text">Q6 pede a descrição e o posicionamento histórico do modelo. Q7 pede avaliação empírica e o debate sobre calibração. <strong>Para Q7:</strong> a calibração fixa os parâmetros com base em evidências externas ao modelo; a vantagem é usar toda a informação disponível, o custo é a ausência de teste formal.</span>
+  </div>
+</div>
+
+<!-- ─── SEÇÃO 7: Romer ─── -->
+<div id="s7" class="section">
+  <div class="section-header">
+    <span class="section-num">7</span>
+    <h2>O Modelo de Romer: Por que as Propriedades Surgem</h2>
+  </div>
+
+  <div class="prose">
+    <p>O modelo simplificado do Romer (capítulo 4, sem governo, com depreciação de 100% e utilidade log) tem duas propriedades notáveis: a oferta de trabalho $\eta$ e a taxa de poupança $\hat{s}$ são constantes, independentes de qualquer choque de tecnologia. Essas propriedades não são hipóteses — são <em>conclusões</em> das equações do modelo. Entender de onde vêm é o objetivo das provas de Q8 e Q9.</p>
+  </div>
+
+  <div class="box box-int">
+    <span class="box-label">Por que $\eta$ é constante: a intuição</span>
+    <div class="box-body">
+      <p>A condição intratemporal iguala a desutilidade marginal do trabalho ao salário real. Quando a tecnologia melhora ($A_t$ sobe), tanto o salário ($w_t \propto Y_t/N_t$) quanto o consumo per capita ($c_t \propto Y_t/N_t$) sobem na mesma proporção. Na condição intratemporal $bc_t/(1-\eta_t) = w_t$, tanto o numerador quanto o denominador do lado esquerdo sobem e descem junto com $Y_t/N_t$. O termo $Y_t/N_t$ cancela dos dois lados. O que determina $\eta$ são apenas os parâmetros estruturais do modelo.</p>
+    </div>
+  </div>
+
+  <div class="box box-int" style="margin-top:0.8rem;">
+    <span class="box-label">Por que $\hat{s}$ é constante: a intuição</span>
+    <div class="box-body">
+      <p>Com log-utilidade e depreciação de 100%, a equação de Euler implica que a decisão ótima é sempre poupar uma fração constante da renda. A intuição é que a log-utilidade tem a propriedade de que os efeitos renda e substituição se cancelam precisamente: quando a taxa de retorno sobe (o que encoraja poupar mais), a riqueza também sobe (o que permite consumir mais). Os dois efeitos se anulam, e a fração poupada permanece $\hat{s} = \alpha\beta$.</p>
+      <p>A depreciação de 100% é necessária porque ela garante que o problema seja estacionário período a período: o capital do período anterior não carreia riqueza de forma assimétrica para o presente.</p>
+    </div>
+  </div>
+
+  <div class="prose" style="margin-top:1.1rem;">
+    <p><strong>O que quebra essas propriedades.</strong> As constâncias dependem de hipóteses específicas. Cada uma que for relaxada muda o resultado:</p>
+  </div>
+
+  <table class="rule-table">
+    <thead>
+      <tr><th>Mudança</th><th>Efeito sobre $\eta$</th><th>Efeito sobre $\hat{s}$</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="rf">Utilidade CRRA com $\sigma \neq 1$ no consumo</td>
+        <td>pode ainda ser constante</td>
+        <td>$\hat{s}$ varia com o ciclo</td>
+      </tr>
+      <tr>
+        <td class="rf">Depreciação $\delta < 1$</td>
+        <td>constante (mantém)</td>
+        <td>$\hat{s}$ não tem forma fechada</td>
+      </tr>
+      <tr>
+        <td class="rf">Utilidade não-separável em $c$ e $\ell$</td>
+        <td>depende de $A_t$</td>
+        <td>depende da forma</td>
+      </tr>
+      <tr>
+        <td class="rf">Mercados incompletos (Aiyagari)</td>
+        <td>distribuição importa</td>
+        <td>varia com incerteza agregada</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="prose" style="margin-top:0.6rem;">
+    <p><strong>O custo das hipóteses.</strong> A constância da taxa de poupança é, ao mesmo tempo, o que torna o modelo elegante e analiticamente tratável, e o que o impede de gerar comportamento realista em episódios de crise. Quando a incerteza aumenta drasticamente, como em 2008, os agentes devem poder aumentar a poupança como resposta precaucionária. Um modelo com taxa de poupança constante, por construção, não consegue gerar isso.</p>
+    <p>A solução da literatura é usar modelos com heterogeneidade de agentes e mercados incompletos (Aiyagari 1994, Krusell-Smith 1998), onde a distribuição da riqueza entre os agentes varia com o ciclo e a taxa de poupança agregada responde à incerteza. O custo: esses modelos não têm solução analítica; dependem de simulações numéricas com distribuições de agentes.</p>
+  </div>
+
+  <div class="conn">
+    <span class="conn-icon">→ Q8, Q9</span>
+    <span class="conn-text">Q8 pede as provas de ambas as propriedades. Q9 verifica se elas sobrevivem a uma mudança na utilidade sobre o lazer. A resposta é sim: como a utilidade é separável e a parte em $c$ é log, a Euler para $c$ é idêntica. <strong>A constância de $\hat{s}$ é uma propriedade da log-utilidade em consumo, não da forma do lazer.</strong></span>
+  </div>
+
+  <div class="takeaway">
+    <span class="takeaway-label">A tensão central do modelo</span>
+    <p>As quatro seções desta parte II descrevem a mesma tensão de ângulos diferentes: os modelos macroeconômicos analiticamente tratáveis exigem hipóteses que impedem de gerar comportamento de crise. A escolha entre tractabilidade e realismo empírico é intencional, não um descuido. Saber onde cada hipótese está sendo feita, e o que ela exclui, é o que separa quem usa o modelo de quem entende o modelo.</p>
+  </div>
+</div>
+
+<footer class="page-footer">
+  <span>Teoria · Macroeconomia Dinâmica · Lista II <span style="color:var(--text-dim)">· Monitor: Lucas Andrade</span></span>
+  <span style="color:var(--text-dim);">7 seções · Partes I e II</span>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<script>
+  renderMathInElement(document.body, {
+    delimiters: [
+      { left: "$$", right: "$$", display: true  },
+      { left: "$",  right: "$",  display: false }
+    ],
+    throwOnError: false
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulação Pulmonar | Lucas R. Andrade</title>
+    <style>
+        #back-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 36px;
+            background: rgba(15,23,42,0.92);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            z-index: 9999;
+            border-bottom: 1px solid rgba(56,189,248,0.2);
+        }
+        #back-nav a {
+            color: #94a3b8;
+            text-decoration: none;
+            font-family: monospace;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+            transition: color 0.2s;
+        }
+        #back-nav a:hover { color: #38bdf8; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 56px 20px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .container {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .simulation-box {
+            flex: 1;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+        .lung-container {
+            width: 100%;
+            height: 400px;
+            background: rgba(255,255,255,0.05);
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .lung-container.inhaling {
+            transform: scale(1.05);
+            background: rgba(255,200,200,0.1);
+        }
+        .lung-container.exhaling {
+            transform: scale(0.95);
+            background: rgba(200,200,255,0.1);
+        }
+        .particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            opacity: 0.8;
+            transition: opacity 0.1s;
+        }
+        .smoke-particle {
+            background: #ff6b6b;
+            box-shadow: 0 0 10px #ff6b6b;
+        }
+        .air-particle {
+            background: #4dabf7;
+            box-shadow: 0 0 5px #4dabf7;
+            width: 5px;
+            height: 5px;
+            opacity: 0.4;
+        }
+        .controls {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            margin-bottom: 20px;
+        }
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+            transition: transform 0.2s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .stats {
+            margin-top: 15px;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0;
+            padding: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 5px;
+        }
+        .stat-label {
+            font-weight: bold;
+        }
+        .stat-value {
+            font-family: 'Courier New', monospace;
+        }
+        h3 {
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        .info {
+            background: rgba(255,255,255,0.15);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .parameter {
+            margin: 10px 0;
+        }
+        input[type="range"] {
+            width: 200px;
+            margin: 0 10px;
+        }
+        .wall {
+            position: absolute;
+            background: rgba(255,255,255,0.2);
+            pointer-events: none;
+        }
+        .breathing-indicator {
+            text-align: center;
+            font-size: 12px;
+            margin-top: 10px;
+            font-weight: bold;
+            min-height: 20px;
+        }
+        .status-running {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: #51cf66;
+            border-radius: 50%;
+            margin-right: 5px;
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+    </style>
+</head>
+<body>
+    <div id="back-nav">
+        <a href="lab.html">← Lab</a>
+    </div>
+
+    <h1>🫁 Simulação Termodinâmica: Absorção de Fumaça nos Pulmões</h1>
+
+    <div class="controls">
+        <div style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+            <div class="parameter">
+                <label>Partículas de Fumaça: <span id="totalParticles">800</span></label>
+                <input type="range" id="particleCount" min="200" max="1500" value="800" step="100">
+            </div>
+            <div class="parameter">
+                <label>Taxa de Absorção: <span id="absorptionRate">15</span>%</label>
+                <input type="range" id="absorption" min="5" max="30" value="15" step="1">
+            </div>
+            <div class="parameter">
+                <label>Tragadas (Aos Poucos): <span id="puffsCount">5</span></label>
+                <input type="range" id="puffs" min="2" max="10" value="5" step="1">
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 15px;">
+            <button id="startAll" onclick="startSimulation('all')">▶ Fumar de Uma Vez</button>
+            <button id="startGradual" onclick="startSimulation('gradual')">▶ Fumar Aos Poucos</button>
+            <button onclick="resetSimulation()">🔄 Reiniciar Tudo</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="simulation-box">
+            <h3>🚬 Fumar de Uma Vez</h3>
+            <div class="lung-container" id="lung1">
+                <div class="wall" style="top: 0; left: 0; right: 0; height: 5px;"></div>
+                <div class="wall" style="bottom: 0; left: 0; right: 0; height: 5px;"></div>
+                <div class="wall" style="left: 0; top: 0; bottom: 0; width: 5px;"></div>
+                <div class="wall" style="right: 0; top: 0; bottom: 0; width: 5px;"></div>
+            </div>
+            <div class="breathing-indicator" id="breath1"></div>
+            <div class="stats">
+                <div class="stat-row">
+                    <span class="stat-label">🔴 Fumaça na câmara:</span>
+                    <span class="stat-value" id="smoke1">0</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">🔵 Ar na câmara:</span>
+                    <span class="stat-value" id="air1">0</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Absorvidas:</span>
+                    <span class="stat-value" id="absorbed1">0</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Expiradas:</span>
+                    <span class="stat-value" id="expelled1">0</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Taxa de absorção:</span>
+                    <span class="stat-value" id="efficiency1">0%</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Tempo total:</span>
+                    <span class="stat-value" id="time1">0.0s</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Ciclos respiratórios:</span>
+                    <span class="stat-value" id="cycles1">0</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="simulation-box">
+            <h3>🚬 Fumar Aos Poucos</h3>
+            <div class="lung-container" id="lung2">
+                <div class="wall" style="top: 0; left: 0; right: 0; height: 5px;"></div>
+                <div class="wall" style="bottom: 0; left: 0; right: 0; height: 5px;"></div>
+                <div class="wall" style="left: 0; top: 0; bottom: 0; width: 5px;"></div>
+                <div class="wall" style="right: 0; top: 0; bottom: 0; width: 5px;"></div>
+            </div>
+            <div class="breathing-indicator" id="breath2"></div>
+            <div class="stats">
+                <div class="stat-row">
+                    <span class="stat-label">🔴 Fumaça na câmara:</span>
+                    <span class="stat-value" id="smoke2">0</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">🔵 Ar na câmara:</span>
+                    <span class="stat-value" id="air2">0</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Absorvidas:</span>
+                    <span class="stat-value" id="absorbed2">0</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Expiradas:</span>
+                    <span class="stat-value" id="expelled2">0</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Taxa de absorção:</span>
+                    <span class="stat-value" id="efficiency2">0%</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Tempo total:</span>
+                    <span class="stat-value" id="time2">0.0s</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Tragada atual:</span>
+                    <span class="stat-value" id="currentPuff">0/0</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Ciclos respiratórios:</span>
+                    <span class="stat-value" id="cycles2">0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="info">
+        <h3>📊 Modelo Termodinâmico Realista</h3>
+        <p><strong>Hipóteses da Simulação:</strong></p>
+        <ul>
+            <li>🫁 <strong>Respiração cíclica</strong>: O pulmão se contrai (expira) e expande (inspira) periodicamente</li>
+            <li>🔴 <strong>Partículas de fumaça</strong> (vermelhas): Entram durante inalação e podem ser absorvidas pelas paredes</li>
+            <li>🔵 <strong>Partículas de ar</strong> (azuis): Entram junto com a fumaça para diluição realista</li>
+            <li>💨 <strong>Expiração</strong>: Durante a contração, partículas não absorvidas são expelidas para cima</li>
+            <li>📈 <strong>Absorção probabilística</strong>: Cada colisão com paredes tem chance configurável de absorção</li>
+            <li>⚡ <strong>Movimento browniano</strong>: Partículas se movem aleatoriamente simulando difusão térmica</li>
+            <li>🎯 <strong>Competição espacial</strong>: Muitas partículas reduzem eficiência individual de absorção</li>
+        </ul>
+        <p><strong>Resultado Esperado:</strong> Fumar aos poucos tende a ter maior absorção total, pois permite ciclos respiratórios mais eficientes com menor saturação.</p>
+    </div>
+
+    <script>
+        class Particle {
+            constructor(x, y, lungId, isSmoke = true) {
+                this.x = x;
+                this.y = y;
+                this.vx = (Math.random() - 0.5) * 2;
+                this.vy = (Math.random() - 0.5) * 2;
+                this.element = document.createElement('div');
+                this.element.className = isSmoke ? 'particle smoke-particle' : 'particle air-particle';
+                this.element.style.left = x + 'px';
+                this.element.style.top = y + 'px';
+                document.getElementById(lungId).appendChild(this.element);
+                this.absorbed = false;
+                this.expelled = false;
+                this.lungId = lungId;
+                this.isSmoke = isSmoke;
+            }
+
+            update(width, height, absorptionRate, isExhaling) {
+                if (this.absorbed || this.expelled) return false;
+
+                this.vx += (Math.random() - 0.5) * 0.5;
+                this.vy += (Math.random() - 0.5) * 0.5;
+
+                if (isExhaling) {
+                    this.vy -= 1.5;
+                }
+
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (isExhaling && this.y < 0) {
+                    this.expel();
+                    return false;
+                }
+
+                if (this.x <= 5 || this.x >= width - 5) {
+                    if (this.isSmoke && Math.random() < absorptionRate / 100) {
+                        this.absorb();
+                        return false;
+                    }
+                    this.vx *= -0.7;
+                    this.x = Math.max(5, Math.min(width - 5, this.x));
+                }
+
+                if (this.y <= 5 || this.y >= height - 5) {
+                    if (this.isSmoke && this.y >= height - 5 && Math.random() < absorptionRate / 100) {
+                        this.absorb();
+                        return false;
+                    }
+                    this.vy *= -0.7;
+                    this.y = Math.max(5, Math.min(height - 5, this.y));
+                }
+
+                this.vx *= 0.98;
+                this.vy *= 0.98;
+
+                this.element.style.left = this.x + 'px';
+                this.element.style.top = this.y + 'px';
+
+                return true;
+            }
+
+            absorb() {
+                this.absorbed = true;
+                this.element.style.transition = 'all 0.5s';
+                this.element.style.opacity = '0';
+                this.element.style.transform = 'scale(0.3)';
+                setTimeout(() => this.element.remove(), 500);
+            }
+
+            expel() {
+                this.expelled = true;
+                this.element.style.transition = 'all 0.3s';
+                this.element.style.opacity = '0';
+                this.element.style.top = '-20px';
+                setTimeout(() => this.element.remove(), 300);
+            }
+        }
+
+        class LungSimulation {
+            constructor(lungId, mode) {
+                this.lungId = lungId;
+                this.mode = mode;
+                this.particles = [];
+                this.absorbed = 0;
+                this.expelled = 0;
+                this.totalTime = 0;
+                this.running = false;
+                this.currentPuff = 0;
+                this.totalPuffs = parseInt(document.getElementById('puffs').value);
+                this.breathingCycles = 0;
+                this.isExhaling = false;
+                this.breathIndicator = document.getElementById(this.lungId === 'lung1' ? 'breath1' : 'breath2');
+                this.lungElement = document.getElementById(lungId);
+            }
+
+            addParticles(smokeCount) {
+                const lung = document.getElementById(this.lungId);
+                const width = lung.offsetWidth;
+                const height = lung.offsetHeight;
+                const margin = 10;
+
+                for (let i = 0; i < smokeCount; i++) {
+                    const x = Math.random() * (width - margin * 2) + margin;
+                    const y = Math.random() * (height - margin * 2) + margin;
+                    this.particles.push(new Particle(x, y, this.lungId, true));
+                }
+
+                const airCount = smokeCount * 3;
+                for (let i = 0; i < airCount; i++) {
+                    const x = Math.random() * (width - margin * 2) + margin;
+                    const y = Math.random() * (height - margin * 2) + margin;
+                    this.particles.push(new Particle(x, y, this.lungId, false));
+                }
+            }
+
+            async start() {
+                this.running = true;
+                const totalParticles = parseInt(document.getElementById('particleCount').value);
+                const startTime = Date.now();
+
+                if (this.mode === 'all') {
+                    await this.breathe('inhale');
+                    this.addParticles(totalParticles);
+
+                    const totalCycles = this.totalPuffs * 2;
+
+                    for (let i = 0; i < totalCycles; i++) {
+                        if (!this.running) break;
+                        await this.breathingCycle();
+                    }
+
+                    await this.breathe('exhale');
+                } else {
+                    const particlesPerPuff = Math.floor(totalParticles / this.totalPuffs);
+
+                    for (let i = 0; i < this.totalPuffs; i++) {
+                        if (!this.running) break;
+                        this.currentPuff = i + 1;
+
+                        await this.breathe('inhale');
+                        this.addParticles(particlesPerPuff);
+
+                        for (let j = 0; j < 2; j++) {
+                            if (!this.running) break;
+                            await this.breathingCycle();
+                        }
+
+                        await this.breathe('exhale');
+
+                        this.breathIndicator.innerHTML = '⏸️ Pausa entre tragadas...';
+                        await new Promise(resolve => setTimeout(resolve, 800));
+                    }
+                }
+
+                this.totalTime = (Date.now() - startTime) / 1000;
+                await this.expelAllRemaining();
+                this.breathIndicator.innerHTML = '✅ Simulação completa';
+                this.running = false;
+            }
+
+            async breathingCycle() {
+                await this.breathe('hold');
+                await this.breathe('exhale');
+            }
+
+            async breathe(phase) {
+                const duration = phase === 'inhale' ? 1000 : phase === 'exhale' ? 1200 : 1500;
+
+                if (phase === 'inhale') {
+                    this.isExhaling = false;
+                    this.lungElement.classList.add('inhaling');
+                    this.lungElement.classList.remove('exhaling');
+                    this.breathIndicator.innerHTML = '<span class="status-running"></span>📥 Inspirando...';
+                } else if (phase === 'exhale') {
+                    this.isExhaling = true;
+                    this.breathingCycles++;
+                    this.lungElement.classList.add('exhaling');
+                    this.lungElement.classList.remove('inhaling');
+                    this.breathIndicator.innerHTML = '<span class="status-running"></span>📤 Expirando...';
+                } else {
+                    this.isExhaling = false;
+                    this.lungElement.classList.remove('inhaling', 'exhaling');
+                    this.breathIndicator.innerHTML = '<span class="status-running"></span>⏸️ Retendo (absorção)...';
+                }
+
+                await this.simulate(duration);
+            }
+
+            async simulate(duration) {
+                const startTime = Date.now();
+                const lung = document.getElementById(this.lungId);
+                const width = lung.offsetWidth;
+                const height = lung.offsetHeight;
+                const absorptionRate = parseInt(document.getElementById('absorption').value);
+
+                return new Promise(resolve => {
+                    const interval = setInterval(() => {
+                        if (!this.running) {
+                            clearInterval(interval);
+                            resolve();
+                            return;
+                        }
+
+                        this.particles = this.particles.filter(p => {
+                            const alive = p.update(width, height, absorptionRate, this.isExhaling);
+                            if (!alive) {
+                                if (p.absorbed && p.isSmoke) this.absorbed++;
+                                if (p.expelled && p.isSmoke) this.expelled++;
+                            }
+                            return alive;
+                        });
+
+                        this.updateStats();
+
+                        if (Date.now() - startTime >= duration) {
+                            clearInterval(interval);
+                            resolve();
+                        }
+                    }, 1000 / 60);
+                });
+            }
+
+            async expelAllRemaining() {
+                const remaining = this.particles.filter(p => p.isSmoke).length;
+                this.expelled += remaining;
+                this.particles.forEach(p => p.expel());
+                this.particles = [];
+                await new Promise(resolve => setTimeout(resolve, 300));
+                this.updateStats();
+            }
+
+            updateStats() {
+                const suffix = this.lungId === 'lung1' ? '1' : '2';
+                const smokeCount = this.particles.filter(p => p.isSmoke).length;
+                const airCount = this.particles.filter(p => !p.isSmoke).length;
+
+                document.getElementById('smoke' + suffix).textContent = smokeCount;
+                document.getElementById('air' + suffix).textContent = airCount;
+                document.getElementById('absorbed' + suffix).textContent = this.absorbed;
+                document.getElementById('expelled' + suffix).textContent = this.expelled;
+
+                const total = this.absorbed + this.expelled;
+                const efficiency = total > 0 ? ((this.absorbed / total) * 100).toFixed(1) : '0.0';
+                document.getElementById('efficiency' + suffix).textContent = efficiency + '%';
+                document.getElementById('time' + suffix).textContent = this.totalTime.toFixed(1) + 's';
+                document.getElementById('cycles' + suffix).textContent = this.breathingCycles;
+
+                if (this.mode === 'gradual') {
+                    document.getElementById('currentPuff').textContent = this.currentPuff + '/' + this.totalPuffs;
+                }
+            }
+
+            stop() {
+                this.running = false;
+                this.particles.forEach(p => p.element.remove());
+                this.particles = [];
+                this.lungElement.classList.remove('inhaling', 'exhaling');
+            }
+        }
+
+        let sim1 = null;
+        let sim2 = null;
+
+        async function startSimulation(mode) {
+            if (mode === 'all') {
+                if (sim1 && sim1.running) return;
+
+                document.getElementById('startAll').disabled = true;
+                sim1 = new LungSimulation('lung1', 'all');
+                await sim1.start();
+                document.getElementById('startAll').disabled = false;
+            } else {
+                if (sim2 && sim2.running) return;
+
+                document.getElementById('startGradual').disabled = true;
+                sim2 = new LungSimulation('lung2', 'gradual');
+                await sim2.start();
+                document.getElementById('startGradual').disabled = false;
+            }
+        }
+
+        function resetSimulation() {
+            if (sim1) sim1.stop();
+            if (sim2) sim2.stop();
+
+            ['lung1', 'lung2'].forEach(id => {
+                const lung = document.getElementById(id);
+                const particles = lung.querySelectorAll('.particle');
+                particles.forEach(p => p.remove());
+            });
+
+            ['1', '2'].forEach(suffix => {
+                document.getElementById('smoke' + suffix).textContent = '0';
+                document.getElementById('air' + suffix).textContent = '0';
+                document.getElementById('absorbed' + suffix).textContent = '0';
+                document.getElementById('expelled' + suffix).textContent = '0';
+                document.getElementById('efficiency' + suffix).textContent = '0%';
+                document.getElementById('time' + suffix).textContent = '0.0s';
+                document.getElementById('cycles' + suffix).textContent = '0';
+            });
+
+            document.getElementById('currentPuff').textContent = '0/0';
+            document.getElementById('breath1').textContent = '';
+            document.getElementById('breath2').textContent = '';
+
+            sim1 = null;
+            sim2 = null;
+        }
+
+        document.getElementById('particleCount').addEventListener('input', function() {
+            document.getElementById('totalParticles').textContent = this.value;
+        });
+
+        document.getElementById('absorption').addEventListener('input', function() {
+            document.getElementById('absorptionRate').textContent = this.value;
+        });
+
+        document.getElementById('puffs').addEventListener('input', function() {
+            document.getElementById('puffsCount').textContent = this.value;
+        });
+    </script>
+</body>
+</html>

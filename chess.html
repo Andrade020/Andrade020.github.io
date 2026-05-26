@@ -1,0 +1,1477 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xadrez Contínuo | Lucas R. Andrade</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  #back-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 36px;
+    background: rgba(15,23,42,0.92);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    z-index: 9999;
+    border-bottom: 1px solid rgba(56,189,248,0.2);
+  }
+  #back-nav a {
+    color: #94a3b8;
+    text-decoration: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    transition: color 0.2s;
+  }
+  #back-nav a:hover { color: #38bdf8; }
+
+  body {
+    background: #1a1a1e;
+    color: #e0ddd5;
+    font-family: 'Crimson Pro', serif;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 56px 20px 20px;
+    gap: 24px;
+  }
+
+  #game-container {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+  }
+
+  #sidebar {
+    width: 240px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .panel {
+    background: #26262c;
+    border: 1px solid #3a3a42;
+    border-radius: 8px;
+    padding: 16px;
+  }
+
+  .panel h3 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #8a8a96;
+    margin-bottom: 12px;
+  }
+
+  #turn-indicator {
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+    padding: 10px;
+  }
+  #turn-indicator.white { color: #f0ead6; }
+  #turn-indicator.black { color: #b8860b; }
+
+  .energy-bar-container {
+    width: 100%;
+    height: 24px;
+    background: #1a1a1e;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #3a3a42;
+    position: relative;
+  }
+
+  .energy-bar {
+    height: 100%;
+    transition: width 0.3s ease;
+    border-radius: 12px;
+  }
+  .energy-bar.white { background: linear-gradient(90deg, #c9b896, #f0ead6); }
+  .energy-bar.black { background: linear-gradient(90deg, #8a6914, #b8860b); }
+
+  .energy-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #1a1a1e;
+    font-weight: 600;
+  }
+
+  #board-wrapper {
+    position: relative;
+  }
+
+  #board {
+    width: 800px;
+    height: 800px;
+    background: #4a4a52;
+    border-radius: 4px;
+    position: relative;
+    cursor: default;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    border: 2px solid #3a3a42;
+  }
+
+  .piece {
+    position: absolute;
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    cursor: pointer;
+    user-select: none;
+    transition: box-shadow 0.2s;
+    z-index: 10;
+    transform: translate(-50%, -50%);
+  }
+
+  .piece.white-piece {
+    background: radial-gradient(circle at 35% 35%, #fff, #d4cfc0);
+    border: 2px solid #a09880;
+    color: #2a2a2e;
+    text-shadow: none;
+  }
+
+  .piece.black-piece {
+    background: radial-gradient(circle at 35% 35%, #5a4a20, #2a2010);
+    border: 2px solid #8a7a30;
+    color: #f0e0a0;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+  }
+
+  .piece.selected {
+    box-shadow: 0 0 0 3px #ff6b35, 0 0 20px rgba(255, 107, 53, 0.4);
+    z-index: 20;
+  }
+
+  .piece.moved-this-turn {
+    opacity: 0.7;
+  }
+
+  .piece:hover:not(.moved-this-turn) {
+    box-shadow: 0 0 12px rgba(255,255,255,0.2);
+  }
+
+  .move-indicator {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 5;
+    transform: translate(-50%, -50%);
+  }
+
+  .range-circle {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 4;
+    transform: translate(-50%, -50%);
+    border: 2px dashed rgba(255, 107, 53, 0.3);
+    background: rgba(255, 107, 53, 0.03);
+  }
+
+  .direction-cone {
+    position: absolute;
+    pointer-events: none;
+    z-index: 3;
+  }
+
+  .ghost-piece {
+    position: absolute;
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 15;
+    transform: translate(-50%, -50%);
+    opacity: 0.5;
+    border: 2px dashed rgba(255, 107, 53, 0.6);
+  }
+
+  .capture-indicator {
+    position: absolute;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 25;
+    transform: translate(-50%, -50%);
+    border: 3px solid #ff3333;
+    animation: pulse-capture 0.8s ease-in-out infinite;
+  }
+
+  @keyframes pulse-capture {
+    0%, 100% { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 1; transform: translate(-50%, -50%) scale(1.15); }
+  }
+
+  @keyframes capture-flash {
+    0% { background: rgba(255, 50, 50, 0.3); }
+    100% { background: transparent; }
+  }
+
+  #board.capture-flash {
+    animation: capture-flash 0.5s ease-out;
+  }
+
+  .path-line {
+    position: absolute;
+    pointer-events: none;
+    z-index: 2;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+  }
+
+  #btn-end-turn, #btn-undo, #btn-reset {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #3a3a42;
+    border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  #btn-end-turn {
+    background: #ff6b35;
+    color: #1a1a1e;
+    border-color: #ff6b35;
+    font-weight: 600;
+  }
+  #btn-end-turn:hover { background: #ff8555; }
+
+  #btn-undo {
+    background: transparent;
+    color: #8a8a96;
+  }
+  #btn-undo:hover { background: #2e2e34; color: #e0ddd5; }
+
+  #btn-reset {
+    background: transparent;
+    color: #8a8a96;
+    border-color: #552222;
+  }
+  #btn-reset:hover { background: #331111; color: #ff6666; }
+
+  #log {
+    max-height: 200px;
+    overflow-y: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: #6a6a76;
+    line-height: 1.6;
+  }
+  #log .log-entry { padding: 2px 0; border-bottom: 1px solid #2a2a30; }
+  #log .log-capture { color: #ff6b35; }
+
+  .moved-list {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: #6a6a76;
+    margin-top: 8px;
+  }
+
+  .knight-mode-hint {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 107, 53, 0.9);
+    color: #1a1a1e;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    z-index: 100;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  #victory-overlay {
+    display: none;
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+  }
+  #victory-overlay.show { display: flex; }
+  #victory-text {
+    font-size: 48px;
+    font-weight: 700;
+    text-shadow: 0 0 30px rgba(255,107,53,0.5);
+  }
+
+  /* Scrollbar */
+  #log::-webkit-scrollbar { width: 4px; }
+  #log::-webkit-scrollbar-track { background: transparent; }
+  #log::-webkit-scrollbar-thumb { background: #3a3a42; border-radius: 2px; }
+
+  .energy-cost-preview {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #ff6b35;
+    text-align: center;
+    margin-top: 4px;
+    min-height: 16px;
+  }
+</style>
+</head>
+<body>
+
+<div id="back-nav">
+  <a href="lab.html">← Lab</a>
+</div>
+
+<div id="game-container">
+  <div id="sidebar">
+    <div class="panel">
+      <h3>Turno</h3>
+      <div id="turn-indicator" class="white">Brancas</div>
+      <div id="turn-number" style="text-align:center;font-family:'JetBrains Mono',monospace;font-size:11px;color:#6a6a76;margin-top:4px;">Turno 1</div>
+    </div>
+
+    <div class="panel">
+      <h3>Energia</h3>
+      <div class="energy-bar-container">
+        <div class="energy-bar white" id="energy-bar" style="width:100%"></div>
+        <div class="energy-text" id="energy-text">100 / 100</div>
+      </div>
+      <div class="energy-cost-preview" id="energy-cost-preview"></div>
+      <div class="moved-list" id="moved-list"></div>
+    </div>
+
+    <div class="panel" style="display:flex;flex-direction:column;gap:8px;">
+      <button id="btn-end-turn" onclick="endTurn()">Encerrar Turno</button>
+      <button id="btn-undo" onclick="undoLastMove()">Desfazer Último</button>
+      <button id="btn-reset" onclick="resetGame()">Novo Jogo</button>
+    </div>
+
+    <div class="panel">
+      <h3>Custos de Energia</h3>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#6a6a76;line-height:2;">
+        ♟ Peão — 30 (~3/turno)<br>
+        <span style="color:#ff6b35;">● 1º mov: 40⚡, alcance 2x</span><br>
+        ♞ Cavalo — 15 (distância fixa)<br>
+        ♝ Bispo — 18+<br>
+        ♜ Torre — 18+<br>
+        ♛ Rainha — 12+<br>
+        ♚ Rei — 30+<br>
+        <span style="color:#8a8a96;font-size:9px;">+ = pode gastar mais para ir mais longe</span>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>Como Jogar</h3>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#6a6a76;line-height:1.8;">
+        Arraste peças para mover<br>
+        Cavalo: 2 cliques (L)<br>
+        Captura = sobreposição &gt;50%<br>
+        Turno acaba em captura<br>
+        Capture o Rei para vencer<br>
+        Gaste pelo menos 10⚡/turno<br>
+        Mais longe = mais energia<br>
+        <span style="color:#8a8a96">Enter</span> encerrar turno<br>
+        <span style="color:#8a8a96">Ctrl+Z</span> desfazer<br>
+        <span style="color:#8a8a96">Esc</span> cancelar
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>Capturadas</h3>
+      <div id="captured-white" style="font-size:22px;min-height:28px;line-height:28px;"></div>
+      <div id="captured-black" style="font-size:22px;min-height:28px;line-height:28px;margin-top:4px;"></div>
+    </div>
+
+    <div class="panel">
+      <h3>Log</h3>
+      <div id="log"></div>
+    </div>
+  </div>
+
+  <div id="board-wrapper">
+    <canvas id="board" width="800" height="800"></canvas>
+    <div id="pieces-layer" style="position:absolute;top:0;left:0;width:800px;height:800px;pointer-events:none;">
+    </div>
+    <div id="ui-layer" style="position:absolute;top:0;left:0;width:800px;height:800px;pointer-events:none;">
+    </div>
+    <div id="victory-overlay">
+      <div id="victory-text"></div>
+      <button onclick="resetGame()" style="padding:12px 32px;font-family:'JetBrains Mono',monospace;font-size:14px;background:#ff6b35;color:#1a1a1e;border:none;border-radius:6px;cursor:pointer;">Novo Jogo</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// CONTINUOUS CHESS - Game Engine
+// ============================================================
+
+const BOARD_W = 800, BOARD_H = 800;
+const PIECE_RADIUS = 34;
+const CAPTURE_OVERLAP_RATIO = 0.5; // >50% overlap to capture
+const MAX_ENERGY = 100;
+const MIN_ENERGY_SPEND = 10; // must spend at least this much per turn
+
+// Piece types
+const PAWN = 'pawn', KNIGHT = 'knight', BISHOP = 'bishop',
+      ROOK = 'rook', QUEEN = 'queen', KING = 'king';
+const WHITE = 'white', BLACK = 'black';
+
+// Energy costs per piece type
+const ENERGY_COST = {
+  [PAWN]: 30, [KNIGHT]: 15, [BISHOP]: 18,
+  [ROOK]: 18, [QUEEN]: 12, [KING]: 30
+};
+
+// Base distance per energy point spent (pixels per energy)
+const DIST_PER_ENERGY = {
+  [PAWN]: 3.5, [KNIGHT]: 7, [BISHOP]: 9,
+  [ROOK]: 9, [QUEEN]: 12, [KING]: 3
+};
+
+// Knight has a FIXED max distance regardless of energy
+const KNIGHT_FIXED_DIST = 130;
+
+// Pawn first move: longer range, higher cost
+const PAWN_FIRST_MOVE_COST = 40;
+const PAWN_FIRST_MOVE_DIST_PER_E = 5;
+
+function getMaxDist(type, availableEnergy, piece) {
+  const baseCost = ENERGY_COST[type];
+  if (availableEnergy < baseCost) return 0;
+  if (type === KNIGHT) return KNIGHT_FIXED_DIST;
+  if (type === PAWN) {
+    if (piece && !piece.hasMoved && availableEnergy >= PAWN_FIRST_MOVE_COST) {
+      return PAWN_FIRST_MOVE_COST * PAWN_FIRST_MOVE_DIST_PER_E;
+    }
+    return baseCost * DIST_PER_ENERGY[type];
+  }
+  const baseDist = baseCost * DIST_PER_ENERGY[type];
+  const extraEnergy = availableEnergy - baseCost;
+  const extraDist = extraEnergy * DIST_PER_ENERGY[type] * 0.6;
+  return baseDist + extraDist;
+}
+
+function getEnergyCostForDist(type, distance, availableEnergy, piece) {
+  const baseCost = ENERGY_COST[type];
+  if (type === KNIGHT) return baseCost;
+  if (type === PAWN) {
+    if (piece && !piece.hasMoved) {
+      const normalMax = baseCost * DIST_PER_ENERGY[type];
+      if (distance > normalMax) return PAWN_FIRST_MOVE_COST;
+      return baseCost;
+    }
+    return baseCost;
+  }
+  const baseDist = baseCost * DIST_PER_ENERGY[type];
+  if (distance <= baseDist) return baseCost;
+  const extraDist = distance - baseDist;
+  const extraRate = DIST_PER_ENERGY[type] * 0.6;
+  const extraEnergy = Math.ceil(extraDist / extraRate);
+  return Math.min(baseCost + extraEnergy, availableEnergy);
+}
+
+const PIECE_SYMBOLS = {
+  [WHITE]: { [KING]: '♔', [QUEEN]: '♕', [ROOK]: '♖', [BISHOP]: '♗', [KNIGHT]: '♘', [PAWN]: '♙' },
+  [BLACK]: { [KING]: '♚', [QUEEN]: '♛', [ROOK]: '♜', [BISHOP]: '♝', [KNIGHT]: '♞', [PAWN]: '♟' }
+};
+
+const PIECE_NAMES = {
+  [PAWN]: 'Peão', [KNIGHT]: 'Cavalo', [BISHOP]: 'Bispo',
+  [ROOK]: 'Torre', [QUEEN]: 'Rainha', [KING]: 'Rei'
+};
+
+let pieces = [];
+let currentTurn = WHITE;
+let energy = MAX_ENERGY;
+let turnNumber = 1;
+let selectedPiece = null;
+let movedThisTurn = [];
+let moveHistory = [];
+let gameOver = false;
+let turnEndedByCapture = false;
+
+let knightPhase = null;
+let knightFirstLeg = null;
+let knightGhostPos = null;
+
+let isDragging = false;
+let dragPiece = null;
+let dragStartX = 0, dragStartY = 0;
+let dragCurrentX = 0, dragCurrentY = 0;
+
+let nextPieceId = 0;
+
+function createPiece(type, color, x, y) {
+  return { id: nextPieceId++, type, color, x, y, alive: true, hasMoved: false };
+}
+
+function initPieces() {
+  pieces = [];
+  nextPieceId = 0;
+  const spacing = BOARD_W / 8;
+  const margin = spacing / 2;
+
+  const backRow = [ROOK, KNIGHT, BISHOP, QUEEN, KING, BISHOP, KNIGHT, ROOK];
+
+  for (let i = 0; i < 8; i++) {
+    const x = margin + i * spacing;
+    pieces.push(createPiece(backRow[i], WHITE, x, BOARD_H - margin));
+    pieces.push(createPiece(PAWN, WHITE, x, BOARD_H - margin - spacing));
+    pieces.push(createPiece(backRow[i], BLACK, x, margin));
+    pieces.push(createPiece(PAWN, BLACK, x, margin + spacing));
+  }
+}
+
+const canvas = document.getElementById('board');
+const ctx = canvas.getContext('2d');
+const piecesLayer = document.getElementById('pieces-layer');
+const uiLayer = document.getElementById('ui-layer');
+
+function render() {
+  ctx.fillStyle = '#4a4a52';
+  ctx.fillRect(0, 0, BOARD_W, BOARD_H);
+
+  ctx.strokeStyle = 'rgba(255,255,255,0.03)';
+  ctx.lineWidth = 1;
+  const sp = BOARD_W / 8;
+  for (let i = 1; i < 8; i++) {
+    ctx.beginPath(); ctx.moveTo(i * sp, 0); ctx.lineTo(i * sp, BOARD_H); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0, i * sp); ctx.lineTo(BOARD_W, i * sp); ctx.stroke();
+  }
+
+  if (selectedPiece && !isDragging) {
+    drawMoveZone(selectedPiece);
+  }
+
+  if (isDragging && dragPiece) {
+    drawDragPath();
+  }
+
+  const alivePieces = pieces.filter(p => p.alive);
+  for (const p of alivePieces) {
+    if (p === selectedPiece && isDragging) continue;
+    drawPiece(p, p === selectedPiece);
+  }
+  if (isDragging && dragPiece) {
+    drawPieceAt(dragPiece, dragCurrentX, dragCurrentY, true, true);
+    drawCapturePreview(dragCurrentX, dragCurrentY, dragPiece);
+  }
+
+  if (knightPhase === 'choosing_bend' && knightGhostPos) {
+    drawKnightPath();
+  }
+
+  updateUI();
+}
+
+function drawPiece(p, isSelected) {
+  drawPieceAt(p, p.x, p.y, isSelected, false);
+}
+
+function drawPieceAt(p, x, y, isSelected, isDrag) {
+  const r = PIECE_RADIUS;
+  const movedAlready = movedThisTurn.includes(p.id);
+
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(x + 2, y + 2, r, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(0,0,0,0.3)';
+  ctx.fill();
+  ctx.restore();
+
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(x, y, r, 0, Math.PI * 2);
+
+  if (p.color === WHITE) {
+    const grad = ctx.createRadialGradient(x - 5, y - 5, 2, x, y, r);
+    grad.addColorStop(0, '#ffffff');
+    grad.addColorStop(1, '#d4cfc0');
+    ctx.fillStyle = grad;
+  } else {
+    const grad = ctx.createRadialGradient(x - 5, y - 5, 2, x, y, r);
+    grad.addColorStop(0, '#5a4a20');
+    grad.addColorStop(1, '#2a2010');
+    ctx.fillStyle = grad;
+  }
+  ctx.fill();
+
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = p.color === WHITE ? '#a09880' : '#8a7a30';
+  if (isSelected) {
+    ctx.strokeStyle = '#ff6b35';
+    ctx.lineWidth = 3;
+    ctx.shadowColor = 'rgba(255, 107, 53, 0.5)';
+    ctx.shadowBlur = 15;
+  }
+  ctx.stroke();
+  ctx.restore();
+
+  if (movedAlready && !isDrag) {
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(26,26,30,0.4)';
+    ctx.fill();
+    ctx.restore();
+  }
+
+  ctx.save();
+  ctx.font = '40px serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillStyle = p.color === WHITE ? '#2a2a2e' : '#f0e0a0';
+  if (movedAlready && !isDrag) ctx.globalAlpha = 0.5;
+  ctx.fillText(PIECE_SYMBOLS[p.color][p.type], x, y + 1);
+  ctx.restore();
+
+  if (p.type === PAWN && !p.hasMoved && !movedAlready) {
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(x, y - r + 5, 4, 0, Math.PI * 2);
+    ctx.fillStyle = '#ff6b35';
+    ctx.fill();
+    ctx.restore();
+  }
+}
+
+function drawMoveZone(p) {
+  const maxD = getMaxDist(p.type, energy, p);
+  const cost = ENERGY_COST[p.type];
+
+  if (movedThisTurn.includes(p.id)) return;
+  if (energy < cost) return;
+
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(p.x, p.y, maxD, 0, Math.PI * 2);
+  ctx.strokeStyle = 'rgba(255, 107, 53, 0.25)';
+  ctx.lineWidth = 2;
+  ctx.setLineDash([6, 4]);
+  ctx.stroke();
+  ctx.fillStyle = 'rgba(255, 107, 53, 0.03)';
+  ctx.fill();
+  ctx.setLineDash([]);
+  ctx.restore();
+
+  if (p.type === PAWN) {
+    const dir = p.color === WHITE ? -1 : 1;
+    drawCone(p.x, p.y, maxD, dir === -1 ? -Math.PI/2 : Math.PI/2, Math.PI/2);
+  } else if (p.type === BISHOP) {
+    for (const angle of [Math.PI/4, 3*Math.PI/4, -Math.PI/4, -3*Math.PI/4]) {
+      drawCone(p.x, p.y, maxD, angle, Math.PI/18);
+    }
+  } else if (p.type === ROOK) {
+    for (const angle of [0, Math.PI/2, Math.PI, -Math.PI/2]) {
+      drawCone(p.x, p.y, maxD, angle, Math.PI/18);
+    }
+  }
+}
+
+function drawCone(cx, cy, radius, centerAngle, halfSpread) {
+  ctx.save();
+  ctx.beginPath();
+  ctx.moveTo(cx, cy);
+  ctx.arc(cx, cy, radius, centerAngle - halfSpread, centerAngle + halfSpread);
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(255, 107, 53, 0.06)';
+  ctx.fill();
+  ctx.restore();
+}
+
+function drawDragPath() {
+  const p = dragPiece;
+  const dx = dragCurrentX - dragStartX;
+  const dy = dragCurrentY - dragStartY;
+  const moveDist = Math.sqrt(dx * dx + dy * dy);
+
+  ctx.save();
+  ctx.beginPath();
+  ctx.moveTo(dragStartX, dragStartY);
+  ctx.lineTo(dragCurrentX, dragCurrentY);
+  ctx.strokeStyle = 'rgba(255, 107, 53, 0.5)';
+  ctx.lineWidth = 2;
+  ctx.setLineDash([4, 3]);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.restore();
+
+  const maxD = getMaxDist(p.type, energy, p);
+  const estCost = getEnergyCostForDist(p.type, moveDist, energy, p);
+  ctx.save();
+  ctx.font = '12px "JetBrains Mono", monospace';
+  ctx.fillStyle = moveDist > maxD ? '#ff3333' : 'rgba(255,107,53,0.8)';
+  ctx.textAlign = 'center';
+  ctx.fillText(`${estCost}⚡`, (dragStartX + dragCurrentX) / 2, (dragStartY + dragCurrentY) / 2 - 10);
+  ctx.restore();
+}
+
+function drawCapturePreview(x, y, movingPiece) {
+  const enemies = pieces.filter(p => p.alive && p.color !== movingPiece.color);
+  for (const e of enemies) {
+    const d = dist(x, y, e.x, e.y);
+    const overlapDist = 2 * PIECE_RADIUS - d;
+    if (overlapDist > PIECE_RADIUS * CAPTURE_OVERLAP_RATIO * 2) {
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(e.x, e.y, PIECE_RADIUS + 4, 0, Math.PI * 2);
+      ctx.strokeStyle = '#ff3333';
+      ctx.lineWidth = 3;
+      ctx.stroke();
+      ctx.restore();
+    } else if (overlapDist > 0) {
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(e.x, e.y, PIECE_RADIUS + 3, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(255, 200, 50, 0.5)';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([3, 3]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.restore();
+    }
+  }
+}
+
+function drawKnightPath() {
+  if (!knightFirstLeg || !knightGhostPos) return;
+  const p = selectedPiece;
+  const bendX = p.x + knightFirstLeg.dx;
+  const bendY = p.y + knightFirstLeg.dy;
+
+  ctx.save();
+  ctx.beginPath();
+  ctx.moveTo(p.x, p.y);
+  ctx.lineTo(bendX, bendY);
+  ctx.lineTo(knightGhostPos.x, knightGhostPos.y);
+  ctx.strokeStyle = 'rgba(255, 107, 53, 0.6)';
+  ctx.lineWidth = 2;
+  ctx.setLineDash([4, 3]);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.restore();
+
+  drawPieceAt(p, knightGhostPos.x, knightGhostPos.y, false, true);
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(knightGhostPos.x, knightGhostPos.y, PIECE_RADIUS, 0, Math.PI * 2);
+  ctx.strokeStyle = 'rgba(255, 107, 53, 0.5)';
+  ctx.lineWidth = 2;
+  ctx.setLineDash([4, 3]);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.restore();
+}
+
+function isValidDirection(piece, dx, dy) {
+  if (piece.type === QUEEN || piece.type === KING) return true;
+  if (piece.type === KNIGHT) return true;
+
+  const angle = Math.atan2(dy, dx);
+
+  if (piece.type === PAWN) {
+    const forward = piece.color === WHITE ? -Math.PI / 2 : Math.PI / 2;
+    let diff = angleDiff(angle, forward);
+    return Math.abs(diff) <= Math.PI / 4 + 0.01;
+  }
+
+  if (piece.type === BISHOP) {
+    const diags = [Math.PI / 4, 3 * Math.PI / 4, -Math.PI / 4, -3 * Math.PI / 4];
+    return diags.some(d => Math.abs(angleDiff(angle, d)) <= Math.PI / 12);
+  }
+
+  if (piece.type === ROOK) {
+    const orthos = [0, Math.PI / 2, Math.PI, -Math.PI / 2];
+    return orthos.some(d => Math.abs(angleDiff(angle, d)) <= Math.PI / 12);
+  }
+
+  return true;
+}
+
+function angleDiff(a, b) {
+  let d = a - b;
+  while (d > Math.PI) d -= 2 * Math.PI;
+  while (d < -Math.PI) d += 2 * Math.PI;
+  return d;
+}
+
+function dist(x1, y1, x2, y2) {
+  return Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2);
+}
+
+function isPathClear(piece, fromX, fromY, toX, toY) {
+  const dx = toX - fromX, dy = toY - fromY;
+  const len = Math.sqrt(dx * dx + dy * dy);
+  if (len < 0.1) return true;
+
+  const steps = Math.max(Math.ceil(len / 5), 10);
+  for (let i = 1; i < steps; i++) {
+    const t = i / steps;
+    const cx = fromX + dx * t;
+    const cy = fromY + dy * t;
+
+    for (const other of pieces) {
+      if (!other.alive || other.id === piece.id) continue;
+      const d = dist(cx, cy, other.x, other.y);
+      if (other.color === piece.color) {
+        if (d < PIECE_RADIUS * 2 - 2) return false;
+      } else {
+        if (d < PIECE_RADIUS * 1.2) {
+          const dToEnd = dist(cx, cy, toX, toY);
+          if (dToEnd > PIECE_RADIUS * 2) return false;
+        }
+      }
+    }
+  }
+  return true;
+}
+
+function wouldCapture(piece, x, y) {
+  const enemies = pieces.filter(p => p.alive && p.color !== piece.color);
+  for (const e of enemies) {
+    const d = dist(x, y, e.x, e.y);
+    const overlapDist = 2 * PIECE_RADIUS - d;
+    if (overlapDist > PIECE_RADIUS * CAPTURE_OVERLAP_RATIO * 2) {
+      return e;
+    }
+  }
+  return null;
+}
+
+function collidesWithAlly(piece, x, y) {
+  const allies = pieces.filter(p => p.alive && p.color === piece.color && p.id !== piece.id);
+  for (const a of allies) {
+    const d = dist(x, y, a.x, a.y);
+    if (d < PIECE_RADIUS * 2 - 2) return true;
+  }
+  return false;
+}
+
+function isInBounds(x, y) {
+  return x >= PIECE_RADIUS && x <= BOARD_W - PIECE_RADIUS &&
+         y >= PIECE_RADIUS && y <= BOARD_H - PIECE_RADIUS;
+}
+
+function clampToMaxDist(piece, targetX, targetY, availEnergy) {
+  const dx = targetX - piece.x;
+  const dy = targetY - piece.y;
+  const d = Math.sqrt(dx * dx + dy * dy);
+  const maxD = getMaxDist(piece.type, availEnergy || energy, piece);
+  if (d <= maxD) return { x: targetX, y: targetY };
+  return { x: piece.x + dx / d * maxD, y: piece.y + dy / d * maxD };
+}
+
+function snapDirection(piece, dx, dy) {
+  if (piece.type === BISHOP) {
+    const angle = Math.atan2(dy, dx);
+    const diags = [Math.PI / 4, 3 * Math.PI / 4, -Math.PI / 4, -3 * Math.PI / 4];
+    let best = diags[0], bestDiff = Infinity;
+    for (const d of diags) {
+      const diff = Math.abs(angleDiff(angle, d));
+      if (diff < bestDiff) { bestDiff = diff; best = d; }
+    }
+    if (bestDiff > Math.PI / 4) return null;
+    const len = Math.sqrt(dx * dx + dy * dy);
+    return { x: Math.cos(best) * len, y: Math.sin(best) * len };
+  }
+  if (piece.type === ROOK) {
+    const angle = Math.atan2(dy, dx);
+    const orthos = [0, Math.PI / 2, Math.PI, -Math.PI / 2];
+    let best = orthos[0], bestDiff = Infinity;
+    for (const d of orthos) {
+      const diff = Math.abs(angleDiff(angle, d));
+      if (diff < bestDiff) { bestDiff = diff; best = d; }
+    }
+    if (bestDiff > Math.PI / 4) return null;
+    const len = Math.sqrt(dx * dx + dy * dy);
+    return { x: Math.cos(best) * len, y: Math.sin(best) * len };
+  }
+  return { x: dx, y: dy };
+}
+
+function tryMovePiece(piece, targetX, targetY) {
+  if (gameOver || turnEndedByCapture) return false;
+  if (piece.color !== currentTurn) return false;
+  if (movedThisTurn.includes(piece.id)) return false;
+
+  const baseCost = ENERGY_COST[piece.type];
+  if (energy < baseCost) return false;
+
+  let dx = targetX - piece.x;
+  let dy = targetY - piece.y;
+  const moveDist = Math.sqrt(dx * dx + dy * dy);
+  if (moveDist < 3) return false;
+
+  if (piece.type === BISHOP || piece.type === ROOK) {
+    const snapped = snapDirection(piece, dx, dy);
+    if (!snapped) return false;
+    dx = snapped.x; dy = snapped.y;
+    const newDist = Math.sqrt(dx * dx + dy * dy);
+    const maxD = getMaxDist(piece.type, energy, piece);
+    if (newDist > maxD) {
+      const ratio = maxD / newDist;
+      dx *= ratio; dy *= ratio;
+    }
+    targetX = piece.x + dx;
+    targetY = piece.y + dy;
+  }
+
+  const clamped = clampToMaxDist(piece, targetX, targetY, energy);
+  targetX = clamped.x; targetY = clamped.y;
+  dx = targetX - piece.x; dy = targetY - piece.y;
+
+  if (!isValidDirection(piece, dx, dy)) return false;
+
+  const totalDist = Math.sqrt(dx * dx + dy * dy);
+  const ndx = dx / totalDist, ndy = dy / totalDist;
+
+  let finalX = targetX, finalY = targetY;
+  let capturedPiece = null;
+  const stepSize = 2;
+  const numSteps = Math.ceil(totalDist / stepSize);
+
+  for (let i = 1; i <= numSteps; i++) {
+    const t = Math.min(i * stepSize, totalDist);
+    const cx = piece.x + ndx * t;
+    const cy = piece.y + ndy * t;
+
+    let allyBlock = false;
+    for (const other of pieces) {
+      if (!other.alive || other.id === piece.id) continue;
+      if (other.color === piece.color) {
+        const d = dist(cx, cy, other.x, other.y);
+        if (d < PIECE_RADIUS * 2 - 1) {
+          const backT = Math.max(0, t - stepSize * 2);
+          finalX = piece.x + ndx * backT;
+          finalY = piece.y + ndy * backT;
+          allyBlock = true;
+          break;
+        }
+      }
+    }
+    if (allyBlock) break;
+
+    for (const other of pieces) {
+      if (!other.alive || other.id === piece.id || other.color === piece.color) continue;
+      const d = dist(cx, cy, other.x, other.y);
+      const overlap = 2 * PIECE_RADIUS - d;
+      if (overlap > PIECE_RADIUS * CAPTURE_OVERLAP_RATIO * 2) {
+        finalX = cx; finalY = cy;
+        capturedPiece = other;
+        break;
+      }
+    }
+    if (capturedPiece) break;
+
+    finalX = cx; finalY = cy;
+  }
+
+  finalX = Math.max(PIECE_RADIUS, Math.min(BOARD_W - PIECE_RADIUS, finalX));
+  finalY = Math.max(PIECE_RADIUS, Math.min(BOARD_H - PIECE_RADIUS, finalY));
+
+  const actualDist = dist(piece.x, piece.y, finalX, finalY);
+  if (actualDist < 2) return false;
+
+  if (collidesWithAlly(piece, finalX, finalY)) return false;
+
+  const fromX = piece.x, fromY = piece.y;
+  const wasFirstMove = !piece.hasMoved;
+  const actualDist2 = dist(piece.x, piece.y, finalX, finalY);
+  const cost = getEnergyCostForDist(piece.type, actualDist2, energy, piece);
+  piece.x = finalX;
+  piece.y = finalY;
+  piece.hasMoved = true;
+  energy -= cost;
+  movedThisTurn.push(piece.id);
+
+  const moveEntry = { pieceId: piece.id, fromX, fromY, energyCost: cost, capturedPiece: null, wasFirstMove };
+
+  if (capturedPiece) {
+    capturedPiece.alive = false;
+    moveEntry.capturedPiece = { ...capturedPiece };
+    turnEndedByCapture = true;
+    addLog(`${PIECE_SYMBOLS[piece.color][piece.type]} captura ${PIECE_SYMBOLS[capturedPiece.color][capturedPiece.type]}!`, true);
+    flashCapture();
+
+    if (capturedPiece.type === KING) {
+      gameOver = true;
+      showVictory(piece.color);
+    }
+  } else {
+    addLog(`${PIECE_SYMBOLS[piece.color][piece.type]} move ${actualDist.toFixed(0)}px`);
+  }
+
+  moveHistory.push(moveEntry);
+  return true;
+}
+
+function tryMoveKnight(piece, firstLegDx, firstLegDy, secondLegDx, secondLegDy) {
+  if (gameOver || turnEndedByCapture) return false;
+  if (piece.color !== currentTurn || piece.type !== KNIGHT) return false;
+  if (movedThisTurn.includes(piece.id)) return false;
+  if (energy < ENERGY_COST[KNIGHT]) return false;
+
+  const totalDist = Math.sqrt(firstLegDx**2 + firstLegDy**2) + Math.sqrt(secondLegDx**2 + secondLegDy**2);
+  const KNIGHT_DIST = getMaxDist(KNIGHT, energy);
+  if (totalDist > KNIGHT_DIST + 1) return false;
+
+  const leg1Len = Math.sqrt(firstLegDx**2 + firstLegDy**2);
+  const leg2Len = Math.sqrt(secondLegDx**2 + secondLegDy**2);
+  const minLeg = KNIGHT_DIST * 0.2;
+  if (leg1Len < minLeg || leg2Len < minLeg) return false;
+
+  const finalX = piece.x + firstLegDx + secondLegDx;
+  const finalY = piece.y + firstLegDy + secondLegDy;
+
+  if (!isInBounds(finalX, finalY)) return false;
+  if (collidesWithAlly(piece, finalX, finalY)) return false;
+
+  let capturedPiece = null;
+  for (const other of pieces) {
+    if (!other.alive || other.id === piece.id || other.color === piece.color) continue;
+    const d = dist(finalX, finalY, other.x, other.y);
+    const overlap = 2 * PIECE_RADIUS - d;
+    if (overlap > PIECE_RADIUS * CAPTURE_OVERLAP_RATIO * 2) {
+      capturedPiece = other;
+      break;
+    }
+  }
+
+  const fromX = piece.x, fromY = piece.y;
+  const knightCost = getEnergyCostForDist(KNIGHT, totalDist, energy);
+  piece.x = finalX;
+  piece.y = finalY;
+  energy -= knightCost;
+  movedThisTurn.push(piece.id);
+
+  const moveEntry = { pieceId: piece.id, fromX, fromY, energyCost: knightCost, capturedPiece: null };
+
+  if (capturedPiece) {
+    capturedPiece.alive = false;
+    moveEntry.capturedPiece = { ...capturedPiece };
+    turnEndedByCapture = true;
+    addLog(`${PIECE_SYMBOLS[piece.color][KNIGHT]} captura ${PIECE_SYMBOLS[capturedPiece.color][capturedPiece.type]}!`, true);
+    flashCapture();
+    if (capturedPiece.type === KING) {
+      gameOver = true;
+      showVictory(piece.color);
+    }
+  } else {
+    addLog(`${PIECE_SYMBOLS[piece.color][KNIGHT]} pula para posição`);
+  }
+
+  moveHistory.push(moveEntry);
+  return true;
+}
+
+function endTurn() {
+  if (gameOver) return;
+  const spent = MAX_ENERGY - energy;
+  if (spent < MIN_ENERGY_SPEND && !turnEndedByCapture) {
+    showMinSpendWarning();
+    return;
+  }
+  currentTurn = currentTurn === WHITE ? BLACK : WHITE;
+  energy = MAX_ENERGY;
+  turnNumber++;
+  movedThisTurn = [];
+  moveHistory = [];
+  selectedPiece = null;
+  turnEndedByCapture = false;
+  knightPhase = null;
+  knightFirstLeg = null;
+  knightGhostPos = null;
+  removeKnightHint();
+  render();
+}
+
+function showMinSpendWarning() {
+  const preview = document.getElementById('energy-cost-preview');
+  preview.textContent = `⚠ Gaste pelo menos ${MIN_ENERGY_SPEND} de energia!`;
+  preview.style.color = '#ff3333';
+  setTimeout(() => { preview.style.color = ''; }, 1500);
+}
+
+function undoLastMove() {
+  if (moveHistory.length === 0) return;
+  const last = moveHistory.pop();
+  const piece = pieces.find(p => p.id === last.pieceId);
+  if (piece) {
+    piece.x = last.fromX;
+    piece.y = last.fromY;
+    if (last.wasFirstMove) piece.hasMoved = false;
+    energy += last.energyCost;
+    movedThisTurn = movedThisTurn.filter(id => id !== last.pieceId);
+    if (last.capturedPiece) {
+      const cap = pieces.find(p => p.id === last.capturedPiece.id);
+      if (cap) {
+        cap.alive = true;
+        cap.x = last.capturedPiece.x;
+        cap.y = last.capturedPiece.y;
+      }
+      turnEndedByCapture = false;
+      if (gameOver) {
+        gameOver = false;
+        document.getElementById('victory-overlay').classList.remove('show');
+      }
+    }
+  }
+  selectedPiece = null;
+  knightPhase = null;
+  removeKnightHint();
+  render();
+}
+
+function resetGame() {
+  initPieces();
+  currentTurn = WHITE;
+  energy = MAX_ENERGY;
+  turnNumber = 1;
+  selectedPiece = null;
+  movedThisTurn = [];
+  moveHistory = [];
+  gameOver = false;
+  turnEndedByCapture = false;
+  knightPhase = null;
+  knightFirstLeg = null;
+  knightGhostPos = null;
+  removeKnightHint();
+  document.getElementById('victory-overlay').classList.remove('show');
+  document.getElementById('log').innerHTML = '';
+  render();
+}
+
+function updateUI() {
+  const ti = document.getElementById('turn-indicator');
+  ti.textContent = currentTurn === WHITE ? 'Brancas' : 'Pretas';
+  ti.className = currentTurn;
+
+  document.getElementById('turn-number').textContent = `Turno ${turnNumber}`;
+
+  const bar = document.getElementById('energy-bar');
+  bar.style.width = (energy / MAX_ENERGY * 100) + '%';
+  bar.className = 'energy-bar ' + currentTurn;
+  document.getElementById('energy-text').textContent = `${energy} / ${MAX_ENERGY}`;
+
+  const preview = document.getElementById('energy-cost-preview');
+  if (selectedPiece && !movedThisTurn.includes(selectedPiece.id)) {
+    const maxD = getMaxDist(selectedPiece.type, energy, selectedPiece);
+    preview.textContent = `Mín: ${ENERGY_COST[selectedPiece.type]}⚡ | Alcance: ${maxD.toFixed(0)}px`;
+  } else {
+    const spent = MAX_ENERGY - energy;
+    if (spent < MIN_ENERGY_SPEND && movedThisTurn.length === 0) {
+      preview.textContent = `Mova pelo menos ${MIN_ENERGY_SPEND}⚡`;
+      preview.style.color = '#ff6b35';
+    } else {
+      preview.textContent = '';
+      preview.style.color = '';
+    }
+  }
+
+  const ml = document.getElementById('moved-list');
+  if (movedThisTurn.length > 0) {
+    const names = movedThisTurn.map(id => {
+      const p = pieces.find(pp => pp.id === id);
+      return p ? PIECE_SYMBOLS[p.color][p.type] : '?';
+    });
+    ml.textContent = 'Movidas: ' + names.join(' ');
+  } else {
+    ml.textContent = '';
+  }
+
+  if (turnEndedByCapture && !gameOver) {
+    document.getElementById('energy-cost-preview').textContent = '⚔ Captura! Turno encerra.';
+  }
+
+  const deadWhite = pieces.filter(p => !p.alive && p.color === WHITE);
+  const deadBlack = pieces.filter(p => !p.alive && p.color === BLACK);
+  document.getElementById('captured-white').textContent = deadWhite.map(p => PIECE_SYMBOLS[WHITE][p.type]).join(' ');
+  document.getElementById('captured-black').textContent = deadBlack.map(p => PIECE_SYMBOLS[BLACK][p.type]).join(' ');
+}
+
+function addLog(text, isCapture = false) {
+  const log = document.getElementById('log');
+  const entry = document.createElement('div');
+  entry.className = 'log-entry' + (isCapture ? ' log-capture' : '');
+  const turnLabel = currentTurn === WHITE ? '○' : '●';
+  entry.textContent = `${turnLabel} T${turnNumber}: ${text}`;
+  log.prepend(entry);
+}
+
+function showVictory(winnerColor) {
+  const overlay = document.getElementById('victory-overlay');
+  overlay.classList.add('show');
+  const text = document.getElementById('victory-text');
+  text.textContent = winnerColor === WHITE ? '♔ Brancas Vencem!' : '♚ Pretas Vencem!';
+  text.style.color = winnerColor === WHITE ? '#f0ead6' : '#b8860b';
+}
+
+function showKnightHint(msg) {
+  removeKnightHint();
+  const hint = document.createElement('div');
+  hint.className = 'knight-mode-hint';
+  hint.id = 'knight-hint';
+  hint.textContent = msg;
+  document.getElementById('board-wrapper').appendChild(hint);
+}
+
+function removeKnightHint() {
+  const h = document.getElementById('knight-hint');
+  if (h) h.remove();
+}
+
+function getPieceAt(x, y) {
+  const alive = pieces.filter(p => p.alive);
+  for (let i = alive.length - 1; i >= 0; i--) {
+    const p = alive[i];
+    if (dist(x, y, p.x, p.y) <= PIECE_RADIUS + 4) return p;
+  }
+  return null;
+}
+
+canvas.addEventListener('mousedown', (e) => {
+  if (gameOver) return;
+  const rect = canvas.getBoundingClientRect();
+  const mx = (e.clientX - rect.left) * (BOARD_W / rect.width);
+  const my = (e.clientY - rect.top) * (BOARD_H / rect.height);
+
+  if (knightPhase === 'choosing_bend' && selectedPiece) {
+    if (knightGhostPos) {
+      const p = selectedPiece;
+      const success = tryMoveKnight(
+        p,
+        knightFirstLeg.dx, knightFirstLeg.dy,
+        knightGhostPos.x - (p.x + knightFirstLeg.dx),
+        knightGhostPos.y - (p.y + knightFirstLeg.dy)
+      );
+      knightPhase = null;
+      knightFirstLeg = null;
+      knightGhostPos = null;
+      selectedPiece = null;
+      removeKnightHint();
+      render();
+      if (turnEndedByCapture) {
+        setTimeout(endTurn, 800);
+      }
+    }
+    return;
+  }
+
+  if (knightPhase === 'choosing_direction' && selectedPiece) {
+    const p = selectedPiece;
+    const dx = mx - p.x, dy = my - p.y;
+    const leg1Len = Math.sqrt(dx * dx + dy * dy);
+    const KNIGHT_DIST = getMaxDist(KNIGHT, energy);
+    const minLeg = KNIGHT_DIST * 0.2;
+    const maxFirstLeg = KNIGHT_DIST - minLeg;
+
+    if (leg1Len < minLeg) {
+      return;
+    }
+    const clampedLen = Math.min(leg1Len, maxFirstLeg);
+    const ndx = dx / leg1Len, ndy = dy / leg1Len;
+
+    knightFirstLeg = { dx: ndx * clampedLen, dy: ndy * clampedLen };
+    knightPhase = 'choosing_bend';
+    showKnightHint('Clique para escolher o segundo trecho do L');
+    render();
+    return;
+  }
+
+  const piece = getPieceAt(mx, my);
+
+  if (piece && piece.color === currentTurn && !movedThisTurn.includes(piece.id) && !turnEndedByCapture) {
+    if (energy < ENERGY_COST[piece.type]) return;
+
+    selectedPiece = piece;
+
+    if (piece.type === KNIGHT) {
+      knightPhase = 'choosing_direction';
+      showKnightHint('Clique para definir a primeira direção do L');
+      render();
+      return;
+    }
+
+    isDragging = true;
+    dragPiece = piece;
+    dragStartX = piece.x;
+    dragStartY = piece.y;
+    dragCurrentX = mx;
+    dragCurrentY = my;
+    render();
+  } else if (piece && piece.color !== currentTurn) {
+    selectedPiece = null;
+    knightPhase = null;
+    removeKnightHint();
+    render();
+  } else if (!piece) {
+    selectedPiece = null;
+    knightPhase = null;
+    removeKnightHint();
+    render();
+  }
+});
+
+canvas.addEventListener('mousemove', (e) => {
+  const rect = canvas.getBoundingClientRect();
+  const mx = (e.clientX - rect.left) * (BOARD_W / rect.width);
+  const my = (e.clientY - rect.top) * (BOARD_H / rect.height);
+
+  if (isDragging && dragPiece) {
+    let tx = mx, ty = my;
+
+    if (dragPiece.type === BISHOP || dragPiece.type === ROOK) {
+      const ddx = tx - dragStartX, ddy = ty - dragStartY;
+      const snapped = snapDirection(dragPiece, ddx, ddy);
+      if (snapped) {
+        const maxD = getMaxDist(dragPiece.type, energy, dragPiece);
+        const sLen = Math.sqrt(snapped.x ** 2 + snapped.y ** 2);
+        if (sLen > maxD) {
+          const ratio = maxD / sLen;
+          tx = dragStartX + snapped.x * ratio;
+          ty = dragStartY + snapped.y * ratio;
+        } else {
+          tx = dragStartX + snapped.x;
+          ty = dragStartY + snapped.y;
+        }
+      }
+    } else {
+      const clamped = clampToMaxDist(dragPiece, tx, ty, energy);
+      tx = clamped.x; ty = clamped.y;
+    }
+
+    if (dragPiece.type === PAWN) {
+      const ddx = tx - dragStartX, ddy = ty - dragStartY;
+      if (!isValidDirection(dragPiece, ddx, ddy)) {
+        const forward = dragPiece.color === WHITE ? -Math.PI / 2 : Math.PI / 2;
+        const angle = Math.atan2(ddy, ddx);
+        const diff = angleDiff(angle, forward);
+        const clampedAngle = forward + Math.sign(diff) * Math.min(Math.abs(diff), Math.PI / 4);
+        const ld = Math.sqrt(ddx * ddx + ddy * ddy);
+        tx = dragStartX + Math.cos(clampedAngle) * ld;
+        ty = dragStartY + Math.sin(clampedAngle) * ld;
+        const c2 = clampToMaxDist(dragPiece, tx, ty, energy);
+        tx = c2.x; ty = c2.y;
+      }
+    }
+
+    dragCurrentX = tx;
+    dragCurrentY = ty;
+    render();
+    return;
+  }
+
+  if (knightPhase === 'choosing_bend' && selectedPiece && knightFirstLeg) {
+    const p = selectedPiece;
+    const bendX = p.x + knightFirstLeg.dx;
+    const bendY = p.y + knightFirstLeg.dy;
+
+    const leg1Angle = Math.atan2(knightFirstLeg.dy, knightFirstLeg.dx);
+    const perpAngles = [leg1Angle + Math.PI / 2, leg1Angle - Math.PI / 2];
+
+    const dmx = mx - bendX, dmy = my - bendY;
+    let bestX = bendX, bestY = bendY, bestDist = 0;
+
+    for (const pa of perpAngles) {
+      const proj = dmx * Math.cos(pa) + dmy * Math.sin(pa);
+      if (proj > 0) {
+        const KNIGHT_DIST = getMaxDist(KNIGHT, energy);
+        const leg1Len = Math.sqrt(knightFirstLeg.dx ** 2 + knightFirstLeg.dy ** 2);
+        const maxLeg2 = KNIGHT_DIST - leg1Len;
+        const leg2Len = Math.min(Math.max(proj, KNIGHT_DIST * 0.2), maxLeg2);
+        const nx = bendX + Math.cos(pa) * leg2Len;
+        const ny = bendY + Math.sin(pa) * leg2Len;
+        const d = dist(mx, my, nx, ny);
+        if (bestDist === 0 || d < bestDist) {
+          bestX = nx; bestY = ny; bestDist = d;
+        }
+      }
+    }
+
+    if (isInBounds(bestX, bestY) && !collidesWithAlly(selectedPiece, bestX, bestY)) {
+      knightGhostPos = { x: bestX, y: bestY };
+    }
+    render();
+  }
+});
+
+canvas.addEventListener('mouseup', (e) => {
+  if (!isDragging || !dragPiece) return;
+
+  const piece = dragPiece;
+  isDragging = false;
+  dragPiece = null;
+
+  const moved = tryMovePiece(piece, dragCurrentX, dragCurrentY);
+  selectedPiece = null;
+  render();
+
+  if (turnEndedByCapture) {
+    setTimeout(endTurn, 800);
+  }
+});
+
+canvas.addEventListener('mouseleave', () => {
+  if (isDragging) {
+    isDragging = false;
+    dragPiece = null;
+    render();
+  }
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' || e.key === 'e') endTurn();
+  if (e.key === 'z' && e.ctrlKey) undoLastMove();
+  if (e.key === 'Escape') {
+    selectedPiece = null;
+    knightPhase = null;
+    knightFirstLeg = null;
+    knightGhostPos = null;
+    isDragging = false;
+    dragPiece = null;
+    removeKnightHint();
+    render();
+  }
+});
+
+function flashCapture() {
+  canvas.classList.remove('capture-flash');
+  void canvas.offsetWidth;
+  canvas.classList.add('capture-flash');
+  setTimeout(() => canvas.classList.remove('capture-flash'), 500);
+}
+
+initPieces();
+render();
+
+</script>
+</body>
+</html>

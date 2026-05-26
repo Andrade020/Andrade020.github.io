@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Announcements — professional milestones and updates by Lucas R. Andrade.">
-    <title>Announcements | Lucas R. Andrade</title>
+    <meta name="description" content="EyeZen — professional screen filter for Windows by Lucas R. Andrade.">
+    <title>EyeZen | Lucas R. Andrade</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='85'>∂</text></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,7 +12,6 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="dark-mode">
-
 <header>
     <div class="header-content">
         <div class="social-icons">
@@ -23,92 +22,78 @@
         </div>
         <nav>
             <a href="index.html">About</a>
-            <a href="projects.html">Projects</a>
+            <a href="projects.html" class="active">Projects</a>
             <a href="publications.html">Publications</a>
             <a href="lab.html">Lab</a>
-            <a href="announcements.html" class="active">Announcements</a>
+            <a href="announcements.html">Announcements</a>
             <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">☀</button>
         </nav>
     </div>
 </header>
 
 <main>
-    <h1>Announcements</h1>
-    <p class="page-description">Professional milestones, publications, and project releases.</p>
+    <a href="projects.html" class="back-link">← Projects</a>
 
-    <span class="year-marker">2026</span>
-
-    <div class="announcement">
-        <p class="announcement-date">May 2026</p>
-        <h2>Paper Published in Nature Scientific Reports</h2>
-        <p>
-            The paper "Estimation of Spatiotemporal Poisson Processes with Some Missing Location Data" was formally
-            published in Nature Scientific Reports. The work develops robust inference methods for spatiotemporal
-            point processes under partial location missingness.
-            <a href="https://www.nature.com/articles/s41598-026-46520-y" target="_blank">Read →</a>
+    <div class="detail-hero">
+        <div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.75rem;">
+            <h1>EyeZen</h1>
+            <span class="status-badge open-source">Open Source</span>
+        </div>
+        <div class="detail-meta">
+            <span>Python · Windows API · PyInstaller</span>
+            <span>Personal Project · 2024 · v1.14</span>
+            <span>Windows 10/11</span>
+        </div>
+        <p style="font-size:1.05rem;color:var(--text-secondary);max-width:680px;line-height:1.75;">
+            A professional screen filter application for Windows. EyeZen applies color overlays to reduce
+            visual fatigue during long reading and coding sessions — without the jagged color distortion
+            of blue-light glasses or the intrusive UI of most filter apps.
+        </p>
+        <p class="project-links" style="border:none;padding:0;margin-top:1rem;">
+            <a href="https://github.com/Andrade020/EyeZen" target="_blank">View on GitHub ↗</a>
         </p>
     </div>
 
-    <div class="announcement">
-        <p class="announcement-date">January 2026</p>
-        <h2>Open Source Projects Published</h2>
-        <p>
-            Released four open source projects on GitHub: Local_LLM (offline LLM interface), EyeZen (screen filter
-            for eye comfort), Krvo (email automation via Microsoft Graph), and ludami.
-            <a href="projects.html">View Projects →</a>
-        </p>
+    <div class="detail-section">
+        <h2>Features</h2>
+        <ul class="feature-list">
+            <li>Runs silently in the Windows system tray — visible only when you need it</li>
+            <li>Four filter intensities: Off, Suave, Médio, and Forte</li>
+            <li>Global keyboard shortcuts work from any application: <code>Ctrl+Alt+1</code> through <code>Ctrl+Alt+4</code></li>
+            <li>Remembers last filter across restarts (persisted to JSON)</li>
+            <li>Right-click tray menu for quick filter switching</li>
+            <li>Distributed as a standalone .exe — no Python or dependencies required</li>
+            <li>~50–80 MB executable size (includes everything)</li>
+        </ul>
     </div>
 
-    <span class="year-marker">2025</span>
-
-    <div class="announcement">
-        <p class="announcement-date">February 2025</p>
-        <h2>Joined Porto Real Asset as Data Engineer</h2>
-        <p>
-            Started as the first data professional at Porto Real Asset Management. Responsible for designing and
-            building the complete data infrastructure for credit fund risk management — from scratch.
-            Work includes ETL pipelines with Airflow, PDF extraction at scale, ML models for default analysis,
-            financial calculators, and an internal risk dashboard.
-            <a href="projects.html">View Projects →</a>
-        </p>
+    <div class="detail-section">
+        <h2>Keyboard shortcuts</h2>
+        <div class="code-block">Ctrl + Alt + 1  →  Disable filter
+Ctrl + Alt + 2  →  Soft filter (Suave)
+Ctrl + Alt + 3  →  Medium filter (Médio)
+Ctrl + Alt + 4  →  Strong filter (Forte)</div>
     </div>
 
-    <span class="year-marker">2024</span>
-
-    <div class="announcement">
-        <p class="announcement-date">October 2024</p>
-        <h2>ArXiv Preprint Published</h2>
-        <p>
-            Published the preprint "Estimation of Spatiotemporal Poisson Processes with Some Missing Location Data"
-            on ArXiv. Subsequently submitted for peer review and accepted by Nature Scientific Reports (2026).
-            <a href="https://arxiv.org/abs/2410.11103" target="_blank">Read preprint →</a>
-        </p>
+    <div class="detail-section">
+        <h2>Technical notes</h2>
+        <p>EyeZen creates a fullscreen transparent window with an RGBA color overlay using the Windows GDI API. The overlay window is click-through (WS_EX_TRANSPARENT), always-on-top, and uses layered window compositing to blend with the screen content without intercepting user input.</p>
+        <p>Built with PyInstaller into a single-directory distribution. The executable is unsigned, which may trigger SmartScreen on first run — adding a code signing certificate would resolve this for enterprise distribution.</p>
     </div>
 
-    <div class="announcement">
-        <p class="announcement-date">2024</p>
-        <h2>Completed MSc in Applied Mathematics</h2>
+    <div class="detail-section">
+        <h2>Stack</h2>
         <p>
-            Defended thesis on "Estimation of Spatiotemporal Poisson Processes with Some Missing Location Data"
-            at FGV EMAp (Escola de Matemática Aplicada).
-            <a href="publications.html">See publications →</a>
-        </p>
-    </div>
-
-    <div class="announcement">
-        <p class="announcement-date">2024</p>
-        <h2>LinkedIn Article Goes Viral</h2>
-        <p>
-            The post <em>"How to Fake Your Handwriting — AI's Ultimate Hack for Homework"</em> reached thousands
-            of readers, exploring the intersection of AI and human imperfection through a computer vision
-            handwriting synthesis system.
-            <a href="https://www.linkedin.com/pulse/how-fake-your-handwriting-ais-ultimate-hack-homework-lucas-andrade-emdyf/" target="_blank">Read →</a>
+            <span class="tag">Python 3.9+</span>
+            <span class="tag">Windows API (ctypes)</span>
+            <span class="tag">PyInstaller</span>
+            <span class="tag">pynput</span>
+            <span class="tag">PIL / Pillow</span>
         </p>
     </div>
 </main>
 
 <footer><p>© 2026 Lucas R. Andrade · Rio de Janeiro, Brazil</p></footer>
-
 <script>
 function toggleTheme() {
     const body = document.body, btn = document.querySelector('.theme-toggle');

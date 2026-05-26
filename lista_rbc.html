@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lista II · Macroeconomia Dinâmica</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+
+  <style>
+    :root {
+      --bg:          #f7f4ef;
+      --surface:     #ffffff;
+      --surface-2:   #f2ede5;
+      --border:      #e4dcd0;
+      --border-light:#cfc6ba;
+      --accent:      #ad5f2b;
+      --accent-dim:  #c8854d;
+      --accent-glow: rgba(173,95,43,0.08);
+      --teal:        #2e7d72;
+      --teal-dim:    #4a9d92;
+      --teal-glow:   rgba(46,125,114,0.07);
+      --text:        #1a1510;
+      --text-muted:  #6b5b4a;
+      --text-dim:    #b0a090;
+      --green:       #3a7a50;
+      --radius:      8px;
+      --radius-sm:   5px;
+      --shadow:      0 1px 4px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg); color: var(--text);
+      line-height: 1.7; font-size: 16px; min-height: 100vh;
+    }
+
+    /* ── Progress ───────────────────────────────────────── */
+    #progress-bar {
+      position: fixed; top: 0; left: 0; height: 3px;
+      background: var(--accent); width: 0%; z-index: 1000;
+      transition: width 0.08s linear; pointer-events: none;
+    }
+
+    /* ── Nav ────────────────────────────────────────────── */
+    .top-nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(247,244,239,0.96); backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem; height: 52px;
+    }
+    .nav-title { font-family: 'Crimson Pro', serif; font-size: 1rem; color: var(--accent); }
+    .nav-counter { font-size: 0.78rem; color: var(--text-dim); }
+    .nav-counter strong { color: var(--accent); font-weight: 600; }
+
+    /* ── Intro ──────────────────────────────────────────── */
+    .intro { max-width: 700px; margin: 0 auto; padding: 4.5rem 2rem 3.5rem; }
+    .intro-eyebrow { font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1.4rem; }
+    .intro h1 { font-family: 'Crimson Pro', serif; font-size: clamp(1.9rem,3.8vw,2.6rem); font-weight: 400; color: var(--text); line-height: 1.2; margin-bottom: 1.4rem; }
+    .intro-body { font-family: 'Crimson Pro', serif; font-size: 1.07rem; color: var(--text-muted); line-height: 1.88; max-width: 560px; }
+    .intro-body p + p { margin-top: 0.85rem; }
+    .intro-divider { width: 36px; height: 1px; background: var(--border-light); margin: 2.5rem 0; }
+    .intro-stats { display: flex; gap: 2.5rem; flex-wrap: wrap; }
+    .stat { display: flex; flex-direction: column; gap: 0.2rem; }
+    .stat-value { font-family: 'Crimson Pro', serif; font-size: 1.55rem; color: var(--accent); line-height: 1; }
+    .stat-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); }
+
+    /* ── Section ────────────────────────────────────────── */
+    .section { max-width: 700px; margin: 0 auto; padding: 0 2rem; }
+    .section-header { padding: 3.5rem 0 1.8rem; border-top: 1px solid var(--border); }
+    .section-eyebrow { font-size: 0.67rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent-dim); margin-bottom: 0.5rem; }
+    .section-header h2 { font-family: 'Crimson Pro', serif; font-size: 1.45rem; font-weight: 400; color: var(--text); margin-bottom: 0.55rem; }
+    .section-desc { font-family: 'Crimson Pro', serif; font-size: 1rem; color: var(--text-muted); line-height: 1.78; max-width: 560px; }
+
+    /* ── Context block ──────────────────────────────────── */
+    .context-block {
+      background: var(--surface); border: 1px solid var(--border);
+      border-top: 2px solid var(--teal);
+      border-radius: var(--radius); margin-bottom: 2rem; overflow: hidden;
+    }
+    .context-top {
+      display: flex; align-items: baseline; gap: 0.75rem;
+      padding: 0.8rem 1.3rem; background: var(--teal-glow);
+      border-bottom: 1px solid var(--border);
+    }
+    .context-type { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.16em; color: var(--teal); font-family: 'Inter', sans-serif; white-space: nowrap; }
+    .context-title-text { font-family: 'Crimson Pro', serif; font-size: 1.05rem; color: var(--text); font-weight: 400; }
+    .context-body { padding: 1.2rem 1.3rem; font-family: 'Crimson Pro', serif; font-size: 1.01rem; color: var(--text-muted); line-height: 1.82; }
+    .context-body p + p { margin-top: 0.75rem; }
+    .context-critical {
+      margin-top: 1.2rem; padding: 0.85rem 1rem;
+      background: #f5f0e8; border-left: 2px solid var(--accent-dim);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    }
+    .context-critical-label { font-size: 0.61rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--accent); display: block; margin-bottom: 0.35rem; font-family: 'Inter', sans-serif; font-style: normal; }
+    .context-critical p { font-style: italic; font-size: 0.97rem; color: var(--text-muted); line-height: 1.76; }
+    .context-ref { padding: 0.6rem 1.3rem; border-top: 1px solid var(--border); font-family: 'JetBrains Mono', monospace; font-size: 0.71rem; color: var(--text-dim); line-height: 1.6; }
+
+    /* ── Charts ─────────────────────────────────────────── */
+    .chart-wrap { position: relative; height: 230px; margin: 1.3rem 0 0.5rem; }
+    .chart-caption { font-size: 0.78rem; color: var(--text-dim); text-align: center; margin-bottom: 0.4rem; font-style: italic; font-family: 'Crimson Pro', serif; }
+    .chart-note { font-size: 0.71rem; color: var(--text-dim); text-align: center; margin-top: 0.5rem; font-style: italic; font-family: 'Crimson Pro', serif; }
+
+    /* ── Question card ──────────────────────────────────── */
+    .question {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); margin-bottom: 1.4rem; overflow: hidden;
+      transition: border-color 0.2s, box-shadow 0.2s, opacity 0.2s;
+    }
+    .question:hover { border-color: var(--border-light); box-shadow: var(--shadow); }
+    .question.done { border-left: 3px solid var(--green); opacity: 0.65; }
+    .question.done:hover { opacity: 0.88; }
+
+    .q-toprow { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.3rem 0; flex-wrap: wrap; gap: 0.5rem; }
+    .q-meta { display: flex; align-items: center; gap: 0.7rem; }
+    .q-id { font-family: 'JetBrains Mono', monospace; font-size: 0.67rem; color: var(--accent); background: var(--accent-glow); border: 1px solid rgba(173,95,43,0.2); padding: 0.18rem 0.5rem; border-radius: var(--radius-sm); letter-spacing: 0.04em; }
+    .q-dots { display: flex; gap: 3px; align-items: center; }
+    .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border); }
+    .dot.filled { background: var(--accent); }
+    .q-time { font-size: 0.71rem; color: var(--text-dim); }
+    .q-tags { display: flex; gap: 0.35rem; flex-wrap: wrap; }
+    .tag { font-size: 0.64rem; color: var(--text-dim); background: var(--bg); border: 1px solid var(--border); padding: 0.12rem 0.45rem; border-radius: 99px; }
+
+    .q-note { font-family: 'Crimson Pro', serif; font-style: italic; font-size: 0.96rem; color: var(--text-muted); line-height: 1.78; padding: 0.85rem 1.3rem; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin-top: 0.85rem; background: var(--surface-2); }
+
+    .q-body { padding: 1.2rem 1.3rem 1.3rem; font-family: 'Crimson Pro', serif; font-size: 1.06rem; color: var(--text); line-height: 1.85; }
+    .q-body p + p { margin-top: 0.7rem; }
+    .q-body .eq { margin: 1.2rem 0; text-align: center; overflow-x: auto; padding: 0.4rem 0; }
+    .q-body .katex-display { margin: 0; }
+    .q-body strong { font-weight: 600; color: var(--text); }
+    .q-body .sub-list { margin-top: 0.9rem; display: flex; flex-direction: column; gap: 0.65rem; }
+    .q-body .sub-list .item { padding-left: 1.1rem; border-left: 2px solid var(--border); }
+    .q-body .sub-list .item p { color: var(--text-muted); }
+
+    .hint-area { display: none; background: #fdf9f3; border-top: 1px solid var(--border); padding: 1rem 1.3rem; }
+    .hint-area.open { display: block; }
+    .area-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--accent-dim); margin-bottom: 0.6rem; font-family: 'Inter', sans-serif; }
+    .hint-item { display: none; font-family: 'Crimson Pro', serif; font-size: 0.97rem; color: var(--text-muted); line-height: 1.75; padding: 0.4rem 0; }
+    .hint-item.visible { display: block; }
+    .hint-item + .hint-item.visible { border-top: 1px dashed var(--border); margin-top: 0.35rem; }
+
+    .why-area { display: none; background: #f9f5ef; border-top: 1px solid var(--border); padding: 1rem 1.3rem; }
+    .why-area.open { display: block; }
+    .why-text { font-family: 'Crimson Pro', serif; font-style: italic; font-size: 0.97rem; color: var(--text-muted); line-height: 1.78; }
+
+    .q-footer { display: flex; align-items: center; justify-content: space-between; padding: 0.6rem 1.3rem; border-top: 1px solid var(--border); flex-wrap: wrap; gap: 0.5rem; }
+    .q-actions { display: flex; gap: 0.4rem; flex-wrap: wrap; align-items: center; }
+    .btn-ghost { font-family: 'Inter', sans-serif; font-size: 0.73rem; color: var(--text-muted); background: none; border: 1px solid var(--border); padding: 0.28rem 0.65rem; border-radius: var(--radius-sm); cursor: pointer; transition: border-color 0.15s, color 0.15s, background 0.15s; line-height: 1; }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-glow); }
+    .btn-ghost:disabled { opacity: 0.35; cursor: default; }
+    .btn-ghost:disabled:hover { border-color: var(--border); color: var(--text-muted); background: none; }
+    .done-label { display: flex; align-items: center; gap: 0.4rem; font-size: 0.73rem; color: var(--text-dim); cursor: pointer; user-select: none; transition: color 0.15s; }
+    .done-label:hover { color: var(--green); }
+    .done-label input[type="checkbox"] { accent-color: var(--green); width: 13px; height: 13px; cursor: pointer; }
+    .question.done .done-label { color: var(--green); }
+
+    .page-footer { max-width: 700px; margin: 4rem auto 0; padding: 2rem 2rem 4rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; font-size: 0.76rem; color: var(--text-dim); flex-wrap: wrap; gap: 0.5rem; }
+
+    /* ── Final boss ─────────────────────────────────────── */
+    .question.boss { border-top: 3px solid var(--accent); }
+    .question.boss .q-id { background: var(--accent); color: #fff; border-color: var(--accent); font-size: 0.72rem; letter-spacing: 0.06em; }
+
+    .steps { margin: 1.1rem 0; }
+    .step-item { display: flex; gap: 1rem; padding: 0.8rem 0; border-bottom: 1px dashed var(--border); align-items: flex-start; }
+    .step-item:last-child { border-bottom: none; }
+    .step-num { flex-shrink: 0; width: 26px; height: 26px; background: var(--accent-glow); border: 1px solid rgba(173,95,43,0.28); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 600; color: var(--accent); font-family: 'JetBrains Mono', monospace; margin-top: 0.18rem; }
+    .step-content { font-family: 'Crimson Pro', serif; font-size: 1.02rem; color: var(--text-muted); line-height: 1.78; }
+    .step-content strong { color: var(--text); font-weight: 600; }
+    .step-content em { color: var(--text-dim); font-style: normal; font-size: 0.92em; }
+
+    .resources-box { background: var(--teal-glow); border: 1px solid rgba(46,125,114,0.22); border-radius: var(--radius-sm); padding: 0.9rem 1.1rem; margin: 1.1rem 0; }
+    .resources-title { font-size: 0.63rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--teal); margin-bottom: 0.65rem; font-family: 'Inter', sans-serif; }
+    .resource-row { display: flex; align-items: baseline; gap: 0.6rem; padding: 0.25rem 0; flex-wrap: wrap; }
+    .resource-row a { font-family: 'JetBrains Mono', monospace; font-size: 0.76rem; color: var(--teal); text-decoration: none; }
+    .resource-row a:hover { text-decoration: underline; }
+    .resource-desc { font-size: 0.76rem; color: var(--text-dim); font-family: 'Crimson Pro', serif; }
+
+    .code-block { background: #1e1b16; color: #d8cfbf; border-radius: var(--radius-sm); padding: 1rem 1.1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; line-height: 1.65; overflow-x: auto; margin: 0.8rem 0; border: 1px solid var(--border); white-space: pre; }
+    .cc { color: #6a5a40; }
+    .cs { color: #8aaa7a; }
+
+    .career-note { margin-top: 1.5rem; padding: 0.95rem 1.1rem; background: var(--teal-glow); border: 1px solid rgba(46,125,114,0.2); border-radius: var(--radius-sm); font-family: 'Crimson Pro', serif; font-size: 0.98rem; color: var(--text-muted); line-height: 1.8; }
+    .career-note strong { color: var(--teal); font-style: normal; font-weight: 600; }
+
+    @media (max-width: 640px) {
+      .top-nav { padding: 0 1.2rem; }
+      .intro, .section { padding-left: 1.2rem; padding-right: 1.2rem; }
+      .q-toprow, .q-note, .q-body, .q-footer, .hint-area, .why-area, .context-body, .context-top, .context-ref { padding-left: 1rem; padding-right: 1rem; }
+    }
+  </style>
+</head>
+<div id="back-nav-lab" style="position:fixed;top:12px;left:16px;z-index:9999;"><a href="lab.html" style="color:#94a3b8;text-decoration:none;font-family:monospace;font-size:12px;background:rgba(15,23,42,0.85);padding:4px 10px;border-radius:20px;border:1px solid rgba(56,189,248,0.3);backdrop-filter:blur(8px);transition:color 0.2s;">← Lab</a></div><body>
+
+<div id="progress-bar"></div>
+
+<nav class="top-nav">
+  <span class="nav-title">Macroeconomia Dinâmica · Lista II</span>
+  <span class="nav-counter"><strong id="done-count">0</strong> / 10 resolvidas</span>
+</nav>
+
+<div class="intro">
+  <p class="intro-eyebrow">Macroeconomia Avançada · Lista de Exercícios II</p>
+  <h1>Ciclo Real de Negócios<br>e Log-Linearização</h1>
+  <div class="intro-body">
+    <p>Em setembro de 2008, o Lehman Brothers entrou em colapso. Os modelos macroeconômicos em uso falharam em prever o que viria a seguir, não por falta de rigor técnico, mas por escolhas sobre o que simplificar.</p>
+    <p>Esta lista foi organizada para que você resolva os exercícios enquanto entende o que está em jogo: onde os modelos funcionam, onde eles falham, e por quê. Cada seção começa com contexto histórico e uma perspectiva crítica. As questões vêm depois.</p>
+  </div>
+  <div class="intro-divider"></div>
+  <div class="intro-stats">
+    <div class="stat"><span class="stat-value">9</span><span class="stat-label">Questões</span></div>
+    <div class="stat"><span class="stat-value">4</span><span class="stat-label">Seções</span></div>
+    <div class="stat"><span class="stat-value">~3h</span><span class="stat-label">Estimado</span></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SEÇÃO 1
+══════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <p class="section-eyebrow">Seção 1 · 1 questão</p>
+    <h2>O Comportamento do Consumidor sob Incerteza</h2>
+    <p class="section-desc">Antes do colapso, as famílias americanas poupavam menos de 3% da renda disponível. Nos meses seguintes a setembro de 2008, esse número mais que dobrou. A taxa de juros esperada não havia subido o suficiente para explicar isso. O que mudou foi a incerteza sobre ela.</p>
+  </div>
+
+  <div class="context-block">
+    <div class="context-top">
+      <span class="context-type">Contexto histórico</span>
+      <span class="context-title-text">A poupança como termômetro da incerteza</span>
+    </div>
+    <div class="context-body">
+      <p class="chart-caption">Taxa de poupança pessoal americana, trimestral (% da renda disponível)</p>
+      <div class="chart-wrap"><canvas id="chart-saving"></canvas></div>
+      <p class="chart-note">Fonte: Bureau of Economic Analysis (FRED). Valores aproximados para fins ilustrativos. Lehman Brothers: setembro de 2008.</p>
+      <p>A taxa de poupança americana permaneceu abaixo de 3% ao longo de toda a expansão dos anos 2000. Em poucos meses após setembro de 2008, saltou para quase 8%. Nenhum modelo com mercados completos e consumidor forward-looking estava equipado para gerar esse salto: a taxa de juros esperada não havia subido o suficiente.</p>
+      <p>O mecanismo correto envolve incerteza, não o nível esperado da taxa. Quando a variância da taxa de juros aumenta, um consumidor com utilidade côncava responde poupando mais como precaução. Isso é o que a questão abaixo demonstra formalmente.</p>
+      <div class="context-critical">
+        <span class="context-critical-label">Simplificação importante</span>
+        <p>O modelo de dois períodos captura a lógica correta via desigualdade de Jensen. Mas em 2008 o mecanismo dominante não era incerteza sobre a taxa de juros, e sim sobre a renda futura: risco de desemprego, quedas nas carteiras de ativos, desvalorização de imóveis. Para capturar isso você precisa de modelos com renda estocástica e mercados incompletos. O modelo de dois períodos com taxa de juros estocástica é um ponto de entrada, não a história completa.</p>
+      </div>
+    </div>
+    <div class="context-ref">Carroll (1997). "Buffer-Stock Saving and the Life Cycle / Permanent Income Hypothesis." QJE 112(1).
+Parker e Preston (2005). "Precautionary Saving and Consumption Fluctuations." AER 95(4).</div>
+  </div>
+
+  <!-- Q3: dois períodos -->
+  <article class="question" data-id="q3-tp">
+    <div class="q-toprow">
+      <div class="q-meta">
+        <span class="q-id">Q1</span>
+        <div class="q-dots"><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span></div>
+        <span class="q-time">~25 min</span>
+      </div>
+      <div class="q-tags"><span class="tag">dois períodos</span><span class="tag">incerteza</span><span class="tag">Jensen</span></div>
+    </div>
+    <div class="q-note">A parte (i) é mecânica. A parte (ii) tem uma sutileza. Antes de calcular, pense: quando $r$ passa a ter variância positiva mas sua média não muda, um consumidor com utilidade logarítmica deveria poupar mais, menos, ou o mesmo?</div>
+    <div class="q-body">
+      <p>Admita que um indivíduo viva dois períodos e que suas preferências sejam representadas por:</p>
+      <div class="eq">$$U = \ln C_1 + \ln C_2$$</div>
+      <p>O indivíduo tem renda zero no primeiro período e $Y_2$ no segundo. O consumo no segundo período é $C_2 = Y_2 - (1+r)\,C_1$, onde $Y_2$ é conhecida com certeza e $r$ pode ser estocástica.</p>
+      <div class="sub-list">
+        <div class="item"><p><strong>i)</strong> Obtenha a condição de primeira ordem que permite determinar $C_1$.</p></div>
+        <div class="item"><p><strong>ii)</strong> Admita que $r$ passe de não-estocástica para estocástica, mas que $\mathbb{E}(r)$ não mude. $C_1$ responde a esta mudança? Se sim, qual é a direção da resposta?</p></div>
+      </div>
+    </div>
+    <div class="hint-area" id="hints-q3-tp">
+      <p class="area-label">Dica</p>
+      <p class="hint-item">Para (i): substitua $C_2$ na função utilidade e maximize em relação a $C_1$. Se $r$ é estocástica, a condição envolve $\mathbb{E}[\,\cdot\,]$.</p>
+      <p class="hint-item">Para (ii): com utilidade log, a FOC é $1/C_1 = \mathbb{E}[(1+r)/C_2]$. Expanda usando a definição de $C_2$ e pergunte se $\mathbb{E}[f(r)] = f(\mathbb{E}[r])$ quando $f$ é convexa.</p>
+      <p class="hint-item">A função $1/(Y_2-(1+r)C_1)$ é convexa em $r$. Pela desigualdade de Jensen, $\mathbb{E}[1/(Y_2-(1+r)C_1)] > 1/(Y_2-(1+\mathbb{E}[r])C_1)$. Para reequilibrar a FOC, $C_1$ precisa cair. Isso é poupança precaucionária.</p>
+    </div>
+    <div class="why-area" id="why-q3-tp">
+      <p class="area-label">Por que isso importa</p>
+      <p class="why-text">O mecanismo exige que a utilidade tenha derivada terceira positiva, o que a log satisfaz. Em modelos com mercados incompletos (Aiyagari, 1994; Huggett, 1993), esse motivo precaucionário gera uma taxa de poupança agregada que varia com a incerteza ao longo do ciclo, algo que os modelos de agente representativo com mercados completos não conseguem reproduzir.</p>
+    </div>
+    <div class="q-footer">
+      <div class="q-actions">
+        <button class="btn-ghost" data-hint="q3-tp">Dica</button>
+        <button class="btn-ghost" data-why="q3-tp">Por que importa?</button>
+      </div>
+      <label class="done-label"><input type="checkbox" data-done="q3-tp" /> Resolvida</label>
+    </div>
+  </article>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SEÇÃO 2
+══════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <p class="section-eyebrow">Seção 2 · 4 questões</p>
+    <h2>O Sistema Log-Linearizado</h2>
+    <p class="section-desc">Para analisar como perturbações se propagam num modelo dinâmico, você precisa de uma versão linearizada das equações de movimento. Log-linearizar é o procedimento padrão: substituir variáveis em nível por desvios percentuais em relação a uma trajetória de referência.</p>
+  </div>
+
+  <div class="context-block">
+    <div class="context-top">
+      <span class="context-type">Fundamentos metodológicos</span>
+      <span class="context-title-text">Por que log-linearizar, e a que custo</span>
+    </div>
+    <div class="context-body">
+      <p>Log-linearizar é admitir que uma aproximação local é suficiente. O procedimento transforma um sistema não-linear de equações num sistema linear que pode ser resolvido analiticamente, o que explica sua popularidade no ensino e em modelos de política.</p>
+      <p>O problema surge em episódios de crise. Quando o PIB cai 4% a 5% em poucos trimestres, você está fora da vizinhança em que a aproximação de primeira ordem é confiável. As quedas são subestimadas, as recuperações também.</p>
+      <div class="context-critical">
+        <span class="context-critical-label">O que a fronteira da pesquisa usa</span>
+        <p>Métodos de perturbação de segunda e terceira ordem preservam mais curvatura do problema original e são significativamente mais precisos em episódios extremos. Em pesquisa de fronteira, eles substituíram a log-linearização padrão para análise de bem-estar e crises. O custo: a solução não é mais legível à mão, exige métodos numéricos. A linearização ainda domina o ensino por gerar resultados analíticos.</p>
+      </div>
+    </div>
+    <div class="context-ref">Judd e Guu (1997). "Perturbation Solution Methods for Economic Growth Models." In: Advances in Computational Economics.
+Schmitt-Grohé e Uribe (2004). "Solving Dynamic General Equilibrium Models Using a Second-Order Approximation." JEDC 28(4).</div>
+  </div>
+
+  <!-- Q5 -->
+  <article class="question" data-id="q5-id">
+    <div class="q-toprow">
+      <div class="q-meta">
+        <span class="q-id">Q2</span>
+        <div class="q-dots"><span class="dot filled"></span><span class="dot"></span><span class="dot"></span></div>
+        <span class="q-time">~15 min</span>
+      </div>
+      <div class="q-tags"><span class="tag">log-linearização</span><span class="tag">identidade nacional</span><span class="tag">Taylor</span></div>
+    </div>
+    <div class="q-note">O ponto de partida obrigatório. Os pesos que emergem no lado direito são os primeiros parâmetros a calibrar, e a maioria erra na primeira tentativa por descuido com os shares de estado estacionário.</div>
+    <div class="q-body">
+      <p>Log-linearize a seguinte equação em torno da trajetória de crescimento equilibrado, utilizando uma expansão de Taylor de primeira ordem:</p>
+      <div class="eq">$$Y_t = C_t + I_t$$</div>
+      <p>Ao log-linearizar, você obterá uma expressão em função de $\tilde{Y}_t$, $\tilde{C}_t$ e $\tilde{I}_t$, onde, para qualquer variável $X_t$:</p>
+      <div class="eq">$$\tilde{X}_t \;\equiv\; \ln X_t - \ln \bar{X}_t$$</div>
+      <p>e $\bar{X}_t$ é o valor da variável em $t$ ao longo de sua trajetória de crescimento equilibrado.</p>
+    </div>
+    <div class="hint-area" id="hints-q5-id">
+      <p class="area-label">Dica</p>
+      <p class="hint-item">Escreva $Y_t = \bar{Y}_t\,e^{\tilde{Y}_t}$ e o mesmo para $C_t$ e $I_t$. Substitua na equação original.</p>
+      <p class="hint-item">Use $e^x \approx 1+x$ para pequenos desvios. Os termos de estado estacionário se cancelam; o que sobra é a relação linear.</p>
+      <p class="hint-item">O coeficiente de $\tilde{C}_t$ é $\bar{C}/\bar{Y}$ e o de $\tilde{I}_t$ é $\bar{I}/\bar{Y}$. Esses são os shares de estado estacionário.</p>
+    </div>
+    <div class="why-area" id="why-q5-id">
+      <p class="area-label">Por que isso importa</p>
+      <p class="why-text">A identidade nacional log-linearizada é o bloco de construção de qualquer modelo DSGE. Ela transforma uma restrição em nível numa relação entre taxas de crescimento ponderadas pelos shares, que são os primeiros parâmetros a calibrar ao estimar o modelo.</p>
+    </div>
+    <div class="q-footer">
+      <div class="q-actions"><button class="btn-ghost" data-hint="q5-id">Dica</button><button class="btn-ghost" data-why="q5-id">Por que importa?</button></div>
+      <label class="done-label"><input type="checkbox" data-done="q5-id" /> Resolvida</label>
+    </div>
+  </article>
+
+  <!-- Q4 -->
+  <article class="question" data-id="q4-id">
+    <div class="q-toprow">
+      <div class="q-meta">
+        <span class="q-id">Q3</span>
+        <div class="q-dots"><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span></div>
+        <span class="q-time">~20 min</span>
+      </div>
+      <div class="q-tags"><span class="tag">equação de Euler</span><span class="tag">dinâmica do consumo</span><span class="tag">expectativas</span></div>
+    </div>
+    <div class="q-note">A equação que governa como o consumidor distribui recursos ao longo do tempo. Log-linearizada, ela conecta o consumo corrente ao esperado via taxa de juros real. O operador $\mathbb{E}_t$ não desaparece nesse processo.</div>
+    <div class="q-body">
+      <p>Obtenha a log-linearização da equação de Euler do modelo de Romer em torno da trajetória de crescimento equilibrado:</p>
+      <div class="eq">$$\frac{1}{c_t} = \beta\;\mathbb{E}_t\!\left[\frac{1+r_{t+1}}{c_{t+1}}\right]$$</div>
+    </div>
+    <div class="hint-area" id="hints-q4-id">
+      <p class="area-label">Dica</p>
+      <p class="hint-item">No estado estacionário: $\beta(1+\bar{r}) = 1$. Guarde essa relação.</p>
+      <p class="hint-item">Log-linearize $1/c_t$ como $-\tilde{c}_t$. Para $(1+r_{t+1})$, use $\ln(1+r_{t+1}) \approx \ln(1+\bar{r}) + \tilde{r}_{t+1}/(1+\bar{r})$.</p>
+      <p class="hint-item">Com $\beta(1+\bar{r}) = 1$, o resultado deve ter a forma $\tilde{c}_t = \mathbb{E}_t[\tilde{c}_{t+1}] + \lambda\,\mathbb{E}_t[\tilde{r}_{t+1}]$ para algum $\lambda$ que você identifica.</p>
+    </div>
+    <div class="why-area" id="why-q4-id">
+      <p class="area-label">Por que isso importa</p>
+      <p class="why-text">O coeficiente de $\mathbb{E}_t[\tilde{r}_{t+1}]$ que emerge é a elasticidade intertemporal de substituição (EIS). É um dos parâmetros mais debatidos da macroeconomia empírica: estimativas variam de 0,1 a 2 dependendo do método. A EIS baixa implica que mudanças na taxa de juros movem pouco o consumo, o que tem implicações diretas para a eficácia da política monetária.</p>
+    </div>
+    <div class="q-footer">
+      <div class="q-actions"><button class="btn-ghost" data-hint="q4-id">Dica</button><button class="btn-ghost" data-why="q4-id">Por que importa?</button></div>
+      <label class="done-label"><input type="checkbox" data-done="q4-id" /> Resolvida</label>
+    </div>
+  </article>
+
+  <!-- Q3 básico -->
+  <article class="question" data-id="q3-bas">
+    <div class="q-toprow">
+      <div class="q-meta">
+        <span class="q-id">Q4</span>
+        <div class="q-dots"><span class="dot filled"></span><span class="dot"></span><span class="dot"></span></div>
+        <span class="q-time">~15 min</span>
+      </div>
+      <div class="q-tags"><span class="tag">condição intratemporal</span><span class="tag">salário real</span><span class="tag">modelo de Romer</span></div>
+    </div>
+    <div class="q-note">Versão direta da condição de ótimo intratemporal do trabalhador. O salário real aparece explicitamente, e a linearização expressa como desvios dele se transmitem para consumo e trabalho simultaneamente.</div>
+    <div class="q-body">
+      <p>Obtenha a log-linearização da equação abaixo, do modelo de Romer, em torno da trajetória de crescimento equilibrado:</p>
+      <div class="eq">$$\frac{1}{c_t}\,w_t = \frac{b}{1 - n_t}$$</div>
+    </div>
+    <div class="hint-area" id="hints-q3-bas">
+      <p class="area-label">Dica</p>
+      <p class="hint-item">Tome $\ln$ dos dois lados. O lado esquerdo vira $\tilde{w}_t - \tilde{c}_t$. O lado direito: $\ln b$ é constante; o único termo variável é $-\ln(1-n_t)$.</p>
+      <p class="hint-item">Para $-\ln(1-n_t)$, use a aproximação em torno de $\bar{n}$: $-\ln(1-n_t) \approx -\ln(1-\bar{n}) + \frac{\bar{n}}{1-\bar{n}}\,\tilde{n}_t$. Substitua e colete.</p>
+    </div>
+    <div class="why-area" id="why-q3-bas">
+      <p class="area-label">Por que isso importa</p>
+      <p class="why-text">Essa equação fecha o sistema intratemporal do modelo. Dado o salário real, ela determina a divisão entre consumo e lazer. Log-linearizada, ela é necessária para montar o sistema completo de equações de movimento que você vai resolver para obter as funções de resposta a impulso.</p>
+    </div>
+    <div class="q-footer">
+      <div class="q-actions"><button class="btn-ghost" data-hint="q3-bas">Dica</button><button class="btn-ghost" data-why="q3-bas">Por que importa?</button></div>
+      <label class="done-label"><input type="checkbox" data-done="q3-bas" /> Resolvida</label>
+    </div>
+  </article>
+
+  <!-- Q3 Campbell -->
+  <article class="question" data-id="q3-cam">
+    <div class="q-toprow">
+      <div class="q-meta">
+        <span class="q-id">Q5</span>
+        <div class="q-dots"><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span></div>
+        <span class="q-time">~20 min</span>
+      </div>
+      <div class="q-tags"><span class="tag">condição intratemporal</span><span class="tag">oferta de trabalho</span><span class="tag">Campbell (1994)</span></div>
+    </div>
+    <div class="q-note">Campbell (1994) reformulou a condição intratemporal de forma a revelar um resultado importante: com as hipóteses certas, choques de tecnologia não afetam a oferta de trabalho. Esta questão constrói a expressão log-linearizada que vai ser usada na Seção 4.</div>
+    <div class="q-body">
+      <p>Obtenha a log-linearização da equação abaixo, do modelo de Romer (Campbell), em torno da trajetória de crescimento equilibrado:</p>
+      <div class="eq">$$\frac{b\,c_t}{1 - n_t} = \frac{(1-\alpha)\,Y_t}{\eta_t\,N_t}$$</div>
+    </div>
+    <div class="hint-area" id="hints-q3-cam">
+      <p class="area-label">Dica</p>
+      <p class="hint-item">Tome $\ln$ de ambos os lados. Produtos viram somas.</p>
+      <p class="hint-item">Para $\ln(1-n_t)$, use: $\ln(1-n_t) \approx \ln(1-\bar{n}) - \frac{\bar{n}}{1-\bar{n}}\,\tilde{n}_t$.</p>
+      <p class="hint-item">No lado direito, $\ln(Y_t/\eta_t N_t) = \tilde{Y}_t - \tilde{\eta}_t - \ln(N_t/\bar{N}_t)$. O crescimento demográfico cancela em per capita.</p>
+    </div>
+    <div class="why-area" id="why-q3-cam">
+      <p class="area-label">Por que isso importa</p>
+      <p class="why-text">Log-linearizada, essa equação revela como choques de tecnologia se transmitem para a oferta de trabalho. A Seção 4 vai mostrar que, com as hipóteses do modelo simplificado do Romer, essa transmissão é nula: $\eta$ não responde a $A_t$. Isso é notável e, ao mesmo tempo, é parte do problema: nos dados, as horas trabalhadas variam muito ao longo do ciclo.</p>
+    </div>
+    <div class="q-footer">
+      <div class="q-actions"><button class="btn-ghost" data-hint="q3-cam">Dica</button><button class="btn-ghost" data-why="q3-cam">Por que importa?</button></div>
+      <label class="done-label"><input type="checkbox" data-done="q3-cam" /> Resolvida</label>
+    </div>
+  </article>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SEÇÃO 3
+══════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <p class="section-eyebrow">Seção 3 · 2 questões</p>
+    <h2>O Modelo RBC em Questão</h2>
+    <p class="section-desc">Os modelos de Ciclo Real de Negócios eram, em 2008, o framework dominante na macroeconomia acadêmica. Eles interpretavam flutuações como respostas ótimas a choques de produtividade. Quando a crise chegou, a pergunta óbvia foi: onde estavam esses choques?</p>
+  </div>
+
+  <div class="context-block">
+    <div class="context-top">
+      <span class="context-type">O modelo confronta os dados</span>
+      <span class="context-title-text">Fatos estilizados do ciclo: onde o RBC acerta e onde erra</span>
+    </div>
+    <div class="context-body">
+      <p>Todo modelo macroeconômico é julgado pela sua capacidade de reproduzir os padrões de volatilidade e correlação do ciclo de negócios. O gráfico abaixo compara os desvios padrão de variáveis-chave nos dados americanos com as previsões do modelo RBC básico, todos normalizados pelo desvio padrão do PIB.</p>
+      <p class="chart-caption">Desvio padrão relativo ao PIB (PIB = 1,00) — Dados EUA vs Modelo RBC básico</p>
+      <div class="chart-wrap"><canvas id="chart-rbc"></canvas></div>
+      <p class="chart-note">Baseado em Kydland e Prescott (1982) e King, Plosser e Rebelo (1988). Dados: EUA, série HP-filtrada.</p>
+      <p>O modelo acerta razoavelmente no investimento. Erra sistematicamente nas horas trabalhadas: no modelo, os trabalhadores reduzem pouco o trabalho em resposta a um choque negativo, porque o salário cai pouco. Nos dados, as horas caem quase três vezes mais do que o modelo prevê.</p>
+      <div class="context-critical">
+        <span class="context-critical-label">A crise de 2008 pelo olhar do RBC</span>
+        <p>Ohanian (2010) tentou aplicar o modelo RBC à crise de 2008. O argumento: o colapso do produto refletia principalmente uma distorção no mercado de trabalho, com trabalhadores relutando em aceitar cortes salariais. A interpretação foi amplamente criticada. Chamar de "resposta ótima de lazer" o desemprego de 10 milhões de americanos custou credibilidade ao programa de pesquisa nos anos seguintes.</p>
+      </div>
+    </div>
+    <div class="context-ref">Kydland e Prescott (1982). "Time to Build and Aggregate Fluctuations." Econometrica 50(6).
+King, Plosser e Rebelo (1988). "Production, Growth and Business Cycles." JME 21(2-3).
+Ohanian (2010). "The Economic Crisis from a Neoclassical Perspective." JEP 24(4).</div>
+  </div>
+
+  <!-- Dissertação -->
+  <article class="question" data-id="q-rbc1">
+    <div class="q-toprow">
+      <div class="q-meta">
+        <span class="q-id">Q6</span>
+        <div class="q-dots"><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span></div>
+        <span class="q-time">~40 min</span>
+      </div>
+      <div class="q-tags"><span class="tag">RBC</span><span class="tag">história do pensamento</span><span class="tag">questão aberta</span></div>
+    </div>
+    <div class="q-note">Esta questão não tem derivações. O que o modelo RBC é, onde ele se encaixa na história do pensamento macroeconômico, e onde ele falha empiricamente. Uma avaliação, não um resumo.</div>
+    <div class="q-body">
+      <p>Descreva, cuidadosamente, o que é um modelo do ciclo real dos negócios. Como estes modelos se inserem na história da evolução recente da macroeconomia, e quais são os aspectos do ciclo de negócios que são ou que não são reproduzidos por algumas versões destes modelos.</p>
+      <p>Você pode basear a sua resposta apenas nos textos indicados ao longo do curso e no capítulo 4 do livro do Romer.</p>
+    </div>
+    <div class="hint-area" id="hints-q-rbc1">
+      <p class="area-label">Dica</p>
+      <p class="hint-item">Estruture em três partes: (1) o que é o modelo, (2) onde ele se encaixa historicamente, (3) o que reproduz e o que não reproduz. A ordem importa para a clareza do argumento.</p>
+      <p class="hint-item">Para o posicionamento histórico: pense na crítica de Lucas às políticas keynesianas, no surgimento das expectativas racionais, e em como o RBC radicaliza essa agenda ao eliminar até a rigidez nominal.</p>
+      <p class="hint-item">Fatos que o modelo reproduz bem: volatilidade de investimento, correlações positivas. Fatos que reproduz mal: volatilidade de horas trabalhadas, papel da moeda, persistência do desemprego.</p>
+    </div>
+    <div class="why-area" id="why-q-rbc1">
+      <p class="area-label">Por que isso importa</p>
+      <p class="why-text">Entender onde o RBC se encaixa historicamente é o que separa quem aprendeu as equações de quem entendeu o debate. Kydland-Prescott (1982), a crítica de Lucas e a resposta keynesiana formam um triângulo de tensões que ainda organiza boa parte da discussão em macroeconomia aplicada.</p>
+    </div>
+    <div class="q-footer">
+      <div class="q-actions"><button class="btn-ghost" data-hint="q-rbc1">Dica</button><button class="btn-ghost" data-why="q-rbc1">Por que importa?</button></div>
+      <label class="done-label"><input type="checkbox" data-done="q-rbc1" /> Resolvida</label>
+    </div>
+  </article>
+
+  <!-- Q5ab -->
+  <article class="question" data-id="q-rbc2">
+    <div class="q-toprow">
+      <div class="q-meta">
+        <span class="q-id">Q7</span>
+        <div class="q-dots"><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span></div>
+        <span class="q-time">~35 min</span>
+      </div>
+      <div class="q-tags"><span class="tag">RBC</span><span class="tag">calibração vs estimação</span><span class="tag">metodologia</span></div>
+    </div>
+    <div class="q-note">A parte (a) pede uma avaliação empírica. A parte (b) aprofunda o debate sobre calibração, a escolha técnica mais controversa de Kydland e Prescott. A questão não é técnica: é epistemológica.</div>
+    <div class="q-body">
+      <div class="sub-list">
+        <div class="item"><p><strong>a)</strong> Descreva, cuidadosamente, que aspectos do ciclo de negócios são ou não são reproduzidos pelo modelo básico do ciclo real de negócios descrito no capítulo 4 do livro do Romer.</p></div>
+        <div class="item"><p><strong>b)</strong> Como são calibrados os modelos de Ciclo Real de Negócios? Quais as vantagens e desvantagens de se calibrar estes modelos? Os parâmetros do modelo deveriam ser estimados?</p></div>
+      </div>
+    </div>
+    <div class="hint-area" id="hints-q-rbc2">
+      <p class="area-label">Dica</p>
+      <p class="hint-item">Para (a): liste os fatos estilizados do Romer e marque quais o modelo reproduz. As correlações entre variáveis são o critério principal, não apenas a volatilidade.</p>
+      <p class="hint-item">Para (b): a vantagem da calibração é usar evidências externas ao modelo. A desvantagem é que você nunca rejeita o modelo formalmente. A estimação por máxima verossimilhança resolve isso, mas enfrenta problemas sérios de identificação em sistemas com choques não observáveis.</p>
+    </div>
+    <div class="why-area" id="why-q-rbc2">
+      <p class="area-label">Por que isso importa</p>
+      <p class="why-text">O debate calibração versus estimação é, no fundo, um debate sobre o que significa "testar" um modelo. Os modelos DSGE modernos tentam um meio-termo: estimação bayesiana com priors informados por evidências microeconômicas. Cada escolha metodológica carrega consequências para as conclusões de política que o modelo gera.</p>
+    </div>
+    <div class="q-footer">
+      <div class="q-actions"><button class="btn-ghost" data-hint="q-rbc2">Dica</button><button class="btn-ghost" data-why="q-rbc2">Por que importa?</button></div>
+      <label class="done-label"><input type="checkbox" data-done="q-rbc2" /> Resolvida</label>
+    </div>
+  </article>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SEÇÃO 4
+══════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <p class="section-eyebrow">Seção 4 · 2 questões</p>
+    <h2>As Fundações do Modelo de Romer</h2>
+    <p class="section-desc">O modelo simplificado do Romer tem duas propriedades notáveis: a taxa de poupança e a oferta de trabalho são constantes, independentes dos choques de tecnologia. Essas são consequências das hipóteses, não hipóteses em si.</p>
+  </div>
+
+  <div class="context-block">
+    <div class="context-top">
+      <span class="context-type">Retornando a 2008</span>
+      <span class="context-title-text">Quando a tractabilidade analítica encontra os dados</span>
+    </div>
+    <div class="context-body">
+      <p>A questão seguinte vai demonstrar que, no modelo simplificado do Romer, a taxa de poupança é uma constante igual a $\beta$. Isso é matematicamente elegante. Também significa que nenhum choque, de qualquer natureza, altera a fração da renda que os agentes poupam.</p>
+      <p>Os dados contam outra história. A taxa de poupança americana ficou abaixo de 3% durante a expansão e chegou a quase 8% em 2009. Esse comportamento não é possível, por construção, num modelo com taxa de poupança constante e mercados completos.</p>
+      <div class="context-critical">
+        <span class="context-critical-label">A alternativa: mercados incompletos</span>
+        <p>Modelos com mercados de ativos incompletos e renda estocástica idiossincrática, como o de Aiyagari (1994), geram motivo precaucionário endógeno: quando a incerteza aumenta, os agentes poupam mais como seguro contra estados ruins futuros. A taxa de poupança agregada varia com o ciclo. O custo computacional é alto: não há solução de forma fechada, os resultados dependem de simulações com distribuições de agentes heterogêneos. A simplicidade do modelo de Romer vem com um preço explícito.</p>
+      </div>
+    </div>
+    <div class="context-ref">Aiyagari (1994). "Uninsured Idiosyncratic Risk and Aggregate Saving." QJE 109(3).
+Krusell e Smith (1998). "Income and Wealth Heterogeneity in the Macroeconomy." JPE 106(5).</div>
+  </div>
+
+  <!-- Q unificada: η e taxa de poupança constantes -->
+  <article class="question" data-id="q-prova">
+    <div class="q-toprow">
+      <div class="q-meta">
+        <span class="q-id">Q8</span>
+        <div class="q-dots"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span></div>
+        <span class="q-time">~30 min</span>
+      </div>
+      <div class="q-tags"><span class="tag">modelo de Romer</span><span class="tag">$\eta$ constante</span><span class="tag">taxa de poupança</span><span class="tag">prova</span></div>
+    </div>
+    <div class="q-note">As duas partes usam a mesma estrutura algébrica: substituir expressões de equilíbrio até que a variável de choque cancele dos dois lados. A surpresa é que, com as hipóteses do modelo simplificado, ela sempre cancela.</div>
+    <div class="q-body">
+      <p>Considere o modelo de Romer na versão simplificada: sem gastos do governo, depreciação de 100% e choque de tecnologia. Utilize as seguintes equações:</p>
+      <div class="eq">$$\frac{b\,c_t}{1-\eta_t} = w_t \qquad\quad c_t = \frac{(1-\hat{s})\,Y_t}{N_t} \qquad\quad w_t = \frac{(1-\alpha)\,Y_t}{\eta_t\,N_t}$$</div>
+      <div class="sub-list">
+        <div class="item"><p><strong>i)</strong> Prove que a oferta de trabalho $\eta$ é constante e não é afetada pelos choques de tecnologia. Justifique cuidadosamente.</p></div>
+        <div class="item"><p><strong>ii)</strong> Prove que a taxa de poupança é constante e não é afetada pelos choques de tecnologia. Justifique cuidadosamente.</p></div>
+      </div>
+    </div>
+    <div class="hint-area" id="hints-q-prova">
+      <p class="area-label">Dica</p>
+      <p class="hint-item">Para (i): substitua $c_t$ e $w_t$ na condição intratemporal. $Y_t$ e $N_t$ aparecem dos dois lados.</p>
+      <p class="hint-item">Para (i): após a substituição, $Y_t$ e $N_t$ se cancelam. O que resta é $b(1-\hat{s})/(1-\eta) = (1-\alpha)/\eta$, determinada apenas por parâmetros.</p>
+      <p class="hint-item">Para (ii): com depreciação de 100% e utilidade log, a equação de Euler gera $c_t = (1-\beta)\,y_t$. O choque $A_t$ escala $c_t$ e $y_t$ na mesma proporção, portanto $c_t/y_t = 1-\beta$ permanece constante.</p>
+    </div>
+    <div class="why-area" id="why-q-prova">
+      <p class="area-label">Por que isso importa</p>
+      <p class="why-text">Esses dois resultados são o que torna o modelo analiticamente tratável. Mas eles são consequências das hipóteses. Em particular, a constância da poupança é exatamente o que impede o modelo de gerar o comportamento observado em 2008. A tractabilidade analítica e o realismo empírico estão, aqui, em tensão direta.</p>
+    </div>
+    <div class="q-footer">
+      <div class="q-actions"><button class="btn-ghost" data-hint="q-prova">Dica</button><button class="btn-ghost" data-why="q-prova">Por que importa?</button></div>
+      <label class="done-label"><input type="checkbox" data-done="q-prova" /> Resolvida</label>
+    </div>
+  </article>
+
+  <!-- Q1: utilidade modificada -->
+  <article class="question" data-id="q1-r">
+    <div class="q-toprow">
+      <div class="q-meta">
+        <span class="q-id">Q9</span>
+        <div class="q-dots"><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span></div>
+        <span class="q-time">~25 min</span>
+      </div>
+      <div class="q-tags"><span class="tag">modelo de Romer</span><span class="tag">utilidade modificada</span><span class="tag">taxa de poupança</span></div>
+    </div>
+    <div class="q-note">Alterar a função utilidade não é cosmético. A questão pede para verificar se as propriedades provadas acima sobrevivem à mudança, com justificativa cuidadosa.</div>
+    <div class="q-body">
+      <p>Considere o modelo do capítulo 4 do Romer na versão simplificada: sem gastos do governo, depreciação de 100% e choque de tecnologia. A função utilidade instantânea é:</p>
+      <div class="eq">$$u(t) = \ln c_t + \frac{b\,(1-\eta_t)^{1-\gamma}}{1-\gamma}, \qquad \eta_t = \text{oferta de trabalho}$$</div>
+      <div class="sub-list">
+        <div class="item"><p><strong>i)</strong> Obtenha a condição de primeira ordem que relaciona os valores correntes do consumo e do lazer $(1-\eta_t)$, para um dado valor do salário real.</p></div>
+        <div class="item"><p><strong>ii)</strong> Com esta alteração na função utilidade, a taxa de poupança continua constante e não afetada pelos choques de tecnologia? Justifique cuidadosamente.</p></div>
+      </div>
+    </div>
+    <div class="hint-area" id="hints-q1-r">
+      <p class="area-label">Dica</p>
+      <p class="hint-item">Para (i): calcule $-\partial u/\partial \eta$ e $\partial u/\partial c$. A FOC intratemporal iguala a razão das utilidades marginais ao salário real.</p>
+      <p class="hint-item">Para (ii): tente mostrar se $\eta_t$ continua constante. Use a FOC de (i) com $w_t = (1-\alpha)Y_t/(\eta_t N_t)$ e $c_t = (1-s)Y_t/N_t$. Veja se $\eta_t$ pode ser isolado sem $A_t$.</p>
+      <p class="hint-item">Com a nova utilidade, a FOC intratemporal resulta em $b(1-\eta)^{-\gamma} = w_t/c_t$. Substitua $w_t$ e $c_t$. A chave está em se o expoente $\gamma$ permite ou não o cancelamento de $Y_t$ dos dois lados.</p>
+    </div>
+    <div class="why-area" id="why-q1-r">
+      <p class="area-label">Por que isso importa</p>
+      <p class="why-text">Esta questão mostra que os resultados da questão anterior dependem crucialmente da especificação da utilidade. É um exemplo de como resultados aparentemente gerais são, na verdade, propriedades de escolhas funcionais específicas. Identificar essas dependências é o que permite avaliar criticamente um modelo.</p>
+    </div>
+    <div class="q-footer">
+      <div class="q-actions"><button class="btn-ghost" data-hint="q1-r">Dica</button><button class="btn-ghost" data-why="q1-r">Por que importa?</button></div>
+      <label class="done-label"><input type="checkbox" data-done="q1-r" /> Resolvida</label>
+    </div>
+  </article>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SEÇÃO 5: CHEFÃO FINAL
+══════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <p class="section-eyebrow">Seção 5 · Projeto computacional</p>
+    <h2>Chefão Final</h2>
+    <p class="section-desc">Você derivou as equações, calibrou a intuição, aprendeu onde o modelo falha. Agora faça o que economistas fazem: baixe os dados, replique os fatos estilizados com suas próprias mãos, e veja se o ciclo de 2008 parece mais com um choque de tecnologia ou com uma falha de demanda.</p>
+  </div>
+
+  <div class="context-block">
+    <div class="context-top">
+      <span class="context-type">RBC versus Keynesiano</span>
+      <span class="context-title-text">A disputa que ainda não tem vencedor</span>
+    </div>
+    <div class="context-body">
+      <p>O modelo RBC diz que recessões são respostas ótimas a choques negativos de produtividade. Os agentes reduzem voluntariamente o trabalho porque o salário real caiu; consumo e investimento caem juntos, na mesma proporção do produto. Não há espaço para política fiscal ou monetária melhorar o resultado: a recessão é eficiente.</p>
+      <p>O Keynesiano diz o oposto. Recessões nascem de colapsos de demanda agregada, não de tecnologia. Investimento desaparece, consumo cai mais do que renda (poupança precaucionária), desemprego é involuntário e persistente. O governo pode — e deve — intervir.</p>
+      <p>Na Seção 3 você viu um gráfico comparando as previsões do modelo RBC com os dados americanos. O projeto abaixo pede que você reproduza esse gráfico com suas próprias mãos, e então examine o episódio de 2008 especificamente: o padrão daquela recessão parece mais com o que o modelo RBC prevê, ou mais com o que um Keynesiano descreveria?</p>
+      <div class="context-critical">
+        <span class="context-critical-label">O que faz isso difícil</span>
+        <p>Um choque de tecnologia e um choque de demanda podem, em princípio, produzir padrões de dados parecidos. A identificação — distinguir um do outro — é um dos problemas mais antigos da macroeconomia empírica. O que o projeto pede não é uma prova formal, mas uma análise visual e intuitiva: olhe para os dados e diga o que você vê.</p>
+      </div>
+    </div>
+    <div class="context-ref">Kydland e Prescott (1982). "Time to Build and Aggregate Fluctuations." Econometrica 50(6).
+Mankiw (1989). "Real Business Cycles: A New Keynesian Perspective." JEP 3(3).
+Blanchard (2009). "The State of Macro." Annual Review of Economics 1.</div>
+  </div>
+
+  <article class="question boss" data-id="q10-proj">
+    <div class="q-toprow">
+      <div class="q-meta">
+        <span class="q-id">Q10 · Projeto</span>
+        <div class="q-dots"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span></div>
+        <span class="q-time">~2–3h</span>
+      </div>
+      <div class="q-tags"><span class="tag">dados reais</span><span class="tag">Python / R</span><span class="tag">fatos estilizados</span><span class="tag">HP-filter</span><span class="tag">RBC vs Keynesiano</span></div>
+    </div>
+
+    <div class="q-note">
+      Você vai reproduzir os fatos estilizados do ciclo americano com dados do FRED, comparar com as previsões do modelo RBC, e fazer uma análise qualitativa do episódio de 2008. Não é econometria: é olhar para os dados e pensar.
+    </div>
+
+    <div class="q-body">
+      <p>O modelo RBC, calibrado com os parâmetros padrão, prevê que as volatilidades relativas ao PIB sejam aproximadamente:</p>
+      <div class="eq">$$\sigma_C / \sigma_Y \approx 0{,}32 \qquad \sigma_I / \sigma_Y \approx 3{,}28 \qquad \sigma_H / \sigma_Y \approx 0{,}38$$</div>
+      <p>Seu objetivo é calcular esses mesmos números com dados reais americanos, reproduzir o gráfico da Seção 3, e então examinar o episódio de 2008.</p>
+
+      <div class="context-critical" style="margin:1.2rem 0;">
+        <span class="context-critical-label">O que é o filtro HP — leia antes de rodar o código</span>
+        <p>Uma série como o PIB tem dois componentes misturados: uma tendência de longo prazo (crescimento estrutural, de décadas) e flutuações de curto prazo em torno dela (o ciclo de negócios, de meses a anos). Macroeconomistas querem estudar só as flutuações, não a tendência.</p>
+        <p style="margin-top:0.6rem;">O filtro Hodrick-Prescott (HP) faz exatamente isso: dado uma série, ele encontra a tendência suave que melhor a acompanha sem seguir cada solavanco. O que sobra — série menos tendência — é o componente cíclico. O parâmetro $\lambda = 1600$ controla quão suave a tendência deve ser; para dados trimestrais, 1600 é o valor padrão da literatura desde Kydland e Prescott (1982).</p>
+        <p style="margin-top:0.6rem;">No código abaixo, <code style="font-family:'JetBrains Mono',monospace;font-size:0.85em;">hpfilter(x, lamb=1600)</code> devolve dois objetos: a tendência e o ciclo. A função <code style="font-family:'JetBrains Mono',monospace;font-size:0.85em;">ciclo()</code> já descarta a tendência e retorna só o que interessa.</p>
+      </div>
+
+      <div class="resources-box">
+        <p class="resources-title">Dados necessários (FRED — clique para baixar CSV)</p>
+        <div class="resource-row">
+          <a href="https://fred.stlouisfed.org/graph/fredgraph.csv?id=GDPC1" target="_blank">GDPC1</a>
+          <span class="resource-desc">PIB real trimestral (bilhões de dólares encadeados de 2017)</span>
+        </div>
+        <div class="resource-row">
+          <a href="https://fred.stlouisfed.org/graph/fredgraph.csv?id=PCECC96" target="_blank">PCECC96</a>
+          <span class="resource-desc">Consumo pessoal real trimestral</span>
+        </div>
+        <div class="resource-row">
+          <a href="https://fred.stlouisfed.org/graph/fredgraph.csv?id=GPDIC1" target="_blank">GPDIC1</a>
+          <span class="resource-desc">Investimento privado bruto real trimestral</span>
+        </div>
+        <div class="resource-row">
+          <a href="https://fred.stlouisfed.org/graph/fredgraph.csv?id=HOANBS" target="_blank">HOANBS</a>
+          <span class="resource-desc">Horas trabalhadas no setor não-agrícola (índice trimestral)</span>
+        </div>
+      </div>
+
+      <p>Instale antes de começar: <code style="font-family:'JetBrains Mono',monospace;font-size:0.85em;background:var(--surface-2);padding:0.1rem 0.35rem;border-radius:3px;">pip install pandas numpy matplotlib statsmodels</code></p>
+      <p style="margin-top:0.6rem;">O código abaixo está completo e roda do início ao fim. Leia cada bloco antes de executar. As perguntas que você precisa responder estão na seção de passos logo abaixo.</p>
+
+      <pre class="code-block"><span class="cc"># ── Imports e carregamento ────────────────────────────────────</span>
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from statsmodels.tsa.filters.hp_filter import hpfilter
+
+gdp   = pd.read_csv(<span class="cs">'GDPC1.csv'</span>,   index_col=0, parse_dates=True).squeeze()
+cons  = pd.read_csv(<span class="cs">'PCECC96.csv'</span>, index_col=0, parse_dates=True).squeeze()
+inv   = pd.read_csv(<span class="cs">'GPDIC1.csv'</span>,  index_col=0, parse_dates=True).squeeze()
+hours = pd.read_csv(<span class="cs">'HOANBS.csv'</span>,  index_col=0, parse_dates=True).squeeze()
+
+<span class="cc"># ── Filtro HP: extrai o componente cíclico ────────────────────</span>
+<span class="cc"># hpfilter retorna (tendência, ciclo). Ficamos só com o ciclo.</span>
+def ciclo(s, lamb=1600):
+    _, c = hpfilter(np.log(s.dropna()), lamb=lamb)
+    return c
+
+cy_y = ciclo(gdp)    <span class="cc"># ciclo do PIB</span>
+cy_c = ciclo(cons)   <span class="cc"># ciclo do consumo</span>
+cy_i = ciclo(inv)    <span class="cc"># ciclo do investimento</span>
+cy_h = ciclo(hours)  <span class="cc"># ciclo das horas trabalhadas</span>
+
+<span class="cc"># ── Fatos estilizados: volatilidade relativa ao PIB ───────────</span>
+std_y = cy_y.std()
+modelo_rbc = {<span class="cs">'Consumo'</span>: 0.32, <span class="cs">'Investimento'</span>: 3.28, <span class="cs">'Horas'</span>: 0.38}
+dados = {
+    <span class="cs">'Consumo'</span>:      cy_c.std() / std_y,
+    <span class="cs">'Investimento'</span>: cy_i.std() / std_y,
+    <span class="cs">'Horas'</span>:        cy_h.std() / std_y,
+}
+print(<span class="cs">"Volatilidade relativa ao PIB:"</span>)
+for var in dados:
+    print(f<span class="cs">"  {var:<14} dados = {dados[var]:.2f}   modelo RBC = {modelo_rbc[var]:.2f}"</span>)
+
+<span class="cc"># ── Correlação com o ciclo do PIB ────────────────────────────</span>
+comum = cy_y.index.intersection(cy_c.index)
+print(<span class="cs">"\nCorrelação com ciclo do PIB:"</span>)
+for cy, nome in [(cy_c, <span class="cs">'Consumo'</span>), (cy_i, <span class="cs">'Investimento'</span>), (cy_h, <span class="cs">'Horas'</span>)]:
+    r = cy.reindex(comum).corr(cy_y.reindex(comum))
+    print(f<span class="cs">"  {nome:<14} {r:.3f}"</span>)
+
+<span class="cc"># ── Gráfico 1: barras agrupadas (reproduz o da Seção 3) ───────</span>
+variaveis = list(dados.keys())
+x = np.arange(len(variaveis))
+fig, ax = plt.subplots(figsize=(8, 4))
+ax.bar(x - 0.2, [dados[v] for v in variaveis],     0.38, label=<span class="cs">'Dados (EUA)'</span>,  color=<span class="cs">'#2e7d72'</span>, alpha=0.8)
+ax.bar(x + 0.2, [modelo_rbc[v] for v in variaveis], 0.38, label=<span class="cs">'Modelo RBC'</span>, color=<span class="cs">'#ad5f2b'</span>, alpha=0.75)
+ax.set_xticks(x); ax.set_xticklabels(variaveis)
+ax.set_ylabel(<span class="cs">'Desvio padrão relativo ao PIB'</span>)
+ax.set_title(<span class="cs">'Fatos estilizados: dados vs modelo RBC'</span>)
+ax.legend(); ax.grid(axis=<span class="cs">'y'</span>, alpha=0.3)
+plt.tight_layout(); plt.show()
+
+<span class="cc"># ── Gráfico 2: zoom em 2008 ──────────────────────────────────</span>
+janela = slice(<span class="cs">'2005'</span>, <span class="cs">'2013'</span>)
+fig, axes = plt.subplots(3, 1, figsize=(10, 7), sharex=True)
+pares = [(cy_y, <span class="cs">'PIB'</span>), (cy_c, <span class="cs">'Consumo'</span>), (cy_h, <span class="cs">'Horas trabalhadas'</span>)]
+for ax, (cy, nome) in zip(axes, pares):
+    ax.plot(cy[janela] * 100, color=<span class="cs">'#1a1510'</span>, lw=1.5)
+    ax.axhline(0, color=<span class="cs">'gray'</span>, lw=0.6)
+    ax.axvspan(<span class="cs">'2007-12-01'</span>, <span class="cs">'2009-06-01'</span>, alpha=0.1, color=<span class="cs">'#ad5f2b'</span>)
+    ax.set_title(nome, fontsize=10, loc=<span class="cs">'left'</span>)
+    ax.set_ylabel(<span class="cs">'% desvio da tendência'</span>, fontsize=8)
+axes[0].annotate(<span class="cs">'Recessão NBER'</span>, xy=(<span class="cs">'2008-06-01'</span>, ax.get_ylim()[1]*0.85),
+                 fontsize=8, color=<span class="cs">'#ad5f2b'</span>)
+plt.tight_layout(); plt.show()</pre>
+
+      <div class="steps">
+        <div class="step-item">
+          <span class="step-num">1</span>
+          <div class="step-content"><strong>Rode o código e observe a tabela de volatilidades.</strong> Em qual variável o modelo mais erra? Em qual ele acerta melhor? Isso é coerente com o que a Seção 3 mostrou?</div>
+        </div>
+        <div class="step-item">
+          <span class="step-num">2</span>
+          <div class="step-content"><strong>Observe as correlações com o PIB.</strong> O modelo RBC prevê que consumo, investimento e horas são todos positivamente correlacionados com o produto. Os dados confirmam? Há alguma surpresa?</div>
+        </div>
+        <div class="step-item">
+          <span class="step-num">3</span>
+          <div class="step-content"><strong>Olhe o Gráfico 1 (barras agrupadas).</strong> A barra de horas trabalhadas é o lugar onde o modelo mais falha. Por que isso acontece? Conecte com o resultado da Q8: se $\eta$ é constante no modelo, o que isso implica sobre a volatilidade prevista das horas?</div>
+        </div>
+        <div class="step-item">
+          <span class="step-num">4</span>
+          <div class="step-content"><strong>Olhe o Gráfico 2 (zoom em 2008).</strong> Compare a queda nas horas com a queda no PIB naquele período. A queda nas horas foi proporcionalmente maior ou menor do que o modelo prevê? O que isso sugere sobre o tipo de choque que causou a recessão?</div>
+        </div>
+        <div class="step-item">
+          <span class="step-num">5</span>
+          <div class="step-content"><strong>Conecte com a Seção 1.</strong> O consumo cíclico caiu mais ou menos do que o PIB em 2008? Lembre que a taxa de poupança subiu de 3% para 8% naquele período. Se as pessoas pouparam mais, o consumo deve ter caído relativamente mais que a renda. Isso é compatível com o modelo RBC, onde consumo e produto caem juntos na mesma proporção?</div>
+        </div>
+        <div class="step-item">
+          <span class="step-num">6</span>
+          <div class="step-content"><strong>Escreva uma conclusão de um parágrafo.</strong> Com base nos dois gráficos e nos números da tabela, o ciclo de 2008 parece mais com o que o modelo RBC descreve (choque de tecnologia, resposta ótima) ou com o que um Keynesiano descreveria (colapso de demanda, desemprego involuntário)? Justifique com pelo menos dois elementos concretos dos seus gráficos.</div>
+        </div>
+      </div>
+
+      <div class="career-note">
+        <strong>Vale publicar.</strong> Um notebook Python que baixa dados do FRED, aplica HP-filter, reproduz uma tabela de fatos estilizados e conclui sobre um debate da literatura é algo concreto para mostrar. Documenta que você sabe ligar teoria a dado, o que é raro entre alunos de graduação. Publique no <a href="https://github.com" target="_blank" style="color:var(--teal);">GitHub</a> com um README explicando o que foi feito, e coloque o link no LinkedIn. Três linhas: o que o projeto faz, o que você encontrou, qual modelo o dado favorece.
+      </div>
+    </div>
+
+    <div class="why-area" id="why-q10-proj">
+      <p class="area-label">Por que isso importa</p>
+      <p class="why-text">A distinção entre choques de oferta e choques de demanda é central para a política econômica. Se recessões são sempre choques de tecnologia (visão RBC), intervenção governamental é ineficaz ou contraproducente. Se são choques de demanda (visão Keynesiana), há espaço para política fiscal e monetária. Os dados de 2008 foram usados por ambos os lados desse debate. Este projeto não vai resolver a questão, mas vai dar a você a capacidade de entender o que cada lado está argumentando e com que evidência.</p>
+    </div>
+
+    <div class="q-footer">
+      <div class="q-actions">
+        <button class="btn-ghost" data-why="q10-proj">Por que importa?</button>
+      </div>
+      <label class="done-label"><input type="checkbox" data-done="q10-proj" /> Concluído</label>
+    </div>
+  </article>
+</div>
+
+<footer class="page-footer">
+  <span>Macroeconomia Dinâmica · Lista II <span style="color:var(--text-dim);font-size:0.9em;">· Monitor: Lucas Andrade</span></span>
+  <span id="footer-status">0 de 10 questões resolvidas</span>
+</footer>
+
+<!-- Scripts: KaTeX, Chart.js, lógica da página -->
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+<script>
+  /* KaTeX */
+  renderMathInElement(document.body, {
+    delimiters: [
+      { left: "$$", right: "$$", display: true  },
+      { left: "$",  right: "$",  display: false }
+    ],
+    throwOnError: false
+  });
+
+  /* Scroll progress */
+  const bar = document.getElementById('progress-bar');
+  window.addEventListener('scroll', () => {
+    const h   = document.documentElement;
+    const pct = h.scrollTop / (h.scrollHeight - h.clientHeight) * 100;
+    bar.style.width = (isFinite(pct) ? pct : 0) + '%';
+  }, { passive: true });
+
+  /* Done state */
+  const STORAGE_KEY = 'macro-lista2-v4';
+  let done = new Set(JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'));
+  function syncCounter() {
+    const n = done.size;
+    document.getElementById('done-count').textContent = n;
+    document.getElementById('footer-status').textContent = `${n} de 10 questões resolvidas`;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify([...done]));
+  }
+  document.querySelectorAll('input[data-done]').forEach(cb => {
+    const id = cb.dataset.done, card = cb.closest('.question');
+    if (done.has(id)) { cb.checked = true; card.classList.add('done'); }
+    cb.addEventListener('change', () => {
+      if (cb.checked) { done.add(id); card.classList.add('done'); }
+      else { done.delete(id); card.classList.remove('done'); }
+      syncCounter();
+    });
+  });
+  syncCounter();
+
+  /* Progressive hints */
+  const hintState = {};
+  document.querySelectorAll('[data-hint]').forEach(btn => {
+    const id = btn.dataset.hint;
+    btn.addEventListener('click', () => {
+      const area  = document.getElementById(`hints-${id}`);
+      const items = area.querySelectorAll('.hint-item');
+      if (!hintState[id]) hintState[id] = 0;
+      area.classList.add('open');
+      if (hintState[id] < items.length) { items[hintState[id]].classList.add('visible'); hintState[id]++; }
+      const rem = items.length - hintState[id];
+      btn.textContent = rem <= 0 ? 'Sem mais dicas' : `Próxima dica (${rem} restante${rem > 1 ? 's' : ''})`;
+      if (rem <= 0) btn.disabled = true;
+    });
+  });
+
+  /* Por que importa toggle */
+  document.querySelectorAll('[data-why]').forEach(btn => {
+    const id = btn.dataset.why;
+    btn.addEventListener('click', () => {
+      const area = document.getElementById(`why-${id}`);
+      const open = area.classList.toggle('open');
+      btn.textContent = open ? 'Fechar' : 'Por que importa?';
+    });
+  });
+
+  /* ── Chart 1: US Personal Saving Rate ──────────────── */
+  const CHART_DEFAULTS = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } }
+  };
+  const GRID_COLOR  = 'rgba(180,170,158,0.3)';
+  const TICK_COLOR  = '#b0a090';
+  const TICK_FONT   = { size: 11, family: 'Inter' };
+
+  const savingData = [2.8,2.7,2.4,2.2, 2.3,2.1,2.6,2.9, 3.2,4.9,5.6,6.3, 7.6,6.9,5.8,5.4, 5.3,5.7,5.4,5.1];
+  const LEHMAN_IDX = 10; // Q3 2008
+
+  new Chart(document.getElementById('chart-saving').getContext('2d'), {
+    type: 'line',
+    data: {
+      labels: ["Q1'06","Q2'06","Q3'06","Q4'06","Q1'07","Q2'07","Q3'07","Q4'07",
+               "Q1'08","Q2'08","Q3'08","Q4'08","Q1'09","Q2'09","Q3'09","Q4'09",
+               "Q1'10","Q2'10","Q3'10","Q4'10"],
+      datasets: [{
+        data: savingData,
+        borderColor: '#ad5f2b',
+        backgroundColor: 'rgba(173,95,43,0.1)',
+        borderWidth: 2, fill: true, tension: 0.3,
+        pointRadius: savingData.map((_,i) => i === LEHMAN_IDX ? 7 : 3),
+        pointBackgroundColor: savingData.map((_,i) => i === LEHMAN_IDX ? '#c8854d' : '#ad5f2b'),
+        pointBorderColor: savingData.map((_,i) => i === LEHMAN_IDX ? '#ffffff' : '#ad5f2b'),
+        pointBorderWidth: savingData.map((_,i) => i === LEHMAN_IDX ? 2 : 0),
+      }]
+    },
+    options: {
+      ...CHART_DEFAULTS,
+      scales: {
+        x: { ticks: { font: TICK_FONT, color: TICK_COLOR, maxRotation: 45 }, grid: { color: GRID_COLOR } },
+        y: { min: 0, max: 10, ticks: { font: TICK_FONT, color: TICK_COLOR, callback: v => v + '%' }, grid: { color: GRID_COLOR } }
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => {
+              const base = ` ${ctx.parsed.y.toFixed(1)}%`;
+              return ctx.dataIndex === LEHMAN_IDX ? base + ' — Lehman (set/2008)' : base;
+            }
+          }
+        }
+      }
+    }
+  });
+
+  /* ── Chart 2: RBC Stylized Facts ────────────────────── */
+  new Chart(document.getElementById('chart-rbc').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: ['Consumo', 'Investimento', 'Horas trabalhadas', 'Salário real'],
+      datasets: [
+        {
+          label: 'Dados (EUA)',
+          data: [0.72, 3.15, 1.09, 0.53],
+          backgroundColor: 'rgba(46,125,114,0.72)',
+          borderColor: '#2e7d72', borderWidth: 1
+        },
+        {
+          label: 'Modelo RBC',
+          data: [0.32, 3.28, 0.38, 0.79],
+          backgroundColor: 'rgba(173,95,43,0.65)',
+          borderColor: '#ad5f2b', borderWidth: 1
+        }
+      ]
+    },
+    options: {
+      ...CHART_DEFAULTS,
+      plugins: {
+        legend: {
+          display: true, position: 'bottom',
+          labels: { font: { size: 11, family: 'Inter' }, color: '#6b5b4a', boxWidth: 14, padding: 16 }
+        }
+      },
+      scales: {
+        x: { ticks: { font: TICK_FONT, color: TICK_COLOR }, grid: { display: false } },
+        y: {
+          min: 0,
+          title: { display: true, text: 'Desvio padrão relativo ao PIB', font: { size: 10, family: 'Inter' }, color: TICK_COLOR },
+          ticks: { font: TICK_FONT, color: TICK_COLOR },
+          grid: { color: GRID_COLOR }
+        }
+      }
+    }
+  });
+</script>
+</body>
+</html>
