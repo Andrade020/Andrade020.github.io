@@ -1,135 +1,187 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Publications by Lucas R. Andrade — research on spatiotemporal processes, econometrics, and macroeconomics.">
-    <title>Publications | Lucas R. Andrade</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='85'>∂</text></svg>">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Research and writing by Lucas R. Andrade: spatiotemporal Poisson processes, credit risk, data engineering.">
+<title>Research · Lucas R. Andrade</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.92em' font-size='95' font-family='Georgia,serif' font-style='italic' fill='%23d4a574'%3EZ%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
 </head>
 <body class="dark-mode">
 
-<header>
-    <div class="header-content">
-        <div class="social-icons">
-            <a href="mailto:lucas_r_andrade@hotmail.com" title="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></a>
-            <a href="https://wa.me/5521975056123" target="_blank" title="WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
-            <a href="https://www.linkedin.com/in/lucas-rafael-de-andrade/" target="_blank" title="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
-            <a href="https://github.com/Andrade020" target="_blank" title="GitHub"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
-        </div>
-        <nav>
-            <a href="index.html">About</a>
-            <a href="projects.html">Projects</a>
-            <a href="publications.html" class="active">Publications</a>
-            <a href="lab.html">Lab</a>
-            <a href="announcements.html">Announcements</a>
-            <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">☀</button>
-        </nav>
+<header class="site-header">
+  <div class="site-header__inner">
+    <a href="index.html" class="brand">
+      <span class="brand__mark"><span class="brand__logo" aria-label="LRA"></span></span>
+      <span>Lucas R. Andrade</span>
+      <span class="brand__pos" data-lang-en>· Economist &amp; Data Scientist</span>
+      <span class="brand__pos" data-lang-pt>· Economista &amp; Cientista de Dados</span>
+    </a>
+    <nav class="nav">
+      <a href="index.html" data-lang-en>About</a><a href="index.html" data-lang-pt>Sobre</a>
+      <a href="production.html" data-lang-en>Production</a><a href="production.html" data-lang-pt>Produção</a>
+      <a href="projects.html" data-lang-en>Open source</a><a href="projects.html" data-lang-pt>Open source</a>
+      <a href="publications.html" class="is-active" data-lang-en>Research</a><a href="publications.html" class="is-active" data-lang-pt>Pesquisa</a>
+      <a href="lab.html" data-lang-en>Lab</a><a href="lab.html" data-lang-pt>Lab</a>
+    </nav>
+    <div class="header-tools">
+      <button class="icon-btn lang-btn" data-lang-btn onclick="toggleLang()" title="Toggle language">en · pt</button>
+      <button class="icon-btn" data-action="theme" onclick="toggleTheme()" title="Toggle theme">☀</button>
     </div>
+  </div>
 </header>
 
 <main>
-    <h1>Publications</h1>
-    <p class="page-description">Academic papers, thesis, and research notes on statistics, econometrics, and macroeconomics.</p>
+  <section class="page-head wrap">
+    <span class="section-label" data-lang-en>Research</span>
+    <span class="section-label" data-lang-pt>Pesquisa</span>
+    <h1 data-lang-en>Statistics, finance, and the writings that <em>connect them.</em></h1>
+    <h1 data-lang-pt>Estatística, finanças e os textos que as <em>conectam.</em></h1>
+    <p data-lang-en>A peer-reviewed paper on Poisson processes with missing data, a dissertation, and notes written while working in production.</p>
+    <p data-lang-pt>Um paper revisado por pares sobre processos de Poisson com dados faltantes, uma dissertação e notas escritas durante o trabalho em produção.</p>
+  </section>
 
-    <section style="border:none;padding-top:0;margin-top:0;">
-        <h2>Peer-Reviewed Papers</h2>
-
-        <div class="publication">
-            <h3>Estimation of Spatiotemporal Poisson Processes with Some Missing Location Data</h3>
-            <p class="publication-meta">Nature Scientific Reports · 2026</p>
-            <p>
-                Statistical inference methods for spatiotemporal point processes when location data is partially
-                missing. The paper develops maximum likelihood and Bayesian estimation techniques that remain
-                robust under various missing data mechanisms — including MCAR, MAR, and MNAR — and validates
-                the approaches on both simulated and real-world crime data.
-            </p>
-            <p class="publication-links">
-                <a href="https://www.nature.com/articles/s41598-026-46520-y" target="_blank">📄 Read in Nature Scientific Reports →</a>
-                <span style="margin:0 8px;color:var(--text-muted)">·</span>
-                <a href="https://arxiv.org/abs/2410.11103" target="_blank">ArXiv preprint →</a>
-            </p>
+  <section class="section wrap">
+    <div class="section__head">
+      <h2 class="section__title" data-lang-en>Featured paper</h2>
+      <h2 class="section__title" data-lang-pt>Paper em destaque</h2>
+    </div>
+    <article class="paper">
+      <div class="paper__meta">
+        <div class="paper__journal">Nature Scientific Reports</div>
+        <div class="paper__date">2026</div>
+        <div class="paper__tags"><span class="tag research">Peer-reviewed</span></div>
+      </div>
+      <div class="paper__body">
+        <h3 class="paper__title" data-lang-en>Parameter estimation for spatiotemporal Poisson processes with missing location data</h3>
+        <h3 class="paper__title" data-lang-pt>Estimação de parâmetros para processos de Poisson espaço-temporais com dados de localização faltantes</h3>
+        <div class="paper__authors">Lucas R. Andrade, Vincent Guigues · FGV EMAp</div>
+        <p class="paper__abstract" data-lang-en>Spatiotemporal Poisson processes are a standard tool to model phenomena that scatter in space and time, from disease incidence to earthquake aftershocks to species sightings. In practice the location of each event is often imperfectly known, dropped, or coarsened. We construct a likelihood that respects what was actually observed, deriving maximum-likelihood estimators that remain consistent under realistic missingness mechanisms. Simulation studies and an application illustrate the practical gain over naive completion strategies.</p>
+        <p class="paper__abstract" data-lang-pt>Processos de Poisson espaço-temporais são ferramenta padrão para modelar fenômenos que se espalham em espaço e tempo, de incidência de doenças a réplicas sísmicas a avistamentos de espécies. Na prática, a localização de cada evento é frequentemente conhecida de modo imperfeito, descartada ou grosseira. Construímos uma verossimilhança que respeita o que de fato foi observado, derivando estimadores de máxima verossimilhança que permanecem consistentes sob mecanismos realistas de falta.</p>
+        <div class="paper__links">
+          <a href="https://www.nature.com/articles/s41598-026-46520-y" target="_blank" rel="noopener">Read on Nature ↗</a>
+          <a href="#" target="_blank" rel="noopener">BibTeX</a>
+          <a href="#" target="_blank" rel="noopener" data-lang-en>Code &amp; data</a>
+          <a href="#" target="_blank" rel="noopener" data-lang-pt>Código &amp; dados</a>
         </div>
-    </section>
+      </div>
+    </article>
+  </section>
 
-    <section>
-        <h2>Thesis</h2>
-
-        <div class="publication">
-            <h3>Estimation of Spatiotemporal Poisson Processes with Some Missing Location Data</h3>
-            <p class="publication-meta">Master's Thesis · FGV EMAp · 2024</p>
-            <p>
-                Full thesis version. Develops estimation techniques for spatiotemporal point processes under
-                partial location uncertainty, extending the classical spatiotemporal Poisson process framework
-                to handle missingness without discarding observations.
-            </p>
-            <p class="publication-links">
-                <a href="https://repositorio.fgv.br/items/49bdd731-6666-475f-9edf-70fd2895613b" target="_blank">📄 Full Thesis (FGV Repository) →</a>
-            </p>
+  <section class="section wrap">
+    <div class="section__head">
+      <h2 class="section__title" data-lang-en>MSc dissertation</h2>
+      <h2 class="section__title" data-lang-pt>Dissertação de mestrado</h2>
+    </div>
+    <article class="paper">
+      <div class="paper__meta">
+        <div class="paper__journal">FGV EMAp</div>
+        <div class="paper__date">2024</div>
+        <div class="paper__tags"><span class="tag research">MSc</span></div>
+      </div>
+      <div class="paper__body">
+        <h3 class="paper__title" data-lang-en>Likelihood inference for spatiotemporal Poisson processes under incomplete observation</h3>
+        <h3 class="paper__title" data-lang-pt>Inferência por verossimilhança para processos de Poisson espaço-temporais sob observação incompleta</h3>
+        <div class="paper__authors" data-lang-en>Master in Applied Mathematics &amp; Data Science · Supervisor: Vincent Guigues</div>
+        <div class="paper__authors" data-lang-pt>Mestrado em Matemática Aplicada &amp; Ciência de Dados · Orientador: Vincent Guigues</div>
+        <p class="paper__abstract" data-lang-en>The dissertation grounds the Nature paper in a longer methodological discussion: classical likelihood theory for inhomogeneous Poisson processes, missingness mechanisms (MCAR, MAR, MNAR) and their consequences for inference, simulation methodology, and a detailed treatment of asymptotic properties of the proposed estimators.</p>
+        <p class="paper__abstract" data-lang-pt>A dissertação ancora o paper da Nature numa discussão metodológica mais longa: teoria clássica da verossimilhança para processos de Poisson não-homogêneos, mecanismos de falta (MCAR, MAR, MNAR) e suas consequências para a inferência, metodologia de simulação e tratamento detalhado das propriedades assintóticas dos estimadores propostos.</p>
+        <div class="paper__links">
+          <a href="#" target="_blank" rel="noopener">PDF</a>
+          <a href="#" target="_blank" rel="noopener">FGV repository</a>
         </div>
-    </section>
+      </div>
+    </article>
+  </section>
 
-    <section>
-        <h2>Research Notes & Studies</h2>
-        <p class="section-intro">Study materials and applied research I've compiled on econometric and macroeconomic topics.</p>
-
-        <div class="publication">
-            <h3>Heterocedasticidade Condicional (ARCH-GARCH)</h3>
-            <p class="publication-meta">Study Notes · Financial Econometrics</p>
-            <p>
-                Reference notes on conditional heteroscedasticity models. Covers ARCH specification, GARCH(p,q),
-                EGARCH, and practical estimation using maximum likelihood — with applications to financial time
-                series volatility modeling.
-            </p>
-            <p class="publication-links">
-                <a href="https://github.com/Andrade020/Heterocedasticidade-Condicional" target="_blank">📚 View on GitHub →</a>
-            </p>
+  <section class="section wrap">
+    <div class="section__head">
+      <h2 class="section__title" data-lang-en>Writing</h2>
+      <h2 class="section__title" data-lang-pt>Textos</h2>
+    </div>
+    <div class="write-list">
+      <div class="write-row">
+        <span class="cat" data-lang-en>Economics &amp; Math</span><span class="cat" data-lang-pt>Economia &amp; Matemática</span>
+        <div>
+          <h3 data-lang-en>The Hidden Unity Behind Discrete and Continuous Time in Economics</h3>
+          <h3 data-lang-pt>A Unidade Escondida Entre Tempo Discreto e Contínuo em Economia</h3>
+          <p data-lang-en>Why the summation in your macro textbook and the integral in your growth theory paper are the same object wearing different clothes.</p>
+          <p data-lang-pt>Por que a soma no seu livro de macro e a integral no seu artigo de teoria do crescimento são o mesmo objeto vestindo roupas diferentes.</p>
         </div>
+        <a href="https://medium.com/@lucas-luciani-andrade/the-hidden-unity-behind-discrete-and-continuous-time-in-economics-b767521fc1b1" target="_blank" rel="noopener" class="go">Medium ↗</a>
+      </div>
 
-        <div class="publication">
-            <h3>Crescimento Econômico</h3>
-            <p class="publication-meta">Study Notes · Macroeconomics</p>
-            <p>
-                Organized materials on economic growth theory: Solow-Swan model, endogenous growth (Romer),
-                AK models, convergence properties, and empirical evidence. Intended as a reference for students
-                and researchers.
-            </p>
-            <p class="publication-links">
-                <a href="https://github.com/Andrade020/Crescimento-Economico" target="_blank">📚 View on GitHub →</a>
-            </p>
+      <div class="write-row">
+        <span class="cat" data-lang-en>Empirical macro</span><span class="cat" data-lang-pt>Macro empírica</span>
+        <div>
+          <h3 data-lang-en>Is Brazil's Labor Market Hostage to GDP?</h3>
+          <h3 data-lang-pt>O Mercado de Trabalho Brasileiro é Refém do PIB?</h3>
+          <p data-lang-en>Empirical evidence on how economic shocks propagate to employment in Latin America's largest economy.</p>
+          <p data-lang-pt>Evidência empírica sobre como choques econômicos se propagam para o emprego na maior economia da América Latina.</p>
         </div>
+        <a href="https://medium.com/@lucas-luciani-andrade/is-brazils-labor-market-hostage-to-gdp-a20b68556fe4" target="_blank" rel="noopener" class="go">Medium ↗</a>
+      </div>
 
-        <div class="publication">
-            <h3>SVAR Brazil Gap</h3>
-            <p class="publication-meta">Applied Research · Brazilian Macroeconomics</p>
-            <p>
-                Structural VAR analysis of output and labor market gap dynamics in Brazil. Identifies shocks
-                driving cyclical fluctuations and examines the interaction between GDP cycles and unemployment
-                using Brazilian quarterly data.
-            </p>
-            <p class="publication-links">
-                <a href="https://github.com/Andrade020/SVAR-Brazil-Gap" target="_blank">📚 View on GitHub →</a>
-            </p>
+      <div class="write-row">
+        <span class="cat" data-lang-en>Quantum · Simulation</span><span class="cat" data-lang-pt>Quântica · Simulação</span>
+        <div>
+          <h3 data-lang-en>A Simulator Powered by Quantum Uncertainty</h3>
+          <h3 data-lang-pt>Um Simulador Movido a Incerteza Quântica</h3>
+          <p data-lang-en>Using Python and Qiskit to turn the mystery of quantum superposition into Gaussian noise, and visualize the famous "drunken walk".</p>
+          <p data-lang-pt>Usando Python e Qiskit para transformar o mistério da superposição quântica em ruído gaussiano e visualizar a famosa "caminhada do bêbado".</p>
         </div>
-    </section>
+        <a href="https://medium.com/@lucas-luciani-andrade/i-built-a-simulator-powered-by-quantum-uncertainty-and-you-can-too-b4334cbd5f68" target="_blank" rel="noopener" class="go">Medium ↗</a>
+      </div>
+
+      <div class="write-row">
+        <span class="cat" data-lang-en>Big Data · Python</span><span class="cat" data-lang-pt>Big Data · Python</span>
+        <div>
+          <h3 data-lang-en>Big Data Tools in Python: A General Comparison</h3>
+          <h3 data-lang-pt>Comparação Geral de Ferramentas de Big Data em Python</h3>
+          <p data-lang-en>A practical overview of the ecosystem (pandas, Dask, PySpark, Polars, DuckDB) and how to pick the right one for a given workload.</p>
+          <p data-lang-pt>Visão prática do ecossistema (pandas, Dask, PySpark, Polars, DuckDB) e como escolher a ferramenta certa para cada workload.</p>
+        </div>
+        <a href="https://medium.com/@lucas-luciani-andrade/compara%C3%A7%C3%A3o-geral-de-ferramentas-de-big-data-em-python-e5780fb4827b" target="_blank" rel="noopener" class="go">Medium ↗</a>
+      </div>
+
+      <div class="write-row">
+        <span class="cat">AI · CV</span>
+        <div>
+          <h3 data-lang-en>How to fake your handwriting</h3>
+          <h3 data-lang-pt>Como fingir sua caligrafia</h3>
+          <p data-lang-en>A system that synthesizes handwriting using computer vision, and what it says about creativity, automation, and authenticity.</p>
+          <p data-lang-pt>Um sistema que sintetiza caligrafia usando visão computacional, e o que isso diz sobre criatividade, automação e autenticidade.</p>
+        </div>
+        <a href="https://medium.com/@lucas-luciani-andrade/how-to-fake-your-handwriting-ais-ultimate-hack-for-homework-automation-6ec581f534b3" target="_blank" rel="noopener" class="go">Medium ↗</a>
+      </div>
+
+      <div class="write-row">
+        <span class="cat">LinkedIn</span>
+        <div>
+          <h3 data-lang-en>Recent post on data &amp; finance</h3>
+          <h3 data-lang-pt>Post recente sobre dados &amp; finanças</h3>
+          <p data-lang-en>Latest thinking on the data layer behind credit funds, shared on LinkedIn.</p>
+          <p data-lang-pt>Reflexão recente sobre a camada de dados por trás de fundos de crédito, publicada no LinkedIn.</p>
+        </div>
+        <a href="https://www.linkedin.com/feed/update/urn:li:activity:7404562576971579392/" target="_blank" rel="noopener" class="go">LinkedIn ↗</a>
+      </div>
+    </div>
+  </section>
 </main>
 
-<footer><p>© 2026 Lucas R. Andrade · Rio de Janeiro, Brazil</p></footer>
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot__base" style="border-top:none;margin-top:0;padding-top:0;">
+      <span>© 2026 Lucas R. Andrade · Rio de Janeiro</span>
+      <a href="mailto:lucas_r_andrade@hotmail.com">lucas_r_andrade@hotmail.com</a>
+    </div>
+  </div>
+</footer>
 
-<script>
-function toggleTheme() {
-    const body = document.body, btn = document.querySelector('.theme-toggle');
-    if (body.classList.contains('dark-mode')) { body.classList.replace('dark-mode','light-mode'); btn.textContent='☾'; localStorage.setItem('theme','light'); }
-    else { body.classList.replace('light-mode','dark-mode'); btn.textContent='☀'; localStorage.setItem('theme','dark'); }
-}
-(function(){ const s=localStorage.getItem('theme'), b=document.querySelector('.theme-toggle');
-    if(s==='light'){document.body.classList.replace('dark-mode','light-mode');if(b)b.textContent='☾';}
-    else{document.body.classList.add('dark-mode');if(b)b.textContent='☀';}
-})();
-</script>
+<script src="app.js"></script>
 </body>
 </html>

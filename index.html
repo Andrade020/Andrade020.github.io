@@ -1,236 +1,435 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Lucas R. Andrade — Data Engineer specializing in Financial Risk & Credit Analytics. MSc Applied Mathematics (FGV EMAp). Python, Airflow, SQL.">
-    <meta name="author" content="Lucas Rafael de Andrade">
-    <meta name="keywords" content="Data Engineer, Financial Risk, Credit Analytics, Python, Airflow, FGV, Porto Real Asset, Applied Mathematics">
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Lucas R. Andrade | Data Engineer">
-    <meta property="og:description" content="Data Engineer specializing in Financial Risk & Credit Analytics. MSc Applied Mathematics (FGV EMAp).">
-    <meta property="og:image" content="foto_LIN.jpg">
-    <meta property="og:url" content="https://andrade020.github.io">
-    <title>Lucas R. Andrade | Data Engineer</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='85'>∂</text></svg>">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Lucas R. Andrade. Economist (FGV EPGE), MSc Applied Mathematics & Data Science (FGV EMAp). Work in data infrastructure, credit risk and quantitative research.">
+<meta name="author" content="Lucas Rafael de Andrade">
+<meta property="og:title" content="Lucas R. Andrade · Economist & Data Scientist">
+<meta property="og:description" content="Economist and data scientist working in finance, data infrastructure and credit risk.">
+<title>Lucas R. Andrade</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.92em' font-size='95' font-family='Georgia,serif' font-style='italic' fill='%23d4a574'%3EZ%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
 </head>
 <body class="dark-mode">
 
-<header>
-    <div class="header-content">
-        <div class="social-icons">
-            <a href="mailto:lucas_r_andrade@hotmail.com" title="Email">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-            </a>
-            <a href="https://wa.me/5521975056123" target="_blank" title="WhatsApp">
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-            </a>
-            <a href="https://www.linkedin.com/in/lucas-rafael-de-andrade/" target="_blank" title="LinkedIn">
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-            </a>
-            <a href="https://github.com/Andrade020" target="_blank" title="GitHub">
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-            </a>
-        </div>
-        <nav>
-            <a href="index.html" class="active">About</a>
-            <a href="projects.html">Projects</a>
-            <a href="publications.html">Publications</a>
-            <a href="lab.html">Lab</a>
-            <a href="announcements.html">Announcements</a>
-            <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">☀</button>
-        </nav>
+<header class="site-header">
+  <div class="site-header__inner">
+    <a href="index.html" class="brand">
+      <span class="brand__mark"><span class="brand__logo" aria-label="LRA"></span></span>
+      <span>Lucas R. Andrade</span>
+      <span class="brand__pos" data-lang-en>· Economist &amp; Data Scientist</span>
+      <span class="brand__pos" data-lang-pt>· Economista &amp; Cientista de Dados</span>
+    </a>
+    <nav class="nav">
+      <a href="index.html" class="is-active" data-lang-en>About</a><a href="index.html" class="is-active" data-lang-pt>Sobre</a>
+      <a href="production.html" data-lang-en>Production</a><a href="production.html" data-lang-pt>Produção</a>
+      <a href="projects.html" data-lang-en>Open source</a><a href="projects.html" data-lang-pt>Open source</a>
+      <a href="publications.html" data-lang-en>Research</a><a href="publications.html" data-lang-pt>Pesquisa</a>
+      <a href="lab.html" data-lang-en>Lab</a><a href="lab.html" data-lang-pt>Lab</a>
+    </nav>
+    <div class="header-tools">
+      <button class="icon-btn lang-btn" data-lang-btn onclick="toggleLang()" title="Toggle language">en · pt</button>
+      <button class="icon-btn" data-action="theme" onclick="toggleTheme()" title="Toggle theme">☀</button>
     </div>
+  </div>
 </header>
 
 <main>
-    <div class="about-section">
-        <div>
-            <img src="foto_LIN.jpg" alt="Lucas R. Andrade" class="profile-photo">
-            <div class="taglines">
-                <p>Data Engineer</p>
-                <p>MSc Applied Mathematics</p>
-                <p>One engineer. Entire stack.</p>
-            </div>
+  <!-- HERO -->
+  <section class="hero wrap" data-screen-label="01 Hero">
+    <div class="hero__grid">
+      <div class="hero__intro">
+        <div class="eyebrow">
+          <span data-lang-en>Rio de Janeiro · Open to opportunities</span>
+          <span data-lang-pt>Rio de Janeiro · Aberto a oportunidades</span>
         </div>
-        <div>
-            <span class="availability-badge">● Open to opportunities</span>
-            <h1>Lucas R. Andrade</h1>
-            <p style="color:var(--text-secondary);font-size:1rem;margin-bottom:0.2rem;">Data Engineer · Porto Real Asset</p>
-            <p class="location">Rio de Janeiro, Brazil</p>
-            <div class="bio">
-                <p>
-                    I am a <strong>Data Engineer</strong> specializing in <strong>Financial Risk</strong> and
-                    <strong>Credit Analytics</strong>. I joined Porto Real Asset as the first — and only — data
-                    professional and built the entire infrastructure from scratch: 2 production Airflow DAGs
-                    integrating 13 data sources, delivering daily risk reports to the investment team.
-                </p>
-                <p>
-                    The pipelines consume 4 Vórtx custodian API streams (fund positions, cash flows, documents,
-                    bank statements) and 9 public macro feeds (CVM, BCB, IBGE, Tesouro Direto, CAGED, INMET,
-                    and others). Results are surfaced through a <strong>Flask + Jinja2</strong> internal dashboard
-                    with three operational views: portfolio positions, fund quotas, and administrative controls.
-                </p>
-                <p>
-                    Alongside the pipelines: a PDF extraction system for 5,000+ Bank Credit Notes (CCBs), ML
-                    credit risk models with SHAP explainability, and a fixed income pricing library following
-                    ANBIMA conventions — all running in production.
-                </p>
-                <p>
-                    I hold a <strong>Master's degree in Applied Mathematics</strong> from
-                    <a href="https://emap.fgv.br/" target="_blank">FGV EMAp</a>, where my research focused on
-                    estimation of spatiotemporal Poisson processes with missing location data — now
-                    <a href="publications.html">published in Nature Scientific Reports</a>.
-                </p>
-            </div>
+
+        <h1 data-lang-en>Economics, statistics, and the systems that turn <em>data into&nbsp;decisions.</em></h1>
+        <h1 data-lang-pt>Economia, estatística e os sistemas que transformam <em>dados em&nbsp;decisão.</em></h1>
+
+        <p class="hero__lede" data-lang-en>
+          Economist by training (FGV EPGE) and Master in Applied Mathematics &amp; Data Science (FGV EMAp).
+          I work at the intersection of financial markets, data infrastructure and statistical research,
+          currently at <strong>Porto Real Asset</strong>. Open to opportunities across data, quantitative
+          research and risk.
+        </p>
+        <p class="hero__lede" data-lang-pt>
+          Economista de formação (FGV EPGE) e Mestre em Matemática Aplicada &amp; Ciência de Dados (FGV EMAp).
+          Atuo na interseção entre mercado financeiro, infraestrutura de dados e pesquisa estatística,
+          hoje na <strong>Porto Real Asset</strong>. Aberto a oportunidades em dados, pesquisa quantitativa
+          e risco.
+        </p>
+
+        <div class="hero__meta">
+          <span><span class="dot"></span><span data-lang-en>Currently at Porto Real Asset</span><span data-lang-pt>Atualmente na Porto Real Asset</span></span>
+          <span>MSc · FGV EMAp</span>
+          <span>BSc · FGV EPGE</span>
+          <a href="mailto:lucas_r_andrade@hotmail.com">lucas_r_andrade@hotmail.com</a>
+          <span>·</span>
+          <a href="https://wa.me/5521975056123" target="_blank" rel="noopener">+55 21 97505 6123</a>
         </div>
+      </div>
+
+      <div class="hero__right">
+        <figure class="hero__portrait-wrap">
+          <img class="hero__portrait" src="assets/foto_LIN.png" alt="Lucas R. Andrade" loading="eager" decoding="async">
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- DISPATCH BOARD -->
+  <section class="dispatch wrap" data-screen-label="02 Dispatch">
+    <div class="dispatch__head">
+      <span class="section-label" data-lang-en>What brings you here</span>
+      <span class="section-label" data-lang-pt>O que te trouxe aqui</span>
+      <span class="section-aside" data-lang-en>pick a path →</span>
+      <span class="section-aside" data-lang-pt>escolha um caminho →</span>
     </div>
 
-    <section class="impact-metrics" style="border:none;padding-top:0;margin-top:0;">
-        <h2>Impact Metrics</h2>
-        <div class="metrics-grid">
-            <div class="metric-card">
-                <span class="metric-number">13</span>
-                <span class="metric-label">Integrated Data Sources</span>
-            </div>
-            <div class="metric-card">
-                <span class="metric-number">5,000+</span>
-                <span class="metric-label">CCBs Auto-Extracted</span>
-            </div>
-            <div class="metric-card">
-                <span class="metric-number">2</span>
-                <span class="metric-label">Production Airflow DAGs</span>
-            </div>
-            <div class="metric-card">
-                <span class="metric-number">1</span>
-                <span class="metric-label">Engineer Who Built It All</span>
-            </div>
-        </div>
-    </section>
+    <div class="dispatch__grid dispatch__grid--4">
+      <a href="production.html" class="dispatch-card">
+        <span class="dispatch-card__num">01.</span>
+        <span class="dispatch-card__title" data-lang-en>Production</span>
+        <span class="dispatch-card__title" data-lang-pt>Produção</span>
+        <span class="dispatch-card__desc" data-lang-en>The pipelines, warehouse, document extraction, pricing library and risk engine I build at Porto Real Asset.</span>
+        <span class="dispatch-card__desc" data-lang-pt>Os pipelines, warehouse, extração documental, biblioteca de precificação e motor de risco que construo na Porto Real Asset.</span>
+        <span class="dispatch-card__foot">
+          <span data-lang-en>Engineering &amp; finance</span><span data-lang-pt>Engenharia &amp; finanças</span>
+          <span class="dispatch-card__arrow">→</span>
+        </span>
+      </a>
 
-    <div class="announcements-preview" style="margin-top:3rem;">
-        <h2>Recent</h2>
-        <div class="announcement-mini">
-            <span class="announcement-date-mini">May 2026</span>
-            <p><strong>Paper Published in Nature Scientific Reports</strong> — Spatiotemporal Poisson processes research formally published. <a href="publications.html">Read →</a></p>
+      <a href="projects.html" class="dispatch-card">
+        <span class="dispatch-card__num">02.</span>
+        <span class="dispatch-card__title" data-lang-en>Open source</span>
+        <span class="dispatch-card__title" data-lang-pt>Open source</span>
+        <span class="dispatch-card__desc" data-lang-en>Personal projects released on GitHub: a PWA scaffolding kit, an email automation messenger, a local LLM runner, a Windows screen filter.</span>
+        <span class="dispatch-card__desc" data-lang-pt>Projetos pessoais publicados no GitHub: kit de scaffolding PWA, messenger de automação de e-mail, runner local de LLMs, filtro de tela para Windows.</span>
+        <span class="dispatch-card__foot">
+          <span data-lang-en>Builders &amp; devs</span><span data-lang-pt>Devs &amp; builders</span>
+          <span class="dispatch-card__arrow">→</span>
+        </span>
+      </a>
+
+      <a href="publications.html" class="dispatch-card">
+        <span class="dispatch-card__num">03.</span>
+        <span class="dispatch-card__title" data-lang-en>Research</span>
+        <span class="dispatch-card__title" data-lang-pt>Pesquisa</span>
+        <span class="dispatch-card__desc" data-lang-en>MSc work on spatiotemporal Poisson processes with missing data, published in <em>Nature Scientific Reports.</em> Plus notes written while shipping in production.</span>
+        <span class="dispatch-card__desc" data-lang-pt>Trabalho de mestrado sobre processos de Poisson espaço-temporais com dados faltantes, publicado no <em>Nature Scientific Reports.</em> Mais notas escritas durante o trabalho em produção.</span>
+        <span class="dispatch-card__foot">
+          <span data-lang-en>Academics &amp; researchers</span><span data-lang-pt>Acadêmicos &amp; pesquisadores</span>
+          <span class="dispatch-card__arrow">→</span>
+        </span>
+      </a>
+
+      <a href="lab.html" class="dispatch-card">
+        <span class="dispatch-card__num">04.</span>
+        <span class="dispatch-card__title" data-lang-en>Lab</span>
+        <span class="dispatch-card__title" data-lang-pt>Laboratório</span>
+        <span class="dispatch-card__desc" data-lang-en>A continuous chessboard. A lung absorbing smoke. A thermodynamic fan. Graduate macro lecture notes. Curiosities that show up nowhere on my résumé.</span>
+        <span class="dispatch-card__desc" data-lang-pt>Um tabuleiro de xadrez contínuo. Um pulmão absorvendo fumaça. Um ventilador termodinâmico. Notas de macro de pós-graduação. Curiosidades que não cabem num currículo.</span>
+        <span class="dispatch-card__foot">
+          <span data-lang-en>Just for fun</span><span data-lang-pt>Só por diversão</span>
+          <span class="dispatch-card__arrow">→</span>
+        </span>
+      </a>
+    </div>
+  </section>
+
+  <!-- CASE STUDY (abstract) -->
+  <section class="case wrap" data-screen-label="03 Case study">
+    <div class="case__layout">
+      <div class="case__intro">
+        <span class="section-label" data-lang-en>Case · reference architecture</span>
+        <span class="section-label" data-lang-pt>Estudo de caso · arquitetura de referência</span>
+        <h2 data-lang-en>An end-to-end view of <em>data infrastructure</em> for credit funds.</h2>
+        <h2 data-lang-pt>Uma visão end-to-end da <em>infraestrutura de dados</em> em fundos de crédito.</h2>
+
+        <p data-lang-en>A reference stack for a credit-fund data operation: raw data pulled via Selenium and public APIs, orchestrated by Apache Airflow, landed in a Postgres warehouse, and surfaced through internal dashboards and automated reports.</p>
+        <p data-lang-pt>Uma stack de referência para a operação de dados de um fundo de crédito: dados brutos baixados via Selenium e APIs públicas, orquestrados pelo Apache Airflow, persistidos num warehouse Postgres e expostos via dashboards internos e relatórios automáticos.</p>
+        <p data-lang-en>On top of that sit the domain layers: a Python pricing library for Brazilian fixed income (ANBIMA conventions, B3 business calendar), and a credit-risk engine with SHAP explanations the investment committee can actually read.</p>
+        <p data-lang-pt>Sobre essa base, as camadas de domínio: uma biblioteca Python de precificação de renda fixa brasileira (convenções ANBIMA, calendário de dias úteis B3) e um motor de risco de crédito com explicações SHAP que o comitê de investimentos efetivamente lê.</p>
+      </div>
+
+      <div class="case__right">
+        <div class="case__detail">
+        <div class="case-fact">
+          <div class="case-fact__k" data-lang-en>Ingestion</div>
+          <div class="case-fact__k" data-lang-pt>Ingestão</div>
+          <div class="case-fact__v" data-lang-en>Selenium &amp; APIs</div>
+          <div class="case-fact__v" data-lang-pt>Selenium &amp; APIs</div>
+          <div class="case-fact__note" data-lang-en>Raw data pulled from custodian endpoints, public macro feeds and scraped sources, then normalised in the warehouse.</div>
+          <div class="case-fact__note" data-lang-pt>Dados brutos puxados de endpoints custodiais, feeds macro públicos e fontes raspadas, normalizados no warehouse.</div>
         </div>
-        <div class="announcement-mini">
-            <span class="announcement-date-mini">Jan 2026</span>
-            <p><strong>Open Source Projects Released</strong> — Local_LLM, EyeZen, Krvo and ludami published on GitHub. <a href="projects.html">View →</a></p>
+        <div class="case-fact">
+          <div class="case-fact__k" data-lang-en>Orchestration</div>
+          <div class="case-fact__k" data-lang-pt>Orquestração</div>
+          <div class="case-fact__v">Apache Airflow</div>
+          <div class="case-fact__note" data-lang-en>Scheduled DAGs run every morning, with incremental loads, dependency-aware retries and structured logging.</div>
+          <div class="case-fact__note" data-lang-pt>DAGs agendados rodam toda manhã, com cargas incrementais, retries com dependência e logging estruturado.</div>
         </div>
-        <div class="announcement-mini">
-            <span class="announcement-date-mini">Feb 2025</span>
-            <p><strong>Joined Porto Real Asset</strong> — First data professional, building data infrastructure for credit fund risk management.</p>
+        <div class="case-fact">
+          <div class="case-fact__k" data-lang-en>Document layer</div>
+          <div class="case-fact__k" data-lang-pt>Camada documental</div>
+          <div class="case-fact__v" data-lang-en>PDF &amp; OCR</div>
+          <div class="case-fact__v" data-lang-pt>PDF &amp; OCR</div>
+          <div class="case-fact__note" data-lang-en>Layout-tolerant extractors lift structured fields from credit notes, with Tesseract OCR as fallback for low-quality scans.</div>
+          <div class="case-fact__note" data-lang-pt>Extratores tolerantes a layout retiram campos estruturados de títulos de crédito, com Tesseract OCR como fallback para digitalizações ruins.</div>
         </div>
-        <p class="view-all"><a href="announcements.html">View all announcements →</a></p>
+        <div class="case-fact">
+          <div class="case-fact__k" data-lang-en>Decision surface</div>
+          <div class="case-fact__k" data-lang-pt>Camada de decisão</div>
+          <div class="case-fact__v" data-lang-en>Dashboards &amp; ML</div>
+          <div class="case-fact__v" data-lang-pt>Dashboards &amp; ML</div>
+          <div class="case-fact__note" data-lang-en>Internal Flask dashboard for positions and fund quotas; ML risk engine ranking debtors with SHAP feature attributions.</div>
+          <div class="case-fact__note" data-lang-pt>Dashboard interno em Flask para posições e cotas; motor de risco em ML que ranqueia devedores com atribuições SHAP.</div>
+        </div>
+      </div>
+        <div class="stack">
+          <b data-lang-en>Stack</b><b data-lang-pt>Stack</b>
+          <br>Python · PostgreSQL · Apache Airflow · Docker · Flask · scikit-learn · SHAP · pdfplumber · Tesseract · Linux
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SELECTED WORK -->
+  <section class="section wrap" data-screen-label="04 Selected">
+    <div class="section__head">
+      <h2 class="section__title" data-lang-en>Selected work</h2>
+      <h2 class="section__title" data-lang-pt>Trabalhos selecionados</h2>
+      <a href="production.html" class="section-aside" data-lang-en>see everything →</a>
+      <a href="production.html" class="section-aside" data-lang-pt>ver tudo →</a>
     </div>
 
-    <section>
-        <h2>Experience</h2>
-        <div class="experience-item">
-            <h3>Data Engineer | Risk Analytics</h3>
-            <p class="experience-meta">Porto Real Asset · Feb 2025 – Present · Remote</p>
-            <p>First data professional at a credit asset manager. Designed and built the entire data infrastructure: 2 production Airflow DAGs integrating 13 sources (4 Vórtx custodian API streams + 9 macro feeds), automated PDF extraction for 5,000+ CCBs, ML credit risk models with SHAP explainability, a Flask + Jinja2 internal dashboard, and fixed income pricing calculators following ANBIMA conventions.</p>
+    <div class="selected">
+      <article class="selected__item">
+        <a href="production.html#sub-01" class="cover" aria-label="Data Infrastructure"></a>
+        <div class="selected__head">
+          <span class="selected__num">01.</span>
+          <span class="tag production" data-lang-en>Production</span><span class="tag production" data-lang-pt>Produção</span>
         </div>
-        <div class="experience-item">
-            <h3>Lab Technician Intern</h3>
-            <p class="experience-meta">FOTON Laboratory, UTFPR · Aug 2017 – May 2018 · Curitiba</p>
-            <p>Data analysis of optical fiber experiments using Bragg Grating technique. Microcontroller programming for precision equipment control.</p>
-        </div>
-    </section>
+        <h3 class="selected__title" data-lang-en>Data Infrastructure</h3>
+        <h3 class="selected__title" data-lang-pt>Infraestrutura de Dados</h3>
+        <p class="selected__desc" data-lang-en>Airflow DAGs, multiple sources, a Postgres warehouse, a Flask dashboard, and an automated daily report delivered before market open.</p>
+        <p class="selected__desc" data-lang-pt>DAGs do Airflow, várias fontes, um warehouse Postgres, um dashboard em Flask e um relatório diário automático antes da abertura do mercado.</p>
+        <div class="selected__stack">Python · Airflow · PostgreSQL · Docker · Flask · Jinja2 · Linux</div>
+      </article>
 
-    <section>
-        <h2>Education</h2>
-        <div class="education-item">
-            <div>
-                <h3>MSc in Applied Mathematics & Data Science</h3>
-                <p class="school">FGV EMAp – Escola de Matemática Aplicada</p>
-            </div>
-            <span class="period">2023 – 2024</span>
+      <article class="selected__item">
+        <a href="production.html#sub-02" class="cover" aria-label="PDF extraction"></a>
+        <div class="selected__head">
+          <span class="selected__num">02.</span>
+          <span class="tag production" data-lang-en>Production</span><span class="tag production" data-lang-pt>Produção</span>
         </div>
-        <div class="education-item">
-            <div>
-                <h3>BSc in Economics</h3>
-                <p class="school">FGV EPGE – Escola Brasileira de Economia e Finanças</p>
-            </div>
-            <span class="period">2019 – 2022</span>
-        </div>
-        <div class="education-item">
-            <div>
-                <h3>Technical Degree in Electronics</h3>
-                <p class="school">UTFPR – Universidade Tecnológica Federal do Paraná</p>
-            </div>
-            <span class="period">2014 – 2018</span>
-        </div>
-    </section>
+        <h3 class="selected__title" data-lang-en>Large-Scale PDF Extraction</h3>
+        <h3 class="selected__title" data-lang-pt>Extração de PDFs em Larga Escala</h3>
+        <p class="selected__desc" data-lang-en>Layout-tolerant pipeline that lifts structured fields per document from thousands of credit notes, with OCR fallback and incremental Airflow runs.</p>
+        <p class="selected__desc" data-lang-pt>Pipeline tolerante a layout que extrai campos estruturados de milhares de cédulas de crédito, com OCR e execução incremental via Airflow.</p>
+        <div class="selected__stack">Python · pdfplumber · Tesseract · Airflow · PostgreSQL</div>
+      </article>
 
-    <section>
-        <h2>Skills</h2>
-        <div class="skills-grid">
-            <div class="skill-category">
-                <h3>Programming</h3>
-                <p>Python, SQL, R, Bash</p>
-            </div>
-            <div class="skill-category">
-                <h3>Data Engineering</h3>
-                <p>Apache Airflow, ETL/ELT, Selenium, pdfplumber, Web Scraping</p>
-            </div>
-            <div class="skill-category">
-                <h3>ML & Analytics</h3>
-                <p>scikit-learn, pandas, NumPy, SHAP, statsmodels</p>
-            </div>
-            <div class="skill-category">
-                <h3>Infrastructure</h3>
-                <p>Linux, Docker, Git, GitHub, Flask</p>
-            </div>
-            <div class="skill-category">
-                <h3>Finance Domain</h3>
-                <p>FIDCs, Credit Risk, Fixed Income, Stress Testing, B3 market conventions</p>
-            </div>
-            <div class="skill-category">
-                <h3>Languages</h3>
-                <p>Portuguese (native), English (fluent), Japanese (advanced), Spanish (intermediate)</p>
-            </div>
+      <article class="selected__item">
+        <a href="production.html#sub-04" class="cover" aria-label="Credit Risk ML"></a>
+        <div class="selected__head">
+          <span class="selected__num">03.</span>
+          <span class="tag production" data-lang-en>Production</span><span class="tag production" data-lang-pt>Produção</span>
         </div>
-    </section>
+        <h3 class="selected__title" data-lang-en>Credit Risk · ML with SHAP</h3>
+        <h3 class="selected__title" data-lang-pt>Risco de Crédito · ML com SHAP</h3>
+        <p class="selected__desc" data-lang-en>A risk engine whose output is not just a score but a ranked list of reasons, the kind of explanation an investment committee can read and challenge.</p>
+        <p class="selected__desc" data-lang-pt>Um motor de risco cuja saída não é só um score, mas uma lista ordenada de razões: o tipo de explicação que um comitê de investimentos consegue ler e contestar.</p>
+        <div class="selected__stack">Python · scikit-learn · SHAP · pandas · Airflow</div>
+      </article>
+
+      <article class="selected__item" id="wildcard-slot">
+        <div class="selected__head">
+          <span class="selected__num">04.</span>
+          <span class="tag research">Research</span>
+        </div>
+        <h3 class="selected__title" data-lang-en>Spatiotemporal Poisson Processes</h3>
+        <h3 class="selected__title" data-lang-pt>Processos de Poisson Espaço-Temporais</h3>
+        <p class="selected__desc" data-lang-en>MSc research on parameter estimation when location data is incomplete: a likelihood that respects what you actually observe. Published in <em>Nature Scientific Reports.</em></p>
+        <p class="selected__desc" data-lang-pt>Pesquisa de mestrado sobre estimação quando dados de localização estão incompletos: uma verossimilhança que respeita o que de fato se observa. Publicada na <em>Nature Scientific Reports.</em></p>
+        <div class="selected__stack">R · Maximum Likelihood · Stochastic Processes</div>
+        <a href="publications.html" class="cover" aria-label="Nature paper"></a>
+      </article>
+    </div>
+  </section>
+
+  <!-- BACKGROUND -->
+  <section class="section wrap" data-screen-label="05 Background">
+    <div class="section__head">
+      <h2 class="section__title" data-lang-en>Background</h2>
+      <h2 class="section__title" data-lang-pt>Trajetória</h2>
+    </div>
+
+    <div class="timeline">
+      <div class="t-row">
+        <div class="t-when">2025 → <span data-lang-en>present</span><span data-lang-pt>presente</span></div>
+        <div class="t-what">
+          <h3 data-lang-en>Data &amp; Risk Analytics</h3>
+          <h3 data-lang-pt>Dados &amp; Análise de Risco</h3>
+          <div class="t-where">Porto Real Asset · <span data-lang-en>Remote, Rio de Janeiro</span><span data-lang-pt>Remoto, Rio de Janeiro</span></div>
+          <p data-lang-en>Work spans the data infrastructure (Airflow pipelines, Postgres warehouse, internal Flask dashboard) and the modelling layer (fixed-income pricing, credit-risk ML with SHAP).</p>
+          <p data-lang-pt>O trabalho cobre a infraestrutura de dados (pipelines em Airflow, warehouse Postgres, dashboard interno em Flask) e a camada de modelagem (precificação de renda fixa, modelos de risco de crédito em ML com SHAP).</p>
+        </div>
+      </div>
+
+      <div class="t-row">
+        <div class="t-when">2023 → 2024</div>
+        <div class="t-what">
+          <h3 data-lang-en>MSc · Applied Mathematics &amp; Data Science</h3>
+          <h3 data-lang-pt>Mestrado · Matemática Aplicada &amp; Ciência de Dados</h3>
+          <div class="t-where">FGV EMAp</div>
+          <p data-lang-en>Thesis on spatiotemporal Poisson processes with missing location data, now published in <em>Nature Scientific Reports.</em></p>
+          <p data-lang-pt>Dissertação sobre processos de Poisson espaço-temporais com dados de localização incompletos, publicada no <em>Nature Scientific Reports.</em></p>
+        </div>
+      </div>
+
+      <div class="t-row">
+        <div class="t-when">2019 → 2022</div>
+        <div class="t-what">
+          <h3 data-lang-en>BSc · Economics</h3>
+          <h3 data-lang-pt>Bacharelado · Economia</h3>
+          <div class="t-where">FGV EPGE</div>
+          <p data-lang-en>Economic theory, dynamic optimization, econometrics. Teaching materials I produced for graduate macroeconomics are linked under Lab.</p>
+          <p data-lang-pt>Teoria econômica, otimização dinâmica, econometria. Materiais que produzi para macroeconomia de pós-graduação estão linkados no Lab.</p>
+        </div>
+      </div>
+
+      <div class="t-row">
+        <div class="t-when">2017 → 2018</div>
+        <div class="t-what">
+          <h3 data-lang-en>Lab Technician Intern · FOTON / UTFPR</h3>
+          <h3 data-lang-pt>Estágio Técnico · FOTON / UTFPR</h3>
+          <div class="t-where" data-lang-en>Curitiba · Optical fiber experiments</div>
+          <div class="t-where" data-lang-pt>Curitiba · Experimentos com fibra óptica</div>
+          <p data-lang-en>Bragg-grating data analysis and microcontroller programming for precision equipment control. Technical degree in Electronics in parallel.</p>
+          <p data-lang-pt>Análise de dados de redes de Bragg e programação de microcontroladores para controle de equipamentos. Curso técnico em Eletrônica em paralelo.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section class="section wrap" data-screen-label="06 Skills">
+    <div class="section__head">
+      <h2 class="section__title" data-lang-en>Toolbox</h2>
+      <h2 class="section__title" data-lang-pt>Ferramental</h2>
+    </div>
+    <div class="skills">
+      <div class="skill">
+        <h4 data-lang-en>Programming</h4><h4 data-lang-pt>Programação</h4>
+        <p>Python · SQL · R · Bash</p>
+      </div>
+      <div class="skill">
+        <h4 data-lang-en>Data engineering</h4><h4 data-lang-pt>Engenharia de dados</h4>
+        <p>Apache Airflow · ETL/ELT · pdfplumber · Tesseract · Selenium · scraping</p>
+      </div>
+      <div class="skill">
+        <h4 data-lang-en>ML &amp; analytics</h4><h4 data-lang-pt>ML &amp; análise</h4>
+        <p>scikit-learn · pandas · NumPy · SHAP · statsmodels</p>
+      </div>
+      <div class="skill">
+        <h4 data-lang-en>Infrastructure</h4><h4 data-lang-pt>Infraestrutura</h4>
+        <p>Linux · Docker · Git · GitHub · Flask · PostgreSQL</p>
+      </div>
+      <div class="skill">
+        <h4 data-lang-en>Finance domain</h4><h4 data-lang-pt>Domínio financeiro</h4>
+        <p>FIDCs · Credit risk · Fixed income · Stress testing · B3 conventions · ANBIMA</p>
+      </div>
+      <div class="skill">
+        <h4 data-lang-en>Languages</h4><h4 data-lang-pt>Idiomas</h4>
+        <p data-lang-en>Portuguese · English (fluent) · Japanese (advanced) · Spanish (intermediate)</p>
+        <p data-lang-pt>Português · Inglês (fluente) · Japonês (avançado) · Espanhol (intermediário)</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- RECENT -->
+  <section class="section wrap" data-screen-label="07 Recent">
+    <div class="section__head">
+      <h2 class="section__title" data-lang-en>Recent</h2>
+      <h2 class="section__title" data-lang-pt>Recente</h2>
+    </div>
+    <div class="recent">
+      <div class="recent-row">
+        <span class="when">May 2026</span>
+        <span class="what">
+          <span data-lang-en>Paper formally published in <em>Nature Scientific Reports.</em></span>
+          <span data-lang-pt>Paper formalmente publicado na <em>Nature Scientific Reports.</em></span>
+        </span>
+        <a href="publications.html" class="go">→</a>
+      </div>
+      <div class="recent-row">
+        <span class="when">Jan 2026</span>
+        <span class="what">
+          <span data-lang-en>Open-source releases: <em>ludami, Local_LLM, EyeZen, Krvo.</em></span>
+          <span data-lang-pt>Releases open source: <em>ludami, Local_LLM, EyeZen, Krvo.</em></span>
+        </span>
+        <a href="projects.html" class="go">→</a>
+      </div>
+      <div class="recent-row">
+        <span class="when">Feb 2025</span>
+        <span class="what">
+          <span data-lang-en>Joined Porto Real Asset, working on data and credit risk.</span>
+          <span data-lang-pt>Entrei na Porto Real Asset, trabalhando com dados e risco de crédito.</span>
+        </span>
+        <span class="go"></span>
+      </div>
+    </div>
+  </section>
 </main>
 
-<footer>
-    <p>© 2026 Lucas R. Andrade · Rio de Janeiro, Brazil</p>
+<!-- FOOTER -->
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot__grid">
+      <div>
+        <div class="foot__sig" data-lang-en>Want to talk?</div>
+        <div class="foot__sig" data-lang-pt>Quer conversar?</div>
+        <p data-lang-en>I read every message. If something here resonates, or if you'd like to compare notes on data, research, or risk, drop a line.</p>
+        <p data-lang-pt>Leio todas as mensagens. Se algo aqui ressoa, ou se você quiser trocar uma ideia sobre dados, pesquisa ou risco, é só escrever.</p>
+      </div>
+      <div>
+        <h5 data-lang-en>Direct</h5><h5 data-lang-pt>Direto</h5>
+        <div class="foot__links">
+          <a href="mailto:lucas_r_andrade@hotmail.com">lucas_r_andrade@hotmail.com</a>
+          <a href="https://wa.me/5521975056123" target="_blank" rel="noopener">WhatsApp · +55 21 97505 6123</a>
+        </div>
+      </div>
+      <div>
+        <h5 data-lang-en>Elsewhere</h5><h5 data-lang-pt>Em outros lugares</h5>
+        <div class="foot__links">
+          <a href="https://github.com/Andrade020" target="_blank" rel="noopener">github.com/Andrade020</a>
+          <a href="https://www.linkedin.com/in/lucas-rafael-de-andrade/" target="_blank" rel="noopener">linkedin.com/in/lucas-rafael-de-andrade</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot__base">
+      <span>© 2026 Lucas R. Andrade · Rio de Janeiro</span>
+      <span><a href="mailto:lucas_r_andrade@hotmail.com">lucas_r_andrade@hotmail.com</a> · <a href="https://wa.me/5521975056123" target="_blank" rel="noopener">+55 21 97505 6123</a></span>
+    </div>
+  </div>
 </footer>
 
-<script>
-function toggleTheme() {
-    const body = document.body;
-    const btn = document.querySelector('.theme-toggle');
-    if (body.classList.contains('dark-mode')) {
-        body.classList.remove('dark-mode');
-        body.classList.add('light-mode');
-        btn.textContent = '☾';
-        localStorage.setItem('theme', 'light');
-    } else {
-        body.classList.remove('light-mode');
-        body.classList.add('dark-mode');
-        btn.textContent = '☀';
-        localStorage.setItem('theme', 'dark');
-    }
-}
-(function() {
-    const saved = localStorage.getItem('theme');
-    const btn = document.querySelector('.theme-toggle');
-    if (saved === 'light') {
-        document.body.classList.remove('dark-mode');
-        document.body.classList.add('light-mode');
-        if (btn) btn.textContent = '☾';
-    } else {
-        document.body.classList.add('dark-mode');
-        if (btn) btn.textContent = '☀';
-    }
-})();
-</script>
+<div id="tweaks-mount"></div>
+
+<script src="app.js"></script>
+<script src="arch-diagram.js"></script>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="tweaks-app.jsx"></script>
+
 </body>
 </html>
