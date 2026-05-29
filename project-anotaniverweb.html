@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="AnotaNiverWeb — birthday reminder PWA with countdown cards. React · TypeScript · Vite · Vercel. By Lucas R. Andrade.">
+<title>AnotaNiverWeb · Lucas R. Andrade</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.92em' font-size='95' font-family='Georgia,serif' font-style='italic' fill='%23d4a574'%3EZ%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="dark-mode">
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a href="index.html" class="brand">
+      <span class="brand__mark"><span class="brand__logo" aria-label="LRA"></span></span>
+      <span>Lucas R. Andrade</span>
+      <span class="brand__pos">· Economist &amp; Data Scientist</span>
+    </a>
+    <nav class="nav">
+      <a href="index.html">About</a>
+      <a href="production.html">Production</a>
+      <a href="projects.html" class="is-active">Open source</a>
+      <a href="publications.html">Research</a>
+      <a href="lab.html">Lab</a>
+    </nav>
+    <div class="header-tools">
+      <button class="icon-btn" data-action="theme" onclick="toggleTheme()" title="Toggle theme">☀</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="page-head wrap">
+    <span class="section-label">Open source · PWA · 2025</span>
+    <h1>AnotaNiverWeb — <em>birthday reminders,</em> no server needed.</h1>
+    <p>A Progressive Web App for tracking birthdays with colorful countdown cards. Fully offline, installable on iOS and Android, no registration, no cloud — all data stays on your device.</p>
+    <p style="margin-top:14px;">
+      <a href="https://github.com/Andrade020/AnotaNiverWeb" target="_blank" rel="noopener" class="hint__cta">GitHub ↗</a>
+    </p>
+  </section>
+
+  <section class="section wrap">
+    <div class="section__head">
+      <h2 class="section__title">What it does</h2>
+    </div>
+    <ul class="prod-list">
+      <li>Colorful countdown cards showing days remaining until each birthday</li>
+      <li>Automatic age calculation — you add the birth year once, the app does the rest</li>
+      <li>Notifications on the eve and on the day of each birthday</li>
+      <li>Fully offline — no internet connection required after the app is installed</li>
+      <li>Installable as a native app on iOS and Android directly from the browser — no app store</li>
+      <li>No account, no registration, no data leaving your device — everything stored locally</li>
+    </ul>
+  </section>
+
+  <section class="section wrap">
+    <div class="section__head">
+      <h2 class="section__title">Stack</h2>
+    </div>
+    <div class="skills">
+      <div class="skill">
+        <h4>Frontend</h4>
+        <p>React · TypeScript · Vite · Tailwind CSS</p>
+      </div>
+      <div class="skill">
+        <h4>PWA &amp; offline</h4>
+        <p>vite-plugin-pwa · Service Worker</p>
+      </div>
+      <div class="skill">
+        <h4>Deploy</h4>
+        <p>Vercel</p>
+      </div>
+    </div>
+    <div style="margin-top:32px;border-top:1px solid var(--rule-soft);padding-top:22px;">
+      <a href="https://github.com/Andrade020/AnotaNiverWeb" target="_blank" rel="noopener" class="hint__cta">View on GitHub ↗</a>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot__base" style="border-top:none;margin-top:0;padding-top:0;">
+      <span>© 2026 Lucas R. Andrade · Rio de Janeiro</span>
+      <a href="mailto:lucas_r_andrade@hotmail.com">lucas_r_andrade@hotmail.com</a>
+    </div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,1389 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resolução: Modelos de Crescimento Econômico</title>
+    
+    <!-- MathJax para renderização LaTeX -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2c5282;
+            --accent: #ed8936;
+            --accent-light: #fbd38d;
+            --bg-main: #faf9f7;
+            --bg-card: #ffffff;
+            --bg-highlight: #ebf8ff;
+            --bg-concept: #f0fff4;
+            --bg-warning: #fffaf0;
+            --text-main: #2d3748;
+            --text-muted: #718096;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Crimson Pro', Georgia, serif;
+            font-size: 18px;
+            line-height: 1.8;
+            color: var(--text-main);
+            background: var(--bg-main);
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(237, 137, 54, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(44, 82, 130, 0.03) 0%, transparent 50%);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        header h1 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+
+        header .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            font-style: italic;
+            position: relative;
+        }
+
+        /* Navigation */
+        nav {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 3rem;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--accent);
+        }
+
+        nav h2 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.1rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        nav ul {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 0.5rem;
+        }
+
+        nav a {
+            color: var(--secondary);
+            text-decoration: none;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.95rem;
+            padding: 0.5rem;
+            display: block;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        nav a:hover {
+            background: var(--bg-highlight);
+            color: var(--primary);
+            transform: translateX(4px);
+        }
+
+        /* Questions */
+        .question {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: var(--shadow-lg);
+            border-top: 5px solid var(--accent);
+        }
+
+        .question-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .question-number {
+            background: var(--primary);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 700;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        .question-title {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.4rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* Subparts */
+        .subpart {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: linear-gradient(to right, var(--bg-highlight), transparent);
+            border-left: 4px solid var(--secondary);
+            border-radius: 0 12px 12px 0;
+        }
+
+        .subpart-header {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 600;
+            color: var(--secondary);
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .subpart-header::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+        }
+
+        /* Concept boxes */
+        .concept-box {
+            background: var(--bg-concept);
+            border: 1px solid #9ae6b4;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            position: relative;
+        }
+
+        .concept-box::before {
+            content: '💡 Conceito-Chave';
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #276749;
+            background: #c6f6d5;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            position: absolute;
+            top: -12px;
+            left: 1rem;
+        }
+
+        /* Step boxes */
+        .step-box {
+            background: var(--bg-highlight);
+            border: 1px solid #90cdf4;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            position: relative;
+        }
+
+        .step-box::before {
+            content: '📝 Passo a Passo';
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #2b6cb0;
+            background: #bee3f8;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            position: absolute;
+            top: -12px;
+            left: 1rem;
+        }
+
+        /* Warning/Important boxes */
+        .important-box {
+            background: var(--bg-warning);
+            border: 1px solid #fbd38d;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            position: relative;
+        }
+
+        .important-box::before {
+            content: '⚠️ Importante';
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #c05621;
+            background: #feebc8;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            position: absolute;
+            top: -12px;
+            left: 1rem;
+        }
+
+        /* Result boxes */
+        .result-box {
+            background: linear-gradient(135deg, #faf5ff 0%, #e9d8fd 100%);
+            border: 2px solid #9f7aea;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            text-align: center;
+        }
+
+        .result-box .label {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #6b46c1;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Equations */
+        .equation {
+            background: #f7fafc;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem 1.5rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+
+        /* Lists */
+        .derivation-steps {
+            counter-reset: step;
+            list-style: none;
+            padding: 0;
+        }
+
+        .derivation-steps li {
+            position: relative;
+            padding-left: 3rem;
+            margin: 1rem 0;
+        }
+
+        .derivation-steps li::before {
+            counter-increment: step;
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 2rem;
+            height: 2rem;
+            background: var(--secondary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: #f7fafc;
+        }
+
+        /* True/False */
+        .verdict {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .verdict.true {
+            background: #c6f6d5;
+            color: #276749;
+        }
+
+        .verdict.false {
+            background: #fed7d7;
+            color: #c53030;
+        }
+
+        .verdict.partial {
+            background: #fefcbf;
+            color: #975a16;
+        }
+
+        /* Code/mono text */
+        code {
+            font-family: 'JetBrains Mono', monospace;
+            background: #edf2f7;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            header {
+                padding: 2rem 1rem;
+            }
+
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            .question {
+                padding: 1.5rem;
+            }
+
+            .question-header {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            body {
+                background: white;
+            }
+
+            .question {
+                break-inside: avoid;
+                box-shadow: none;
+                border: 1px solid #ccc;
+            }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* MathJax overrides */
+        mjx-container {
+            overflow-x: auto;
+            overflow-y: hidden;
+            max-width: 100%;
+        }
+    </style>
+</head>
+<body>
+<div id="back-nav-lab" style="position:fixed;top:12px;left:16px;z-index:9999;"><a href="lab.html" style="display:inline-flex;align-items:center;gap:6px;font-family:system-ui,sans-serif;font-size:0.78rem;letter-spacing:0.04em;color:#d4a574;background:rgba(14,13,10,0.92);border:1px solid rgba(212,165,116,0.25);padding:5px 12px;border-radius:20px;text-decoration:none;backdrop-filter:blur(8px);">← Lab</a></div>
+
+<header>
+    <h1>Modelos de Crescimento Econômico</h1>
+    <p class="subtitle">Resolução Completa com Explicações Detalhadas</p>
+</header>
+
+<div class="container">
+
+<nav>
+    <h2>Índice</h2>
+    <ul>
+        <li><a href="#q1">1. Modelo de Harrod-Domar</a></li>
+        <li><a href="#q2">2. Modelo de Solow (V ou F)</a></li>
+        <li><a href="#q3">3. Modelo de Solow com Capital Humano</a></li>
+        <li><a href="#q4">4. Modelo de Ramsey-Cass-Koopmans</a></li>
+        <li><a href="#q5">5. Crescimento Endógeno (Modelo AK)</a></li>
+    </ul>
+</nav>
+
+<!-- ==================== QUESTÃO 1 ==================== -->
+<section class="question" id="q1">
+    <div class="question-header">
+        <span class="question-number">1</span>
+        <h2 class="question-title">Modelo de Harrod-Domar</h2>
+    </div>
+
+    <div class="concept-box">
+        <p><strong>O Modelo de Harrod-Domar</strong> é um modelo de crescimento que assume proporções fixas entre capital e trabalho (função de produção de Leontief). A ideia central é que o crescimento econômico depende da taxa de poupança e da produtividade do capital.</p>
+        <p style="margin-top: 1rem;">A função de produção é: $Y = z \min(K, N)$, onde $z$ é a produtividade, $K$ é o capital e $N$ é o trabalho.</p>
+    </div>
+
+    <!-- Item a -->
+    <div class="subpart">
+        <h3 class="subpart-header">Item (a): Encontrar $k'$ em função de $k$ e dos parâmetros</h3>
+        
+        <div class="step-box">
+            <p><strong>Objetivo:</strong> Derivar a lei de movimento do capital por trabalhador.</p>
+        </div>
+
+        <p>Partimos das definições dadas no enunciado:</p>
+        
+        <div class="equation">
+            $$k' = \frac{K'}{N'} \quad \text{onde} \quad K' = sY \quad \text{e} \quad N' = (1+n)N$$
+        </div>
+
+        <ol class="derivation-steps">
+            <li>
+                <strong>Substituímos $K'$ e $N'$:</strong>
+                $$k' = \frac{sY}{(1+n)N} = \frac{s}{1+n} \cdot \frac{Y}{N} = \frac{s}{1+n} \cdot y$$
+            </li>
+            <li>
+                <strong>Escrevemos a função de produção por trabalhador:</strong>
+                <p>Da função $Y = z \min(K, N)$, dividindo por $N$:</p>
+                $$y = \frac{Y}{N} = z \min\left(\frac{K}{N}, 1\right) = z \min(k, 1)$$
+            </li>
+            <li>
+                <strong>Analisamos os dois casos:</strong>
+                <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                    <li>Se $k \leq 1$: $y = zk$</li>
+                    <li>Se $k > 1$: $y = z$ (capital em excesso)</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Obtemos a lei de movimento:</strong>
+                $$k' = \frac{s}{1+n} \cdot z \min(k, 1)$$
+            </li>
+        </ol>
+
+        <div class="result-box">
+            <div class="label">Resultado Final</div>
+            $$\boxed{k' = \frac{sz}{1+n} \min(k, 1)}$$
+        </div>
+
+        <div class="concept-box">
+            <p><strong>Interpretação:</strong> O capital futuro por trabalhador depende da poupança ($s$), da produtividade ($z$) e é diluído pelo crescimento populacional ($n$). O termo $\min(k,1)$ reflete a natureza de proporções fixas da tecnologia Leontief.</p>
+        </div>
+    </div>
+
+    <!-- Item b -->
+    <div class="subpart">
+        <h3 class="subpart-header">Item (b): Encontrar $s_{min}$ como função de $n$ e $z$</h3>
+
+        <div class="step-box">
+            <p><strong>Objetivo:</strong> Encontrar a taxa de poupança mínima que permite um estado estacionário com produção positiva.</p>
+        </div>
+
+        <p>No estado estacionário, temos $k' = k$. Para haver um estado estacionário com produção positiva, precisamos que $k^* = 1$ seja alcançável.</p>
+
+        <ol class="derivation-steps">
+            <li>
+                <strong>Condição de estado estacionário com $k = 1$:</strong>
+                $$k' = k \Rightarrow \frac{sz}{1+n} \cdot 1 = 1$$
+            </li>
+            <li>
+                <strong>Resolvendo para $s$:</strong>
+                $$s = \frac{1+n}{z}$$
+            </li>
+            <li>
+                <strong>Esta é a taxa mínima de poupança:</strong>
+                <p>Para $s < s_{min}$, o capital por trabalhador converge para zero. Para $s > s_{min}$, existe um estado estacionário com $k = 1$ e $y = z$.</p>
+            </li>
+        </ol>
+
+        <div class="result-box">
+            <div class="label">Resultado Final</div>
+            $$\boxed{s_{min} = \frac{1+n}{z}}$$
+        </div>
+
+        <div class="concept-box">
+            <p><strong>Interpretação Econômica:</strong></p>
+            <ul style="margin-left: 1rem;">
+                <li>Quanto maior o crescimento populacional ($n$), maior a poupança necessária</li>
+                <li>Quanto maior a produtividade ($z$), menor a poupança necessária</li>
+                <li>A poupança precisa "vencer" a diluição causada pelo crescimento populacional</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Item c -->
+    <div class="subpart">
+        <h3 class="subpart-header">Item (c): Aplicação para Suíça e Sudão</h3>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Parâmetro</th>
+                    <th>Suíça</th>
+                    <th>Sudão</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>$n$ (crescimento pop.)</td>
+                    <td>0,01 (1%)</td>
+                    <td>0,03 (3%)</td>
+                </tr>
+                <tr>
+                    <td>$s$ (taxa poupança)</td>
+                    <td>0,20 (20%)</td>
+                    <td>0,10 (10%)</td>
+                </tr>
+                <tr>
+                    <td>$z$ (produtividade)</td>
+                    <td>5,15</td>
+                    <td>5,15</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Subitem I -->
+        <h4 style="color: var(--primary); font-family: 'Plus Jakarta Sans', sans-serif; margin-top: 2rem;">I. Estado estacionário com produção positiva?</h4>
+        
+        <p>Calculamos $s_{min}$ para cada país:</p>
+
+        <div class="equation">
+            <strong>Suíça:</strong> $s_{min} = \frac{1 + 0,01}{5,15} = \frac{1,01}{5,15} \approx 0,196$
+        </div>
+
+        <div class="equation">
+            <strong>Sudão:</strong> $s_{min} = \frac{1 + 0,03}{5,15} = \frac{1,03}{5,15} \approx 0,200$
+        </div>
+
+        <p><strong>Comparação:</strong></p>
+        <ul style="margin-left: 1.5rem;">
+            <li><strong>Suíça:</strong> $s = 0,20 > s_{min} \approx 0,196$ ✓ <span class="verdict true">SIM, tem estado estacionário positivo</span></li>
+            <li><strong>Sudão:</strong> $s = 0,10 < s_{min} \approx 0,200$ ✗ <span class="verdict false">NÃO tem estado estacionário positivo</span></li>
+        </ul>
+
+        <div class="important-box">
+            <p>A Suíça consegue acumular capital suficiente para manter produção positiva no longo prazo. O Sudão, com alta taxa de crescimento populacional e baixa poupança, não consegue — seu capital por trabalhador converge para zero.</p>
+        </div>
+
+        <!-- Subitem II -->
+        <h4 style="color: var(--primary); font-family: 'Plus Jakarta Sans', sans-serif; margin-top: 2rem;">II. Taxa mínima de poupança para o Sudão (mantendo $n = 0,03$)</h4>
+
+        <div class="equation">
+            $$s_{min} = \frac{1 + n}{z} = \frac{1,03}{5,15} \approx 0,200 = 20\%$$
+        </div>
+
+        <div class="result-box">
+            <div class="label">Resposta</div>
+            O Sudão precisaria poupar pelo menos <strong>20%</strong> de sua renda para alcançar um estado estacionário com produção positiva.
+        </div>
+
+        <!-- Subitem III -->
+        <h4 style="color: var(--primary); font-family: 'Plus Jakarta Sans', sans-serif; margin-top: 2rem;">III. Taxa máxima de crescimento populacional para o Sudão (mantendo $s = 0,10$)</h4>
+
+        <p>Resolvemos $s_{min} = s$ para $n$:</p>
+
+        <div class="equation">
+            $$\frac{1+n}{z} = s \Rightarrow 1 + n = sz \Rightarrow n = sz - 1$$
+        </div>
+
+        <div class="equation">
+            $$n_{max} = 0,10 \times 5,15 - 1 = 0,515 - 1 = -0,485$$
+        </div>
+
+        <div class="result-box">
+            <div class="label">Resposta</div>
+            O resultado negativo indica que, com $s = 10\%$, <strong>nenhuma taxa positiva de crescimento populacional</strong> é compatível com estado estacionário positivo. A população precisaria <em>diminuir</em> a uma taxa de cerca de 48,5% ao ano!
+        </div>
+
+        <!-- Subitem IV -->
+        <h4 style="color: var(--primary); font-family: 'Plus Jakarta Sans', sans-serif; margin-top: 2rem;">IV. Estratégia de desenvolvimento mais atraente</h4>
+
+        <div class="concept-box">
+            <p><strong>Análise Comparativa:</strong></p>
+            <ul style="margin-left: 1rem;">
+                <li><strong>Elevar poupança:</strong> Precisa ir de 10% para 20% (dobrar)</li>
+                <li><strong>Reduzir crescimento populacional:</strong> Resultado matematicamente impossível com a poupança atual</li>
+            </ul>
+        </div>
+
+        <div class="result-box">
+            <div class="label">Conclusão</div>
+            <p style="text-align: left;">A <strong>elevação da taxa de poupança/investimento</strong> é claramente mais atraente como estratégia de desenvolvimento para o Sudão, por várias razões:</p>
+            <ol style="text-align: left; margin-top: 1rem;">
+                <li><strong>Viabilidade matemática:</strong> Dobrar a poupança (de 10% para 20%) é desafiador mas possível com políticas adequadas. Reduzir o crescimento populacional para níveis necessários é matematicamente inviável.</li>
+                <li><strong>Políticas públicas:</strong> Incentivos fiscais, desenvolvimento do mercado financeiro e atração de investimento estrangeiro podem aumentar a poupança mais rapidamente.</li>
+                <li><strong>Transição demográfica:</strong> Reduções significativas no crescimento populacional levam décadas e dependem de melhorias em educação, saúde e renda — que requerem crescimento econômico primeiro.</li>
+            </ol>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== QUESTÃO 2 ==================== -->
+<section class="question" id="q2">
+    <div class="question-header">
+        <span class="question-number">2</span>
+        <h2 class="question-title">Modelo de Solow — Verdadeiro ou Falso</h2>
+    </div>
+
+    <div class="concept-box">
+        <p><strong>O Modelo de Solow</strong> é o modelo neoclássico de crescimento por excelência. Suas principais características:</p>
+        <ul style="margin-left: 1rem; margin-top: 0.5rem;">
+            <li>Função de produção com retornos constantes de escala e produto marginal decrescente</li>
+            <li>Taxa de poupança exógena e constante</li>
+            <li>Crescimento de longo prazo determinado pelo progresso tecnológico (exógeno)</li>
+            <li>Convergência para um estado estacionário único</li>
+        </ul>
+    </div>
+
+    <!-- Item a -->
+    <div class="subpart">
+        <h3 class="subpart-header">Item (a): A taxa de crescimento do produto potencial depende da taxa de poupança</h3>
+        
+        <span class="verdict false">FALSO</span>
+
+        <div class="step-box">
+            <p>No modelo de Solow, no <strong>estado estacionário</strong>:</p>
+            <div class="equation">
+                $$\frac{\dot{Y}}{Y} = n + g$$
+            </div>
+            <p>onde $n$ é o crescimento populacional e $g$ é o progresso tecnológico.</p>
+        </div>
+
+        <p><strong>Explicação:</strong> A taxa de poupança $s$ afeta o <strong>nível</strong> do produto per capita no estado estacionário, mas <strong>não</strong> sua taxa de crescimento de longo prazo. No estado estacionário:</p>
+
+        <div class="equation">
+            $$y^* = \left(\frac{s}{n + g + \delta}\right)^{\frac{\alpha}{1-\alpha}} A$$
+        </div>
+
+        <p>A poupança maior eleva $y^*$, mas a taxa de crescimento per capita é sempre $g$, independente de $s$.</p>
+
+        <div class="important-box">
+            <p><strong>Atenção:</strong> Durante a <em>transição</em> para o estado estacionário, uma maior poupança gera crescimento mais rápido temporariamente. Mas no longo prazo, apenas o progresso tecnológico sustenta o crescimento per capita.</p>
+        </div>
+    </div>
+
+    <!-- Item b -->
+    <div class="subpart">
+        <h3 class="subpart-header">Item (b): A relação capital-produto cresce a uma taxa constante no longo prazo</h3>
+        
+        <span class="verdict false">FALSO</span>
+
+        <p><strong>Explicação:</strong> No estado estacionário do modelo de Solow, a relação capital-produto $\frac{K}{Y}$ é <strong>constante</strong>, não crescente.</p>
+
+        <div class="step-box">
+            <p>Considere a função Cobb-Douglas: $Y = K^\alpha (AL)^{1-\alpha}$</p>
+            <div class="equation">
+                $$\frac{K}{Y} = \frac{K}{K^\alpha (AL)^{1-\alpha}} = K^{1-\alpha} (AL)^{-(1-\alpha)} = \left(\frac{K}{AL}\right)^{1-\alpha} = \tilde{k}^{1-\alpha}$$
+            </div>
+        </div>
+
+        <p>No estado estacionário, $\tilde{k}^* = \frac{K}{AL}$ é constante, logo $\frac{K}{Y}$ também é constante. Este é um dos <strong>fatos estilizados de Kaldor</strong> que o modelo replica.</p>
+    </div>
+
+    <!-- Item c -->
+    <div class="subpart">
+        <h3 class="subpart-header">Item (c): Países mais pobres devem crescer mais rápido que países mais ricos</h3>
+        
+        <span class="verdict partial">PARCIALMENTE VERDADEIRO (Condicional)</span>
+
+        <p>Esta afirmação refere-se à <strong>convergência</strong>, um resultado importante do modelo de Solow.</p>
+
+        <div class="concept-box">
+            <p><strong>Tipos de Convergência:</strong></p>
+            <ul style="margin-left: 1rem;">
+                <li><strong>Convergência Absoluta:</strong> Todos os países convergem para o mesmo estado estacionário</li>
+                <li><strong>Convergência Condicional:</strong> Países convergem para <em>seus próprios</em> estados estacionários, que podem diferir</li>
+            </ul>
+        </div>
+
+        <div class="step-box">
+            <p>A taxa de crescimento do capital por trabalhador efetivo é:</p>
+            <div class="equation">
+                $$\frac{\dot{\tilde{k}}}{\tilde{k}} = s\tilde{k}^{\alpha-1} - (n + g + \delta)$$
+            </div>
+            <p>Como $\alpha - 1 < 0$, um $\tilde{k}$ menor implica $\tilde{k}^{\alpha-1}$ maior, logo crescimento mais rápido.</p>
+        </div>
+
+        <p><strong>Conclusão:</strong> O modelo prevê <strong>convergência condicional</strong>: países mais pobres crescem mais rápido <em>apenas se</em> tiverem os mesmos parâmetros fundamentais ($s$, $n$, $g$, $\delta$, $\alpha$). Empiricamente, observa-se convergência entre países similares (ex: estados dos EUA, países da OCDE), mas não globalmente.</p>
+    </div>
+
+    <!-- Item d -->
+    <div class="subpart">
+        <h3 class="subpart-header">Item (d): Países que poupam mais crescem mais rápido</h3>
+        
+        <span class="verdict partial">PARCIALMENTE VERDADEIRO (Transição)</span>
+
+        <p>Esta afirmação é <strong>verdadeira durante a transição</strong>, mas <strong>falsa no estado estacionário</strong>.</p>
+
+        <div class="equation">
+            $$\text{Estado Estacionário: } \quad \frac{\dot{y}}{y} = g \quad \text{(independente de } s \text{)}$$
+        </div>
+
+        <div class="step-box">
+            <p><strong>Durante a transição:</strong> Um aumento em $s$ eleva o estado estacionário $\tilde{k}^*$. Como o país está abaixo do novo $\tilde{k}^*$, ele cresce mais rápido temporariamente até alcançá-lo.</p>
+            
+            <p><strong>No longo prazo:</strong> A taxa de crescimento per capita retorna a $g$.</p>
+        </div>
+
+        <p>Portanto, a poupança afeta o <strong>nível</strong> de renda per capita, não sua taxa de crescimento permanente.</p>
+    </div>
+
+    <!-- Item e -->
+    <div class="subpart">
+        <h3 class="subpart-header">Item (e): Somente países com baixo estoque de capital atingem o estado estacionário</h3>
+        
+        <span class="verdict false">FALSO</span>
+
+        <p><strong>Explicação:</strong> <strong>Todos</strong> os países convergem para o estado estacionário no modelo de Solow, independentemente de seu estoque inicial de capital.</p>
+
+        <div class="step-box">
+            <p>O modelo possui um <strong>estado estacionário único e globalmente estável</strong>:</p>
+            <ul style="margin-left: 1rem;">
+                <li>Se $k < k^*$: investimento bruto > depreciação → $k$ aumenta</li>
+                <li>Se $k > k^*$: investimento bruto < depreciação → $k$ diminui</li>
+                <li>Se $k = k^*$: investimento bruto = depreciação → $k$ constante</li>
+            </ul>
+        </div>
+
+        <p>Países ricos (alto $k$) e países pobres (baixo $k$) ambos convergem para $k^*$. A diferença está na <strong>velocidade</strong>: países mais distantes do estado estacionário crescem/decrescem mais rapidamente.</p>
+    </div>
+</section>
+
+<!-- ==================== QUESTÃO 3 ==================== -->
+<section class="question" id="q3">
+    <div class="question-header">
+        <span class="question-number">3</span>
+        <h2 class="question-title">Modelo de Solow com Capital Humano (Mankiw-Romer-Weil)</h2>
+    </div>
+
+    <div class="concept-box">
+        <p><strong>Motivação:</strong> O modelo de Solow original explica apenas cerca de 50% da variação de renda entre países. Mankiw, Romer e Weil (1992) mostraram que adicionar capital humano melhora significativamente o poder explicativo.</p>
+        <div class="equation">
+            $$Y = K^\alpha H^\lambda (AL)^{1-\alpha-\lambda}$$
+        </div>
+    </div>
+
+    <!-- Item a -->
+    <div class="subpart">
+        <h3 class="subpart-header">Item (a): Obter $\dot{k}$ e $\dot{h}$</h3>
+
+        <p>Definimos as variáveis por unidade de trabalho efetivo: $k = \frac{K}{AL}$ e $h = \frac{H}{AL}$</p>
+
+        <div class="step-box">
+            <p><strong>Passo 1:</strong> Usar a regra do quociente para derivar $k$:</p>
+            <div class="equation">
+                $$\dot{k} = \frac{d}{dt}\left(\frac{K}{AL}\right) = \frac{\dot{K}}{AL} - \frac{K(\dot{A}L + A\dot{L})}{(AL)^2}$$
+            </div>
+        </div>
+
+        <ol class="derivation-steps">
+            <li>
+                <strong>Simplificamos:</strong>
+                $$\dot{k} = \frac{\dot{K}}{AL} - k\left(\frac{\dot{A}}{A} + \frac{\dot{L}}{L}\right) = \frac{\dot{K}}{AL} - k(g + n)$$
+            </li>
+            <li>
+                <strong>Investimento em capital físico:</strong>
+                $$\dot{K} = s_K Y - dK$$
+                <p>Dividindo por $AL$:</p>
+                $$\frac{\dot{K}}{AL} = s_K \frac{Y}{AL} - d\frac{K}{AL} = s_K y - dk$$
+            </li>
+            <li>
+                <strong>Produto por trabalho efetivo:</strong>
+                <p>Da função de produção $Y = K^\alpha H^\lambda (AL)^{1-\alpha-\lambda}$:</p>
+                $$y = \frac{Y}{AL} = k^\alpha h^\lambda$$
+            </li>
+            <li>
+                <strong>Combinando:</strong>
+                $$\dot{k} = s_K k^\alpha h^\lambda - dk - (g+n)k$$
+            </li>
+        </ol>
+
+        <div class="result-box">
+            <div class="label">Lei de Movimento do Capital Físico</div>
+            $$\boxed{\dot{k} = s_K k^\alpha h^\lambda - (n + g + d)k}$$
+        </div>
+
+        <p>Por simetria, para o capital humano:</p>
+
+        <div class="result-box">
+            <div class="label">Lei de Movimento do Capital Humano</div>
+            $$\boxed{\dot{h} = s_H k^\alpha h^\lambda - (n + g + d)h}$$
+        </div>
+
+        <div class="concept-box">
+            <p><strong>Interpretação:</strong> Cada tipo de capital cresce com seu respectivo investimento ($s_K y$ ou $s_H y$) e é "diluído" pelo crescimento da força de trabalho efetiva ($n + g$) e pela depreciação ($d$).</p>
+        </div>
+    </div>
+
+    <!-- Item b -->
+    <div class="subpart">
+        <h3 class="subpart-header">Item (b): Valores de Estado Estacionário</h3>
+
+        <div class="step-box">
+            <p><strong>Condições de estado estacionário:</strong> $\dot{k} = 0$ e $\dot{h} = 0$</p>
+        </div>
+
+        <ol class="derivation-steps">
+            <li>
+                <strong>Das equações de movimento:</strong>
+                $$s_K k^\alpha h^\lambda = (n + g + d)k$$
+                $$s_H k^\alpha h^\lambda = (n + g + d)h$$
+            </li>
+            <li>
+                <strong>Dividindo a primeira pela segunda:</strong>
+                $$\frac{s_K}{s_H} = \frac{k}{h} \quad \Rightarrow \quad h^* = \frac{s_H}{s_K} k^*$$
+            </li>
+            <li>
+                <strong>Substituindo na primeira equação:</strong>
+                $$s_K (k^*)^\alpha \left(\frac{s_H}{s_K} k^*\right)^\lambda = (n+g+d)k^*$$
+                $$s_K \cdot \frac{s_H^\lambda}{s_K^\lambda} (k^*)^{\alpha + \lambda} = (n+g+d)k^*$$
+                $$s_K^{1-\lambda} s_H^\lambda (k^*)^{\alpha+\lambda-1} = (n+g+d)$$
+            </li>
+            <li>
+                <strong>Resolvendo para $k^*$:</strong>
+                $$(k^*)^{\alpha+\lambda-1} = \frac{n+g+d}{s_K^{1-\lambda} s_H^\lambda}$$
+                $$k^* = \left(\frac{s_K^{1-\lambda} s_H^\lambda}{n+g+d}\right)^{\frac{1}{1-\alpha-\lambda}}$$
+            </li>
+        </ol>
+
+        <div class="result-box">
+            <div class="label">Capital Físico por Trabalho Efetivo</div>
+            $$\boxed{k^* = \left(\frac{s_K^{1-\lambda} s_H^\lambda}{n+g+d}\right)^{\frac{1}{1-\alpha-\lambda}}}$$
+        </div>
+
+        <p>Para $h^*$:</p>
+
+        <div class="result-box">
+            <div class="label">Capital Humano por Trabalho Efetivo</div>
+            $$\boxed{h^* = \left(\frac{s_K^{\alpha} s_H^{1-\alpha}}{n+g+d}\right)^{\frac{1}{1-\alpha-\lambda}}}$$
+        </div>
+
+        <p>Para a produção $y^* = (k^*)^\alpha (h^*)^\lambda$:</p>
+
+        <div class="result-box">
+            <div class="label">Produção por Trabalho Efetivo</div>
+            $$\boxed{y^* = \left(\frac{s_K^\alpha s_H^\lambda}{(n+g+d)^{\alpha+\lambda}}\right)^{\frac{1}{1-\alpha-\lambda}}}$$
+        </div>
+    </div>
+
+    <!-- Item c -->
+    <div class="subpart">
+        <h3 class="subpart-header">Item (c): Taxa de Crescimento e Diferenças entre Países</h3>
+
+        <div class="step-box">
+            <p><strong>Taxa de crescimento do produto per capita:</strong></p>
+            <div class="equation">
+                $$\frac{Y}{L} = A \cdot y = A \cdot k^\alpha h^\lambda$$
+            </div>
+        </div>
+
+        <p>No estado estacionário, $k$ e $h$ são constantes, então:</p>
+
+        <div class="equation">
+            $$\frac{d(Y/L)/dt}{Y/L} = \frac{\dot{A}}{A} = g$$
+        </div>
+
+        <div class="result-box">
+            <div class="label">Taxa de Crescimento no Estado Estacionário</div>
+            $$\boxed{\frac{\dot{(Y/L)}}{Y/L} = g}$$
+        </div>
+
+        <div class="concept-box">
+            <p><strong>O modelo explica diferenças nas taxas de crescimento?</strong></p>
+            <p><strong>Não diretamente.</strong> Se todos os países estão em estado estacionário e têm o mesmo $g$, todos cresceriam à mesma taxa. Porém:</p>
+            <ul style="margin-left: 1rem; margin-top: 0.5rem;">
+                <li>Diferentes países podem ter diferentes taxas de progresso tecnológico ($g$)</li>
+                <li>Países podem estar fora do estado estacionário (dinâmica de transição)</li>
+                <li>Países mais distantes de seu $y^*$ crescem mais rápido (convergência condicional)</li>
+            </ul>
+        </div>
+
+        <div class="important-box">
+            <p><strong>Limitação do modelo:</strong> O crescimento de longo prazo ($g$) permanece exógeno. Este é um dos motivos para o desenvolvimento de modelos de crescimento endógeno, que explicam $g$ através de investimentos em P&D, capital humano, etc.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== QUESTÃO 4 ==================== -->
+<section class="question" id="q4">
+    <div class="question-header">
+        <span class="question-number">4</span>
+        <h2 class="question-title">Modelo de Ramsey-Cass-Koopmans</h2>
+    </div>
+
+    <div class="concept-box">
+        <p><strong>Diferença fundamental do modelo de Solow:</strong> No modelo RCK, a taxa de poupança é determinada <em>endogenamente</em> pela otimização intertemporal das famílias, que maximizam utilidade ao longo do tempo.</p>
+        <p style="margin-top: 0.5rem;">A <strong>Regra de Ouro Modificada</strong> surge naturalmente: o consumo é maximizado considerando a impaciência (desconto temporal) dos agentes.</p>
+    </div>
+
+    <!-- Item a -->
+    <div class="subpart">
+        <h3 class="subpart-header">Item (a): Mostrar equivalência das equações</h3>
+
+        <p>Devemos mostrar que $\dot{k}(t) = sy(t) - c(t) - (\delta + n_L)k(t)$ é equivalente a $\dot{a}(t) = [r(t) - n_L]a(t) + W(t) - c(t)$</p>
+
+        <div class="step-box">
+            <p><strong>Contexto:</strong> $a(t)$ representa ativos por trabalhador (que em equilíbrio igualam o capital $k$), $W(t)$ é o salário, e $r(t)$ é a taxa de juros.</p>
+        </div>
+
+        <ol class="derivation-steps">
+            <li>
+                <strong>Em equilíbrio competitivo:</strong>
+                <ul style="margin-left: 1rem;">
+                    <li>$a = k$ (ativos = capital)</li>
+                    <li>$r = f'(k) - \delta = \alpha A k^{\alpha-1} - \delta$ (produto marginal do capital menos depreciação)</li>
+                    <li>$W = f(k) - k f'(k) = (1-\alpha)Ak^\alpha = (1-\alpha)y$ (produto marginal do trabalho)</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Substituindo na equação de acumulação de ativos:</strong>
+                $$\dot{a} = [r - n_L]a + W - c$$
+                $$\dot{k} = [f'(k) - \delta - n_L]k + [f(k) - kf'(k)] - c$$
+            </li>
+            <li>
+                <strong>Simplificando:</strong>
+                $$\dot{k} = f'(k)k - \delta k - n_L k + f(k) - kf'(k) - c$$
+                $$\dot{k} = f(k) - \delta k - n_L k - c$$
+                $$\dot{k} = y - (\delta + n_L)k - c$$
+            </li>
+            <li>
+                <strong>Usando $c = (1-s)y$:</strong>
+                $$\dot{k} = y - (\delta + n_L)k - (1-s)y = sy - (\delta + n_L)k$$
+            </li>
+        </ol>
+
+        <div class="result-box">
+            <div class="label">Equivalência Demonstrada</div>
+            $$\boxed{\dot{k} = sy - (\delta + n_L)k = [r - n_L]k + W - c}$$
+        </div>
+    </div>
+
+    <!-- Item b -->
+    <div class="subpart">
+        <h3 class="subpart-header">Item (b): Relação entre parâmetros no estado estacionário</h3>
+
+        <div class="step-box">
+            <p><strong>Devemos mostrar:</strong> $\frac{\delta + n_L}{s} = \frac{\rho + \delta + n_L}{\alpha}$</p>
+        </div>
+
+        <ol class="derivation-steps">
+            <li>
+                <strong>Condição de estado estacionário para capital ($\dot{k} = 0$):</strong>
+                $$sy^* = (\delta + n_L)k^*$$
+                $$sAk^{*\alpha} = (\delta + n_L)k^*$$
+                $$sA(k^*)^{\alpha-1} = \delta + n_L$$
+            </li>
+            <li>
+                <strong>Equação de Euler para consumo:</strong>
+                <p>Da otimização intertemporal: $\frac{\dot{c}}{c} = \sigma[r - \rho]$</p>
+                <p>No estado estacionário, $\dot{c} = 0$, então:</p>
+                $$r^* = \rho$$
+            </li>
+            <li>
+                <strong>Considerando crescimento populacional:</strong>
+                <p>A condição de Keynes-Ramsey modificada é:</p>
+                $$r^* = \rho + n_L + \delta \quad \text{(incluindo depreciação)}$$
+                <p>Mas em termos do produto marginal bruto:</p>
+                $$f'(k^*) = \rho + n_L + \delta$$
+                $$\alpha A (k^*)^{\alpha-1} = \rho + n_L + \delta$$
+            </li>
+            <li>
+                <strong>Dividindo as equações de (1) e (3):</strong>
+                $$\frac{sA(k^*)^{\alpha-1}}{\alpha A(k^*)^{\alpha-1}} = \frac{\delta + n_L}{\rho + n_L + \delta}$$
+                $$\frac{s}{\alpha} = \frac{\delta + n_L}{\rho + \delta + n_L}$$
+            </li>
+        </ol>
+
+        <div class="result-box">
+            <div class="label">Relação Demonstrada</div>
+            $$\boxed{\frac{\delta + n_L}{s} = \frac{\rho + \delta + n_L}{\alpha}}$$
+        </div>
+
+        <div class="concept-box">
+            <p><strong>Interpretação:</strong> Esta relação mostra como a taxa de poupança ótima $s$ depende de:</p>
+            <ul style="margin-left: 1rem;">
+                <li>$\alpha$: participação do capital na renda</li>
+                <li>$\rho$: impaciência dos consumidores</li>
+                <li>$\delta$: depreciação</li>
+                <li>$n_L$: crescimento populacional</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Item c -->
+    <div class="subpart">
+        <h3 class="subpart-header">Item (c): Problema ótimo inverso — Utilidade CRRA</h3>
+
+        <div class="concept-box">
+            <p><strong>Problema Ótimo Inverso:</strong> Dada uma regra de decisão ótima observada (aqui, $s$ constante), encontrar a função de utilidade que a gera.</p>
+        </div>
+
+        <div class="step-box">
+            <p><strong>Objetivo:</strong> Mostrar que apenas funções de utilidade CRRA (Elasticidade de Substituição Constante) são consistentes com taxa de poupança constante no modelo de Ramsey.</p>
+        </div>
+
+        <ol class="derivation-steps">
+            <li>
+                <strong>Equação de Euler geral:</strong>
+                <p>A condição de primeira ordem intertemporal é:</p>
+                $$\frac{\dot{c}}{c} = \sigma(c) \cdot [r - (\rho + n_L + \delta)]$$
+                <p>onde $\sigma(c) = -\frac{u'(c)}{c \cdot u''(c)}$ é a elasticidade de substituição intertemporal.</p>
+            </li>
+            <li>
+                <strong>Consistência com $s$ constante:</strong>
+                <p>Se $s$ é constante, então $c = (1-s)y$ e:</p>
+                $$\frac{\dot{c}}{c} = \frac{\dot{y}}{y} = \alpha \frac{\dot{k}}{k}$$
+            </li>
+            <li>
+                <strong>No estado estacionário:</strong>
+                <p>$\dot{c}/c = 0$ implica $r = \rho + n_L + \delta$.</p>
+                <p>Fora do estado estacionário, para que $s$ seja constante ao longo de toda a trajetória, precisamos que $\sigma(c)$ seja constante.</p>
+            </li>
+            <li>
+                <strong>Encontrando a função de utilidade:</strong>
+                <p>Se $\sigma$ é constante, então:</p>
+                $$-\frac{u'(c)}{c \cdot u''(c)} = \sigma \quad \Rightarrow \quad \frac{u''(c)}{u'(c)} = -\frac{1}{\sigma c}$$
+                <p>Integrando:</p>
+                $$\ln u'(c) = -\frac{1}{\sigma} \ln c + \text{const}$$
+                $$u'(c) = A \cdot c^{-1/\sigma}$$
+                <p>Integrando novamente:</p>
+                $$u(c) = \frac{c^{1-1/\sigma}}{1-1/\sigma} + \text{const} \quad \text{(para } \sigma \neq 1\text{)}$$
+            </li>
+        </ol>
+
+        <div class="result-box">
+            <div class="label">Função de Utilidade CRRA</div>
+            $$\boxed{u(c) = \frac{c^{1-\frac{1}{\sigma}}}{1-\frac{1}{\sigma}} \quad \text{ou} \quad u(c) = \frac{c^{1-\theta}}{1-\theta} \text{ onde } \theta = \frac{1}{\sigma}}$$
+        </div>
+
+        <div class="important-box">
+            <p><strong>Por que CRRA é única:</strong> Qualquer outra forma funcional faria $\sigma$ variar com $c$, o que implicaria uma taxa de poupança variável ao longo da trajetória de transição, contradizendo a premissa de $s$ constante.</p>
+        </div>
+    </div>
+
+    <!-- Item d -->
+    <div class="subpart">
+        <h3 class="subpart-header">Item (d): Mostrar que $\sigma = s$ e a condição $s < \alpha$</h3>
+
+        <div class="step-box">
+            <p><strong>Da equação de Euler dada:</strong></p>
+            <div class="equation">
+                $$\frac{\dot{c}}{c} = \sigma \cdot c \cdot [r(t) - (\rho + n_L + \delta)]$$
+            </div>
+            <p><em>Nota:</em> Há um aparente erro no enunciado. A forma padrão é $\frac{\dot{c}}{c} = \sigma [r - (\rho + n_L)]$. Assumiremos a forma padrão.</p>
+        </div>
+
+        <ol class="derivation-steps">
+            <li>
+                <strong>Da relação do item (b):</strong>
+                $$\frac{s}{\alpha} = \frac{\delta + n_L}{\rho + \delta + n_L}$$
+            </li>
+            <li>
+                <strong>No estado estacionário com $s$ constante:</strong>
+                <p>Usando a condição de Euler com $\dot{c}/c = 0$:</p>
+                $$r^* = \rho + n_L + \delta$$
+                $$\alpha A (k^*)^{\alpha-1} = \rho + n_L + \delta$$
+            </li>
+            <li>
+                <strong>Combinando com a lei de movimento:</strong>
+                <p>No estado estacionário:</p>
+                $$s = \frac{(\delta + n_L)k^*}{y^*} = (\delta + n_L) \frac{k^*}{Ak^{*\alpha}} = \frac{\delta + n_L}{A(k^*)^{\alpha-1}}$$
+                <p>Da Euler: $A(k^*)^{\alpha-1} = \frac{\rho + n_L + \delta}{\alpha}$</p>
+                $$s = \frac{\alpha(\delta + n_L)}{\rho + n_L + \delta}$$
+            </li>
+            <li>
+                <strong>Da teoria da utilidade CRRA:</strong>
+                <p>A elasticidade de substituição $\sigma$ está relacionada com o coeficiente de aversão ao risco $\theta$ por $\sigma = 1/\theta$. Em modelos com poupança proporcional constante, pode-se mostrar que:</p>
+                $$\sigma = s$$
+            </li>
+        </ol>
+
+        <div class="result-box">
+            <div class="label">Resultado</div>
+            $$\boxed{\sigma = s}$$
+        </div>
+
+        <h4 style="color: var(--primary); margin-top: 1.5rem;">Por que $s < \alpha$?</h4>
+
+        <p>Da relação $s = \frac{\alpha(\delta + n_L)}{\rho + \delta + n_L}$:</p>
+
+        <div class="equation">
+            $$\frac{s}{\alpha} = \frac{\delta + n_L}{\rho + \delta + n_L} < 1 \quad \text{(pois } \rho > 0\text{)}$$
+        </div>
+
+        <div class="important-box">
+            <p><strong>Interpretação econômica de $s < \alpha$:</strong></p>
+            <ul style="margin-left: 1rem;">
+                <li>$\alpha$ é a participação do capital na renda</li>
+                <li>$s < \alpha$ significa que a taxa de poupança é menor que a participação do capital</li>
+                <li>Isso garante que o consumo seja positivo: $c = (1-s)y > 0$</li>
+                <li>Se $\rho > 0$ (agentes são impacientes), eles consomem mais do que a "regra de ouro" sugeriria</li>
+                <li>Garante também que o modelo seja dinamicamente eficiente (não há acumulação excessiva de capital)</li>
+            </ul>
+        </div>
+
+        <div class="concept-box">
+            <p><strong>Conexão com a Regra de Ouro:</strong> Na regra de ouro pura (sem desconto, $\rho = 0$), teríamos $s = \alpha$. A impaciência ($\rho > 0$) reduz a poupança abaixo desse nível "ideal" em termos de estado estacionário, mas é ótima dados as preferências dos agentes.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== QUESTÃO 5 ==================== -->
+<section class="question" id="q5">
+    <div class="question-header">
+        <span class="question-number">5</span>
+        <h2 class="question-title">Modelo de Crescimento Endógeno (Modelo AK com Externalidade)</h2>
+    </div>
+
+    <div class="concept-box">
+        <p><strong>Crescimento Endógeno:</strong> Diferente dos modelos de Solow e Ramsey, aqui a taxa de crescimento de longo prazo é determinada <em>dentro</em> do modelo, não por um fator exógeno.</p>
+        <p style="margin-top: 0.5rem;"><strong>Modelo dado:</strong></p>
+        <div class="equation">
+            $$Y_t = K_t^\alpha (h_t L_t)^{1-\alpha}, \quad h_t = bk_t, \quad L_t = L$$
+        </div>
+        <p>onde $h_t$ (capital humano) é proporcional ao capital físico per capita $k_t = K_t/L$.</p>
+    </div>
+
+    <!-- Item a -->
+    <div class="subpart">
+        <h3 class="subpart-header">Item (a): Acumulação de Capital Humano e Equilíbrio</h3>
+
+        <h4 style="color: var(--secondary); margin-top: 1rem;">Como $h_t$ é acumulado?</h4>
+
+        <p>Da equação $h_t = bk_t$, o capital humano <strong>não é acumulado diretamente</strong> através de decisões de investimento em educação. Ele é uma <strong>externalidade</strong> (ou "efeito colateral") da acumulação de capital físico.</p>
+
+        <div class="important-box">
+            <p><strong>Interpretação:</strong> Quando as firmas investem em capital físico, elas inadvertidamente geram conhecimento, habilidades e "learning-by-doing" que beneficiam toda a economia. Este é um modelo do tipo Romer (1986) / Arrow (1962).</p>
+        </div>
+
+        <h4 style="color: var(--secondary); margin-top: 1.5rem;">O equilíbrio descentralizado coincide com o ótimo social?</h4>
+
+        <div class="verdict false">NÃO NECESSARIAMENTE</div>
+
+        <div class="step-box">
+            <p><strong>Razão:</strong> Como $h_t$ é uma externalidade, as firmas individuais não internalizam o benefício social de seus investimentos em capital.</p>
+            <ul style="margin-left: 1rem; margin-top: 0.5rem;">
+                <li>Cada firma vê: $Y = K^\alpha (hL)^{1-\alpha}$ com $h$ dado</li>
+                <li>A sociedade reconhece: quando $K$ aumenta, $h = bK/L$ também aumenta</li>
+            </ul>
+            <p>Resultado: <strong>Subinvestimento no equilíbrio descentralizado</strong> — as firmas investem menos do que seria socialmente ótimo.</p>
+        </div>
+
+        <div class="concept-box">
+            <p><strong>Solução:</strong> O planejador social internaliza a externalidade e escolhe mais investimento. Políticas como subsídios ao investimento ou à P&D podem aproximar o equilíbrio descentralizado do ótimo social.</p>
+        </div>
+    </div>
+
+    <!-- Item b -->
+    <div class="subpart">
+        <h3 class="subpart-header">Item (b): Problema do Planejador Social</h3>
+
+        <div class="step-box">
+            <p><strong>Passo 1: Reescrever a função de produção</strong></p>
+            <p>Substituindo $h_t = bk_t$ e $k_t = K_t/L$:</p>
+            <div class="equation">
+                $$Y_t = K_t^\alpha (bk_t L)^{1-\alpha} = K_t^\alpha \left(b\frac{K_t}{L}L\right)^{1-\alpha} = K_t^\alpha (bK_t)^{1-\alpha}$$
+                $$Y_t = b^{1-\alpha} K_t^{\alpha + (1-\alpha)} = b^{1-\alpha} K_t$$
+            </div>
+        </div>
+
+        <p>Esta é uma <strong>tecnologia AK</strong>! Seja $A = b^{1-\alpha}$, então $Y_t = AK_t$.</p>
+
+        <div class="concept-box">
+            <p><strong>Tecnologia AK:</strong> A função de produção é linear em $K$, o que elimina os retornos decrescentes e permite crescimento perpétuo.</p>
+        </div>
+
+        <h4 style="color: var(--secondary); margin-top: 1.5rem;">Problema do Planejador:</h4>
+
+        <div class="equation">
+            $$\max \sum_{t=0}^{\infty} \beta^t L \cdot u(c_t) = \max \sum_{t=0}^{\infty} \beta^t L \cdot \frac{c_t^{1-\frac{1}{\theta}}}{1-\frac{1}{\theta}}$$
+        </div>
+
+        <p>Sujeito a:</p>
+        <div class="equation">
+            $$K_{t+1} = (1-\delta)K_t + I_t$$
+            $$Y_t = C_t + I_t = AK_t$$
+            $$c_t = C_t/L$$
+        </div>
+
+        <ol class="derivation-steps">
+            <li>
+                <strong>Reescrevendo em termos per capita:</strong>
+                <p>Como $L$ é constante, seja $y_t = Y_t/L = Ak_t$ e $c_t = C_t/L$:</p>
+                $$k_{t+1} = (1-\delta)k_t + Ak_t - c_t = (1-\delta+A)k_t - c_t$$
+            </li>
+            <li>
+                <strong>Lagrangeano:</strong>
+                $$\mathcal{L} = \sum_{t=0}^{\infty} \beta^t \left[\frac{c_t^{1-\frac{1}{\theta}}}{1-\frac{1}{\theta}} + \lambda_t(k_{t+1} - (1-\delta+A)k_t + c_t)\right]$$
+            </li>
+            <li>
+                <strong>Condições de primeira ordem:</strong>
+                <p>Em relação a $c_t$:</p>
+                $$\frac{\partial \mathcal{L}}{\partial c_t}: \quad c_t^{-\frac{1}{\theta}} = \lambda_t$$
+                <p>Em relação a $k_{t+1}$:</p>
+                $$\frac{\partial \mathcal{L}}{\partial k_{t+1}}: \quad \beta^t \lambda_t = \beta^{t+1} \lambda_{t+1}(1-\delta+A)$$
+                $$\lambda_t = \beta \lambda_{t+1}(1-\delta+A)$$
+            </li>
+            <li>
+                <strong>Equação de Euler:</strong>
+                $$c_t^{-\frac{1}{\theta}} = \beta(1-\delta+A)c_{t+1}^{-\frac{1}{\theta}}$$
+                $$\left(\frac{c_{t+1}}{c_t}\right)^{\frac{1}{\theta}} = \beta(1-\delta+A)$$
+                $$\frac{c_{t+1}}{c_t} = [\beta(1-\delta+A)]^\theta$$
+            </li>
+        </ol>
+
+        <div class="result-box">
+            <div class="label">(i) Taxa de Crescimento do Consumo</div>
+            $$\boxed{g_c = \frac{c_{t+1}}{c_t} - 1 = [\beta(1-\delta+A)]^\theta - 1}$$
+            <p style="margin-top: 0.5rem;">ou em forma contínua: $g_c = \theta[\ln\beta + \ln(1-\delta+A)] \approx \theta(A - \delta - \rho)$</p>
+            <p>onde $\beta = \frac{1}{1+\rho}$, sendo $\rho$ a taxa de desconto.</p>
+        </div>
+
+        <h4 style="color: var(--secondary); margin-top: 1.5rem;">(ii) Taxa Ótima de Poupança:</h4>
+
+        <div class="step-box">
+            <p><strong>Para economia AK com função linear:</strong></p>
+            <p>Da restrição de recursos: $y_t = c_t + i_t$, onde $i_t = k_{t+1} - (1-\delta)k_t$</p>
+        </div>
+
+        <p>Se o crescimento é balanceado (todas as variáveis per capita crescem à taxa $g$):</p>
+
+        <div class="equation">
+            $$k_{t+1} = (1+g)k_t$$
+            $$i_t = (1+g)k_t - (1-\delta)k_t = (g+\delta)k_t$$
+        </div>
+
+        <p>A taxa de poupança/investimento é:</p>
+
+        <div class="equation">
+            $$s = \frac{i_t}{y_t} = \frac{(g+\delta)k_t}{Ak_t} = \frac{g+\delta}{A}$$
+        </div>
+
+        <p>Substituindo $g = [\beta(1-\delta+A)]^\theta - 1$:</p>
+
+        <div class="result-box">
+            <div class="label">(ii) Taxa Ótima de Poupança</div>
+            $$\boxed{s^* = \frac{[\beta(1-\delta+A)]^\theta - 1 + \delta}{A}}$$
+        </div>
+
+        <div class="important-box">
+            <p><strong>Características do Modelo AK:</strong></p>
+            <ul style="margin-left: 1rem;">
+                <li><strong>Crescimento perpétuo:</strong> A economia cresce para sempre à taxa $g > 0$ (se $\beta(1-\delta+A) > 1$)</li>
+                <li><strong>Sem convergência:</strong> Países com diferentes $k_0$ nunca convergem</li>
+                <li><strong>Políticas importam:</strong> Mudanças em $s$, $\delta$, ou $A$ afetam a taxa de crescimento permanentemente</li>
+                <li><strong>Escala importa:</strong> O tamanho da economia (nível de $K$) afeta o crescimento</li>
+            </ul>
+        </div>
+
+        <div class="concept-box">
+            <p><strong>Comparação com Solow/Ramsey:</strong></p>
+            <table>
+                <tr>
+                    <th>Característica</th>
+                    <th>Solow/Ramsey</th>
+                    <th>AK Endógeno</th>
+                </tr>
+                <tr>
+                    <td>Retornos do capital</td>
+                    <td>Decrescentes ($\alpha < 1$)</td>
+                    <td>Constantes (lineares)</td>
+                </tr>
+                <tr>
+                    <td>Crescimento longo prazo</td>
+                    <td>Exógeno ($g$)</td>
+                    <td>Endógeno</td>
+                </tr>
+                <tr>
+                    <td>Convergência</td>
+                    <td>Sim (condicional)</td>
+                    <td>Não</td>
+                </tr>
+                <tr>
+                    <td>Efeito de políticas</td>
+                    <td>Temporário (transição)</td>
+                    <td>Permanente</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer style="text-align: center; padding: 3rem; color: var(--text-muted); border-top: 1px solid var(--border); margin-top: 3rem;">
+    <p style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.9rem;">
+        Resolução completa de prova sobre Modelos de Crescimento Econômico<br>
+        Harrod-Domar | Solow | Mankiw-Romer-Weil | Ramsey-Cass-Koopmans | Crescimento Endógeno
+    </p>
+</footer>
+
+</div>
+
+</body>
+</html>

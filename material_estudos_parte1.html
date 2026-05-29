@@ -1,0 +1,1393 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Material de Estudos – Microeconomia III (Parte 1)</title>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script>
+MathJax = { tex: { inlineMath: [['\\(','\\)'],['$','$']], displayMath: [['\\[','\\]'],['$$','$$']] } };
+</script>
+<style>
+:root {
+  --bg: #0d1117; --card: #161b22; --border: #30363d;
+  --text: #c9d1d9; --muted: #8b949e;
+  --blue: #58a6ff; --green: #3fb950; --orange: #d29922;
+  --pink: #f778ba; --purple: #bc8cff; --red: #f85149;
+  --cyan: #39d353;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; }
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+nav { width: 260px; min-width: 260px; background: var(--card); border-right: 1px solid var(--border); padding: 2rem 1rem; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+nav h2 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 0.75rem; margin-top: 1.5rem; }
+nav h2:first-child { margin-top: 0; }
+nav ul { list-style: none; }
+nav li a { display: block; padding: 0.25rem 0.5rem; border-radius: 6px; font-size: 0.875rem; color: var(--text); }
+nav li a:hover { background: var(--border); text-decoration: none; }
+main { flex: 1; padding: 3rem 4rem; max-width: 960px; }
+
+/* Typography */
+h1 { font-size: 2.25rem; font-weight: 700; color: #fff; margin-bottom: 0.5rem; }
+h2 { font-size: 1.5rem; font-weight: 600; color: #fff; margin: 3rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); }
+h3 { font-size: 1.125rem; font-weight: 600; color: var(--blue); margin: 2rem 0 0.75rem; }
+h4 { font-size: 1rem; font-weight: 600; color: var(--purple); margin: 1.5rem 0 0.5rem; }
+p { margin-bottom: 1rem; }
+ul, ol { margin-left: 1.5rem; margin-bottom: 1rem; }
+li { margin-bottom: 0.35rem; }
+
+/* Boxes */
+.box { border-radius: 8px; padding: 1.25rem 1.5rem; margin: 1.5rem 0; border-left: 4px solid; }
+.def  { background: rgba(88,166,255,0.07); border-color: var(--blue); }
+.thm  { background: rgba(63,185,80,0.07); border-color: var(--green); }
+.prf  { background: rgba(188,140,255,0.07); border-color: var(--purple); }
+.ex   { background: rgba(215,153,33,0.07); border-color: var(--orange); }
+.warn { background: rgba(248,81,73,0.08); border-color: var(--red); }
+.key  { background: rgba(57,211,83,0.07); border-color: var(--cyan); }
+
+.box-title { font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.6rem; }
+.def .box-title  { color: var(--blue); }
+.thm .box-title  { color: var(--green); }
+.prf .box-title  { color: var(--purple); }
+.ex  .box-title  { color: var(--orange); }
+.warn .box-title { color: var(--red); }
+.key .box-title  { color: var(--cyan); }
+
+/* Math display */
+.math { background: #0d1117; border: 1px solid var(--border); border-radius: 6px; padding: 1rem 1.5rem; margin: 1rem 0; overflow-x: auto; font-size: 1.05rem; }
+
+/* Steps */
+.steps { counter-reset: step; list-style: none; margin-left: 0; }
+.steps li { counter-increment: step; padding-left: 2rem; position: relative; margin-bottom: 0.75rem; }
+.steps li::before { content: counter(step); position: absolute; left: 0; width: 1.4rem; height: 1.4rem; background: var(--blue); color: #000; border-radius: 50%; font-size: 0.75rem; font-weight: 700; display: flex; align-items: center; justify-content: center; top: 0.2rem; }
+
+/* Collapsible solution */
+details { margin: 0.5rem 0; }
+summary { cursor: pointer; padding: 0.6rem 1rem; background: var(--card); border: 1px solid var(--border); border-radius: 6px; font-weight: 600; font-size: 0.9rem; color: var(--orange); user-select: none; }
+summary:hover { border-color: var(--orange); }
+.solution { padding: 1.25rem; background: rgba(215,153,33,0.05); border: 1px solid var(--border); border-top: none; border-radius: 0 0 6px 6px; }
+
+/* Practice header */
+.q-header { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.5rem; margin: 2rem 0 1rem; display: flex; align-items: center; gap: 1rem; }
+.q-num { background: var(--orange); color: #000; font-weight: 700; font-size: 1.1rem; width: 2.5rem; height: 2.5rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.q-title { font-size: 1rem; font-weight: 600; color: #fff; }
+.q-pts { margin-left: auto; font-size: 0.875rem; color: var(--muted); }
+
+/* Header */
+.page-header { margin-bottom: 2.5rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border); }
+.page-header .tag { display: inline-block; padding: 0.25rem 0.75rem; background: rgba(88,166,255,0.15); border: 1px solid rgba(88,166,255,0.3); border-radius: 20px; font-size: 0.8rem; color: var(--blue); margin-bottom: 0.75rem; }
+.page-header p { color: var(--muted); font-size: 0.95rem; }
+
+/* Table */
+table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+th { background: var(--card); color: var(--blue); padding: 0.6rem 0.75rem; border: 1px solid var(--border); text-align: left; font-weight: 600; }
+td { padding: 0.5rem 0.75rem; border: 1px solid var(--border); }
+tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  nav { display: none; }
+  main { padding: 1.5rem; }
+}
+</style>
+</head>
+<body>
+<div id="back-nav-lab" style="position:fixed;top:12px;left:16px;z-index:9999;"><a href="lab.html" style="display:inline-flex;align-items:center;gap:6px;font-family:system-ui,sans-serif;font-size:0.78rem;letter-spacing:0.04em;color:#d4a574;background:rgba(14,13,10,0.92);border:1px solid rgba(212,165,116,0.25);padding:5px 12px;border-radius:20px;text-decoration:none;backdrop-filter:blur(8px);">← Lab</a></div>
+<div class="layout">
+
+<!-- ═══════════════════════════════════════════════════════════ NAV -->
+<nav>
+  <h2>Módulo 1</h2>
+  <ul>
+    <li><a href="#m1-setup">Setup e Caixa de Edgeworth</a></li>
+    <li><a href="#m1-uu">Maximização de Utilidade</a></li>
+    <li><a href="#m1-we">Equilíbrio Walrasiano</a></li>
+    <li><a href="#m1-pareto">Ótimo de Pareto</a></li>
+    <li><a href="#m1-welfare">Teoremas do Bem-Estar</a></li>
+  </ul>
+  <h2>Módulo 2</h2>
+  <ul>
+    <li><a href="#m2-bens">Bens Contingentes e VNM</a></li>
+    <li><a href="#m2-ad">Equilíbrio Arrow-Debreu</a></li>
+    <li><a href="#m2-risk">Compartilhamento de Risco</a></li>
+    <li><a href="#m2-radner">Equilíbrio de Radner</a></li>
+  </ul>
+  <h2>Módulo 3</h2>
+  <ul>
+    <li><a href="#m3-assets">Ativos e Matriz de Payoffs</a></li>
+    <li><a href="#m3-complete">Mercados Completos</a></li>
+    <li><a href="#m3-arb">Precificação por Arbitragem</a></li>
+    <li><a href="#m3-incomplete">Mercados Incompletos</a></li>
+  </ul>
+  <h2>Módulo 4</h2>
+  <ul>
+    <li><a href="#m4-euler">Equação de Euler</a></li>
+  </ul>
+  <h2>Demonstrações</h2>
+  <ul>
+    <li><a href="#proof-walras">Lei de Walras</a></li>
+    <li><a href="#proof-fwt">1º Teorema do Bem-Estar</a></li>
+    <li><a href="#proof-transv">Transversalidade</a></li>
+  </ul>
+  <h2>Simulado</h2>
+  <ul>
+    <li><a href="#sim-q1">Q1 – Trocas Puras</a></li>
+    <li><a href="#sim-q2">Q2 – Arrow-Debreu</a></li>
+    <li><a href="#sim-q3">Q3 – Ativos</a></li>
+    <li><a href="#sim-q4">Q4 – Radner (Arrow)</a></li>
+    <li><a href="#sim-q5">Q5 – Radner (Genérico)</a></li>
+  </ul>
+  <h2>Questões Extras</h2>
+  <ul>
+    <li><a href="#ext-q6">Q6 – Opções com S=3</a></li>
+    <li><a href="#ext-q7">Q7 – Utilidade Exponencial</a></li>
+    <li><a href="#ext-q8">Q8 – Bens Públicos</a></li>
+    <li><a href="#ext-q9">Q9 – CD Geral + Estática Comp.</a></li>
+    <li><a href="#ext-q10">Q10 – Robinson Crusoé</a></li>
+    <li><a href="#ext-q11">Q11 – Arquipélago (Incompleto)</a></li>
+  </ul>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════════ MAIN -->
+<main>
+
+<div class="page-header">
+  <div class="tag">PPGCE/UERJ · Doutorado · 2025</div>
+  <h1>Microeconomia III – Parte 1</h1>
+  <p style="font-size:1rem; margin-bottom:0.5rem;">Aluno: <span style="color:var(--blue); font-weight:600;">Lucas Rafael de Andrade</span></p>
+  <p>Equilíbrio Geral, Incerteza e Mercados de Ativos. Material baseado em MWG caps. 15, 16 e 19.</p>
+</div>
+
+<!-- ================================================================
+     MÓDULO 1: EQUILÍBRIO GERAL EM TROCAS PURAS
+     ================================================================ -->
+<h2 id="m1-setup">1.1 Setup e Caixa de Edgeworth</h2>
+
+<p>Uma <strong>economia de trocas puras</strong> com \(I\) consumidores e \(L\) bens é descrita por:</p>
+<ul>
+  <li>Preferências \(\succcurlyeq_i\) sobre \(\mathbb{R}^L_+\), representadas por \(u_i\).</li>
+  <li>Dotações iniciais \(\omega_i \in \mathbb{R}^L_+\), com dotação agregada \(\bar\omega_\ell = \sum_i \omega_{\ell i}\).</li>
+  <li>Um vetor de preços \(p = (p_1,\dots,p_L) \in \mathbb{R}^L_+\).</li>
+</ul>
+
+<div class="box def">
+  <div class="box-title">Definição – Alocação Factível</div>
+  Uma alocação \(x = (x_1,\dots,x_I)\) é <strong>factível</strong> se
+  \[\sum_{i=1}^I x_{\ell i} \leq \bar\omega_\ell \quad \forall \ell.\]
+  Diz-se <em>sem desperdício</em> (ou <em>factível com igualdade</em>) quando vale a igualdade.
+</div>
+
+<p>No caso \(I=2\), \(L=2\) a <strong>Caixa de Edgeworth</strong> representa geometricamente todas as alocações factíveis: um retângulo \([0,\bar\omega_1]\times[0,\bar\omega_2]\), com a perspectiva do consumidor 1 medida a partir do canto inferior-esquerdo e a do consumidor 2 a partir do superior-direito.</p>
+
+<!-- ----------------------------------------------------------------- -->
+<h2 id="m1-uu">1.2 Maximização de Utilidade</h2>
+
+<p>O <strong>conjunto orçamentário</strong> do consumidor \(i\) a preços \(p\) é
+\[B_i(p) = \{x_i \in \mathbb{R}^L_+ : p\cdot x_i \leq p\cdot\omega_i\}.\]
+Sob <em>Não-Saciedade Local</em> (LNS), a restrição é satisfeita com igualdade no ótimo.</p>
+
+<h3>Cobb-Douglas</h3>
+<p>Para \(u_i(x_1,x_2) = x_1^\alpha x_2^\beta\) com \(\alpha,\beta>0\), a solução interior satisfaz:</p>
+<div class="math">
+$$\mathcal{L} = x_1^\alpha x_2^\beta - \lambda(p_1 x_1 + p_2 x_2 - w_i)$$
+$$\frac{\partial \mathcal{L}}{\partial x_1} = \alpha x_1^{\alpha-1}x_2^\beta = \lambda p_1, \qquad \frac{\partial \mathcal{L}}{\partial x_2} = \beta x_1^\alpha x_2^{\beta-1} = \lambda p_2$$
+</div>
+<p>Dividindo: \(\dfrac{\alpha}{\beta}\cdot\dfrac{x_2}{x_1} = \dfrac{p_1}{p_2}\). Combinando com a restrição orçamentária \(w_i = p_1 x_1+p_2 x_2\):</p>
+<div class="math">
+$$\boxed{x_{\ell i}^* = \frac{\alpha_\ell}{\alpha+\beta}\cdot\frac{w_i}{p_\ell}, \quad \alpha_1=\alpha,\, \alpha_2=\beta}$$
+</div>
+<p>A proporção da renda gasta em cada bem é <em>constante</em> (propriedade cardinal das preferências CD).</p>
+
+<div class="box ex">
+  <div class="box-title">Exemplo – Prova 2025, Questão 1</div>
+  <p>\(u_A = x_1^{1/4}x_2^{3/4}\), \(\omega_A = (12,0)\). Renda: \(w_A = 12p_1\).</p>
+  \[x_{1A} = \frac{1/4}{1}\cdot\frac{12p_1}{p_1} = 3, \qquad x_{2A} = \frac{3/4}{1}\cdot\frac{12p_1}{p_2} = \frac{9p_1}{p_2}.\]
+  <p>Note que \(x_{1A}=3\) <em>independe de preços</em> (renda proporcional a \(p_1\) cancela).</p>
+</div>
+
+<h3>Leontief: \(u = \min\{ax_1, bx_2\}\)</h3>
+<p>O ótimo ocorre no <em>kink</em> da curva de indiferença, onde \(ax_1 = bx_2\), ou seja, \(x_2 = (a/b)x_1\). Substituindo na restrição orçamentária:</p>
+<div class="math">
+$$x_1^* = \frac{b \cdot w_i}{bp_1 + ap_2}, \qquad x_2^* = \frac{a \cdot w_i}{bp_1 + ap_2}.$$
+</div>
+<p>Para \(u = \min\{x_1,x_2\}\) (\(a=b=1\)): \(x_1^* = x_2^* = w_i/(p_1+p_2)\).</p>
+
+<div class="box warn">
+  <div class="box-title">Atenção – Solução de Canto</div>
+  <p>A Cobb-Douglas <em>nunca</em> tem solução de canto quando \(p\gg 0\), pois \(u(0,x_2) = 0\) e qualquer alocação com \(x_1,x_2>0\) gera utilidade positiva. Sempre verifique se há soluções de canto quando a utilidade de canto iguala a de interior.</p>
+</div>
+
+<!-- ----------------------------------------------------------------- -->
+<h2 id="m1-we">1.3 Equilíbrio Walrasiano</h2>
+
+<div class="box def">
+  <div class="box-title">Definição – Equilíbrio Walrasiano (Competitivo)</div>
+  <p>Um par \((p^*, x^*)\) é um <strong>equilíbrio walrasiano</strong> se:</p>
+  <ol>
+    <li>Para cada \(i\): \(x_i^* \in \arg\max_{x_i \in B_i(p^*)} u_i(x_i)\) (otimização individual).</li>
+    <li>Mercados se equilibram: \(\displaystyle\sum_i x_{\ell i}^* = \bar\omega_\ell\) para todo \(\ell\) (factibilidade com igualdade).</li>
+  </ol>
+</div>
+
+<h3>Lei de Walras</h3>
+<div class="box thm">
+  <div class="box-title">Teorema – Lei de Walras</div>
+  <p>Se cada consumidor satisfaz a restrição orçamentária com igualdade (LNS), então para <em>quaisquer</em> preços \(p\):</p>
+  \[\sum_{\ell=1}^L p_\ell\!\left(\sum_i x_{\ell i}(p) - \bar\omega_\ell\right) = 0.\]
+  <p><strong>Corolário:</strong> Se \(L-1\) mercados estão em equilíbrio e \(p\gg 0\), o \(L\)-ésimo também está. Basta encontrar o preço relativo usando um único mercado.</p>
+</div>
+
+<div class="box ex">
+  <div class="box-title">Exemplo – Encontrando o Preço Relativo</div>
+  <p>Continuando a Questão 1 da prova: Bruna tem \(u_B = \min\{x_1,x_2\}\), \(\omega_B=(0,12)\), logo \(x_{1B}=x_{2B}\) na solução interior.</p>
+  <p><strong>Passo 1:</strong> Da factibilidade do bem 1: \(x_{1A}+x_{1B}=12 \Rightarrow 3+x_{1B}=12 \Rightarrow x_{1B}=9\).</p>
+  <p><strong>Passo 2:</strong> Da maximização de Bruna: \(x_{2B}=x_{1B}=9\).</p>
+  <p><strong>Passo 3:</strong> Da factibilidade do bem 2: \(x_{2A}=12-9=3\).</p>
+  <p><strong>Passo 4:</strong> Da demanda de Andrea pelo bem 2: \(x_{2A}=\tfrac{9p_1}{p_2}=3 \Rightarrow \tfrac{p_1}{p_2}=\tfrac{1}{3}\).</p>
+  <p>Equilíbrio: \(p^*=(p_2/3, p_2)\), \(x^*=((3,3),(9,9))\).</p>
+</div>
+
+<h3>Análise de Equilíbrios de Canto</h3>
+<p>É essencial verificar sistematicamente todos os casos de preços-limite. O procedimento padrão:</p>
+<table>
+  <tr><th>Caso</th><th>O que verificar</th><th>Conclusão típica</th></tr>
+  <tr><td>\(p_1,p_2>0\)</td><td>Solução interior</td><td>Caso genérico</td></tr>
+  <tr><td>\(p_1=0, p_2>0\)</td><td>Demanda de cada agente pelo bem 1</td><td>Geralmente viola factibilidade</td></tr>
+  <tr><td>\(p_1>0, p_2=0\)</td><td>Demanda pelo bem 2 →∞?</td><td>Geralmente viola factibilidade</td></tr>
+  <tr><td>\(p_1=p_2=0\)</td><td>Nenhum tem renda; verificar indiferença</td><td>Pode existir equilíbrio de canto</td></tr>
+</table>
+
+<!-- ----------------------------------------------------------------- -->
+<h2 id="m1-pareto">1.4 Ótimo de Pareto e Curva de Contrato</h2>
+
+<div class="box def">
+  <div class="box-title">Definição – Ótimo de Pareto</div>
+  Uma alocação factível \(x^*\) é <strong>Pareto-ótima</strong> se não existe outra alocação factível \(x'\) tal que \(x'_i \succcurlyeq_i x^*_i\) para todo \(i\), com \(x'_j \succ_j x^*_j\) para algum \(j\).
+</div>
+
+<p>Com preferências estritamente convexas e interiores, o ótimo de Pareto se caracteriza pela tangência das curvas de indiferença:
+\[\text{TMS}_1(x_1^*,x_2^*) = \text{TMS}_2(x_1^*,x_2^*),\]
+onde \(\text{TMS}_i = -\partial u_i/\partial x_1 \div \partial u_i/\partial x_2\).
+</p>
+<p>O conjunto de todos os ótimos de Pareto no interior da caixa de Edgeworth é a <strong>curva de contrato</strong>.</p>
+
+<!-- ----------------------------------------------------------------- -->
+<h2 id="m1-welfare">1.5 Teoremas Fundamentais do Bem-Estar</h2>
+
+<div class="box thm">
+  <div class="box-title">Primeiro Teorema do Bem-Estar (1TBE)</div>
+  <p>Se as preferências são LNS e \((p^*,x^*)\) é um equilíbrio walrasiano, então \(x^*\) é Pareto-ótimo.</p>
+</div>
+
+<div class="box prf">
+  <div class="box-title">Prova do 1TBE</div>
+  <p>Por contradição. Suponha \(x'\) factível que Pareto-domina \(x^*\).</p>
+  <ol class="steps">
+    <li><strong>Para \(i_0\) com preferência estrita:</strong> \(x'_{i_0} \succ_{i_0} x^*_{i_0}\). Como \(x^*_{i_0}\) maximiza \(u_{i_0}\) no conjunto orçamentário, qualquer coisa estritamente preferida está <em>fora</em> do orçamento: \(p^*\cdot x'_{i_0} > p^*\cdot\omega_{i_0}\).</li>
+    <li><strong>Para \(i \neq i_0\) com \(x'_i \succcurlyeq_i x^*_i\):</strong> Suponha \(p^*\cdot x'_i < p^*\cdot\omega_i\). Pela LNS, existe \(x''\) próximo de \(x'_i\) com \(x''\succ x'_i \succcurlyeq x^*_i\) e \(x''\in B_i(p^*)\), contradizendo a otimalidade de \(x^*_i\). Logo \(p^*\cdot x'_i \geq p^*\cdot\omega_i\).</li>
+    <li><strong>Somando sobre \(i\):</strong> \(p^*\cdot\sum_i x'_i > p^*\cdot\sum_i\omega_i = p^*\cdot\bar\omega\).</li>
+    <li><strong>Contradição:</strong> A factibilidade de \(x'\) impõe \(\sum_i x'_{\ell i} \leq \bar\omega_\ell\) e \(p^*\gg 0\), logo \(p^*\cdot\sum_i x'_i \leq p^*\cdot\bar\omega\). Absurdo. \(\square\)</li>
+  </ol>
+</div>
+
+<div class="box thm">
+  <div class="box-title">Segundo Teorema do Bem-Estar (2TBE)</div>
+  <p>Se as preferências são LNS, contínuas e <strong>estritamente convexas</strong>, então qualquer alocação Pareto-ótima \(x^*\) pode ser sustentada como equilíbrio walrasiano após uma redistribuição de riqueza (<em>transferências lump-sum</em>), via algum vetor de preços \(p^*\).</p>
+</div>
+
+<div class="box warn">
+  <div class="box-title">Falha do 2TBE – Preferências Não-Convexas</div>
+  <p>Com preferências não-convexas (ex: \(u = x_1^2 + x_2^2\)), ótimos de Pareto na fronteira da caixa podem não ser sustentados por nenhum sistema de preços – o hiperplano de suporte em pontos não-convexos pode não ser único ou pode não separar os conjuntos de preferência.</p>
+</div>
+
+<!-- ================================================================
+     MÓDULO 2: INCERTEZA E ARROW-DEBREU
+     ================================================================ -->
+<h2 id="m2-bens">2.1 Bens Contingentes e Utilidade Esperada</h2>
+
+<p>Com incerteza, o espaço de mercadorias se expande: um bem físico \(\ell\) no estado \(s\) é uma <em>mercadoria diferente</em>. Com \(L\) bens físicos e \(S\) estados, o espaço de mercadorias é \(\mathbb{R}^{LS}\).</p>
+
+<div class="box def">
+  <div class="box-title">Definição – Utilidade Esperada de VNM</div>
+  <p>A <strong>utilidade esperada de Von Neumann-Morgenstern</strong> do consumidor \(i\) é:</p>
+  \[U_i(x_{1i},\dots,x_{Si}) = \sum_{s=1}^S \pi_s \, u_i(x_{si}),\]
+  <p>onde \(\pi_s > 0\) é a probabilidade do estado \(s\) (\(\sum_s \pi_s = 1\)) e \(u_i\) é a função de Bernoulli (utilidade cardinal).</p>
+</div>
+
+<p>A <strong>aversão ao risco</strong> é capturada pela concavidade de \(u_i\): se \(u_i'' < 0\), o agente prefere a esperança matemática ao risco. Exemplos:</p>
+<table>
+  <tr><th>Bernoulli \(u_i(x)\)</th><th>Atitude ao risco</th><th>Intuição</th></tr>
+  <tr><td>\(\ln x\)</td><td>Averso (côncava)</td><td>Marginal decrescente</td></tr>
+  <tr><td>\(x\) (linear)</td><td>Neutro</td><td>Indiferente ao risco</td></tr>
+  <tr><td>\(x^2\)</td><td>Propenso (convexa)</td><td>Marginal crescente</td></tr>
+</table>
+
+<!-- ----------------------------------------------------------------- -->
+<h2 id="m2-ad">2.2 Equilíbrio de Arrow-Debreu</h2>
+
+<div class="box def">
+  <div class="box-title">Definição – Equilíbrio de Arrow-Debreu</div>
+  <p>Com \(L=1\) bem físico e \(S\) estados (generalização imediata para \(L>1\)): um equilíbrio de Arrow-Debreu é um par \((p^*,x^*)\) com \(p^*=(p_1^*,\dots,p_S^*)\) (preços contingentes em \(t=0\)) e \(x^*=(x_{si})\) tais que:</p>
+  <ol>
+    <li>Cada agente \(i\) maximiza a utilidade esperada sujeito a <em>uma única</em> restrição orçamentária: \(\displaystyle\sum_s p_s x_{si} \leq \sum_s p_s \omega_{si} \equiv w_i\).</li>
+    <li>Factibilidade em cada estado: \(\displaystyle\sum_i x_{si} = \sum_i \omega_{si}\) para todo \(s\).</li>
+  </ol>
+</div>
+
+<h3>Demanda com Utilidade Logarítmica</h3>
+<p>Para \(u_i = \ln\), a lagrangiana é:</p>
+<div class="math">
+$$\mathcal{L} = \sum_s \pi_s \ln x_{si} - \lambda\!\left(\sum_s p_s x_{si} - w_i\right)$$
+$$\text{CPO: } \frac{\pi_s}{x_{si}} = \lambda p_s \;\Rightarrow\; x_{si} = \frac{\pi_s}{\lambda p_s}.$$
+</div>
+<p>Substituindo na restrição orçamentária: \(\sum_s p_s \cdot \frac{\pi_s}{\lambda p_s} = w_i \;\Rightarrow\; \frac{1}{\lambda} = w_i\) (pois \(\sum_s\pi_s=1\)).</p>
+
+<div class="box key">
+  <div class="box-title">Fórmula Central – Demanda AD com Log</div>
+  \[\boxed{x_{si}^* = \frac{\pi_s \, w_i}{p_s}}\]
+  <p>O consumo no estado \(s\) é proporcional à probabilidade de \(s\) e à riqueza total \(w_i\), e inversamente proporcional ao preço contingente \(p_s\).</p>
+</div>
+
+<div class="box ex">
+  <div class="box-title">Exemplo Completo – Famílias Amoreira e Boaventura</div>
+  <p>Dados: \(\pi_1=\pi_2=1/2\), \(\omega_A=(10,0)\), \(\omega_B=(0,30)\), \(u_i=\ln\).</p>
+  <p><strong>Passo 1 – Riquezas:</strong> \(w_A = 10p_1\), \(w_B = 30p_2\).</p>
+  <p><strong>Passo 2 – Demandas:</strong>
+  \[x_{1A} = \frac{(1/2)\cdot 10p_1}{p_1} = 5, \quad x_{2A} = \frac{(1/2)\cdot 10p_1}{p_2} = \frac{5p_1}{p_2}\]
+  \[x_{1B} = \frac{(1/2)\cdot 30p_2}{p_1} = \frac{15p_2}{p_1}, \quad x_{2B} = \frac{(1/2)\cdot 30p_2}{p_2} = 15\]
+  </p>
+  <p><strong>Passo 3 – Market clearing (estado 1):</strong> \(x_{1A}+x_{1B}=10 \;\Rightarrow\; 5 + \frac{15p_2}{p_1}=10 \;\Rightarrow\; \frac{p_1}{p_2}=3\).</p>
+  <p><strong>Passo 4 – Verificação (estado 2):</strong> \(x_{2A}=5\cdot(1/3)\cdot3^{-1}\)... mais direto: \(x_{2A}=5p_1/p_2=5\cdot3=15\). \(x_{2B}=15\). \(15+15=30\) ✓</p>
+  <p><strong>Equilíbrio AD:</strong> \(p^*=(3p_2,p_2)\), \(x_A^*=(5,15)\), \(x_B^*=(5,15)\).</p>
+</div>
+
+<!-- ----------------------------------------------------------------- -->
+<h2 id="m2-risk">2.3 Compartilhamento de Risco</h2>
+
+<p>O equilíbrio AD com mercados completos implica <strong>compartilhamento eficiente do risco agregado</strong>. Duas regras práticas:</p>
+
+<div class="box key">
+  <div class="box-title">Regras de Compartilhamento de Risco</div>
+  <ol>
+    <li><strong>Agentes simétricos com mesma riqueza:</strong> consomem o mesmo em equilíbrio (ex: Amoreira e Boaventura acima, mesmo com dotações assimétricas, pois as riquezas se igualam pelo preço relativo).</li>
+    <li><strong>Agente neutro ao risco (\(u_C(x)=x\)):</strong> as CPO implicam \(\pi_s = \lambda p_s\), ou seja, \(p_s/p_{s'} = \pi_s/\pi_{s'}\). Com probabilidades iguais, \(p_1=p_2\). O agente neutro <em>absorve todo o risco agregado</em>; o agente averso consome o mesmo em todo estado.</li>
+  </ol>
+</div>
+
+<div class="box ex">
+  <div class="box-title">Exemplo – Substituição por Agente Neutro ao Risco</div>
+  <p>Famílias Amoreira (\(u_A=\ln\)) e Carvalho (\(u_C=x\)). \(\pi_1=\pi_2=1/2\).</p>
+  <p>CPO de Carvalho: \(\pi_\ell = \lambda p_\ell\) com \(\pi_1=\pi_2 \Rightarrow p_1=p_2\).</p>
+  <p>Com \(p_1=p_2\): \(w_A = 10p_1\). Demanda de Amoreira: \(x_{1A}=x_{2A}=5\) (consumo constante nos estados).</p>
+  <p>Factibilidade: \(x_{1C}=10-5=5\), \(x_{2C}=30-5=25\). A família Carvalho arca com toda a variabilidade agregada.</p>
+</div>
+
+<!-- ----------------------------------------------------------------- -->
+<h2 id="m2-radner">2.4 Equilíbrio de Radner (Mercados Sequenciais)</h2>
+
+<div class="box def">
+  <div class="box-title">Definição – Equilíbrio de Radner</div>
+  <p>Estrutura em dois períodos: em \(t=0\) os agentes transacionam ativos financeiros; em \(t=1\) o estado \(s\) se realiza e os mercados spot abrem. Um equilíbrio de Radner é \((q^*, z^*, p^{s*}, x^{s*})\) tal que:</p>
+  <ol>
+    <li>Cada agente escolhe portfólio \(z_i^*\) e consumo \(x_i^{s*}\) para maximizar utilidade esperada.</li>
+    <li>Restrições orçamentárias: em \(t=0\): \(q\cdot z_i \leq 0\); em cada estado \(s\): \(p^s \cdot x_i^s \leq p^s\cdot\omega_i^s + \sum_k z_{ik} r_{sk}\).</li>
+    <li>Market clearing: mercados de ativos (\(\sum_i z_i = 0\)) e spot (\(\sum_i x_i^s = \sum_i\omega_i^s\) ∀\(s\)).</li>
+  </ol>
+</div>
+
+<div class="box thm">
+  <div class="box-title">Teorema da Equivalência AD–Radner</div>
+  <p>Se a matriz de payoffs \(R\) tem posto igual a \(S\) (mercados completos), então o conjunto de alocações reais de equilíbrio de Radner coincide com o de Arrow-Debreu.</p>
+</div>
+
+<!-- ================================================================
+     MÓDULO 3: MERCADOS DE ATIVOS
+     ================================================================ -->
+<h2 id="m3-assets">3.1 Ativos e Matriz de Payoffs</h2>
+
+<p>Com \(K\) ativos e \(S\) estados, o ativo \(k\) tem:</p>
+<ul>
+  <li><strong>Vetor de retornos:</strong> \(r_k = (r_{1k},\dots,r_{Sk}) \in \mathbb{R}^S\).</li>
+  <li><strong>Preço de mercado:</strong> \(q_k \in \mathbb{R}\).</li>
+</ul>
+<p>A <strong>matriz de payoffs</strong> \(R\) é \(S\times K\), com a coluna \(k\) igual a \(r_k\). Um portfólio \(z=(z_1,\dots,z_K)\) gera o vetor de transferências de renda \(Rz\) nos diferentes estados.</p>
+
+<div class="box def">
+  <div class="box-title">Ativos Elementares de Arrow</div>
+  <p>O ativo \(k\) é <strong>elementar de Arrow para o estado \(s\)</strong> se \(r_{s'k}=\mathbf{1}[s'=s]\) (paga 1 no estado \(s\) e 0 nos demais). Qualquer ativo pode ser decomposto em ativos de Arrow.</p>
+</div>
+
+<!-- ----------------------------------------------------------------- -->
+<h2 id="m3-complete">3.2 Mercados Completos</h2>
+
+<div class="box def">
+  <div class="box-title">Mercados Completos</div>
+  <p>Os mercados são <strong>completos</strong> se e somente se \(\text{posto}(R) = S\), ou seja, qualquer vetor de transferências em \(\mathbb{R}^S\) é atingível por algum portfólio.</p>
+</div>
+
+<p>Para verificar: calcule \(\det(R)\) (com \(S=K=2\)) ou reduza à forma escalonada. Se as colunas de \(R\) são linearmente dependentes, \(\text{posto}(R) < S\) e o mercado é incompleto.</p>
+
+<div class="box ex">
+  <div class="box-title">Completo vs Incompleto</div>
+  <p>\(R_1 = \begin{pmatrix}1 & 1\\0 & 2\end{pmatrix}\): \(\det = 2 \neq 0\) → completo.</p>
+  <p>\(R_2 = \begin{pmatrix}2 & 1\\4 & 2\end{pmatrix}\): linha 2 = 2×linha 1 → \(\det = 0\) → incompleto (posto 1).</p>
+</div>
+
+<!-- ----------------------------------------------------------------- -->
+<h2 id="m3-arb">3.3 Precificação por Ausência de Arbitragem</h2>
+
+<div class="box def">
+  <div class="box-title">Definição – Arbitragem</div>
+  <p>Uma carteira \(z\) é uma <strong>oportunidade de arbitragem</strong> se \(q\cdot z \leq 0\) (custo nulo ou negativo) e \(Rz \geq 0\) com \(Rz \neq 0\) (retorno não-negativo em todos os estados, positivo em algum).</p>
+</div>
+
+<p>Em mercados completos, um novo ativo com retorno \(r^{\text{new}}\) pode ser replicado: encontre \(\alpha\) tal que \(R\alpha = r^{\text{new}}\). O preço de não-arbitragem é \(q^{\text{new}} = q\cdot\alpha\).</p>
+
+<div class="box key">
+  <div class="box-title">Algoritmo – Precificação por Replicação</div>
+  <ol class="steps">
+    <li>Verifique se \(\text{posto}(R)=S\) (mercado completo).</li>
+    <li>Resolva o sistema linear \(R\alpha = r^{\text{new}}\) para \(\alpha \in \mathbb{R}^K\).</li>
+    <li>O preço sem arbitragem é \(q^{\text{new}} = \sum_k \alpha_k q_k\).</li>
+  </ol>
+</div>
+
+<div class="box ex">
+  <div class="box-title">Exemplo – Opção Call (Prova 2025, Q3)</div>
+  <p>Ativos: \(r_1=(1,0)\), \(r_2=(1,2)\), \(q_1=1\), \(q_2=2\). \(S=K=2\).</p>
+  <p><strong>Derivativo (call sobre ativo 2, strike = 0.5·valor à vista, exercida se valor > 1.5):</strong></p>
+  <p>Estado 1: valor à vista de \(r_2\) é 1 ≤ 1.5 → não exercida → payoff = 0.</p>
+  <p>Estado 2: valor à vista de \(r_2\) é 2 > 1.5 → exercida → compra a \(0.5\times 2=1\), recebe payoff 2, lucro = \(2-1=1\).</p>
+  <p>Portanto \(r_3=(0,1)\).</p>
+  <p><strong>Replicação:</strong> \(\alpha_1(1,0)+\alpha_2(1,2)=(0,1)\):</p>
+  \[\alpha_1+\alpha_2=0, \quad 2\alpha_2=1 \;\Rightarrow\; \alpha_2=0.5,\; \alpha_1=-0.5.\]
+  <p>\(q_3 = -0.5\times 1 + 0.5\times 2 = \mathbf{0.5}\).</p>
+</div>
+
+<!-- ----------------------------------------------------------------- -->
+<h2 id="m3-incomplete">3.4 Mercados Incompletos</h2>
+
+<p>Se \(\text{posto}(R) < S\), existem estados cujo risco não pode ser transferido. Consequências:</p>
+<ul>
+  <li>O 1TBE falha no sentido usual (a alocação pode não ser Pareto-ótima sem restrições).</li>
+  <li>Derivativos cujo retorno está fora do espaço de colunas de \(R\) não podem ser precificados por não-arbitragem (preço indeterminado).</li>
+  <li>Pode-se falar em <em>Ótimo de Pareto Restrito</em> (second-best): eficiência dentro do espaço de alocações atingíveis.</li>
+</ul>
+
+<div class="box ex">
+  <div class="box-title">Mercado Incompleto – Não Há Precificação</div>
+  <p>Se \(r_1=(2,4)\) e \(r_2=(1,2)\): \(r_2=(1/2)r_1\), logo \(\text{posto}(R)=1 < 2\). O ativo \(r_3=(0,1)\) não pertence ao espaço coluna de \(R\) (que só contém múltiplos de \((2,4)\)), portanto não há portfólio replicante e o preço não pode ser determinado por arbitragem.</p>
+</div>
+
+<!-- ================================================================
+     MÓDULO 4: EQUAÇÃO DE EULER
+     ================================================================ -->
+<h2 id="m4-euler">4. Equação de Euler – Horizonte Infinito</h2>
+
+<p>Considere o problema de um consumidor em horizonte infinito com tecnologia \(F(k)=Ak\):</p>
+<div class="math">
+$$\max_{k\geq 0} \sum_{t=0}^\infty \delta^t \ln c_t \quad \text{s.a.} \quad c_t = Ak_{t-1} - k_t, \quad k_0 \text{ dado.}$$
+</div>
+
+<h3>Derivação</h3>
+<p>Substituindo a restrição na função objetivo:</p>
+<div class="math">
+$$\max_{k} \sum_{t=0}^\infty \delta^t \ln(Ak_{t-1} - k_t).$$
+</div>
+<p>CPO em relação a \(k_t\) (afeta o período \(t\) como investimento e o período \(t+1\) como capital):</p>
+<div class="math">
+$$\delta^t \cdot \frac{-1}{Ak_{t-1}-k_t} + \delta^{t+1}\cdot\frac{A}{Ak_t - k_{t+1}} = 0.$$
+</div>
+
+<div class="box key">
+  <div class="box-title">Equação de Euler – Duas Formas Equivalentes</div>
+  <p><strong>Em capital:</strong>
+  \[k_{t+1} = (1+\delta)Ak_t - \delta A^2 k_{t-1}\]
+  </p>
+  <p><strong>Em consumo:</strong>
+  \[\underbrace{u'(c_t)}_{\text{custo marginal de poupar}} = \delta \underbrace{F'(k_t)}_A \underbrace{u'(c_{t+1})}_{\text{benefício marginal}} \;\Rightarrow\; \frac{1}{c_t} = \frac{\delta A}{c_{t+1}} \;\Rightarrow\; \boxed{c_{t+1} = \delta A \, c_t}\]
+  </p>
+</div>
+
+<p><strong>Interpretação:</strong> o consumidor poupa até que o custo de abrir mão de uma unidade hoje (\(u'(c_t)\)) iguale o retorno amanhã (\(\delta A\)) multiplicado pelo benefício de consumir amanhã (\(u'(c_{t+1})\)). O consumo cresce à taxa \(\delta A - 1\) — se \(\delta A > 1\), a economia cresce; se \(\delta A < 1\), decresce.</p>
+
+<!-- ================================================================
+     DEMONSTRAÇÕES FORMAIS
+     ================================================================ -->
+<h2 id="proof-walras">5.1 Prova Formal da Lei de Walras</h2>
+
+<div class="box prf">
+  <div class="box-title">Prova</div>
+  <p>Seja \(x_i(p)\) a demanda do consumidor \(i\). Sob LNS, a restrição orçamentária é satisfeita com igualdade: \(p\cdot x_i(p) = p\cdot\omega_i\) para todo \(i\) e todo \(p\).</p>
+  <p>Somando sobre todos os \(I\) consumidores:</p>
+  \[\sum_{i=1}^I p\cdot x_i(p) = \sum_{i=1}^I p\cdot\omega_i\]
+  \[p\cdot\sum_i x_i(p) = p\cdot\bar\omega\]
+  \[p\cdot\!\left(\sum_i x_i(p) - \bar\omega\right) = 0\]
+  \[\sum_{\ell=1}^L p_\ell\!\left(\sum_i x_{\ell i}(p) - \bar\omega_\ell\right) = 0. \quad\square\]
+</div>
+
+<p><strong>Aplicação:</strong> Se o mercado do bem 1 equilibra (\(\sum_i x_{1i}(p^*)=\bar\omega_1\)) e \(p^*\gg 0\), então \(p_2^*(\sum_i x_{2i}(p^*)-\bar\omega_2)=0\) e como \(p_2^*>0\), concluímos \(\sum_i x_{2i}(p^*)=\bar\omega_2\).</p>
+
+<!-- ----------------------------------------------------------------- -->
+<h2 id="proof-fwt">5.2 Prova Detalhada do 1º Teorema do Bem-Estar</h2>
+
+<p>(Já apresentada na Seção 1.5 com formato de passos. Abaixo, a versão mais compacta para uso em prova.)</p>
+
+<div class="box prf">
+  <div class="box-title">Prova Compacta (Para Uso em Avaliação)</div>
+  <p>Seja \((p^*,x^*)\) WE. Suponha, por contradição, que \(\exists\) alocação factível \(x'\) com \(x'_i \succcurlyeq_i x_i^*\) para todo \(i\) e \(x'_{i_0}\succ_{i_0} x_{i_0}^*\) para algum \(i_0\).</p>
+  <ul>
+    <li>Otimalidade de \(x_{i_0}^*\): \(x'_{i_0}\succ_{i_0}x_{i_0}^* \Rightarrow x'_{i_0} \notin B_{i_0}(p^*) \Rightarrow p^*\cdot x'_{i_0} > p^*\cdot\omega_{i_0}\).</li>
+    <li>Para \(i\neq i_0\): \(x'_i\succcurlyeq_i x_i^*\). Suponha \(p^*\cdot x'_i < p^*\cdot\omega_i\). Por LNS, \(\exists\, x''\) próximo de \(x'_i\) com \(x''\succ x'_i\) ainda dentro do orçamento, contradizendo \(x_i^*\) ser ótimo. Logo \(p^*\cdot x'_i \geq p^*\cdot\omega_i\).</li>
+    <li>Somando: \(p^*\cdot\sum_i x'_i > p^*\cdot\bar\omega\). Porém \(x'\) factível e \(p^*\geq 0\) implica \(p^*\cdot\sum_i x'_i \leq p^*\cdot\bar\omega\). Contradição. \(\square\)</li>
+  </ul>
+</div>
+
+<!-- ----------------------------------------------------------------- -->
+<h2 id="proof-transv">5.3 Eficiência Fraca e Condição de Transversalidade</h2>
+
+<div class="box def">
+  <div class="box-title">Eficiência Fraca de Trajetórias de Produção</div>
+  <p>Uma trajetória \(y=(y_0,y_1,\dots)\) é <strong>fracamente eficiente</strong> se não existe \(y'=(y'_0,y'_1,\dots)\) tal que \(y_{a,t-1}+y_{bt} \ll y'_{a,t-1}+y'_{bt}\) para todo \(t\) (onde \(a\ll b\) significa \(a_\ell < b_\ell\) para todo \(\ell\)).</p>
+</div>
+
+<div class="box prf">
+  <div class="box-title">Prova: Transversalidade implica Eficiência Fraca</div>
+  <p>Seja \(y\) que maximiza lucros a curto prazo para preços \(p\geq 0\) (com algum \(p_t\neq 0\)) e satisfaz \(p_{T+1}\cdot y_{aT}\to 0\) quando \(T\to\infty\).</p>
+  <p>Suponha \(y'\) com \(y_{a,t-1}+y_{bt} \ll y'_{a,t-1}+y'_{bt}\) para todo \(t\). Como \(p_t\geq 0\) com algum termo não nulo, isso implica \(p_t\cdot(y'_{a,t-1}+y'_{bt}) > p_t\cdot(y_{a,t-1}+y_{bt})\).</p>
+  <p>Da maximização de lucros a curto prazo em \(t\): \(p_t\cdot y_{bt} - p_{t+1}\cdot y_{at} \geq p_t\cdot y'_{bt} - p_{t+1}\cdot y'_{at}\), logo \(p_{t+1}\cdot(y'_{at}-y_{at}) \geq p_t\cdot(y'_{bt}-y_{bt}) > 0\) (pela hipótese de dominância estrita).</p>
+  <p>Telescopando de \(t=0\) a \(T\): \(p_{T+1}\cdot y'_{aT} - p_{T+1}\cdot y_{aT} \geq \varepsilon > 0\) para algum \(\varepsilon\) uniforme. Mas \(p_{T+1}\cdot y_{aT}\to 0\) (transversalidade) implica \(p_{T+1}\cdot y'_{aT} \geq \varepsilon > 0\) para todo \(T\), contradizendo que \(y'\) é uma trajetória de produção factível com preços que convergem. \(\square\)</p>
+</div>
+
+<!-- ================================================================
+     SIMULADO
+     ================================================================ -->
+<h2 style="margin-top:4rem; border-color: var(--orange);">Simulado – Questões no Estilo da Avaliação</h2>
+<p style="color:var(--muted); margin-bottom:2rem;">Tente resolver cada item antes de expandir o gabarito.</p>
+
+<!-- ─── Q1 ─── -->
+<div class="q-header" id="sim-q1">
+  <div class="q-num">1</div>
+  <div>
+    <div class="q-title">Trocas Puras com Cobb-Douglas e Leontief Generalizado</div>
+    <div style="font-size:0.85rem;color:var(--muted);margin-top:0.25rem;">Equilíbrio walrasiano, demandas, factibilidade, soluções de canto</div>
+  </div>
+  <div class="q-pts">[2,5 pts]</div>
+</div>
+
+<p>Carlos e Daniela habitam uma economia de trocas puras com dois bens. Suas preferências e dotações são:</p>
+<ul>
+  <li><strong>Carlos:</strong> \(u_C(x_1,x_2) = x_1^{1/3}x_2^{2/3}\), \(\omega_C = (6,\,0)\).</li>
+  <li><strong>Daniela:</strong> \(u_D(x_1,x_2) = \min\{x_1,\,2x_2\}\), \(\omega_D = (0,\,9)\).</li>
+</ul>
+
+<p><strong>(a)</strong> Encontre a demanda marshalliana de Carlos condicionalmente a preços \(p_1,p_2>0\). [0,5 pt]</p>
+
+<details>
+<summary>Gabarito (a)</summary>
+<div class="solution">
+<ol class="steps">
+  <li><strong>Calcular a renda —</strong> Carlos detém dotação apenas no bem 1: \(w_C = p_1\omega_{1C} = 6p_1\).</li>
+  <li><strong>Descartar solução de canto —</strong> Cobb-Douglas tem \(u_C(0,\cdot)=u_C(\cdot,0)=0\), enquanto qualquer ponto interior gera utilidade positiva. Com \(p\gg0\) a solução é sempre interior.</li>
+  <li><strong>Aplicar fórmula Cobb-Douglas —</strong> Com \(\alpha=1/3\), \(\beta=2/3\):
+  \[x_{1C}=\frac{1/3}{1}\cdot\frac{6p_1}{p_1}=2,\qquad x_{2C}=\frac{2/3}{1}\cdot\frac{6p_1}{p_2}=\frac{4p_1}{p_2}.\]
+  \(x_{1C}=2\) é constante pois \(w_C\propto p_1\) cancela \(p_1\) no denominador.</li>
+</ol>
+</div>
+</details>
+
+<p><strong>(b)</strong> Encontre a demanda de Daniela. Note que \(u_D = \min\{x_1, 2x_2\}\) — o kink ocorre em \(x_1 = 2x_2\), não em \(x_1=x_2\). [0,5 pt]</p>
+
+<details>
+<summary>Gabarito (b)</summary>
+<div class="solution">
+<ol class="steps">
+  <li><strong>Identificar condição do kink —</strong> \(u_D=\min\{x_1,2x_2\}\) é maximizada em \(x_1=2x_2\): consumir além desse ponto em qualquer bem não eleva utilidade.</li>
+  <li><strong>Calcular a renda —</strong> \(w_D = p_2\omega_{2D} = 9p_2\).</li>
+  <li><strong>Substituir kink na restrição orçamentária —</strong> Com \(x_1=2x_2\):
+  \[2p_1 x_{2D}+p_2 x_{2D}=9p_2\;\Rightarrow\; x_{2D}=\frac{9p_2}{2p_1+p_2},\quad x_{1D}=\frac{18p_2}{2p_1+p_2}.\]
+  </li>
+</ol>
+</div>
+</details>
+
+<p><strong>(c)</strong> Defina o que é um equilíbrio walrasiano nesta economia e encontre-o. [0,75 pt]</p>
+
+<details>
+<summary>Gabarito (c)</summary>
+<div class="solution">
+<ol class="steps">
+  <li><strong>Definição formal —</strong> Par \((p^*,x^*)\) tal que (i) cada agente maximiza utilidade dado seu orçamento e (ii) mercados equilibram: \(x_{1C}+x_{1D}=6\) e \(x_{2C}+x_{2D}=9\).</li>
+  <li><strong>Impor market clearing no bem 1 —</strong>
+  \[2+\frac{18p_2}{2p_1+p_2}=6\;\Rightarrow\;\frac{18p_2}{2p_1+p_2}=4.\]
+  </li>
+  <li><strong>Resolver o preço relativo —</strong> \(18p_2=8p_1+4p_2\;\Rightarrow\;14p_2=8p_1\;\Rightarrow\;\dfrac{p_1}{p_2}=\dfrac{7}{4}\).</li>
+  <li><strong>Completar a alocação —</strong>
+  \[x_{1D}=\frac{18}{2(7/4)+1}=\frac{18}{9/2}=4,\quad x_{2D}=2,\quad x_{2C}=4\cdot\frac{7}{4}=7.\]
+  </li>
+  <li><strong>Verificar pelo segundo mercado —</strong> \(x_{2C}+x_{2D}=7+2=9\) ✓ (Lei de Walras). Equilíbrio: \(p^*=\!\bigl(\tfrac{7p_2}{4},p_2\bigr)\), \(x_C^*=(2,7)\), \(x_D^*=(4,2)\).</li>
+</ol>
+</div>
+</details>
+
+<p><strong>(d)</strong> Esta economia admite algum equilíbrio com solução de canto? Justifique sistematicamente. [0,75 pt]</p>
+
+<details>
+<summary>Gabarito (d)</summary>
+<div class="solution">
+<ol class="steps">
+  <li><strong>Listar casos de preços-limite —</strong> Com \(L=2\) bens, analisar: \((p_1,p_2>0)\), \((p_1=0,p_2>0)\), \((p_1>0,p_2=0)\) e \((p_1=p_2=0)\).</li>
+  <li><strong>Caso \(p_1=0,\,p_2>0\) —</strong> Carlos tem \(w_C=0\). Daniela tem \(w_D=9p_2>0\): ao preço nulo do bem 1, \(x_{1D}\to\infty\), violando factibilidade. <em>Impossível.</em></li>
+  <li><strong>Caso \(p_1>0,\,p_2=0\) —</strong> Daniela tem \(w_D=0\). Carlos tem \(x_{2C}=4p_1/p_2\to\infty\). Viola factibilidade. <em>Impossível.</em></li>
+  <li><strong>Caso \(p_1=p_2=0\) —</strong> Ambos com renda zero. Carlos indiferente em \((0,0)\); Daniela indiferente em \((0,x_{2D})\). Alocação \(x_C=(6,9)\), \(x_D=(0,0)\) é factível. <em>Único equilíbrio de canto.</em></li>
+</ol>
+</div>
+</details>
+
+<!-- ─── Q2 ─── -->
+<div class="q-header" id="sim-q2">
+  <div class="q-num">2</div>
+  <div>
+    <div class="q-title">Arrow-Debreu com Probabilidades Assimétricas</div>
+    <div style="font-size:0.85rem;color:var(--muted);margin-top:0.25rem;">Definição AD, demanda com log, risk-sharing, comparação de equilíbrios</div>
+  </div>
+  <div class="q-pts">[2,5 pts]</div>
+</div>
+
+<p>As famílias Esperança e Fortuna vivem em uma economia com um bem e dois estados da natureza. O estado 1 ocorre com probabilidade \(\pi_1=1/3\) e o estado 2 com \(\pi_2=2/3\). As dotações são:</p>
+<ul>
+  <li><strong>Esperança:</strong> \(\omega_E=(12,\,0)\). <strong>Fortuna:</strong> \(\omega_F=(0,\,6)\).</li>
+</ul>
+<p>Ambas têm utilidade de Bernoulli \(u_i(x)=\ln x\).</p>
+
+<p><strong>(a)</strong> Defina formalmente o equilíbrio de Arrow-Debreu nesta economia. [0,5 pt]</p>
+
+<details>
+<summary>Gabarito (a)</summary>
+<div class="solution">
+<p>Um equilíbrio AD é um par \((p^*,x^*)\) com \(p^*=(p_1^*,p_2^*)\) (preços contingentes) e \(x^*=((x_{1E},x_{2E}),(x_{1F},x_{2F}))\) tal que:</p>
+<ol>
+  <li>Cada família \(i\in\{E,F\}\) resolve:
+  \[\max_{x_{1i},x_{2i}\geq 0} \frac{1}{3}\ln x_{1i}+\frac{2}{3}\ln x_{2i} \quad\text{s.a.}\quad p_1 x_{1i}+p_2 x_{2i} \leq p_1\omega_{1i}+p_2\omega_{2i}.\]
+  </li>
+  <li>Factibilidade: \(x_{1E}+x_{1F}=12\) e \(x_{2E}+x_{2F}=6\).</li>
+</ol>
+</div>
+</details>
+
+<p><strong>(b)</strong> Encontre o equilíbrio de Arrow-Debreu. [0,5 pt]</p>
+
+<details>
+<summary>Gabarito (b)</summary>
+<div class="solution">
+<ol class="steps">
+  <li><strong>Calcular riquezas —</strong> \(w_E=p_1\omega_{1E}=12p_1\) e \(w_F=p_2\omega_{2F}=6p_2\).</li>
+  <li><strong>Aplicar fórmula de demanda (log) —</strong> Para \(u_i=\ln\), \(x_{si}=\pi_s w_i/p_s\):
+  \[x_{1E}=\frac{(1/3)\cdot12p_1}{p_1}=4,\quad x_{2E}=\frac{(2/3)\cdot12p_1}{p_2}=\frac{8p_1}{p_2},\]
+  \[x_{1F}=\frac{(1/3)\cdot6p_2}{p_1}=\frac{2p_2}{p_1},\quad x_{2F}=\frac{(2/3)\cdot6p_2}{p_2}=4.\]
+  </li>
+  <li><strong>Impor market clearing (estado 1) —</strong>
+  \[4+\frac{2p_2}{p_1}=12\;\Rightarrow\;\frac{p_1}{p_2}=\frac{1}{4}.\]
+  </li>
+  <li><strong>Completar e verificar estado 2 —</strong> \(x_{2E}=8\cdot(1/4)=2\), \(x_{2F}=4\), soma \(=6\) ✓. Equilíbrio: \(p^*=(p_2/4,\,p_2)\), \(x_E^*=(4,2)\), \(x_F^*=(8,4)\).</li>
+</ol>
+</div>
+</details>
+
+<p><strong>(c)</strong> O equilíbrio é simétrico? O que explica o padrão de consumo encontrado? [0,5 pt]</p>
+
+<details>
+<summary>Gabarito (c)</summary>
+<div class="solution">
+<ol class="steps">
+  <li><strong>Verificar simetria —</strong> \(x_E^*=(4,2)\neq x_F^*=(8,4)\): equilíbrio <em>não</em> é simétrico. Fortuna consome o dobro de Esperança em cada estado.</li>
+  <li><strong>Calcular riquezas com o preço encontrado —</strong> Normalizando \(p_2=1\): \(w_E=12\cdot(1/4)=3\) e \(w_F=6\cdot1=6\). Razão \(w_F/w_E=2\).</li>
+  <li><strong>Interpretar via aversão ao risco idêntica —</strong> Com \(u_i=\ln\) (mesma curvatura), agentes avessos consomem em proporção às riquezas em todos os estados: \(x_F/x_E=w_F/w_E=2\). A razão \(x_{2i}/x_{1i}=1/2\) reflete apenas a escassez relativa da dotação agregada (6 vs 12), via preços.</li>
+</ol>
+</div>
+</details>
+
+<p><strong>(d)</strong> Suponha que Fortuna é substituída pela família Glória, com utilidade de Bernoulli \(u_G(x)=x\) (neutra ao risco) e a mesma dotação \(\omega_G=(0,6)\). Encontre o novo equilíbrio de Arrow-Debreu. [0,5 pt]</p>
+
+<details>
+<summary>Gabarito (d)</summary>
+<div class="solution">
+<ol class="steps">
+  <li><strong>CPO do agente neutro ao risco —</strong> Para \(u_G(x)=x\) (linear): \(\pi_s=\lambda p_s\), logo
+  \[\frac{p_1}{p_2}=\frac{\pi_1}{\pi_2}=\frac{1/3}{2/3}=\frac{1}{2}.\]
+  Preços contingentes ficam proporcionais às probabilidades.</li>
+  <li><strong>Demanda de Esperança com o novo preço —</strong> Normalizando \(p_2=1\): \(w_E=12\cdot(1/2)=6\).
+  \[x_{1E}=\frac{(1/3)\cdot6}{1/2}=4,\quad x_{2E}=\frac{(2/3)\cdot6}{1}=4.\]
+  Consumo constante: seguro completo provido por Glória.</li>
+  <li><strong>Factibilidade para Glória —</strong> \(x_{1G}=12-4=8\) e \(x_{2G}=6-4=2\).</li>
+  <li><strong>Verificar orçamento de Glória —</strong> \(w_G=6\), gasto \(=(1/2)\cdot8+1\cdot2=4+2=6\) ✓. Equilíbrio: \(p^*=(p_2/2,\,p_2)\), \(x_E^*=(4,4)\), \(x_G^*=(8,2)\).</li>
+</ol>
+</div>
+</details>
+
+<p><strong>(e)</strong> Compare os dois equilíbrios (itens b e d) em termos de compartilhamento de risco. [0,5 pt]</p>
+
+<details>
+<summary>Gabarito (e)</summary>
+<div class="solution">
+<ol class="steps">
+  <li><strong>Equilíbrio com dois avessos (item b) —</strong> Ambas compartilham o risco proporcionalmente à riqueza; nenhuma tem consumo constante: \(x_E=(4,2)\) e \(x_F=(8,4)\) variam entre estados, refletindo a variabilidade da dotação total.</li>
+  <li><strong>Equilíbrio com agente neutro (item d) —</strong> Glória absorve <em>todo</em> o risco agregado. Esperança obtém consumo constante \(x_E=(4,4)\) — seguro perfeito. Glória assume \(x_G=(8,2)\), arcando com toda a variabilidade.</li>
+  <li><strong>Mecanismo subjacente —</strong> O agente neutro é indiferente ao risco (utilidade linear), provendo seguro sem custo de bem-estar esperado. Isso força \(p_s\propto\pi_s\), tornando o consumo de Esperança constante entre os estados.</li>
+</ol>
+</div>
+</details>
+
+<!-- ─── Q3 ─── -->
+<div class="q-header" id="sim-q3">
+  <div class="q-num">3</div>
+  <div>
+    <div class="q-title">Mercados de Ativos e Precificação por Arbitragem</div>
+    <div style="font-size:0.85rem;color:var(--muted);margin-top:0.25rem;">Completude de mercado, derivativos, arbitragem, mercados incompletos</div>
+  </div>
+  <div class="q-pts">[2 pts]</div>
+</div>
+
+<p>Considere uma economia com \(S=2\) estados e \(K=2\) ativos com retornos e preços:
+\[r_1=(1,2), \quad r_2=(2,1), \quad q_1=1, \quad q_2=1.\]
+</p>
+
+<p><strong>(a)</strong> Verifique se o mercado é completo. [0,25 pt]</p>
+
+<details>
+<summary>Gabarito (a)</summary>
+<div class="solution">
+<ol class="steps">
+  <li><strong>Construir a matriz de payoffs —</strong> Linhas = estados, colunas = ativos: \(R=\begin{pmatrix}1&2\\2&1\end{pmatrix}\).</li>
+  <li><strong>Calcular determinante e concluir —</strong> \(\det(R)=1-4=-3\neq0\). Logo \(\text{posto}(R)=2=S\): mercado <strong>completo</strong>.</li>
+</ol>
+</div>
+</details>
+
+<p><strong>(b)</strong> Uma instituição quer lançar um derivativo com retorno \(r_3=(3,0)\). As condições são suficientes para precificar este ativo? Se sim, calcule \(q_3\). [0,75 pt]</p>
+
+<details>
+<summary>Gabarito (b)</summary>
+<div class="solution">
+<ol class="steps">
+  <li><strong>Confirmar precificação possível —</strong> Mercado completo (\(\text{posto}=S=2\)): qualquer \(r_3\in\mathbb{R}^2\) é replicável. Sim.</li>
+  <li><strong>Montar sistema de replicação —</strong> Encontre \((\alpha_1,\alpha_2)\) com \(\alpha_1 r_1+\alpha_2 r_2=r_3\):
+  \[\begin{cases}\alpha_1+2\alpha_2=3\\2\alpha_1+\alpha_2=0\end{cases}\]
+  </li>
+  <li><strong>Resolver o sistema —</strong> Da segunda: \(\alpha_1=-\alpha_2/2\). Substituindo: \(3\alpha_2/2=3\Rightarrow\alpha_2=2\), \(\alpha_1=-1\).</li>
+  <li><strong>Calcular preço por não-arbitragem —</strong> \(q_3=(-1)\cdot1+2\cdot1=\mathbf{1}\).</li>
+</ol>
+</div>
+</details>
+
+<p><strong>(c)</strong> Suponha agora que \(r_1=(2,4)\), mantendo \(r_2\), \(q_1\) e \(q_2\). O mercado ainda é completo? É possível precificar \(r_3=(3,0)\)? Justifique. [0,5 pt]</p>
+
+<details>
+<summary>Gabarito (c)</summary>
+<div class="solution">
+<ol class="steps">
+  <li><strong>Recalcular completude —</strong> \(R'=\begin{pmatrix}2&2\\4&1\end{pmatrix}\). \(\det(R')=2-8=-6\neq0\). Mercado ainda <strong>completo</strong>.</li>
+  <li><strong>Novo sistema de replicação —</strong>
+  \[\begin{cases}2\alpha_1+2\alpha_2=3\\4\alpha_1+\alpha_2=0\end{cases}\;\Rightarrow\;\alpha_2=-4\alpha_1,\;2\alpha_1-8\alpha_1=3\;\Rightarrow\;\alpha_1=-\tfrac{1}{2},\;\alpha_2=2.\]
+  </li>
+  <li><strong>Calcular preço —</strong> \(q_3=(-\tfrac{1}{2})\cdot1+2\cdot1=\mathbf{3/2}\).</li>
+</ol>
+</div>
+</details>
+
+<p><strong>(d)</strong> Considere uma terceira variação: \(r_1=(1,2)\) e \(r_2=(2,4)\) (voltando ao original, mas trocando \(r_2\)). O mercado é completo? Pode-se precificar \(r_3=(3,0)\)? [0,5 pt]</p>
+
+<details>
+<summary>Gabarito (d)</summary>
+<div class="solution">
+<ol class="steps">
+  <li><strong>Construir R'' e verificar det —</strong> \(R''=\begin{pmatrix}1&2\\2&4\end{pmatrix}\). \(\det(R'')=4-4=0\). Mercado <strong>incompleto</strong>.</li>
+  <li><strong>Identificar dependência linear —</strong> \(r_2=2r_1\): colunas proporcionais, \(\text{posto}(R'')=1<S=2\). Espaço coluna: \(\{c\cdot(1,2):c\in\mathbb{R}\}\).</li>
+  <li><strong>Verificar se \(r_3\) é replicável —</strong> \(r_3=(3,0)\) exigiria \(c=3\) (estado 1) e \(c=0\) (estado 2) simultaneamente. Contradição: \((3,0)\notin\text{col}(R'')\).</li>
+  <li><strong>Concluir —</strong> Preço indeterminado por não-arbitragem: mercado incompleto não gera preço único para ativos fora do espaço de replicação.</li>
+</ol>
+</div>
+</details>
+
+<!-- ================================================================
+     RODAPÉ
+     ================================================================ -->
+<!-- ─── Q4 ─── -->
+<div class="q-header" id="sim-q4">
+  <div class="q-num">4</div>
+  <div>
+    <div class="q-title">Equilíbrio de Radner com Ativos de Arrow</div>
+    <div style="font-size:0.85rem;color:var(--muted);margin-top:0.25rem;">Estrutura sequencial t=0/t=1, equivalência AD–Radner, portfólios ótimos</div>
+  </div>
+  <div class="q-pts">[2,5 pts]</div>
+</div>
+
+<p>As famílias Henrique (H) e Isabela (I) habitam uma economia com um bem físico (\(L=1\)), dois estados da natureza (\(S=2\)), probabilidades \(\pi_1=1/3\) e \(\pi_2=2/3\), e utilidade de Bernoulli \(u_i(x)=\ln x\). As dotações são \(\omega_H=(6,\,0)\) e \(\omega_I=(0,\,6)\). Em \(t=0\) transacionam dois ativos:</p>
+<ul>
+  <li>Ativo 1 – elementar de Arrow para o estado 1: \(r_1=(1,\,0)\), preço \(q_1\).</li>
+  <li>Ativo 2 – elementar de Arrow para o estado 2: \(r_2=(0,\,1)\), preço \(q_2\).</li>
+</ul>
+<p>Em \(t=1\), após a realização do estado, os mercados <em>spot</em> abrem com preço normalizado \(p^s=1\) em cada estado.</p>
+
+<p><strong>(a)</strong> Defina formalmente o equilíbrio de Radner nesta economia. [0,5 pt]</p>
+
+<details>
+<summary>Gabarito (a)</summary>
+<div class="solution">
+<p>Um <strong>equilíbrio de Radner</strong> é uma tupla \((q^*,z^*,p^{1*},p^{2*},x^*)\) tal que:</p>
+<ol>
+  <li>Cada família \(i\in\{H,I\}\) maximiza \(\tfrac{1}{3}\ln x_{1i}+\tfrac{2}{3}\ln x_{2i}\) sujeita a:
+    <ul>
+      <li><em>t=0 (mercado de ativos):</em> \(q_1 z_{i1}+q_2 z_{i2} \leq 0\).</li>
+      <li><em>t=1, estado s (mercado spot):</em> \(p^s x_{si} \leq p^s\omega_{si}+z_{i1}r_{s1}+z_{i2}r_{s2}\).</li>
+    </ul>
+  </li>
+  <li>Mercados se equilibram: ativos \(\sum_i z_{ik}=0\) para \(k=1,2\); spot \(\sum_i x_{si}=\sum_i\omega_{si}\) para \(s=1,2\).</li>
+</ol>
+<p>A diferença essencial frente ao AD: há duas datas e restrições orçamentárias separadas por estado, em vez de uma única restrição global com preços contingentes.</p>
+</div>
+</details>
+
+<p><strong>(b)</strong> Mostre que o mercado é completo e, usando o equilíbrio Arrow-Debreu desta economia, determine \(q_1\) e \(q_2\). [0,5 pt]</p>
+
+<details>
+<summary>Gabarito (b)</summary>
+<div class="solution">
+<ol class="steps">
+  <li><strong>Verificar completude —</strong> \(R=I_2\). \(\det(R)=1\neq0\), \(\text{posto}(R)=2=S\). ✓</li>
+  <li><strong>Resolver o equilíbrio AD —</strong> Com fórmula \(x_{si}=\pi_s w_i/p_s^{AD}\): \(x_{1H}=2\), \(x_{2H}=4p_1^{AD}/p_2^{AD}\), \(x_{1I}=2p_2^{AD}/p_1^{AD}\), \(x_{2I}=4\). Market clearing: \(2+2p_2^{AD}/p_1^{AD}=6\Rightarrow p_1^{AD}/p_2^{AD}=1/2\). Com \(p_2^{AD}=1\): \(p^{AD}=(1/2,1)\), \(x_H=(2,2)\), \(x_I=(4,4)\).</li>
+  <li><strong>Extrair preços de Radner —</strong> Com ativos elementares e \(p^s=1\): \(q_s=p_s^{AD}/p^s=p_s^{AD}\). Normalizando \(q_2=2\): \(q_1=1\), \(q_2=2\).</li>
+</ol>
+</div>
+</details>
+
+<p><strong>(c)</strong> Encontre os portfólios ótimos \(z_H\) e \(z_I\). Verifique clearing de ativos e orçamentos em \(t=0\). [0,75 pt]</p>
+
+<details>
+<summary>Gabarito (c)</summary>
+<div class="solution">
+<ol class="steps">
+  <li><strong>Simplificar restrição de estado —</strong> Com \(p^s=1\) e ativos de Arrow (\(r_{ss}=1\), \(r_{ss'}=0\)): a restrição de estado \(s\) dá \(x_{si}=\omega_{si}+z_{is}\), logo \(z_{is}=x_{si}-\omega_{si}\).</li>
+  <li><strong>Portfólio de Henrique —</strong> \(z_{H1}=2-6=-4\), \(z_{H2}=2-0=+2\). Orçamento \(t=0\): \(1(-4)+2(+2)=0\) ✓</li>
+  <li><strong>Portfólio de Isabela —</strong> \(z_{I1}=4-0=+4\), \(z_{I2}=4-6=-2\). Orçamento \(t=0\): \(1(4)+2(-2)=0\) ✓</li>
+  <li><strong>Verificar clearing de ativos —</strong> \(z_{H1}+z_{I1}=0\) ✓; \(z_{H2}+z_{I2}=0\) ✓. Henrique vende Arrow-1 (estado da dotação) e compra Arrow-2; Isabela faz o espelho.</li>
+</ol>
+</div>
+</details>
+
+<p><strong>(d)</strong> Enuncie o Teorema da Equivalência AD–Radner e verifique-o explicitamente. [0,75 pt]</p>
+
+<details>
+<summary>Gabarito (d)</summary>
+<div class="solution">
+<ol class="steps">
+  <li><strong>Enunciar o teorema —</strong> Se \(\text{posto}(R)=S\), o conjunto de alocações reais de equilíbrio de Radner coincide com o de Arrow-Debreu.</li>
+  <li><strong>Calcular alocação induzida pelos portfólios —</strong>
+  \[x_{1H}=6+(-4)=2,\quad x_{2H}=0+2=2\;\Rightarrow\;x_H=(2,2).\]
+  \[x_{1I}=0+4=4,\quad x_{2I}=6-2=4\;\Rightarrow\;x_I=(4,4).\]
+  </li>
+  <li><strong>Confirmar igualdade com AD —</strong> Coincide exatamente com a alocação AD do item (b). \(\square\)</li>
+</ol>
+</div>
+</details>
+
+<!-- ─── Q5 ─── -->
+<div class="q-header" id="sim-q5">
+  <div class="q-num">5</div>
+  <div>
+    <div class="q-title">Radner com Ativos Genéricos: Bônus e Ativo de Risco</div>
+    <div style="font-size:0.85rem;color:var(--muted);margin-top:0.25rem;">Preços de Arrow implícitos, portfólios com ativos não-elementares, redundância</div>
+  </div>
+  <div class="q-pts">[2,5 pts]</div>
+</div>
+
+<p>Considere <strong>a mesma economia da Questão 4</strong> (H e I, \(\pi_1=1/3\), \(\pi_2=2/3\), \(u_i=\ln\), \(\omega_H=(6,0)\), \(\omega_I=(0,6)\)), mas agora com dois ativos financeiros distintos:</p>
+<ul>
+  <li>Ativo 1 (bônus, paga 1 em qualquer estado): \(r_1=(1,\,1)\), preço \(q_1\).</li>
+  <li>Ativo 2 (ativo de risco): \(r_2=(0,\,2)\), preço \(q_2\).</li>
+</ul>
+
+<p><strong>(a)</strong> O mercado é completo? Expresse os preços de Arrow implícitos \((\psi_1,\psi_2)\) em função de \(q_1\) e \(q_2\). [0,5 pt]</p>
+
+<details>
+<summary>Gabarito (a)</summary>
+<div class="solution">
+<ol class="steps">
+  <li><strong>Construir R e verificar det —</strong> \(R=\begin{pmatrix}1&0\\1&2\end{pmatrix}\). \(\det(R)=2\neq0\). Mercado <strong>completo</strong>.</li>
+  <li><strong>Montar sistema \(R^\top\psi=q\) —</strong>
+  \[\begin{pmatrix}1&1\\0&2\end{pmatrix}\begin{pmatrix}\psi_1\\\psi_2\end{pmatrix}=\begin{pmatrix}q_1\\q_2\end{pmatrix}.\]
+  </li>
+  <li><strong>Resolver para \(\psi\) —</strong> Da segunda linha: \(\psi_2=q_2/2\). Da primeira: \(\psi_1=q_1-q_2/2\).</li>
+</ol>
+</div>
+</details>
+
+<p><strong>(b)</strong> Usando os preços Arrow-Debreu da Questão 4, determine \(q_1\) e \(q_2\). [0,5 pt]</p>
+
+<details>
+<summary>Gabarito (b)</summary>
+<div class="solution">
+<ol class="steps">
+  <li><strong>Extrair \(\psi\) do equilíbrio AD —</strong> De Q4: \(p^{AD}=(1/2,1)\) e \(p^s=1\), logo \(\psi_s=p_s^{AD}\): \(\psi_1=1/2\), \(\psi_2=1\).</li>
+  <li><strong>Calcular \(q_k=\sum_s\psi_s r_{sk}\) —</strong>
+  \[q_1=\tfrac{1}{2}\cdot1+1\cdot1=\tfrac{3}{2},\quad q_2=\tfrac{1}{2}\cdot0+1\cdot2=2.\]
+  </li>
+  <li><strong>Verificação cruzada —</strong> \(\psi_2=q_2/2=1\) ✓; \(\psi_1=q_1-q_2/2=3/2-1=1/2\) ✓.</li>
+</ol>
+</div>
+</details>
+
+<p><strong>(c)</strong> Encontre os portfólios ótimos \(z_H\) e \(z_I\). Verifique clearing e orçamentos. Compare com a Questão 4. [0,75 pt]</p>
+
+<details>
+<summary>Gabarito (c)</summary>
+<div class="solution">
+<ol class="steps">
+  <li><strong>Identificar alocação-alvo —</strong> Pelo Teorema da Equivalência, a alocação real é a mesma do AD: \(x_H=(2,2)\), \(x_I=(4,4)\).</li>
+  <li><strong>Sistema \(Rz_H=x_H-\omega_H\) —</strong>
+  \[\begin{pmatrix}1&0\\1&2\end{pmatrix}\begin{pmatrix}z_{H1}\\z_{H2}\end{pmatrix}=\begin{pmatrix}-4\\2\end{pmatrix}\;\Rightarrow\;z_{H1}=-4,\;z_{H2}=3.\]
+  Orçamento: \(\tfrac{3}{2}(-4)+2(3)=0\) ✓</li>
+  <li><strong>Sistema \(Rz_I=x_I-\omega_I\) —</strong>
+  \[\begin{pmatrix}1&0\\1&2\end{pmatrix}\begin{pmatrix}z_{I1}\\z_{I2}\end{pmatrix}=\begin{pmatrix}4\\-2\end{pmatrix}\;\Rightarrow\;z_{I1}=4,\;z_{I2}=-3.\]
+  Orçamento: \(\tfrac{3}{2}(4)+2(-3)=0\) ✓</li>
+  <li><strong>Verificar clearing e comparar com Q4 —</strong> \(z_{H1}+z_{I1}=0\) ✓; \(z_{H2}+z_{I2}=0\) ✓. Alocação idêntica à Q4; portfólios diferem: \(z_{H2}=3\) aqui vs \(z_{H2}=2\) em Arrow. Mercados completos distintos produzem a mesma alocação real.</li>
+</ol>
+</div>
+</details>
+
+<p><strong>(d)</strong> Uma instituição propõe emitir \(r_3=(1,\,3)\). Esse ativo é redundante? Se sim, calcule \(q_3\) por ausência de arbitragem e descreva a estratégia de arbitragem caso o preço seja \(q_3=4\). [0,75 pt]</p>
+
+<details>
+<summary>Gabarito (d)</summary>
+<div class="solution">
+<ol class="steps">
+  <li><strong>Testar replicação (sistema linear) —</strong> \(\alpha_1(1,1)+\alpha_2(0,2)=(1,3)\Rightarrow\alpha_1=1,\;1+2\alpha_2=3\Rightarrow\alpha_2=1\). Solução existe: \(r_3=r_1+r_2\). Ativo <strong>redundante</strong>.</li>
+  <li><strong>Calcular \(q_3\) por não-arbitragem —</strong> \(q_3=1\cdot q_1+1\cdot q_2=\tfrac{3}{2}+2=\tfrac{7}{2}\). Via Arrow: \(\psi_1\cdot1+\psi_2\cdot3=\tfrac{1}{2}+3=\tfrac{7}{2}\) ✓.</li>
+  <li><strong>Estratégia de arbitragem se \(q_3=4\) —</strong> Ativo 3 sobrepreçado (\(4>7/2\)). Venda 1 unidade de \(r_3\), receba 4; compre a carteira \((r_1+r_2)\) pagando \(7/2\). Lucro imediato \(1/2\), payoff nulo em ambos os estados. Arbitragem pura sem risco.</li>
+</ol>
+</div>
+</details>
+
+<!-- ================================================================
+     QUESTÕES EXTRAS
+     ================================================================ -->
+<h2 id="extras" style="margin-top:4rem; border-color: var(--pink);">Questões Extras – Das Listas de Exercícios</h2>
+<p style="color:var(--muted); margin-bottom:2rem;">Questões selecionadas das listas de MWG e exercícios adicionais (A.4, A.6, A.7). Nível e estilo idênticos ao simulado.</p>
+
+<!-- ─── Q6 ─── -->
+<div class="q-header" id="ext-q6">
+  <div class="q-num" style="background:var(--pink);color:#000;">6</div>
+  <div>
+    <div class="q-title">Opções com Três Estados e Preços de Arrow (A.4)</div>
+    <div style="font-size:0.85rem;color:var(--muted);margin-top:0.25rem;">Completude com S=3, precificação por arbitragem e via multiplicadores, replicação de portfólio</div>
+  </div>
+  <div class="q-pts">[3 pts]</div>
+</div>
+
+<p>Considere uma economia com \(S=3\) estados \(\{A,B,C\}\) e \(K=3\) ativos com retornos e preços:</p>
+<div class="math">
+$$r_1=(1,0,0),\quad r_2=(0,1,0),\quad r_3=(1,2,3),\quad q_1=1,\quad q_2=1,\quad q_3=5.$$
+</div>
+<p>Uma instituição oferece uma opção de compra \(r_4\) sobre o ativo 3, com <strong>preço de exercício \(c=2\)</strong>, exercível após a revelação do estado e antes do pagamento dos retornos.</p>
+
+<p><strong>(a)</strong> Escreva o vetor de retornos \(r_4\). [0,5 pt]</p>
+
+<details>
+<summary>Gabarito (a)</summary>
+<div class="solution">
+<ol class="steps">
+  <li><strong>Identificar a condição de exercício —</strong> A opção é exercida quando o valor do ativo 3 supera o preço de exercício \(c=2\): payoff = \(\max\{r_{3s}-c,\,0\}\).</li>
+  <li><strong>Calcular payoff estado a estado —</strong>
+    <ul>
+      <li>Estado A: \(r_{3A}=1 < 2\) → não exerce → payoff \(=0\).</li>
+      <li>Estado B: \(r_{3B}=2 = 2\) → indiferente → payoff \(=0\).</li>
+      <li>Estado C: \(r_{3C}=3 > 2\) → exerce → payoff \(=3-2=1\).</li>
+    </ul>
+  </li>
+  <li><strong>Resultado —</strong> \(r_4=(0,\,0,\,1)\).</li>
+</ol>
+</div>
+</details>
+
+<p><strong>(b)</strong> O mercado é completo? Se sim, calcule \(q_4\) por arbitragem. [1 pt]</p>
+
+<details>
+<summary>Gabarito (b)</summary>
+<div class="solution">
+<ol class="steps">
+  <li><strong>Construir R e verificar completude —</strong> \(R=\begin{pmatrix}1&0&1\\0&1&2\\0&0&3\end{pmatrix}\). Triangular superior com diagonal não-nula: \(\det(R)=1\cdot1\cdot3=3\neq0\). Logo \(\text{posto}(R)=3=S\). Mercado <strong>completo</strong>.</li>
+  <li><strong>Montar sistema de replicação \(\alpha_1 r_1+\alpha_2 r_2+\alpha_3 r_3=r_4\) —</strong>
+  \[\begin{cases}
+  \alpha_1+\alpha_3=0 & \text{(estado A)}\\
+  \alpha_2+2\alpha_3=0 & \text{(estado B)}\\
+  3\alpha_3=1 & \text{(estado C)}
+  \end{cases}\]
+  </li>
+  <li><strong>Resolver de baixo para cima —</strong> Estado C: \(\alpha_3=1/3\). Estado B: \(\alpha_2=-2/3\). Estado A: \(\alpha_1=-1/3\).</li>
+  <li><strong>Calcular \(q_4\) por não-arbitragem —</strong>
+  \[q_4=\alpha_1 q_1+\alpha_2 q_2+\alpha_3 q_3=\left(-\tfrac{1}{3}\right)\cdot1+\left(-\tfrac{2}{3}\right)\cdot1+\tfrac{1}{3}\cdot5=\frac{-1-2+5}{3}=\frac{2}{3}.\]
+  </li>
+</ol>
+</div>
+</details>
+
+<p><strong>(c)</strong> Calcule \(q_4\) via preços de Arrow (multiplicadores \(\mu_s\)). Verifique a consistência. [0,5 pt]</p>
+
+<details>
+<summary>Gabarito (c)</summary>
+<div class="solution">
+<ol class="steps">
+  <li><strong>Montar sistema \(R^\top\mu=q\) —</strong>
+  \[\begin{pmatrix}1&0&0\\0&1&0\\1&2&3\end{pmatrix}\begin{pmatrix}\mu_A\\\mu_B\\\mu_C\end{pmatrix}=\begin{pmatrix}1\\1\\5\end{pmatrix}\;\Rightarrow\;\mu_A=1,\;\mu_B=1,\;1+2+3\mu_C=5\;\Rightarrow\;\mu_C=\tfrac{2}{3}.\]
+  </li>
+  <li><strong>Precificar \(r_4\) via \(\mu\) —</strong>
+  \[q_4=\mu_A\cdot0+\mu_B\cdot0+\mu_C\cdot1=\frac{2}{3}\;\checkmark\]
+  </li>
+  <li><strong>Interpretar —</strong> \(\mu_A=\mu_B=1>\mu_C=2/3\): a riqueza é mais valiosa nos estados A e B (onde os recursos são mais escassos) do que no estado C, onde o ativo 3 paga 3 unidades, tornando-o relativamente abundante.</li>
+</ol>
+</div>
+</details>
+
+<p><strong>(d)</strong> Encontre a carteira \(z=(z_1,z_2,z_3,0)\) que replica \(z_4=30\) unidades de \(r_4\). Quantas unidades de cada ativo são compradas ou vendidas? [0,5 pt]</p>
+
+<details>
+<summary>Gabarito (d)</summary>
+<div class="solution">
+<ol class="steps">
+  <li><strong>Escalar a meta —</strong> A carteira deve replicar \(30\cdot r_4=(0,0,30)\).</li>
+  <li><strong>Resolver \(Rz=30r_4\) —</strong>
+  \[\begin{cases}z_1+z_3=0\\z_2+2z_3=0\\3z_3=30\end{cases}\;\Rightarrow\;z_3=10,\;z_1=-10,\;z_2=-20.\]
+  </li>
+  <li><strong>Descrever as operações —</strong>
+    <ul>
+      <li>\(z_1=-10\): <strong>vende</strong> 10 unidades do ativo 1 (ativo de Arrow estado A).</li>
+      <li>\(z_2=-20\): <strong>vende</strong> 20 unidades do ativo 2 (ativo de Arrow estado B).</li>
+      <li>\(z_3=+10\): <strong>compra</strong> 10 unidades do ativo 3.</li>
+    </ul>
+    Custo: \(-10\cdot1-20\cdot1+10\cdot5=0\). Carteira de custo zero com payoff \((0,0,30)\) ✓.
+  </li>
+</ol>
+</div>
+</details>
+
+<!-- ─── Q7 ─── -->
+<div class="q-header" id="ext-q7">
+  <div class="q-num" style="background:var(--pink);color:#000;">7</div>
+  <div>
+    <div class="q-title">Utilidade Exponencial (CARA) e Agente Neutro ao Risco (A.6)</div>
+    <div style="font-size:0.85rem;color:var(--muted);margin-top:0.25rem;">CPO com u(x)=−e<sup>−x</sup>, seguro completo, sensibilidade ao nível de dotação</div>
+  </div>
+  <div class="q-pts">[2,5 pts]</div>
+</div>
+
+<p>Considere uma economia de trocas com dois agentes A e B, um bem físico, dois estados (\(S=2\)) e probabilidades \(\pi_1=1/3\), \(\pi_2=2/3\). As utilidades de Bernoulli são:</p>
+<ul>
+  <li>Agente A (averso ao risco CARA): \(u_A(x)=-e^{-x}\).</li>
+  <li>Agente B (neutro ao risco): \(u_B(x)=x\).</li>
+</ul>
+<p>Normalização de preços: \(p_1+p_2=1\). Encontre o equilíbrio Arrow-Debreu para os dois casos de dotação e interprete.</p>
+<ul>
+  <li><strong>Caso (a):</strong> \(\omega_A=(99,0)\), \(\omega_B=(0,99)\).</li>
+  <li><strong>Caso (b):</strong> \(\omega_A=(33,0)\), \(\omega_B=(0,66)\).</li>
+</ul>
+
+<p><strong>(a)</strong> Determine os preços de equilíbrio \((p_1,p_2)\) e a alocação para o Caso (a). [1 pt]</p>
+
+<details>
+<summary>Gabarito (a)</summary>
+<div class="solution">
+<ol class="steps">
+  <li><strong>CPO de B (neutro) → preços —</strong> Para \(u_B(x)=x\), a lagrangiana dá \(\pi_s=\lambda_B p_s\) para cada \(s\). Logo:
+  \[\frac{p_1}{p_2}=\frac{\pi_1}{\pi_2}=\frac{1/3}{2/3}=\frac{1}{2}.\]
+  Com normalização \(p_1+p_2=1\): \(\boxed{p_1=1/3,\;p_2=2/3}\).</li>
+  <li><strong>CPO de A (CARA) → seguro completo —</strong> \(u_A'(x)=e^{-x}\). A CPO dá:
+  \[\pi_s e^{-x_{sA}}=\lambda_A p_s\;\Rightarrow\; e^{-x_{sA}}=\lambda_A\frac{p_s}{\pi_s}.\]
+  Como \(p_s/\pi_s = 1/\lambda_B\) (constante em \(s\)), \(e^{-x_{sA}}\) é constante em \(s\). Logo \(x_{1A}=x_{2A}\equiv c_A\): agente A obtém <strong>consumo constante</strong> em ambos os estados.</li>
+  <li><strong>Determinar \(c_A\) pelo orçamento —</strong> Renda: \(w_A=p_1\cdot99=(1/3)\cdot99=33\). Com \(x_{1A}=x_{2A}=c_A\) e \(p_1+p_2=1\):
+  \[p_1 c_A+p_2 c_A=c_A(p_1+p_2)=c_A=w_A=33.\]
+  </li>
+  <li><strong>Factibilidade para B —</strong> Dotação total: 99 em cada estado.
+  \[x_{1B}=99-33=66,\quad x_{2B}=99-33=66.\]
+  B também tem consumo constante (pois a dotação agregada é idêntica nos dois estados).
+  </li>
+  <li><strong>Resultado —</strong> \(p^*=(1/3,\,2/3)\), \(x_A^*=(33,33)\), \(x_B^*=(66,66)\). Razão \(x_B/x_A=2\) em cada estado, proporcional à relação de riquezas (\(w_B/w_A=66/33=2\)).</li>
+</ol>
+</div>
+</details>
+
+<p><strong>(b)</strong> Repita para o Caso (b) e compare as alocações. [1 pt]</p>
+
+<details>
+<summary>Gabarito (b)</summary>
+<div class="solution">
+<ol class="steps">
+  <li><strong>Preços —</strong> Os preços não dependem das dotações (derivam apenas da CPO de B): \(p_1=1/3\), \(p_2=2/3\) (idem ao Caso a).</li>
+  <li><strong>Consumo constante de A —</strong> \(w_A=p_1\cdot33=(1/3)\cdot33=11\). Logo \(c_A=11\).</li>
+  <li><strong>Factibilidade para B —</strong> Dotação total: 33 no estado 1 e 66 no estado 2.
+  \[x_{1B}=33-11=22,\quad x_{2B}=66-11=55.\]
+  B agora tem consumo <em>variável</em>: absorve toda a variabilidade agregada da economia.
+  </li>
+  <li><strong>Resultado —</strong> \(p^*=(1/3,\,2/3)\), \(x_A^*=(11,11)\), \(x_B^*=(22,55)\).</li>
+</ol>
+</div>
+</details>
+
+<p><strong>(c)</strong> Interprete os dois resultados: por que A tem sempre consumo constante? Por que B absorve todo o risco no Caso (b) mas não no Caso (a)? [0,5 pt]</p>
+
+<details>
+<summary>Gabarito (c)</summary>
+<div class="solution">
+<ol class="steps">
+  <li><strong>Por que A tem consumo constante (seguro perfeito) —</strong> A tem utilidade CARA (\(u_A=-e^{-x}\)), com aversão absoluta ao risco \(=1\) (constante). O agente B é neutro ao risco, portanto provê seguro completo a qualquer preço actuarialmente justo. Como \(p_s/\pi_s\) é constante (consequência da CPO de B), o custo de transferir riqueza entre estados é proporcional às probabilidades, e A prefere não ter variabilidade: obtém seguro perfeito sem custo extra de bem-estar para B.</li>
+  <li><strong>Por que B não tem consumo constante no Caso (b) —</strong> No Caso (a), a dotação agregada é \(99+99=99\) em <em>ambos</em> os estados: sem risco agregado, B também termina com consumo constante. No Caso (b), a dotação agregada é \(33\) no estado 1 e \(66\) no estado 2: há risco agregado real, e como A está completamente segurado, B absorve <em>toda</em> a variação (\(22\) vs \(55\)). Um agente neutro ao risco é o segurador natural de última instância.</li>
+</ol>
+</div>
+</details>
+
+<!-- ─── Q8 ─── -->
+<div class="q-header" id="ext-q8">
+  <div class="q-num" style="background:var(--pink);color:#000;">8</div>
+  <div>
+    <div class="q-title">Bens Públicos sob Incerteza e Valor do Seguro (A.7)</div>
+    <div style="font-size:0.85rem;color:var(--muted);margin-top:0.25rem;">DAP por bem público sem e com mercados completos, crowding-out do seguro privado</div>
+  </div>
+  <div class="q-pts">[3 pts]</div>
+</div>
+
+<p>Dois agricultores, A e B, são separados por uma montanha. Há 50% de chance de enchente. Os colhimentos são:</p>
+<ul>
+  <li>Estado 1 (enchente, \(\pi_1=1/2\)): A colhe 5, B colhe 10.</li>
+  <li>Estado 2 (sem enchente, \(\pi_2=1/2\)): A colhe 10, B colhe 10.</li>
+</ul>
+<p>Ambos têm \(u_i(x)=\ln x\). Uma obra de contenção eliminaria a enchente nos dois lados, fazendo A colher 10 em qualquer estado. O custo da obra é \(P\) (em sacos de batata), pago antes da realização do estado.</p>
+
+<p><strong>(a)</strong> Sem qualquer mercado, qual a disposição a pagar (DAP) de cada agricultor pela obra, se tiver que arcar sozinho com o custo? [1 pt]</p>
+
+<details>
+<summary>Gabarito (a)</summary>
+<div class="solution">
+<ol class="steps">
+  <li><strong>Utilidade esperada de A sem obra —</strong> \(EU_A=\tfrac{1}{2}\ln5+\tfrac{1}{2}\ln10=\tfrac{1}{2}\ln50\).</li>
+  <li><strong>Utilidade de A com obra (paga \(P\)) —</strong> A passa a colher 10 em ambos os estados mas paga \(P\): \(EU_A^{obra}=\ln(10-P)\).</li>
+  <li><strong>DAP de A —</strong> Iguala as utilidades:
+  \[\ln(10-P_A)=\tfrac{1}{2}\ln50\;\Rightarrow\;10-P_A=\sqrt{50}=5\sqrt{2}\;\Rightarrow\;\boxed{P_A=10-5\sqrt{2}\approx2{,}93}.\]
+  </li>
+  <li><strong>DAP de B —</strong> B colhe 10 nos dois estados independentemente da enchente. A obra não altera o consumo de B: \(EU_B^{obra}=\ln(10-P_B)\) vs \(EU_B=\ln10\). Logo \(P_B=0\). B não está disposto a pagar nada.</li>
+</ol>
+</div>
+</details>
+
+<p><strong>(b)</strong> Surge um intermediário financeiro que viabiliza mercados completos de ativos (equilíbrio Arrow-Debreu). Qual é o equilíbrio? [1 pt]</p>
+
+<details>
+<summary>Gabarito (b)</summary>
+<div class="solution">
+<ol class="steps">
+  <li><strong>Aplicar fórmula de demanda (log) —</strong> Com \(u_i=\ln\), \(\pi_1=\pi_2=1/2\): \(x_{si}=\tfrac{1}{2}w_i/p_s\). Riquezas: \(w_A=5p_1+10p_2\), \(w_B=10p_1+10p_2\).</li>
+  <li><strong>Market clearing (estado 1) —</strong>
+  \[\frac{w_A+w_B}{2p_1}=15\;\Rightarrow\;15p_1+20p_2=30p_1\;\Rightarrow\;\frac{p_1}{p_2}=\frac{4}{3}.\]
+  </li>
+  <li><strong>Calcular alocações (com \(p_2=1\), \(p_1=4/3\)) —</strong>
+  \[w_A=5\cdot\tfrac{4}{3}+10=\tfrac{50}{3},\quad w_B=10\cdot\tfrac{4}{3}+10=\tfrac{70}{3}.\]
+  \[x_{1A}=\frac{50/3}{2\cdot4/3}=\frac{25}{4},\quad x_{2A}=\frac{50/3}{2}=\frac{25}{3},\quad x_{1B}=\frac{35}{4},\quad x_{2B}=\frac{35}{3}.\]
+  </li>
+  <li><strong>Verificar e interpretar —</strong> Clearings: \(\tfrac{25}{4}+\tfrac{35}{4}=15\) ✓; \(\tfrac{25}{3}+\tfrac{35}{3}=20\) ✓. A razão \(x_B/x_A=7/5\) em todo estado reflete \(w_B/w_A=7/5\) (Regra de Borch com mesma curvatura). A recebe consumo variável: \(6{,}25\) no estado 1 e \(8{,}33\) no estado 2 — seguro parcial, não completo, pois B é também averso ao risco.</li>
+</ol>
+</div>
+</details>
+
+<p><strong>(c)</strong> Sob mercados completos, qual a DAP de cada agricultor pela obra? Compare com o item (a) e interprete o resultado. [1 pt]</p>
+
+<details>
+<summary>Gabarito (c)</summary>
+<div class="solution">
+<ol class="steps">
+  <li><strong>Utilidade de A no equilíbrio AD (sem obra) —</strong>
+  \[EU_A^{AD}=\tfrac{1}{2}\ln\!\tfrac{25}{4}+\tfrac{1}{2}\ln\!\tfrac{25}{3}=\tfrac{1}{2}\ln\!\frac{625}{12}.\]
+  </li>
+  <li><strong>Utilidade de A com obra e mercados completos —</strong> Com a obra, as dotações tornam-se \(\omega_A=(10,10)\), \(\omega_B=(10,10)\). Endowments simétricos → sem motivo para troca → cada um consome a dotação menos o pagamento: \(EU_A^{fp}=\ln(10-P_A)\).</li>
+  <li><strong>DAP de A sob mercados completos —</strong>
+  \[\ln(10-P_A^{AD})=\tfrac{1}{2}\ln\!\frac{625}{12}\;\Rightarrow\;10-P_A^{AD}=\sqrt{\frac{625}{12}}=\frac{25\sqrt{3}}{6}\;\Rightarrow\;\boxed{P_A^{AD}=10-\frac{25\sqrt{3}}{6}\approx2{,}78}.\]
+  \(P_A^{AD}<P_A\): a DAP de A <em>cai</em> quando há mercados completos.
+  </li>
+  <li><strong>DAP de B sob mercados completos —</strong>
+  \[EU_B^{AD}=\tfrac{1}{2}\ln\!\tfrac{35}{4}+\tfrac{1}{2}\ln\!\tfrac{35}{3}=\tfrac{1}{2}\ln\!\frac{1225}{12}\approx2{,}31 > \ln10\approx2{,}30.\]
+  Logo \(10-P_B^{AD}=\sqrt{1225/12}=35\sqrt{3}/6\approx10{,}10>10\), ou seja, \(P_B^{AD}\approx-0{,}10<0\).
+  B precisaria ser <em>compensado</em> para aceitar a obra.
+  </li>
+  <li><strong>Interpretação —</strong> Os mercados financeiros <em>substituem parcialmente</em> o bem público: A já obtém seguro parcial via negociação de ativos, então o valor marginal da obra cai. Para B, a obra é prejudicial: ela elimina o mercado de seguros em que B lucra (B seria a contraparte vendendo proteção). Este é um exemplo clássico de <em>crowding-out</em> de bens públicos por seguros privados.</li>
+</ol>
+</div>
+</details>
+
+<!-- ─── Q9 ─── -->
+<div class="q-header" id="ext-q9">
+  <div class="q-num" style="background:var(--pink);color:#000;">9</div>
+  <div>
+    <div class="q-title">Equilíbrio Geral com Dois Cobb-Douglas e Estática Comparativa (MWG 15.B.2)</div>
+    <div style="font-size:0.85rem;color:var(--muted);margin-top:0.25rem;">Fórmula geral do preço relativo de equilíbrio, efeito de uma variação de dotação</div>
+  </div>
+  <div class="q-pts">[2 pts]</div>
+</div>
+
+<p>Dois consumidores têm preferências Cobb-Douglas com parâmetros potencialmente distintos:</p>
+<div class="math">
+$$u_1(x_{11},x_{21})=x_{11}^\alpha x_{21}^{1-\alpha},\qquad u_2(x_{12},x_{22})=x_{12}^\beta x_{22}^{1-\beta},\quad \alpha,\beta\in(0,1).$$
+</div>
+<p>As dotações são \((\omega_{11},\omega_{21})\gg0\) e \((\omega_{12},\omega_{22})\gg0\).</p>
+
+<p><strong>(a)</strong> Encontre o preço relativo de equilíbrio \(p_1/p_2\) e a alocação walrasiana. Para o caso especial \(\alpha=\beta=1/2\), simplifique a fórmula e interprete. [1 pt]</p>
+
+<details>
+<summary>Gabarito (a)</summary>
+<div class="solution">
+<ol class="steps">
+  <li><strong>Demandas marshallianas —</strong> Para Cobb-Douglas com expoentes \((\alpha_\ell)\), \(x_{\ell i}^*=\alpha_\ell\, w_i/p_\ell\). Definindo \(r\equiv p_1/p_2\) e \(w_i=p_1\omega_{1i}+p_2\omega_{2i}=p_2(r\omega_{1i}+\omega_{2i})\):
+  \[x_{11}^*=\frac{\alpha(r\omega_{11}+\omega_{21})}{r},\quad x_{12}^*=\frac{\beta(r\omega_{12}+\omega_{22})}{r}.\]
+  </li>
+  <li><strong>Market clearing do bem 1 —</strong> \(x_{11}^*+x_{12}^*=\bar\omega_1\equiv\omega_{11}+\omega_{12}\):
+  \[\alpha(r\omega_{11}+\omega_{21})+\beta(r\omega_{12}+\omega_{22})=r\bar\omega_1.\]
+  </li>
+  <li><strong>Isolar \(r\) —</strong> Coletando termos:
+  \[r\bigl[\alpha\omega_{11}+\beta\omega_{12}-\bar\omega_1\bigr]=-(\alpha\omega_{21}+\beta\omega_{22})\]
+  \[r\bigl[-(1-\alpha)\omega_{11}-(1-\beta)\omega_{12}\bigr]=-(\alpha\omega_{21}+\beta\omega_{22}).\]
+  \[\boxed{r^*=\frac{p_1}{p_2}=\frac{\alpha\omega_{21}+\beta\omega_{22}}{(1-\alpha)\omega_{11}+(1-\beta)\omega_{12}}.}\]
+  </li>
+  <li><strong>Alocação de equilíbrio —</strong> Normalizando \(p_2=1\), \(p_1=r^*\):
+  \[x_{11}^*=\frac{\alpha(r^*\omega_{11}+\omega_{21})}{r^*},\quad x_{21}^*=(1-\alpha)(r^*\omega_{11}+\omega_{21}),\]
+  e análogo para o consumidor 2.
+  </li>
+  <li><strong>Caso especial \(\alpha=\beta=1/2\) —</strong>
+  \[r^*=\frac{\tfrac{1}{2}(\omega_{21}+\omega_{22})}{\tfrac{1}{2}(\omega_{11}+\omega_{12})}=\frac{\bar\omega_2}{\bar\omega_1}.\]
+  O preço relativo iguala a <em>razão das dotações agregadas</em>. Com preferências simétricas, o mercado precifica os bens proporcionalmente à sua escassez relativa, independentemente de como as dotações se distribuem entre os dois agentes.</li>
+</ol>
+</div>
+</details>
+
+<p><strong>(b)</strong> Mostre que \(\partial r^*/\partial\omega_{11}<0\) e interprete. Como a alocação de equilíbrio de cada agente se altera? [1 pt]</p>
+
+<details>
+<summary>Gabarito (b)</summary>
+<div class="solution">
+<ol class="steps">
+  <li><strong>Derivar \(\partial r^*/\partial\omega_{11}\) —</strong> Escrevendo \(r^*=N/D\) com \(N=\alpha\omega_{21}+\beta\omega_{22}\) e \(D=(1-\alpha)\omega_{11}+(1-\beta)\omega_{12}\):
+  \[\frac{\partial r^*}{\partial\omega_{11}}=\frac{0\cdot D - N\cdot(1-\alpha)}{D^2}=\frac{-(1-\alpha)N}{D^2}<0.\]
+  Um aumento na dotação de bem 1 do consumidor 1 reduz o preço relativo do bem 1.
+  </li>
+  <li><strong>Intuição do efeito-preço —</strong> Maior oferta do bem 1 → excesso de oferta transitório → o preço \(p_1\) cai até restaurar o equilíbrio. Este é o efeito fundamental de dotação em equilíbrio geral: o preço de um bem cai quando a oferta aumenta.</li>
+  <li><strong>Efeito sobre as demandas —</strong> Para o consumidor 1: com \(q\equiv1/r^*\), \(x_{11}^*=\alpha(\omega_{11}+q\omega_{21})\). Como \(q=1/r^*\) sobe (pois \(r^*\) cai), \(x_{11}^*\) aumenta — tanto pelo efeito riqueza direto quanto pela queda no preço relativo. Para o consumidor 2: \(x_{12}^*=\beta(\omega_{12}+q\omega_{22})\) também sobe via o aumento de \(q\), pois a queda de \(p_1\) barateia o bem 1 para todos.</li>
+</ol>
+</div>
+</details>
+
+<!-- ─── Q10 ─── -->
+<div class="q-header" id="ext-q10">
+  <div class="q-num" style="background:var(--pink);color:#000;">10</div>
+  <div>
+    <div class="q-title">Economia de Robinson Crusoé com Produção (MWG 15.C.2)</div>
+    <div style="font-size:0.85rem;color:var(--muted);margin-top:0.25rem;">Equilíbrio com firma e consumidor, lucro, salário, lazer ótimo</div>
+  </div>
+  <div class="q-pts">[2,5 pts]</div>
+</div>
+
+<p>Considere uma economia com um único consumidor–proprietário e uma firma. O consumidor maximiza \(u(x_1,x_2)=\ln x_1+\ln x_2\), onde \(x_1\) é lazer e \(x_2\) é o bem de consumo. Sua dotação de tempo é \(\bar L=1\). A firma usa trabalho \(z\geq0\) como único insumo, com tecnologia \(f(z)=z^{1/2}\). O consumidor é dono da firma e recebe os lucros. Normalize o preço do bem produzido: \(p=1\).</p>
+<p>Encontre o equilíbrio walrasiano: salário \(w^*\), lucros \(\pi^*\), consumo \((x_1^*,x_2^*)\) e emprego \(z^*\).</p>
+
+<details>
+<summary>Gabarito</summary>
+<div class="solution">
+<ol class="steps">
+  <li><strong>Problema da firma —</strong> Maximiza lucro \(\pi=p\cdot f(z)-w\cdot z=z^{1/2}-wz\).
+  \[\text{CPO}: \frac{1}{2}z^{-1/2}=w\;\Rightarrow\; z^*=\frac{1}{4w^2},\quad\pi^*=\frac{1}{4w}.\]
+  </li>
+  <li><strong>Problema do consumidor —</strong> Renda: \(I=w\bar L+\pi=w+\frac{1}{4w}\). Restrição orçamentária: \(w\cdot x_1+x_2=I\) (custo de lazer = salário-oportunidade).
+  <br>Com Cobb-Douglas de expoentes iguais:
+  \[x_1^*=\frac{I}{2w}=\frac{w+\frac{1}{4w}}{2w}=\frac{1}{2}+\frac{1}{8w^2},\qquad x_2^*=\frac{I}{2}=\frac{w}{2}+\frac{1}{8w}.\]
+  </li>
+  <li><strong>Market clearing do trabalho —</strong> Trabalho ofertado \(= \bar L - x_1^* =\frac{1}{2}-\frac{1}{8w^2}\) deve igualar a demanda da firma \(z^*=\frac{1}{4w^2}\):
+  \[\frac{1}{2}-\frac{1}{8w^2}=\frac{1}{4w^2}\;\Rightarrow\;\frac{1}{2}=\frac{3}{8w^2}\;\Rightarrow\;w^2=\frac{3}{4}\;\Rightarrow\;\boxed{w^*=\frac{\sqrt{3}}{2}.}\]
+  </li>
+  <li><strong>Computar o equilíbrio —</strong>
+  \[z^*=\frac{1}{4\cdot\frac{3}{4}}=\frac{1}{3},\qquad\pi^*=\frac{1}{4\cdot\frac{\sqrt3}{2}}=\frac{\sqrt3}{6}.\]
+  \[x_1^*=\frac{1}{2}+\frac{1}{8\cdot\frac{3}{4}}=\frac{1}{2}+\frac{1}{6}=\frac{2}{3}\quad(\text{lazer}),\qquad x_2^*=f(z^*)=\left(\frac{1}{3}\right)^{1/2}=\frac{\sqrt3}{3}\quad(\text{consumo}).\]
+  </li>
+  <li><strong>Verificação —</strong> Trabalho ofertado: \(1-\frac{2}{3}=\frac{1}{3}=z^*\) ✓. Renda: \(w^*+\pi^*=\frac{\sqrt3}{2}+\frac{\sqrt3}{6}=\frac{2\sqrt3}{3}\). Gasto: \(w^*x_1^*+x_2^*=\frac{\sqrt3}{2}\cdot\frac{2}{3}+\frac{\sqrt3}{3}=\frac{\sqrt3}{3}+\frac{\sqrt3}{3}=\frac{2\sqrt3}{3}\) ✓.
+  <br><em>Interpretação:</em> O consumidor dedica \(1/3\) do tempo ao trabalho e \(2/3\) ao lazer. O salário real \(w^*=\sqrt3/2\approx0{,}87\) iguala a produtividade marginal do trabalho em \(z^*\). O lucro \(\pi^*=\sqrt3/6\) reflete a renda gerada pela tecnologia decrescente de escala.
+  </li>
+</ol>
+</div>
+</details>
+
+<!-- ─── Q11 ─── -->
+<div class="q-header" id="ext-q11">
+  <div class="q-num" style="background:var(--pink);color:#000;">11</div>
+  <div>
+    <div class="q-title">Arquipélago — Mercados Incompletos quando Rank(R) &lt; S (A.5 itens e–f)</div>
+    <div style="font-size:0.85rem;color:var(--muted);margin-top:0.25rem;">Detectar dependência linear em S=3, consequências para a alocação, comparação com mercados completos</div>
+  </div>
+  <div class="q-pts">[2 pts]</div>
+</div>
+
+<p>Em um arquipélago, cada ilha tem dois agentes \(i\in\{A,B\}\), dois bens físicos (gado G e maçãs M), \(S=3\) estados com \(\pi_1=1/2\), \(\pi_2=\pi_3=1/4\), e \(u_i=\ln x_G+\ln x_M\). Na <strong>ilha I</strong>, os mercados são completos (Arrow-Debreu). Na <strong>ilha III</strong>, os mercados são sequenciais e há três ativos financeiros com retornos (escalares, em unidades de um bem-numerário):</p>
+<div class="math">
+$$r_1=(1,1,0),\quad r_2=(1,2,3),\quad r_3=(3,5,6).$$
+</div>
+
+<p><strong>(a)</strong> Mostre que o mercado de ativos da ilha III é incompleto, identificando a dependência linear entre os ativos. [0,75 pt]</p>
+
+<details>
+<summary>Gabarito (a)</summary>
+<div class="solution">
+<ol class="steps">
+  <li><strong>Construir R e testar rank —</strong> \(R=\begin{pmatrix}1&1&3\\1&2&5\\0&3&6\end{pmatrix}\). Para \(S=3\) estados, precisamos \(\text{posto}(R)=3\).</li>
+  <li><strong>Procurar dependência linear —</strong> Teste \(r_3=\alpha r_1+\beta r_2\):
+  \[\begin{cases}\alpha+\beta=3\\\alpha+2\beta=5\\3\beta=6\end{cases}\;\Rightarrow\;\beta=2,\;\alpha=1.\]
+  Verificação: \(1\cdot(1,1,0)+2\cdot(1,2,3)=(1,1,0)+(2,4,6)=(3,5,6)=r_3\) ✓.
+  </li>
+  <li><strong>Concluir —</strong> \(r_3=r_1+2r_2\): o ativo 3 é <strong>redundante</strong>. As colunas de \(R\) são linearmente dependentes, logo \(\text{posto}(R)=2<S=3\). O mercado é <strong>incompleto</strong>.</li>
+</ol>
+</div>
+</details>
+
+<p><strong>(b)</strong> Que classe de transferências intertemporais a ilha III consegue implementar? Qual transferência simples é impossível? [0,75 pt]</p>
+
+<details>
+<summary>Gabarito (b)</summary>
+<div class="solution">
+<ol class="steps">
+  <li><strong>Caracterizar o espaço de transferências atingíveis —</strong> Com apenas \(\{r_1,r_2\}\) gerando o espaço, um portfólio \((z_1,z_2)\) produz a transferência:
+  \[t=z_1(1,1,0)+z_2(1,2,3)=(z_1+z_2,\;z_1+2z_2,\;3z_2).\]
+  Parametrizando: \(t_3=3z_2\) e \(t_1=z_1+z_2=t_2-z_2=t_2-t_3/3\). Portanto a condição de atingibilidade é:
+  \[3t_1-3t_2+t_3=0.\]
+  </li>
+  <li><strong>Exemplo de transferência impossível —</strong> A transferência \(t=(1,-1,0)\) (mover riqueza do estado 2 para o estado 1, sem afetar o estado 3) viola a restrição: \(3(1)-3(-1)+0=6\neq0\). Portanto é <strong>impossível</strong> com os ativos disponíveis.</li>
+  <li><strong>Intuição —</strong> Os ativos da ilha III não permitem separar transferências entre os estados 1 e 2 sem afetar o estado 3. Qualquer ajuste entre estados 1 e 2 inevitavelmente altera o estado 3 de forma proporcional via \(r_2\).</li>
+</ol>
+</div>
+</details>
+
+<p><strong>(c)</strong> A alocação de consumo da ilha III coincide com a de Arrow-Debreu (ilha I)? Justifique formalmente e compare com a ilha II (que possui três ativos de Arrow). [0,5 pt]</p>
+
+<details>
+<summary>Gabarito (c)</summary>
+<div class="solution">
+<ol class="steps">
+  <li><strong>Ilha II (ativos de Arrow) —</strong> Com \(r_1^{II}=(1,0,0)\), \(r_2^{II}=(0,1,0)\), \(r_3^{II}=(0,0,1)\): \(R^{II}=I_3\), \(\text{posto}=3=S\). Mercado completo. Pelo Teorema da Equivalência, a alocação da ilha II coincide com a de Arrow-Debreu. ✓</li>
+  <li><strong>Ilha III (mercado incompleto) —</strong> Com \(\text{posto}(R^{III})=2<3=S\), o espaço de transferências atingíveis é um subespaço bidimensional de \(\mathbb{R}^3\). Em geral, a alocação AD requer transferências em todas as três direções de \(\mathbb{R}^3\). Se a transferência ótima de equilíbrio AD não satisfizer \(3t_1-3t_2+t_3=0\), ela não é atingível na ilha III. A alocação da ilha III é, em geral, <strong>distinta</strong> da AD — os agentes não conseguem compartilhar completamente o risco agregado.</li>
+  <li><strong>Conclusão —</strong> Mesmo com \(K=S=3\) ativos, o mercado pode ser incompleto se os ativos forem linearmente dependentes. O número de ativos é condição necessária mas não suficiente para completude: o determinante é o posto da matriz \(R\).</li>
+</ol>
+</div>
+</details>
+
+<div style="margin-top:5rem; padding-top:2rem; border-top:1px solid var(--border); color:var(--muted); font-size:0.85rem;">
+  <p>Material elaborado com base em MWG caps. 15, 16 e 19 e no estilo de avaliação do PPGCE/UERJ (Prova P1, 2025). Para as demonstrações das Listas 1 e 2 (Lei de Walras e Eficiência Fraca com Transversalidade), consulte as seções 5.1–5.3.</p>
+</div>
+
+</main>
+</div>
+</body>
+</html>

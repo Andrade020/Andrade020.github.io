@@ -841,13 +841,10 @@ main { position: relative; z-index: 1; }
 .proj-art--krvo   { color: var(--sage); }
 .proj-art--llm    { color: var(--steel); }
 .proj-art--eyezen { color: var(--oxblood); }
+.proj-art--niver  { color: var(--ink-mute); }
 .proj-item__body { min-width: 0; }
 .proj-item__body .proj-item__title { margin-bottom: 4px; }
 .proj-item__body .proj-item__meta { margin-bottom: 14px; }
-.proj-art--ludami { color: var(--accent); }
-.proj-art--krvo   { color: var(--sage); }
-.proj-art--llm    { color: var(--steel); }
-.proj-art--eyezen { color: var(--oxblood); }
 .proj-item__num {
   font-family: var(--type-mono);
   font-size: 0.72rem;

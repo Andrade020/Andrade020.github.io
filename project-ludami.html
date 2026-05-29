@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="ludami — link curation platform for shared spaces. React · TypeScript · Vite · Supabase. By Lucas R. Andrade.">
+<title>ludami · Lucas R. Andrade</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.92em' font-size='95' font-family='Georgia,serif' font-style='italic' fill='%23d4a574'%3EZ%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="dark-mode">
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a href="index.html" class="brand">
+      <span class="brand__mark"><span class="brand__logo" aria-label="LRA"></span></span>
+      <span>Lucas R. Andrade</span>
+      <span class="brand__pos">· Economist &amp; Data Scientist</span>
+    </a>
+    <nav class="nav">
+      <a href="index.html">About</a>
+      <a href="production.html">Production</a>
+      <a href="projects.html" class="is-active">Open source</a>
+      <a href="publications.html">Research</a>
+      <a href="lab.html">Lab</a>
+    </nav>
+    <div class="header-tools">
+      <button class="icon-btn" data-action="theme" onclick="toggleTheme()" title="Toggle theme">☀</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="page-head wrap">
+    <span class="section-label">Open source · Latest release · 2025</span>
+    <h1>ludami — <em>curate links,</em> share spaces.</h1>
+    <p>A link curation platform for shared spaces. Save YouTube videos and URLs into thematic collections, annotate each one, and share with collaborators — no spreadsheet, no chat thread, no chaos.</p>
+    <p style="margin-top:14px;">
+      <a href="https://github.com/Andrade020/ludami" target="_blank" rel="noopener" class="hint__cta">GitHub ↗</a>
+    </p>
+  </section>
+
+  <section class="section wrap">
+    <div class="case__layout">
+      <div class="case__intro">
+        <span class="section-label">What it is</span>
+        <h2>A shared space for the links that matter.</h2>
+        <p>Bookmarks are personal. ludami is for the links that belong to a group — a study cohort, a project team, a reading club. You create thematic collections, add links with your own annotations, and share the space with whoever needs access.</p>
+        <p>The focus is on YouTube videos and URLs in general, organized around a simple but expressive taxonomy: collection → link → annotation. Nothing more complex than needed.</p>
+        <p>Built as a Progressive Web App, ludami is installable on desktop and mobile straight from the browser — no app store, no native build.</p>
+      </div>
+      <div class="case__detail">
+        <div class="case-fact">
+          <div class="case-fact__k">Type</div>
+          <div class="case-fact__v">Web app · PWA</div>
+          <div class="case-fact__note">Installable on desktop and mobile directly from the browser.</div>
+        </div>
+        <div class="case-fact">
+          <div class="case-fact__k">Backend</div>
+          <div class="case-fact__v">Supabase</div>
+          <div class="case-fact__note">PostgreSQL + realtime + auth, fully managed.</div>
+        </div>
+        <div class="case-fact">
+          <div class="case-fact__k">Deploy</div>
+          <div class="case-fact__v">Vercel</div>
+          <div class="case-fact__note">Continuous deployment from the main branch.</div>
+        </div>
+        <div class="case-fact">
+          <div class="case-fact__k">License</div>
+          <div class="case-fact__v">Open source</div>
+          <div class="case-fact__note">Source on GitHub, free to fork and adapt.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="section__head">
+      <h2 class="section__title">What ludami does</h2>
+    </div>
+    <ul class="prod-list">
+      <li>Create and name thematic collections to organize any set of links around a topic</li>
+      <li>Save YouTube videos and arbitrary URLs with custom titles and personal annotations</li>
+      <li>Share collections with other users for collaborative curation — same space, multiple contributors</li>
+      <li>Install as a Progressive Web App on desktop or mobile — no app store, no native build required</li>
+      <li>Clean, minimal interface: no algorithmic feeds, no distractions, just the links you chose</li>
+    </ul>
+  </section>
+
+  <section class="section wrap">
+    <div class="section__head">
+      <h2 class="section__title">Stack</h2>
+    </div>
+    <div class="skills">
+      <div class="skill">
+        <h4>Frontend</h4>
+        <p>React · TypeScript · Vite · Tailwind CSS</p>
+      </div>
+      <div class="skill">
+        <h4>Backend &amp; data</h4>
+        <p>Supabase · PostgreSQL</p>
+      </div>
+      <div class="skill">
+        <h4>Deploy &amp; PWA</h4>
+        <p>Vercel · vite-plugin-pwa</p>
+      </div>
+    </div>
+    <div style="margin-top:32px;border-top:1px solid var(--rule-soft);padding-top:22px;">
+      <a href="https://github.com/Andrade020/ludami" target="_blank" rel="noopener" class="hint__cta">View on GitHub ↗</a>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot__base" style="border-top:none;margin-top:0;padding-top:0;">
+      <span>© 2026 Lucas R. Andrade · Rio de Janeiro</span>
+      <a href="mailto:lucas_r_andrade@hotmail.com">lucas_r_andrade@hotmail.com</a>
+    </div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

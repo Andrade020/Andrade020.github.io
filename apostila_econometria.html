@@ -1,0 +1,1161 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apostila: Modelos de Escolha Binária em Econometria</title>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=Source+Sans+Pro:wght@400;600;700&family=Fira+Code&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2c5282;
+            --accent: #ed8936;
+            --accent-light: #fbd38d;
+            --success: #38a169;
+            --warning: #dd6b20;
+            --info: #3182ce;
+            --bg-cream: #faf8f5;
+            --bg-blue: #ebf4ff;
+            --bg-orange: #fffaf0;
+            --bg-green: #f0fff4;
+            --text-dark: #1a202c;
+            --text-muted: #4a5568;
+            --border: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+            background: var(--bg-cream);
+            color: var(--text-dark);
+            line-height: 1.7;
+            font-size: 17px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        header h1 {
+            font-family: 'Crimson Pro', serif;
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            position: relative;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        header .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            position: relative;
+        }
+
+        /* Container */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Table of Contents */
+        .toc {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border-left: 5px solid var(--accent);
+        }
+
+        .toc h2 {
+            font-family: 'Crimson Pro', serif;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-size: 1.6rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .toc ul {
+            list-style: none;
+        }
+
+        .toc > ul > li {
+            margin-bottom: 0.8rem;
+        }
+
+        .toc a {
+            color: var(--secondary);
+            text-decoration: none;
+            transition: all 0.2s;
+            display: inline-block;
+        }
+
+        .toc a:hover {
+            color: var(--accent);
+            transform: translateX(5px);
+        }
+
+        .toc .chapter-num {
+            font-weight: 700;
+            color: var(--accent);
+            margin-right: 0.5rem;
+        }
+
+        .toc ul ul {
+            margin-left: 1.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .toc ul ul li {
+            margin-bottom: 0.3rem;
+            font-size: 0.95rem;
+        }
+
+        /* Sections */
+        section {
+            background: white;
+            border-radius: 12px;
+            padding: 2.5rem;
+            margin: 2rem 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        h2 {
+            font-family: 'Crimson Pro', serif;
+            color: var(--primary);
+            font-size: 1.9rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 3px solid var(--accent);
+        }
+
+        h3 {
+            font-family: 'Crimson Pro', serif;
+            color: var(--secondary);
+            font-size: 1.4rem;
+            margin: 2rem 0 1rem;
+        }
+
+        h4 {
+            color: var(--text-dark);
+            font-size: 1.15rem;
+            margin: 1.5rem 0 0.8rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+
+        /* Formula Boxes */
+        .formula-box {
+            background: linear-gradient(135deg, var(--bg-blue) 0%, #dbeafe 100%);
+            border: 2px solid var(--info);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .formula-box::before {
+            content: '📐';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: white;
+            padding: 0 8px;
+            font-size: 1.2rem;
+        }
+
+        .formula-box.important {
+            background: linear-gradient(135deg, var(--bg-orange) 0%, #feebc8 100%);
+            border-color: var(--accent);
+        }
+
+        .formula-box.important::before {
+            content: '⭐';
+        }
+
+        .formula-box.definition {
+            background: linear-gradient(135deg, var(--bg-green) 0%, #c6f6d5 100%);
+            border-color: var(--success);
+        }
+
+        .formula-box.definition::before {
+            content: '📖';
+        }
+
+        .formula {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.15rem;
+            color: var(--text-dark);
+            padding: 0.5rem;
+        }
+
+        .formula-label {
+            font-weight: 600;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        /* Concept Box */
+        .concept-box {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 5px solid var(--success);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .concept-box h4 {
+            color: var(--success);
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Warning Box */
+        .warning-box {
+            background: #fff5f5;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 5px solid #e53e3e;
+        }
+
+        .warning-box h4 {
+            color: #c53030;
+            margin-top: 0;
+        }
+
+        /* Example Box */
+        .example-box {
+            background: #f7fafc;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border: 1px dashed var(--border);
+        }
+
+        .example-box h4 {
+            color: var(--info);
+            margin-top: 0;
+        }
+
+        /* Step by Step */
+        .steps {
+            counter-reset: step;
+        }
+
+        .step {
+            position: relative;
+            padding-left: 3rem;
+            margin: 1.5rem 0;
+        }
+
+        .step::before {
+            counter-increment: step;
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 2rem;
+            height: 2rem;
+            background: var(--accent);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        /* Code Block */
+        .code-block {
+            background: #1a202c;
+            color: #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+        }
+
+        .code-block .comment {
+            color: #68d391;
+        }
+
+        .code-block .keyword {
+            color: #f687b3;
+        }
+
+        .code-block .function {
+            color: #63b3ed;
+        }
+
+        /* Lists */
+        ul, ol {
+            margin: 1rem 0 1rem 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+        }
+
+        td {
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        tr:nth-child(even) {
+            background: #f7fafc;
+        }
+
+        /* Highlight */
+        .highlight {
+            background: var(--accent-light);
+            padding: 0.1rem 0.4rem;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        /* Math inline */
+        .math {
+            font-family: 'Fira Code', monospace;
+            background: #edf2f7;
+            padding: 0.1rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.95em;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+            .container {
+                padding: 1rem;
+            }
+            section {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div id="back-nav-lab" style="position:fixed;top:12px;left:16px;z-index:9999;"><a href="lab.html" style="display:inline-flex;align-items:center;gap:6px;font-family:system-ui,sans-serif;font-size:0.78rem;letter-spacing:0.04em;color:#d4a574;background:rgba(14,13,10,0.92);border:1px solid rgba(212,165,116,0.25);padding:5px 12px;border-radius:20px;text-decoration:none;backdrop-filter:blur(8px);">← Lab</a></div>
+
+<header>
+    <h1>Modelos de Escolha Binária</h1>
+    <p class="subtitle">LPM, Logit e Máxima Verossimilhança — Teoria e Aplicações</p>
+</header>
+
+<div class="container">
+
+    <!-- ÍNDICE -->
+    <nav class="toc">
+        <h2>📚 Índice</h2>
+        <ul>
+            <li><a href="#cap1"><span class="chapter-num">1.</span> Fundamentos Estatísticos</a>
+                <ul>
+                    <li><a href="#sec1-1">1.1 Esperança Matemática</a></li>
+                    <li><a href="#sec1-2">1.2 Variância Condicional</a></li>
+                    <li><a href="#sec1-3">1.3 Distribuição de Bernoulli</a></li>
+                </ul>
+            </li>
+            <li><a href="#cap2"><span class="chapter-num">2.</span> Modelo de Probabilidade Linear (LPM)</a>
+                <ul>
+                    <li><a href="#sec2-1">2.1 Estrutura do Modelo</a></li>
+                    <li><a href="#sec2-2">2.2 Demonstração: E(Y|X) = P(Y=1|X)</a></li>
+                    <li><a href="#sec2-3">2.3 Heterocedasticidade no LPM</a></li>
+                    <li><a href="#sec2-4">2.4 Limitações e Correções</a></li>
+                </ul>
+            </li>
+            <li><a href="#cap3"><span class="chapter-num">3.</span> Modelo Logit</a>
+                <ul>
+                    <li><a href="#sec3-1">3.1 Função Logística (Sigmoide)</a></li>
+                    <li><a href="#sec3-2">3.2 Odds e Log-Odds</a></li>
+                    <li><a href="#sec3-3">3.3 Interpretação dos Coeficientes</a></li>
+                </ul>
+            </li>
+            <li><a href="#cap4"><span class="chapter-num">4.</span> Efeitos Marginais</a>
+                <ul>
+                    <li><a href="#sec4-1">4.1 Regra da Cadeia</a></li>
+                    <li><a href="#sec4-2">4.2 Derivação no Logit</a></li>
+                    <li><a href="#sec4-3">4.3 Interpretação Gráfica</a></li>
+                </ul>
+            </li>
+            <li><a href="#cap5"><span class="chapter-num">5.</span> Estimação por Máxima Verossimilhança</a>
+                <ul>
+                    <li><a href="#sec5-1">5.1 Função de Verossimilhança</a></li>
+                    <li><a href="#sec5-2">5.2 Log-Verossimilhança</a></li>
+                    <li><a href="#sec5-3">5.3 Condições de Primeira Ordem</a></li>
+                </ul>
+            </li>
+            <li><a href="#cap6"><span class="chapter-num">6.</span> Implementação em R</a>
+                <ul>
+                    <li><a href="#sec6-1">6.1 Manipulação de Dados</a></li>
+                    <li><a href="#sec6-2">6.2 Erros-Padrão Robustos</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- CAPÍTULO 1 -->
+    <section id="cap1">
+        <h2>1. Fundamentos Estatísticos</h2>
+
+        <h3 id="sec1-1">1.1 Esperança Matemática</h3>
+        
+        <p>A <strong>esperança matemática</strong> (ou valor esperado) representa a média ponderada de todos os valores possíveis de uma variável aleatória, onde os pesos são as probabilidades.</p>
+
+        <div class="formula-box definition">
+            <div class="formula-label">Definição: Esperança para Variável Discreta</div>
+            <div class="formula">E(Y) = Σⱼ yⱼ · P(Y = yⱼ)</div>
+        </div>
+
+        <p>Para uma esperança <strong>condicional</strong>, calculamos o valor esperado dado que conhecemos o valor de outra variável:</p>
+
+        <div class="formula-box">
+            <div class="formula-label">Esperança Condicional</div>
+            <div class="formula">E(Y | X) = Σⱼ yⱼ · P(Y = yⱼ | X)</div>
+        </div>
+
+        <div class="concept-box">
+            <h4>💡 Intuição</h4>
+            <p>Pense na esperança como o "centro de gravidade" da distribuição. Se repetíssemos o experimento infinitas vezes, a média dos resultados convergiria para E(Y).</p>
+        </div>
+
+        <h3 id="sec1-2">1.2 Variância Condicional</h3>
+
+        <p>A <strong>variância</strong> mede a dispersão dos valores em torno da média. A variância condicional considera essa dispersão dado um valor de X.</p>
+
+        <div class="formula-box definition">
+            <div class="formula-label">Definição: Variância</div>
+            <div class="formula">Var(Y | X) = E[(Y - E(Y|X))² | X] = E(Y² | X) - [E(Y|X)]²</div>
+        </div>
+
+        <p>Uma fórmula útil quando E(Y|X) = 0:</p>
+
+        <div class="formula-box">
+            <div class="formula">Se E(u) = 0, então Var(u) = E(u²)</div>
+        </div>
+
+        <h3 id="sec1-3">1.3 Distribuição de Bernoulli</h3>
+
+        <p>Uma variável de <strong>Bernoulli</strong> assume apenas dois valores: 0 (fracasso) ou 1 (sucesso), com probabilidade p de sucesso.</p>
+
+        <div class="formula-box important">
+            <div class="formula-label">Propriedades da Bernoulli</div>
+            <div class="formula">
+                Y ∈ {0, 1}<br><br>
+                P(Y = 1) = p &nbsp;&nbsp;&nbsp; P(Y = 0) = 1 - p<br><br>
+                E(Y) = p<br><br>
+                Var(Y) = p(1 - p)
+            </div>
+        </div>
+
+        <div class="example-box">
+            <h4>📝 Exemplo: Lançamento de Moeda</h4>
+            <p>Se Y = 1 indica "cara" com p = 0.5:</p>
+            <ul>
+                <li>E(Y) = 0.5</li>
+                <li>Var(Y) = 0.5 × 0.5 = 0.25</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- CAPÍTULO 2 -->
+    <section id="cap2">
+        <h2>2. Modelo de Probabilidade Linear (LPM)</h2>
+
+        <h3 id="sec2-1">2.1 Estrutura do Modelo</h3>
+
+        <p>O <strong>Modelo de Probabilidade Linear</strong> aplica regressão linear por MQO quando a variável dependente é binária (0 ou 1).</p>
+
+        <div class="formula-box important">
+            <div class="formula-label">Modelo LPM</div>
+            <div class="formula">Yᵢ = β₀ + β₁Xᵢ + uᵢ</div>
+        </div>
+
+        <p>Onde:</p>
+        <ul>
+            <li><span class="math">Yᵢ ∈ {0, 1}</span> — variável dependente binária</li>
+            <li><span class="math">Xᵢ</span> — variável(is) explicativa(s)</li>
+            <li><span class="math">uᵢ</span> — termo de erro</li>
+        </ul>
+
+        <h3 id="sec2-2">2.2 Demonstração: E(Y|X) = P(Y=1|X)</h3>
+
+        <p>Esta é uma das demonstrações mais importantes para entender o LPM. Provaremos que o valor esperado condicional de Y é igual à probabilidade de sucesso.</p>
+
+        <div class="steps">
+            <div class="step">
+                <strong>Ponto de Partida:</strong> Use a definição de esperança para variável discreta.
+                <div class="formula-box">
+                    <div class="formula">E(Y | X) = Σⱼ yⱼ · P(Y = yⱼ | X)</div>
+                </div>
+            </div>
+
+            <div class="step">
+                <strong>Valores Possíveis:</strong> Como Y é Bernoulli, só assume 0 ou 1.
+                <div class="formula-box">
+                    <div class="formula">E(Yᵢ | Xᵢ) = 0 · P(Yᵢ = 0 | Xᵢ) + 1 · P(Yᵢ = 1 | Xᵢ)</div>
+                </div>
+            </div>
+
+            <div class="step">
+                <strong>Simplificação:</strong> O termo multiplicado por zero desaparece.
+                <div class="formula-box important">
+                    <div class="formula">E(Yᵢ | Xᵢ) = P(Yᵢ = 1 | Xᵢ) = Pᵢ</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="concept-box">
+            <h4>💡 Conclusão Fundamental</h4>
+            <p>No LPM, a <strong>esperança condicional E(Y|X)</strong> é interpretada diretamente como a <strong>probabilidade de sucesso</strong>. Por isso, os coeficientes representam variações em pontos percentuais (p.p.) na probabilidade.</p>
+        </div>
+
+        <h3 id="sec2-3">2.3 Heterocedasticidade no LPM</h3>
+
+        <p>Um problema fundamental do LPM é que os erros são <strong>heterocedásticos</strong> por construção.</p>
+
+        <h4>Dedução da Variância do Erro</h4>
+
+        <p>O erro é definido como: <span class="math">uᵢ = Yᵢ - Pᵢ</span></p>
+
+        <div class="steps">
+            <div class="step">
+                <strong>Identificar valores possíveis de u²:</strong>
+                <table>
+                    <tr>
+                        <th>Se Y =</th>
+                        <th>u =</th>
+                        <th>u² =</th>
+                        <th>Probabilidade</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>1 - Pᵢ</td>
+                        <td>(1 - Pᵢ)²</td>
+                        <td>Pᵢ</td>
+                    </tr>
+                    <tr>
+                        <td>0</td>
+                        <td>0 - Pᵢ = -Pᵢ</td>
+                        <td>Pᵢ²</td>
+                        <td>1 - Pᵢ</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="step">
+                <strong>Calcular E(u²):</strong>
+                <div class="formula-box">
+                    <div class="formula">E(uᵢ²) = Pᵢ · (1-Pᵢ)² + (1-Pᵢ) · Pᵢ²</div>
+                </div>
+            </div>
+
+            <div class="step">
+                <strong>Fatorar Pᵢ(1-Pᵢ):</strong>
+                <div class="formula-box">
+                    <div class="formula">
+                        E(uᵢ²) = Pᵢ(1-Pᵢ)[(1-Pᵢ) + Pᵢ]<br><br>
+                        E(uᵢ²) = Pᵢ(1-Pᵢ) · [1]
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <strong>Resultado Final:</strong>
+                <div class="formula-box important">
+                    <div class="formula-label">Variância do Erro no LPM</div>
+                    <div class="formula">Var(uᵢ | Xᵢ) = Pᵢ(1 - Pᵢ)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="warning-box">
+            <h4>⚠️ Por que é Heterocedástico?</h4>
+            <p>A variância depende de <span class="math">Pᵢ = β₀ + β₁Xᵢ</span>, que varia com X. Como a variância <strong>não é constante</strong>, o erro é <strong>heterocedástico por construção</strong>.</p>
+        </div>
+
+        <h4>Impacto nos Testes de Hipótese</h4>
+
+        <ul>
+            <li>Os estimadores MQO continuam <strong>não viesados</strong></li>
+            <li>Porém, <strong>não são eficientes</strong> (não têm variância mínima)</li>
+            <li>Os <strong>erros-padrão calculados pela fórmula usual estão incorretos</strong></li>
+            <li>As estatísticas <strong>t</strong> e <strong>F</strong> ficam inválidas</li>
+            <li>Os <strong>intervalos de confiança</strong> não têm cobertura correta</li>
+        </ul>
+
+        <h3 id="sec2-4">2.4 Limitações e Correções</h3>
+
+        <h4>Problema: Probabilidades Fora de [0,1]</h4>
+
+        <p>O LPM pode gerar previsões impossíveis:</p>
+
+        <div class="example-box">
+            <h4>📝 Exemplo Numérico</h4>
+            <p>Considere: <span class="math">deny = -0.091 + 0.559(P/I) + 0.177(Afam)</span></p>
+            <p>Para um indivíduo branco (Afam=0) sem dívida (P/I=0):</p>
+            <div class="formula-box">
+                <div class="formula">P̂ = -0.091 + 0 + 0 = -0.091 = -9.1%</div>
+            </div>
+            <p><strong>Problema:</strong> Uma probabilidade negativa é matematicamente impossível!</p>
+        </div>
+
+        <h4>Correção por Mínimos Quadrados Ponderados (WLS)</h4>
+
+        <p>Para corrigir a heterocedasticidade, usamos MQP dividindo toda a equação pelo desvio-padrão estimado:</p>
+
+        <div class="formula-box important">
+            <div class="formula-label">Transformação WLS</div>
+            <div class="formula">
+                σᵢ = √[P̂ᵢ(1-P̂ᵢ)]<br><br>
+                Yᵢ/σᵢ = β₀/σᵢ + β₁(Xᵢ/σᵢ) + uᵢ/σᵢ
+            </div>
+        </div>
+
+        <p>Após a transformação, o novo termo de erro tem variância constante (homocedástico).</p>
+    </section>
+
+    <!-- CAPÍTULO 3 -->
+    <section id="cap3">
+        <h2>3. Modelo Logit</h2>
+
+        <h3 id="sec3-1">3.1 Função Logística (Sigmoide)</h3>
+
+        <p>O modelo Logit resolve o problema das probabilidades fora de [0,1] usando a <strong>função logística</strong>:</p>
+
+        <div class="formula-box important">
+            <div class="formula-label">Função Logística</div>
+            <div class="formula">Pᵢ = 1 / (1 + e^(-Zᵢ))</div>
+            <div class="formula-label" style="margin-top: 0.5rem;">onde Zᵢ = β₀ + β₁Xᵢ</div>
+        </div>
+
+        <div class="concept-box">
+            <h4>💡 Propriedades da Sigmoide</h4>
+            <ul>
+                <li>Quando Z → +∞, então P → 1</li>
+                <li>Quando Z → -∞, então P → 0</li>
+                <li>Quando Z = 0, então P = 0.5</li>
+                <li>A função é sempre crescente</li>
+                <li>O resultado está <strong>sempre</strong> entre 0 e 1</li>
+            </ul>
+        </div>
+
+        <h3 id="sec3-2">3.2 Odds e Log-Odds</h3>
+
+        <h4>Derivação da Transformação Logit</h4>
+
+        <p>Vamos demonstrar que o termo linear é igual ao logaritmo da razão de chances:</p>
+
+        <div class="steps">
+            <div class="step">
+                <strong>Ponto de partida:</strong> A função logística.
+                <div class="formula-box">
+                    <div class="formula">Pᵢ = 1 / (1 + e^(-Zᵢ))</div>
+                </div>
+            </div>
+
+            <div class="step">
+                <strong>Inverter a fração:</strong>
+                <div class="formula-box">
+                    <div class="formula">1 + e^(-Zᵢ) = 1/Pᵢ</div>
+                </div>
+            </div>
+
+            <div class="step">
+                <strong>Isolar a exponencial:</strong>
+                <div class="formula-box">
+                    <div class="formula">e^(-Zᵢ) = 1/Pᵢ - 1 = (1 - Pᵢ)/Pᵢ</div>
+                </div>
+            </div>
+
+            <div class="step">
+                <strong>Inverter ambos os lados:</strong>
+                <div class="formula-box">
+                    <div class="formula">e^(Zᵢ) = Pᵢ/(1 - Pᵢ)</div>
+                </div>
+                <p>O termo à direita é chamado de <strong>Odds</strong> (razão de chances).</p>
+            </div>
+
+            <div class="step">
+                <strong>Aplicar logaritmo natural:</strong>
+                <div class="formula-box important">
+                    <div class="formula-label">Log-Odds (Logit)</div>
+                    <div class="formula">ln[Pᵢ/(1 - Pᵢ)] = Zᵢ = β₀ + β₁Xᵢ</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="formula-box definition">
+            <div class="formula-label">Definições Importantes</div>
+            <div class="formula">
+                <strong>Odds:</strong> Pᵢ/(1 - Pᵢ) = razão sucesso/fracasso<br><br>
+                <strong>Log-Odds (Logit):</strong> ln[Pᵢ/(1 - Pᵢ)] = termo linear
+            </div>
+        </div>
+
+        <h3 id="sec3-3">3.3 Interpretação dos Coeficientes</h3>
+
+        <div class="warning-box">
+            <h4>⚠️ Erro Comum de Interpretação</h4>
+            <p>No Logit, os coeficientes <strong>NÃO</strong> representam variação direta na probabilidade!</p>
+            <p>Eles representam variação no <strong>log-odds</strong>.</p>
+        </div>
+
+        <h4>Interpretação Correta via Odds Ratio</h4>
+
+        <p>Se <span class="math">β₁ = 1.27</span>, então:</p>
+
+        <div class="formula-box">
+            <div class="formula">e^(β₁) = e^(1.27) ≈ 3.56</div>
+        </div>
+
+        <p>Isso significa que um aumento de 1 unidade em X <strong>multiplica a odds por 3.56</strong>.</p>
+
+        <div class="example-box">
+            <h4>📝 Exemplo: Crédito e Raça</h4>
+            <p>Modelo: <span class="math">L̂ = -4.13 + 5.37(P/I) + 1.27(Afam)</span></p>
+            
+            <p><strong>Interpretação ERRADA:</strong> "Ser afro-americano aumenta a probabilidade de negação em 127%"</p>
+            
+            <p><strong>Interpretação CORRETA:</strong> Como e^(1.27) ≈ 3.5, a <strong>chance (odds)</strong> de um afro-americano ter crédito negado é aproximadamente <strong>3,5 vezes maior</strong> que a de um branco com mesmas condições financeiras.</p>
+        </div>
+    </section>
+
+    <!-- CAPÍTULO 4 -->
+    <section id="cap4">
+        <h2>4. Efeitos Marginais</h2>
+
+        <h3 id="sec4-1">4.1 Regra da Cadeia</h3>
+
+        <p>Para calcular o efeito marginal no Logit, precisamos da <strong>regra da cadeia</strong> do cálculo diferencial:</p>
+
+        <div class="formula-box definition">
+            <div class="formula-label">Regra da Cadeia</div>
+            <div class="formula">
+                Se y = f(g(x)), então:<br><br>
+                dy/dx = (df/dg) · (dg/dx)
+            </div>
+        </div>
+
+        <p>No contexto do Logit:</p>
+        <ul>
+            <li>P é função de Z: <span class="math">P = f(Z) = 1/(1+e^(-Z))</span></li>
+            <li>Z é função de X: <span class="math">Z = g(X) = β₀ + β₁X</span></li>
+        </ul>
+
+        <div class="formula-box">
+            <div class="formula">∂P/∂Xₖ = (dP/dZ) · (∂Z/∂Xₖ)</div>
+        </div>
+
+        <h3 id="sec4-2">4.2 Derivação no Logit</h3>
+
+        <div class="steps">
+            <div class="step">
+                <strong>Calcular ∂Z/∂Xₖ:</strong>
+                <div class="formula-box">
+                    <div class="formula">∂Z/∂Xₖ = βₖ</div>
+                </div>
+            </div>
+
+            <div class="step">
+                <strong>Derivar a Sigmoide P(Z) = (1 + e^(-Z))^(-1):</strong>
+                <div class="formula-box">
+                    <div class="formula">
+                        dP/dZ = -1 · (1+e^(-Z))^(-2) · (e^(-Z)) · (-1)<br><br>
+                        dP/dZ = e^(-Z) / (1+e^(-Z))²
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <strong>Simplificar algebricamente:</strong>
+                <div class="formula-box">
+                    <div class="formula">
+                        dP/dZ = [1/(1+e^(-Z))] · [e^(-Z)/(1+e^(-Z))]<br><br>
+                        dP/dZ = P · (1 - P)
+                    </div>
+                </div>
+                <p>Note que <span class="math">e^(-Z)/(1+e^(-Z)) = 1 - P</span></p>
+            </div>
+
+            <div class="step">
+                <strong>Resultado Final:</strong>
+                <div class="formula-box important">
+                    <div class="formula-label">Efeito Marginal no Logit</div>
+                    <div class="formula">∂Pᵢ/∂Xₖ = βₖ · Pᵢ · (1 - Pᵢ)</div>
+                </div>
+            </div>
+        </div>
+
+        <h3 id="sec4-3">4.3 Interpretação Gráfica</h3>
+
+        <p>O termo <span class="math">P(1-P)</span> determina a <strong>sensibilidade</strong> do modelo em diferentes pontos da probabilidade.</p>
+
+        <table>
+            <tr>
+                <th>P</th>
+                <th>P(1-P)</th>
+                <th>Sensibilidade</th>
+            </tr>
+            <tr>
+                <td>0.10</td>
+                <td>0.09</td>
+                <td>Baixa</td>
+            </tr>
+            <tr>
+                <td>0.30</td>
+                <td>0.21</td>
+                <td>Média</td>
+            </tr>
+            <tr>
+                <td class="highlight">0.50</td>
+                <td class="highlight">0.25 (máximo)</td>
+                <td class="highlight">Máxima</td>
+            </tr>
+            <tr>
+                <td>0.70</td>
+                <td>0.21</td>
+                <td>Média</td>
+            </tr>
+            <tr>
+                <td>0.90</td>
+                <td>0.09</td>
+                <td>Baixa</td>
+            </tr>
+        </table>
+
+        <div class="concept-box">
+            <h4>💡 Insight Importante</h4>
+            <p>O efeito marginal é <strong>máximo quando P = 0.5</strong> e diminui nos extremos. Isso significa que o Logit é mais sensível a mudanças em X quando a probabilidade está no meio da distribuição, e menos sensível nos extremos (perto de 0 ou 1).</p>
+        </div>
+
+        <div class="example-box">
+            <h4>📝 Exemplo Comparativo</h4>
+            <p>Dado <span class="math">β(P/I) = 5.37</span>:</p>
+            <ul>
+                <li><strong>Indivíduo A (P = 0.50):</strong> Efeito = 5.37 × 0.50 × 0.50 = <span class="highlight">1.34</span></li>
+                <li><strong>Indivíduo B (P = 0.90):</strong> Efeito = 5.37 × 0.90 × 0.10 = <span class="highlight">0.48</span></li>
+            </ul>
+            <p>O impacto de um aumento na dívida é <strong>2.8 vezes maior</strong> para quem está na faixa média de probabilidade!</p>
+        </div>
+    </section>
+
+    <!-- CAPÍTULO 5 -->
+    <section id="cap5">
+        <h2>5. Estimação por Máxima Verossimilhança</h2>
+
+        <h3 id="sec5-1">5.1 Função de Verossimilhança</h3>
+
+        <p>A <strong>Máxima Verossimilhança (MLE)</strong> busca os parâmetros que maximizam a probabilidade de observar os dados que temos.</p>
+
+        <p>Para uma observação individual com Y ∈ {0,1}:</p>
+
+        <div class="formula-box">
+            <div class="formula-label">Probabilidade de uma observação</div>
+            <div class="formula">P(Yᵢ) = Pᵢ^(Yᵢ) · (1-Pᵢ)^(1-Yᵢ)</div>
+        </div>
+
+        <p>Verificação:</p>
+        <ul>
+            <li>Se Yᵢ = 1: P(Yᵢ) = Pᵢ¹ · (1-Pᵢ)⁰ = Pᵢ ✓</li>
+            <li>Se Yᵢ = 0: P(Yᵢ) = Pᵢ⁰ · (1-Pᵢ)¹ = 1-Pᵢ ✓</li>
+        </ul>
+
+        <p>A <strong>função de verossimilhança</strong> é o produto das probabilidades individuais (assumindo independência):</p>
+
+        <div class="formula-box important">
+            <div class="formula-label">Função de Verossimilhança</div>
+            <div class="formula">L(β) = ∏ᵢ Pᵢ^(Yᵢ) · (1-Pᵢ)^(1-Yᵢ)</div>
+        </div>
+
+        <h3 id="sec5-2">5.2 Log-Verossimilhança</h3>
+
+        <p>Por conveniência matemática, trabalhamos com o logaritmo (transforma produtos em somas):</p>
+
+        <div class="formula-box important">
+            <div class="formula-label">Log-Verossimilhança</div>
+            <div class="formula">ln L = Σᵢ [Yᵢ ln(Pᵢ) + (1-Yᵢ) ln(1-Pᵢ)]</div>
+        </div>
+
+        <h4>Simplificação Usando Propriedades do Logit</h4>
+
+        <p>Sabemos que no Logit:</p>
+        <ul>
+            <li><span class="math">ln(Pᵢ/(1-Pᵢ)) = Xᵢβ</span></li>
+            <li><span class="math">ln(1-Pᵢ) = -ln(1 + e^(Xᵢβ))</span></li>
+        </ul>
+
+        <p>Substituindo:</p>
+
+        <div class="formula-box">
+            <div class="formula">ln L = Σᵢ [Yᵢ(Xᵢβ) - ln(1 + e^(Xᵢβ))]</div>
+        </div>
+
+        <h3 id="sec5-3">5.3 Condições de Primeira Ordem</h3>
+
+        <p>Para encontrar o máximo, derivamos em relação a β e igualamos a zero.</p>
+
+        <div class="steps">
+            <div class="step">
+                <strong>Derivar a Log-Verossimilhança (Score):</strong>
+                <div class="formula-box">
+                    <div class="formula">
+                        ∂ln L/∂β = Σᵢ [YᵢXᵢ - (1/(1+e^(Xᵢβ))) · e^(Xᵢβ) · Xᵢ]
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <strong>Reconhecer que e^(Xᵢβ)/(1+e^(Xᵢβ)) = Pᵢ:</strong>
+                <div class="formula-box">
+                    <div class="formula">∂ln L/∂β = Σᵢ [YᵢXᵢ - PᵢXᵢ]</div>
+                </div>
+            </div>
+
+            <div class="step">
+                <strong>Fatorar Xᵢ:</strong>
+                <div class="formula-box">
+                    <div class="formula">∂ln L/∂β = Σᵢ (Yᵢ - Pᵢ)Xᵢ</div>
+                </div>
+            </div>
+
+            <div class="step">
+                <strong>Igualar a zero para maximizar:</strong>
+                <div class="formula-box important">
+                    <div class="formula-label">Condição de Primeira Ordem (CPO) do MLE-Logit</div>
+                    <div class="formula">Σᵢ (Yᵢ - Pᵢ)Xᵢ = 0</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="concept-box">
+            <h4>💡 Interpretação da CPO</h4>
+            <p>A condição <span class="math">Σ(Yᵢ - Pᵢ)Xᵢ = 0</span> diz que os resíduos <span class="math">(Yᵢ - Pᵢ)</span> devem ser ortogonais às variáveis explicativas Xᵢ. Isso é análogo à condição de MQO, onde <span class="math">Σ(Yᵢ - Ŷᵢ)Xᵢ = 0</span>.</p>
+        </div>
+
+        <div class="warning-box">
+            <h4>⚠️ Não Existe Solução Fechada</h4>
+            <p>A equação <span class="math">Σ(Yᵢ - Pᵢ)Xᵢ = 0</span> é <strong>não-linear</strong> em β (pois Pᵢ depende de β de forma não-linear). Por isso, o MLE do Logit requer <strong>métodos numéricos iterativos</strong> (Newton-Raphson, por exemplo).</p>
+        </div>
+    </section>
+
+    <!-- CAPÍTULO 6 -->
+    <section id="cap6">
+        <h2>6. Implementação em R</h2>
+
+        <h3 id="sec6-1">6.1 Manipulação de Dados</h3>
+
+        <h4>Conversão de Fatores para Binário</h4>
+
+        <p>No R, variáveis categóricas (fatores) são armazenadas internamente como inteiros 1, 2, 3, etc. Para o LPM funcionar, precisamos de 0 e 1.</p>
+
+        <div class="code-block">
+<span class="comment"># Problema: 'deny' é um fator com níveis "no" e "yes"</span>
+<span class="comment"># Internamente armazenado como 1 e 2</span>
+
+<span class="comment"># Solução: converter para numérico e subtrair 1</span>
+HMDA$deny <- <span class="function">as.numeric</span>(HMDA$deny) - 1
+
+<span class="comment"># Agora deny é 0 (negação = não) ou 1 (negação = sim)</span>
+</div>
+
+        <div class="warning-box">
+            <h4>⚠️ Por que subtrair 1?</h4>
+            <p>Sem a subtração, o modelo preveria valores em torno de 1.5 (média de 1 e 2), em vez de probabilidades entre 0 e 1. A interpretação como probabilidade <strong>exige</strong> que Y seja 0 ou 1.</p>
+        </div>
+
+        <h3 id="sec6-2">6.2 Erros-Padrão Robustos</h3>
+
+        <h4>Comparação de Abordagens</h4>
+
+        <div class="code-block">
+<span class="comment"># Abordagem 1: MQO padrão (INCORRETO para LPM)</span>
+modelo <- <span class="function">lm</span>(deny ~ pirat, data = HMDA)
+<span class="function">summary</span>(modelo)
+<span class="comment"># Assume homocedasticidade - erros-padrão INCORRETOS</span>
+
+<span class="comment"># Abordagem 2: Com erros robustos (CORRETO)</span>
+<span class="keyword">library</span>(sandwich)
+<span class="keyword">library</span>(lmtest)
+<span class="function">coeftest</span>(modelo, vcov. = <span class="function">vcovHC</span>)
+<span class="comment"># Usa matriz de covariância robusta - erros-padrão CORRETOS</span>
+</div>
+
+        <table>
+            <tr>
+                <th>Aspecto</th>
+                <th>lm() padrão</th>
+                <th>coeftest() com vcovHC</th>
+            </tr>
+            <tr>
+                <td>Coeficientes</td>
+                <td>Corretos</td>
+                <td>Corretos</td>
+            </tr>
+            <tr>
+                <td>Erros-padrão</td>
+                <td class="highlight">Incorretos</td>
+                <td>Corretos</td>
+            </tr>
+            <tr>
+                <td>Estatística t</td>
+                <td class="highlight">Inválida</td>
+                <td>Válida</td>
+            </tr>
+            <tr>
+                <td>p-valores</td>
+                <td class="highlight">Não confiáveis</td>
+                <td>Confiáveis</td>
+            </tr>
+            <tr>
+                <td>Pressuposto</td>
+                <td>Homocedasticidade</td>
+                <td>Permite heterocedasticidade</td>
+            </tr>
+        </table>
+
+        <div class="concept-box">
+            <h4>💡 vcovHC - O que faz?</h4>
+            <p>A função <strong>vcovHC</strong> (Heteroskedasticity-Consistent) calcula uma matriz de covariância que é <strong>consistente mesmo sob heterocedasticidade</strong>. Ela usa os resíduos ao quadrado de cada observação para estimar a variância individual, em vez de assumir variância constante.</p>
+        </div>
+
+        <h4>Código Completo para Análise</h4>
+
+        <div class="code-block">
+<span class="comment"># Carregar pacotes necessários</span>
+<span class="keyword">library</span>(AER)      <span class="comment"># Dados HMDA</span>
+<span class="keyword">library</span>(sandwich) <span class="comment"># vcovHC</span>
+<span class="keyword">library</span>(lmtest)   <span class="comment"># coeftest</span>
+
+<span class="comment"># Carregar dados</span>
+<span class="function">data</span>("HMDA")
+
+<span class="comment"># Converter variável dependente</span>
+HMDA$deny <- <span class="function">as.numeric</span>(HMDA$deny) - 1
+
+<span class="comment"># Estimar LPM</span>
+lpm <- <span class="function">lm</span>(deny ~ pirat + afam, data = HMDA)
+
+<span class="comment"># Resultados com erros robustos</span>
+<span class="function">coeftest</span>(lpm, vcov. = <span class="function">vcovHC</span>(lpm, type = "HC1"))
+
+<span class="comment"># Estimar Logit</span>
+logit <- <span class="function">glm</span>(deny ~ pirat + afam, 
+              data = HMDA, 
+              family = <span class="function">binomial</span>(link = "logit"))
+<span class="function">summary</span>(logit)
+
+<span class="comment"># Calcular Odds Ratios</span>
+<span class="function">exp</span>(<span class="function">coef</span>(logit))
+</div>
+    </section>
+
+    <!-- RESUMO FINAL -->
+    <section>
+        <h2>📋 Resumo das Fórmulas Essenciais</h2>
+
+        <div class="formula-box definition">
+            <div class="formula-label">Esperança = Probabilidade (LPM)</div>
+            <div class="formula">E(Yᵢ | Xᵢ) = P(Yᵢ = 1 | Xᵢ)</div>
+        </div>
+
+        <div class="formula-box definition">
+            <div class="formula-label">Variância do Erro (LPM)</div>
+            <div class="formula">Var(uᵢ | Xᵢ) = Pᵢ(1 - Pᵢ)</div>
+        </div>
+
+        <div class="formula-box definition">
+            <div class="formula-label">Função Logística</div>
+            <div class="formula">Pᵢ = 1 / (1 + e^(-Zᵢ))</div>
+        </div>
+
+        <div class="formula-box definition">
+            <div class="formula-label">Log-Odds (Logit)</div>
+            <div class="formula">ln[Pᵢ/(1-Pᵢ)] = β₀ + β₁Xᵢ</div>
+        </div>
+
+        <div class="formula-box definition">
+            <div class="formula-label">Efeito Marginal (Logit)</div>
+            <div class="formula">∂Pᵢ/∂Xₖ = βₖ · Pᵢ · (1 - Pᵢ)</div>
+        </div>
+
+        <div class="formula-box definition">
+            <div class="formula-label">CPO do MLE-Logit</div>
+            <div class="formula">Σᵢ (Yᵢ - Pᵢ)Xᵢ = 0</div>
+        </div>
+
+        <div class="formula-box definition">
+            <div class="formula-label">Transformação WLS</div>
+            <div class="formula">Dividir toda equação por σᵢ = √[P̂ᵢ(1-P̂ᵢ)]</div>
+        </div>
+    </section>
+
+</div>
+
+<footer>
+    <p>Apostila de Econometria — Modelos de Escolha Binária</p>
+    <p>Material de apoio para estudos</p>
+</footer>
+
+</body>
+</html>
