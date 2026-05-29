@@ -837,6 +837,10 @@ main { position: relative; z-index: 1; }
   padding: 26px;
 }
 .proj-art svg { width: 100%; height: 100%; display: block; }
+.proj-item { position: relative; cursor: pointer; }
+.proj-item [href^="project-"]::after { content: ''; position: absolute; inset: 0; z-index: 0; }
+.proj-item__row { position: relative; z-index: 1; }
+.proj-item:hover { background: var(--bg-hover, rgba(212,165,116,0.04)); }
 .proj-art--ludami { color: var(--accent); }
 .proj-art--krvo   { color: var(--sage); }
 .proj-art--llm    { color: var(--steel); }
@@ -971,14 +975,16 @@ main { position: relative; z-index: 1; }
   color: var(--ink-dim);
   line-height: 1.6;
 }
-.write-row a.go {
+a.write-row { color: inherit; text-decoration: none; display: grid; }
+a.write-row:hover { background: var(--bg-hover, rgba(212,165,116,0.04)); }
+.write-row .go {
   font-family: var(--type-mono);
   font-size: 0.75rem;
   color: var(--ink-mute);
   border: none;
   white-space: nowrap;
 }
-.write-row a.go:hover { color: var(--accent); }
+.write-row .go:hover, a.write-row:hover .go { color: var(--accent); }
 
 /* ============ PROD PAGE ============ */
 .prod-diagram {
