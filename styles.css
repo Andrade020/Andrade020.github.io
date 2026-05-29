@@ -1247,7 +1247,8 @@ body.tweak-roomy .selected__item { padding: 32px 34px; }
 .skill h4 { margin-bottom: 12px; }
 
 /* Recent rows */
-.recent-row { padding: 22px 0; }
+.recent-row { padding: 13px 0; }
+.recent-row .what { font-size: 0.88rem; }
 
 /* Lab demo cards: title → desc gap */
 .demo { gap: 12px; }
