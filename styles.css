@@ -1116,6 +1116,11 @@ main { position: relative; z-index: 1; }
   padding: 2px 0;
 }
 .paper__links a:hover { color: var(--accent); border-color: var(--accent); }
+.paper--compact { padding: 24px; background: transparent; border-bottom: none; border-top: 1px solid var(--rule-soft); border-radius: 0; margin-top: 0; }
+.paper--compact .paper__journal { font-size: 0.88rem; color: var(--ink-mute); }
+.paper--compact .paper__title { font-size: 1.15rem; }
+.paper--compact .paper__abstract { font-size: 0.9rem; color: var(--ink-mute); }
+.paper--compact + .paper--compact { border-top: 1px solid var(--rule-soft); }
 
 /* ============ HINT CARD (open source ↔ production) ============ */
 .hint {
