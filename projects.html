@@ -45,30 +45,37 @@
     <p data-lang-pt>Projetos pessoais, em geral pequenos e opinativos, todos abertos no GitHub. Um kit de scaffolding que clono toda vez, um messenger de automação que uso em produção, um wrapper desktop para rodar LLMs localmente, um filtro de tela para Windows.</p>
   </section>
 
-  <section class="wrap proj-list">
-    <article class="proj-item proj-item--ludami">
+  <section class="section wrap">
+    <div class="section__head">
+      <h2 class="section__title" data-lang-en>Latest release</h2>
+      <h2 class="section__title" data-lang-pt>Último lançamento</h2>
+    </div>
+    <article class="proj-item proj-item--ludami proj-item--featured" onclick="if(!event.target.closest('a'))location.href='project-ludami.html'">
       <div class="proj-art proj-art--ludami">
           <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
             <rect x="10" y="10" width="80" height="80" rx="14" fill="none" stroke="currentColor" stroke-width="2.5"/>
             <rect x="22" y="22" width="56" height="56" rx="8" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.6"/>
             <circle cx="50" cy="50" r="10" fill="currentColor"/>
           </svg>
-        </div><div class="proj-item__body"><h2 class="proj-item__title">ludami</h2><div class="proj-item__meta" data-lang-en>2025 · Link curation platform</div>
-        <div class="proj-item__meta" data-lang-pt>2025 · Plataforma de curadoria de links</div>
-      
-        <p data-lang-en>A link curation platform for shared spaces: save YouTube videos and URLs into thematic collections, annotate them, and share with collaborators. Built as a PWA — installable on desktop and mobile from the browser, no app store needed.</p>
-        <p data-lang-pt>Plataforma de curadoria de links para espaços compartilhados: salve vídeos do YouTube e URLs em coleções temáticas, anote-os e compartilhe com colaboradores. PWA — instalável em desktop e mobile direto do navegador, sem app store.</p>
+        </div><div class="proj-item__body"><h2 class="proj-item__title">ludami</h2><div class="proj-item__meta" data-lang-en>2025 · Link curation platform · PWA</div>
+        <div class="proj-item__meta" data-lang-pt>2025 · Plataforma de curadoria de links · PWA</div>
+        <p data-lang-en>A link curation platform for shared spaces: save YouTube videos and URLs into thematic collections, annotate them, and share with collaborators. Installable on desktop and mobile from the browser, no app store needed.</p>
+        <p data-lang-pt>Plataforma de curadoria de links para espaços compartilhados: salve vídeos do YouTube e URLs em coleções temáticas, anote-os e compartilhe com colaboradores. Instalável em desktop e mobile direto do navegador, sem app store.</p>
         <div class="selected__stack">React · TypeScript · Vite · Tailwind · Supabase · PostgreSQL · Vercel</div>
         <div class="proj-item__row">
           <a href="project-ludami.html" data-lang-en>Details →</a><a href="project-ludami.html" data-lang-pt>Detalhes →</a>
           <span class="sep">·</span>
-          <a href="https://github.com/Andrade020/ludami" target="_blank" rel="noopener">GitHub ↗</a>
+          <a href="#" class="btn-app" data-lang-en target="_blank" rel="noopener">App ↗</a><a href="#" class="btn-app" data-lang-pt target="_blank" rel="noopener">App ↗</a>
+          <span class="sep">·</span>
+          <a href="https://github.com/Andrade020/ludami" class="btn-gh" target="_blank" rel="noopener">GitHub ↗</a>
           <span class="tag open" data-lang-en>Open source</span><span class="tag open" data-lang-pt>Open source</span>
         </div>
       </div>
     </article>
+  </section>
 
-    <article class="proj-item proj-item--krvo">
+  <section class="wrap proj-list">
+    <article class="proj-item proj-item--krvo" onclick="if(!event.target.closest('a'))location.href='project-krvo.html'">
       <div class="proj-art proj-art--krvo">
           <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
             <path d="M 12 32 L 50 56 L 88 32" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -77,20 +84,21 @@
           </svg>
         </div><div class="proj-item__body"><h2 class="proj-item__title">Krvo</h2><div class="proj-item__meta" data-lang-en>2024 · Email automation</div>
         <div class="proj-item__meta" data-lang-pt>2024 · Automação de e-mail</div>
-      
         <p data-lang-en>Digital messenger for automated email dispatch via Microsoft Graph. GUI and CLI both available, rule-based routing by directory, template management, rate limiting. I use it in production to fire the daily risk reports from my Airflow pipelines.</p>
         <p data-lang-pt>Messenger digital para envio automatizado de e-mails via Microsoft Graph. GUI e CLI, roteamento por diretório, gestão de templates, rate limiting. Uso em produção para disparar os relatórios diários dos meus pipelines do Airflow.</p>
         <div class="selected__stack">Python · Microsoft Graph API · Azure AD · PyInstaller</div>
         <div class="proj-item__row">
           <a href="project-krvo.html" data-lang-en>Details →</a><a href="project-krvo.html" data-lang-pt>Detalhes →</a>
           <span class="sep">·</span>
-          <a href="https://github.com/Andrade020/krvo" target="_blank" rel="noopener">GitHub ↗</a>
+          <a href="https://github.com/Andrade020/krvo/releases" class="btn-gh" target="_blank" rel="noopener" data-lang-en>Download .exe ↗</a><a href="https://github.com/Andrade020/krvo/releases" class="btn-gh" target="_blank" rel="noopener" data-lang-pt>Baixar .exe ↗</a>
+          <span class="sep">·</span>
+          <a href="https://github.com/Andrade020/krvo" class="btn-gh" target="_blank" rel="noopener">GitHub ↗</a>
           <span class="tag open" data-lang-en>Open source</span><span class="tag open" data-lang-pt>Open source</span>
         </div>
       </div>
     </article>
 
-    <article class="proj-item proj-item--llm">
+    <article class="proj-item proj-item--llm" onclick="if(!event.target.closest('a'))location.href='project-local-llm.html'">
       <div class="proj-art proj-art--llm">
           <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
             <rect x="14" y="24" width="72" height="50" rx="3" fill="none" stroke="currentColor" stroke-width="2.5"/>
@@ -104,20 +112,19 @@
           </svg>
         </div><div class="proj-item__body"><h2 class="proj-item__title">Local_LLM</h2><div class="proj-item__meta" data-lang-en>2024 · Desktop LLM runner</div>
         <div class="proj-item__meta" data-lang-pt>2024 · Runner local de LLMs</div>
-      
         <p data-lang-en>A desktop interface for installing and running LLMs locally, no internet required after setup. A single GUI manages model downloads, configuration, and inference. Useful when you want to keep prompts off the cloud entirely.</p>
         <p data-lang-pt>Uma interface desktop para instalar e rodar LLMs localmente, sem necessidade de internet após o setup. Uma GUI única gerencia downloads de modelos, configuração e inferência. Útil quando você quer manter prompts totalmente fora da nuvem.</p>
         <div class="selected__stack">Python · tkinter · llama.cpp</div>
         <div class="proj-item__row">
           <a href="project-local-llm.html" data-lang-en>Details →</a><a href="project-local-llm.html" data-lang-pt>Detalhes →</a>
           <span class="sep">·</span>
-          <a href="https://github.com/Andrade020/Local_LLM" target="_blank" rel="noopener">GitHub ↗</a>
+          <a href="https://github.com/Andrade020/Local_LLM" class="btn-gh" target="_blank" rel="noopener">GitHub ↗</a>
           <span class="tag open" data-lang-en>Open source</span><span class="tag open" data-lang-pt>Open source</span>
         </div>
       </div>
     </article>
 
-    <article class="proj-item proj-item--eyezen">
+    <article class="proj-item proj-item--eyezen" onclick="if(!event.target.closest('a'))location.href='project-eyezen.html'">
       <div class="proj-art proj-art--eyezen">
           <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
             <path d="M 14 50 Q 50 18 86 50 Q 50 82 14 50 Z" fill="none" stroke="currentColor" stroke-width="2.5"/>
@@ -126,19 +133,20 @@
           </svg>
         </div><div class="proj-item__body"><h2 class="proj-item__title">EyeZen</h2><div class="proj-item__meta" data-lang-en>2024 · Visual fatigue filter</div>
         <div class="proj-item__meta" data-lang-pt>2024 · Filtro de fadiga visual</div>
-      
         <p data-lang-en>A Windows screen filter that reduces visual fatigue during long reading sessions. Sits in the system tray with global Ctrl+Alt+1 through 4 shortcuts and persistent state. Distributed as a standalone .exe.</p>
         <p data-lang-pt>Filtro de tela para Windows que reduz fadiga visual em sessões longas de leitura. Vive na bandeja do sistema, com atalhos globais Ctrl+Alt+1 a 4 e estado persistente. Distribuído como .exe standalone.</p>
         <div class="selected__stack">Python · Windows API · PyInstaller</div>
         <div class="proj-item__row">
           <a href="project-eyezen.html" data-lang-en>Details →</a><a href="project-eyezen.html" data-lang-pt>Detalhes →</a>
           <span class="sep">·</span>
-          <a href="https://github.com/Andrade020/EyeZen" target="_blank" rel="noopener">GitHub ↗</a>
+          <a href="https://github.com/Andrade020/EyeZen/releases" class="btn-gh" target="_blank" rel="noopener" data-lang-en>Download .exe ↗</a><a href="https://github.com/Andrade020/EyeZen/releases" class="btn-gh" target="_blank" rel="noopener" data-lang-pt>Baixar .exe ↗</a>
+          <span class="sep">·</span>
+          <a href="https://github.com/Andrade020/EyeZen" class="btn-gh" target="_blank" rel="noopener">GitHub ↗</a>
           <span class="tag open" data-lang-en>Open source</span><span class="tag open" data-lang-pt>Open source</span>
         </div>
       </div>
     </article>
-    <article class="proj-item proj-item--niver">
+    <article class="proj-item proj-item--niver" onclick="if(!event.target.closest('a'))location.href='project-anotaniverweb.html'">
       <div class="proj-art proj-art--niver">
           <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
             <rect x="18" y="48" width="64" height="38" rx="4" fill="none" stroke="currentColor" stroke-width="2.5"/>
@@ -154,14 +162,15 @@
           </svg>
         </div><div class="proj-item__body"><h2 class="proj-item__title">AnotaNiverWeb</h2><div class="proj-item__meta" data-lang-en>2025 · Birthday reminder PWA</div>
         <div class="proj-item__meta" data-lang-pt>2025 · PWA de lembretes de aniversário</div>
-
-        <p data-lang-en>A Progressive Web App for tracking birthdays with colorful countdown cards. Fully offline, installable on iOS and Android from the browser, no account, no server — everything lives on your device.</p>
+        <p data-lang-en>A Progressive Web App for tracking birthdays with colorful countdown cards. Fully offline, installable on iOS and Android from the browser, no account, no server.</p>
         <p data-lang-pt>Progressive Web App para acompanhar aniversários com cards de contagem regressiva coloridos. Totalmente offline, instalável em iOS e Android direto do navegador, sem conta, sem servidor.</p>
         <div class="selected__stack">React · TypeScript · Vite · Tailwind · Vercel</div>
         <div class="proj-item__row">
           <a href="project-anotaniverweb.html" data-lang-en>Details →</a><a href="project-anotaniverweb.html" data-lang-pt>Detalhes →</a>
           <span class="sep">·</span>
-          <a href="https://github.com/Andrade020/AnotaNiverWeb" target="_blank" rel="noopener">GitHub ↗</a>
+          <a href="#" class="btn-app" data-lang-en target="_blank" rel="noopener">App ↗</a><a href="#" class="btn-app" data-lang-pt target="_blank" rel="noopener">App ↗</a>
+          <span class="sep">·</span>
+          <a href="https://github.com/Andrade020/AnotaNiverWeb" class="btn-gh" target="_blank" rel="noopener">GitHub ↗</a>
           <span class="tag open" data-lang-en>Open source</span><span class="tag open" data-lang-pt>Open source</span>
         </div>
       </div>
@@ -182,9 +191,31 @@
 
 <footer class="foot">
   <div class="wrap">
-    <div class="foot__base" style="border-top:none;margin-top:0;padding-top:0;">
+    <div class="foot__grid">
+      <div>
+        <div class="foot__sig" data-lang-en>Want to talk?</div>
+        <div class="foot__sig" data-lang-pt>Quer conversar?</div>
+        <p data-lang-en>I read every message. If something here resonates, drop a line.</p>
+        <p data-lang-pt>Leio todas as mensagens. Se algo aqui ressoa, é só escrever.</p>
+      </div>
+      <div>
+        <h5 data-lang-en>Direct</h5><h5 data-lang-pt>Direto</h5>
+        <div class="foot__links">
+          <a href="mailto:lucas_r_andrade@hotmail.com">lucas_r_andrade@hotmail.com</a>
+          <a href="https://wa.me/5521975056123" target="_blank" rel="noopener">WhatsApp · +55 21 97505 6123</a>
+        </div>
+      </div>
+      <div>
+        <h5 data-lang-en>Elsewhere</h5><h5 data-lang-pt>Em outros lugares</h5>
+        <div class="foot__links">
+          <a href="https://github.com/Andrade020" target="_blank" rel="noopener">github.com/Andrade020</a>
+          <a href="https://www.linkedin.com/in/lucas-rafael-de-andrade/" target="_blank" rel="noopener">linkedin.com/in/lucas-rafael-de-andrade</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot__base">
       <span>© 2026 Lucas R. Andrade · Rio de Janeiro</span>
-      <a href="mailto:lucas_r_andrade@hotmail.com">lucas_r_andrade@hotmail.com</a>
+      <span><a href="mailto:lucas_r_andrade@hotmail.com">lucas_r_andrade@hotmail.com</a> · <a href="https://wa.me/5521975056123" target="_blank" rel="noopener">+55 21 97505 6123</a></span>
     </div>
   </div>
 </footer>
