@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Subgrafos Monocromáticos e os Limites de Grafos (Graphons)</title>
+  <meta name="description" content="Apostila de divulgação científica sobre subgrafos monocromáticos em redes multiplex densas coloridas aleatoriamente, baseada no artigo arXiv:2501.07821 de M. D. Andrade e B. B. Bhattacharya." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [["$","$"],["\\(","\\)"]],
+        displayMath: [["$$","$$"],["\\[","\\]"]]
+      },
+      options: { skipHtmlTags: ["script","noscript","style","textarea"] }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+  <style>
+    :root {
+      --bg:          #0f1117;
+      --bg-card:     #161b27;
+      --bg-card-2:   #1c2233;
+      --border:      #2a3349;
+      --border-light:#334060;
+      --accent:      #c9a96e;
+      --accent-dim:  #8a6d3b;
+      --accent-glow: rgba(201,169,110,0.12);
+      --text:        #dde4f0;
+      --text-muted:  #7a8aa8;
+      --text-dim:    #4e5f7a;
+      --blue:        #74a7e8;
+      --radius:      10px;
+      --radius-sm:   6px;
+      --shadow:      0 4px 24px rgba(0,0,0,0.5);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      font-size: 16px;
+      min-height: 100vh;
+    }
+
+    /* Top bar */
+    .top-bar {
+      background: linear-gradient(135deg, #0a0e18 0%, #131929 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+    }
+    .top-bar-title { font-family: 'Lora', serif; font-size: 0.95rem; color: var(--accent); letter-spacing: 0.04em; }
+    .top-bar-meta  { font-size: 0.78rem; color: var(--text-muted); letter-spacing: 0.02em; }
+
+    /* Hero (apenas gradiente CSS, sem imagem) */
+    .hero { position: relative; text-align: center; padding: 5rem 2rem 4rem; border-bottom: 1px solid var(--border); overflow: hidden; }
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 55% 45% at 18% 25%, rgba(201,169,110,0.20), transparent 65%),
+        radial-gradient(ellipse 50% 55% at 82% 72%, rgba(116,167,232,0.15), transparent 65%),
+        radial-gradient(ellipse 40% 40% at 60% 18%, rgba(201,169,110,0.10), transparent 70%),
+        linear-gradient(135deg, #0a0e18 0%, #131929 60%, #0f1117 100%);
+    }
+    .hero-bg::after { content:""; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(15,17,23,0.2) 0%, rgba(15,17,23,0.88) 100%); }
+    .hero-inner { position: relative; z-index: 1; }
+    .hero-label {
+      display: inline-block; font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--accent); background: rgba(201,169,110,0.1); border: 1px solid rgba(201,169,110,0.25);
+      padding: 0.3rem 0.9rem; border-radius: 99px; margin-bottom: 1.4rem;
+    }
+    .hero h1 {
+      font-family: 'Lora', serif; font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 600;
+      color: #f0e8d5; line-height: 1.25; margin-bottom: 1rem; text-shadow: 0 2px 20px rgba(0,0,0,0.8);
+    }
+    .hero-subtitle { font-size: 1rem; color: #b8c6dc; max-width: 660px; margin: 0 auto 1.6rem; }
+    .hero-divider  { width: 60px; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent); margin: 0 auto; }
+
+    /* Layout */
+    .page-wrap { max-width: 860px; margin: 0 auto; padding: 3rem 1.5rem 6rem; }
+
+    /* Part */
+    .part { margin-bottom: 3.5rem; }
+    .part-header { display: flex; align-items: flex-start; gap: 1.2rem; margin-bottom: 2rem; padding-bottom: 1.2rem; border-bottom: 1px solid var(--border); }
+    .part-number {
+      flex-shrink: 0; width: 44px; height: 44px; border-radius: 50%;
+      background: var(--accent-glow); border: 1.5px solid var(--accent-dim);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Lora', serif; font-size: 1rem; color: var(--accent); margin-top: 0.15rem;
+    }
+    .part-info h2    { font-family: 'Lora', serif; font-size: 1.4rem; font-weight: 600; color: #eae0cc; margin-bottom: 0.3rem; }
+    .part-info .part-tagline { font-size: 0.88rem; color: var(--text-muted); font-style: italic; }
+
+    /* Narrative */
+    .narrative {
+      background: var(--bg-card); border: 1px solid var(--border); border-left: 3px solid var(--accent-dim);
+      border-radius: var(--radius); padding: 1.2rem 1.4rem; margin-bottom: 2rem;
+      font-family: 'Lora', serif; font-size: 0.97rem; color: #c8d4e8; line-height: 1.85;
+    }
+    .narrative p + p { margin-top: 0.75rem; }
+
+    /* Question card */
+    .question { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 1.5rem; overflow: hidden; transition: border-color 0.2s ease, box-shadow 0.2s ease; }
+    .question:hover { border-color: var(--border-light); box-shadow: 0 0 0 1px var(--border-light), var(--shadow); }
+    .question-header { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.25rem; background: var(--bg-card-2); border-bottom: 1px solid var(--border); }
+    .q-badge {
+      flex-shrink: 0; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; font-weight: 500;
+      color: var(--accent); background: var(--accent-glow); border: 1px solid rgba(201,169,110,0.2);
+      border-radius: var(--radius-sm); padding: 0.2rem 0.55rem; letter-spacing: 0.05em;
+    }
+    .question-header h3 { font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.95rem; color: #dde4f0; flex: 1; }
+    .question-body { padding: 1.2rem 1.25rem 1.4rem; }
+    .question-body p { margin-bottom: 0.7rem; font-size: 0.95rem; color: var(--text); }
+
+    /* Sub-items */
+    .sub-list { list-style: none; margin-top: 1rem; display: flex; flex-direction: column; gap: 0.85rem; }
+    .sub-list li {
+      display: flex; gap: 0.9rem; align-items: flex-start; padding: 0.75rem 1rem;
+      background: rgba(255,255,255,0.025); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); font-size: 0.93rem; line-height: 1.65; transition: background 0.18s ease;
+    }
+    .sub-list li:hover { background: rgba(201,169,110,0.04); }
+    .sub-label { flex-shrink: 0; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; font-weight: 500; color: var(--accent); margin-top: 0.1rem; min-width: 20px; }
+
+    /* Math */
+    .math-block { overflow-x: auto; padding: 0.6rem 0; margin: 0.4rem 0; }
+
+    /* Hint */
+    .hint {
+      display: flex; gap: 0.75rem; margin-top: 0.9rem; padding: 0.75rem 1rem;
+      background: rgba(116,167,232,0.06); border: 1px solid rgba(116,167,232,0.2);
+      border-radius: var(--radius-sm); font-size: 0.87rem; color: #8ab4d8;
+    }
+    .hint-icon { flex-shrink: 0; font-size: 0.85rem; margin-top: 0.05rem; opacity: 0.8; }
+
+    .part-sep { border: none; border-top: 1px dashed var(--border); margin: 3rem 0; }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 3px; }
+
+    @media (max-width: 600px) {
+      .top-bar-meta { display: none; }
+      .hero { padding: 2.5rem 1rem 2rem; }
+      .page-wrap { padding: 2rem 1rem 4rem; }
+    }
+
+    /* ── Elementos interativos ────────────────────────────────────────────── */
+    .hint          { cursor: pointer; user-select: none; }
+    .hint-toggle   { margin-left: auto; flex-shrink: 0; font-size: 0.75rem;
+                     font-weight: 600; letter-spacing: 0.06em;
+                     color: var(--blue); white-space: nowrap; }
+    .hint-content  { transition: max-height 0.35s ease, opacity 0.3s ease;
+                     max-height: 400px; overflow: hidden; opacity: 1; }
+    .hint.collapsed .hint-content { max-height: 0; opacity: 0; pointer-events: none; }
+
+    /* Interactive card */
+    .ic { background: linear-gradient(135deg,#0e1828 0%,#141f35 100%);
+          border: 1px solid #2a3f6a; border-radius: var(--radius);
+          margin-bottom: 1.8rem; overflow: hidden; }
+    .ic-header { display:flex; align-items:center; gap:.9rem;
+                 padding:.85rem 1.2rem; border-bottom:1px solid #2a3f6a;
+                 background:rgba(255,255,255,.025); }
+    .ic-badge  { font-family:'JetBrains Mono',monospace; font-size:.68rem;
+                 font-weight:600; letter-spacing:.08em; text-transform:uppercase;
+                 color:#74a7e8; background:rgba(116,167,232,.12);
+                 border:1px solid rgba(116,167,232,.28);
+                 border-radius:var(--radius-sm); padding:.18rem .55rem; }
+    .ic-header h4 { font-family:'Inter',sans-serif; font-size:.9rem;
+                    font-weight:600; color:#cdd8f0; }
+    .ic-body { padding:1.1rem 1.2rem 1.4rem; }
+    .ic-body p { font-size:.9rem; color:var(--text-muted); margin-bottom:.9rem; }
+
+    /* Sliders */
+    .sl-row   { display:flex; align-items:center; gap:.9rem;
+                margin-bottom:.75rem; flex-wrap:wrap; }
+    .sl-lbl   { font-family:'JetBrains Mono',monospace; font-size:.8rem;
+                color:var(--accent); min-width:100px; }
+    input[type=range].sl {
+        flex:1; min-width:120px; max-width:260px;
+        -webkit-appearance:none; height:4px; border-radius:2px;
+        background:linear-gradient(to right,var(--accent-dim) 0%,
+          var(--accent-dim) var(--v,50%),#2a3349 var(--v,50%));
+        outline:none; cursor:pointer; }
+    input[type=range].sl::-webkit-slider-thumb {
+        -webkit-appearance:none; width:14px; height:14px; border-radius:50%;
+        background:var(--accent); cursor:pointer;
+        box-shadow:0 0 0 3px rgba(201,169,110,.2); }
+    .sl-val { font-family:'JetBrains Mono',monospace; font-size:.8rem;
+              color:#dde4f0; min-width:38px; text-align:right; }
+
+    /* Output grid */
+    .out-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+                gap:.65rem; margin-top:.9rem; }
+    .out-cell { background:rgba(0,0,0,.2); border:1px solid #2a3349;
+                border-radius:var(--radius-sm); padding:.6rem .85rem; text-align:center; }
+    .out-lbl  { font-size:.7rem; color:var(--text-muted); margin-bottom:.22rem;
+                font-family:'JetBrains Mono',monospace; }
+    .out-val  { font-family:'JetBrains Mono',monospace; font-size:1rem;
+                font-weight:600; color:var(--accent); }
+
+    /* Buttons */
+    .btn-row  { display:flex; gap:.65rem; margin-top:.9rem; flex-wrap:wrap;
+                align-items:center; }
+    .btn { font-family:'Inter',sans-serif; font-size:.82rem; font-weight:600;
+           padding:.48rem 1.1rem; border-radius:99px; border:none; cursor:pointer;
+           transition:transform .15s,box-shadow .15s,opacity .15s; }
+    .btn:active { transform:scale(.96); }
+    .btn:disabled { opacity:.35; cursor:not-allowed; }
+    .btn-p { background:linear-gradient(135deg,#c9a96e,#9a6f38); color:#0f1117; }
+    .btn-p:hover { box-shadow:0 0 14px rgba(201,169,110,.35); }
+    .btn-s { background:rgba(255,255,255,.07); color:var(--text-muted);
+             border:1px solid var(--border); }
+    .btn-s:hover { background:rgba(255,255,255,.11); color:var(--text); }
+    .btn-s.on { border-color:var(--accent-dim); color:var(--accent);
+                background:var(--accent-glow); }
+
+    /* MCQ */
+    .mcq-opt { display:flex; align-items:center; gap:.7rem; padding:.6rem .85rem;
+               border-radius:var(--radius-sm); border:1px solid var(--border);
+               margin-bottom:.4rem; cursor:pointer; font-size:.88rem;
+               color:var(--text); transition:border-color .18s,background .18s; }
+    .mcq-opt:hover { border-color:var(--border-light); background:rgba(255,255,255,.03); }
+    .mcq-opt.ok  { border-color:#52b788; background:rgba(82,183,136,.08); color:#86d9b0; }
+    .mcq-opt.bad { border-color:#e07070; background:rgba(224,112,112,.08); color:#e89090; }
+    .opt-lbl { font-family:'JetBrains Mono',monospace; font-size:.72rem;
+               font-weight:600; color:var(--accent); min-width:16px; }
+    .opt-arr { margin-left:auto; }
+    .mcq-fb  { font-size:.84rem; padding:.6rem .85rem; border-radius:var(--radius-sm);
+               margin-top:.5rem; display:none; line-height:1.6; }
+    .mcq-fb.ok  { display:block; background:rgba(82,183,136,.1); color:#86d9b0;
+                  border:1px solid rgba(82,183,136,.3); }
+    .mcq-fb.bad { display:block; background:rgba(224,112,112,.1); color:#e89090;
+                  border:1px solid rgba(224,112,112,.3); }
+
+    /* Canvas do graphon */
+    .cv-box { border:1px solid #2a3349; border-radius:var(--radius-sm);
+              background:#0b0e15; padding:.5rem; text-align:center; }
+    .cv-box canvas { display:block; margin:0 auto; max-width:100%; }
+    .cv-cap { font-family:'JetBrains Mono',monospace; font-size:.68rem;
+              color:var(--text-muted); margin-top:.4rem; }
+  </style>
+</head>
+<body>
+
+<div class="top-bar">
+  <span class="top-bar-title">Subgrafos Monocromáticos &amp; Graphons</span>
+  <span class="top-bar-meta">COLMEA 2026 &nbsp;&middot;&nbsp; UERJ &nbsp;&middot;&nbsp; Lucas Rafael de Andrade</span>
+</div>
+
+<header class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-inner">
+    <span class="hero-label">Apostila de Divulgação Científica</span>
+    <h1>Subgrafos Monocromáticos e os Limites de Grafos (Graphons)</h1>
+    <p class="hero-subtitle">
+      O que acontece quando colorimos os vértices de uma rede enorme ao acaso e contamos
+      quantas estruturas ficam &ldquo;da mesma cor&rdquo;? Uma viagem do problema do aniversário
+      até os limites contínuos de grafos, baseada no artigo de
+      Mauricio Daros Andrade &amp; Bhaswar B. Bhattacharya (arXiv:2501.07821).
+    </p>
+    <div class="hero-divider"></div>
+  </div>
+</header>
+
+<main class="page-wrap">
+
+  <!-- ===== PARTE I ===== -->
+  <section class="part" id="parte-1">
+    <div class="part-header">
+      <div class="part-number">I</div>
+      <div class="part-info">
+        <h2>Colorindo redes aleatoriamente</h2>
+        <span class="part-tagline">O cenário: uma rede, um punhado de cores e muita sorte</span>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p>Imagine uma rede qualquer: pessoas e amizades, computadores e cabos, proteínas e interações.
+      Modele-a como um <strong>grafo</strong> $G_n$ com $n$ vértices, onde uma aresta liga dois vértices
+      quando há uma relação entre eles. Agora faça o seguinte experimento: para cada vértice,
+      sorteie <strong>independentemente</strong> uma cor entre $c$ cores disponíveis, todas com a mesma
+      probabilidade $1/c$. Denote por $X_u$ a cor sorteada do vértice $u$.</p>
+      <p>Uma aresta é chamada <strong>monocromática</strong> quando suas duas pontas recebem a mesma cor.
+      É como olhar para a rede colorida e perguntar: quantas conexões unem &ldquo;iguais&rdquo;?
+      A resposta é um número aleatório, que os matemáticos escrevem assim:</p>
+      <div class="math-block">
+        $$T(K_2, G_n) = \frac{1}{2}\sum_{u \neq v} a_{uv}(G_n)\,\mathbf{1}\{X_u = X_v\}$$
+      </div>
+      <p>Não se assuste com a fórmula: $a_{uv}(G_n)$ vale $1$ se existe aresta entre $u$ e $v$ e $0$ caso
+      contrário (é a <em>matriz de adjacência</em> do grafo); o símbolo $\mathbf{1}\{X_u = X_v\}$ vale $1$
+      quando as cores coincidem e $0$ quando diferem. Somamos sobre todos os pares e dividimos por $2$
+      porque cada aresta foi contada duas vezes (uma na ordem $(u,v)$, outra na ordem $(v,u)$).
+      O nome $T(K_2, G_n)$ vem do fato de que uma aresta é o grafo $K_2$: dois vértices ligados.</p>
+    </div>
+
+    <div class="question">
+      <div class="question-header">
+        <span class="q-badge">Definição</span>
+        <h3>Contando cópias monocromáticas de um padrão $H$</h3>
+      </div>
+      <div class="question-body">
+        <p>Nada nos impede de procurar padrões maiores que uma aresta. Fixe um grafo pequeno $H$ &mdash;
+        um triângulo ($K_3$), uma estrela, um ciclo &mdash; e conte quantas cópias de $H$ em $G_n$
+        ficaram <em>inteiramente</em> da mesma cor. Esse número é $T(H, G_n)$, o
+        <strong>contador de subgrafos monocromáticos</strong>.</p>
+        <p>A primeira pergunta natural é: <strong>quanto esperamos contar, em média?</strong>
+        A resposta é elegante:</p>
+        <div class="math-block">
+          $$\mathbb{E}\left[T(H, G_n)\right] = \frac{N(H, G_n)}{c^{\,|V(H)|-1}}$$
+        </div>
+        <p>onde $N(H, G_n)$ é o número de cópias de $H$ no grafo $G_n$ (sem falar de cores) e
+        $|V(H)|$ é o número de vértices de $H$. Em palavras: <em>o valor esperado é o total de cópias
+        vezes a probabilidade de uma cópia específica sair monocromática</em>.</p>
+        <div class="hint">
+          <span class="hint-icon">&#9432;</span>
+          <span><strong>Por que $c^{\,|V(H)|-1}$ e não $c^{\,|V(H)|}$?</strong>
+          Para que $|V(H)|$ vértices tenham todos a mesma cor, não importa <em>qual</em> cor seja &mdash;
+          só importa que coincidam. A cor do primeiro vértice é &ldquo;de graça&rdquo;: seja ela qual for,
+          cada um dos outros $|V(H)|-1$ vértices precisa acertá-la, o que ocorre com probabilidade
+          $1/c$ cada, de forma independente. Resultado: $(1/c)^{|V(H)|-1}$. Para uma aresta ($|V(H)|=2$),
+          isso dá $1/c$; para um triângulo, $1/c^2$.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- INTERACTIVE: MCQ valor esperado -->
+    <div class="ic" id="mcq-esperanca">
+      <div class="ic-header">
+        <span class="ic-badge">Teste rápido</span>
+        <h4>Aquecimento: o valor esperado</h4>
+      </div>
+      <div class="ic-body">
+        <p>Uma turma tem um grafo de amizades com $|E(G_n)| = 200$ arestas, e cada pessoa é colorida
+        ao acaso com uma entre $c = 4$ camisetas. Quantas arestas monocromáticas (amigos com a mesma
+        camiseta) esperamos ver?</p>
+        <div class="mcq-opt" data-g="g1" data-c="0"><span class="opt-lbl">A</span>
+          <span>$800$ &mdash; cada aresta tem $4$ cores possíveis em cada ponta</span>
+          <span class="opt-arr"></span></div>
+        <div class="mcq-opt" data-g="g1" data-c="1"><span class="opt-lbl">B</span>
+          <span>$50$ &mdash; cada aresta é monocromática com probabilidade $1/4$</span>
+          <span class="opt-arr"></span></div>
+        <div class="mcq-opt" data-g="g1" data-c="0"><span class="opt-lbl">C</span>
+          <span>$12{,}5$ &mdash; a probabilidade seria $1/4^2 = 1/16$</span>
+          <span class="opt-arr"></span></div>
+        <div class="mcq-fb" id="g1-ok">Exato! $\mathbb{E}[T(K_2, G_n)] = |E(G_n)|/c = 200/4 = 50$.
+          Dadas as cores das pontas, a chance de coincidirem é $1/c$ &mdash; não $1/c^2$, pois a cor da
+          primeira ponta não precisa ser nenhuma cor específica.</div>
+        <div class="mcq-fb" id="g1-bad">Quase! A fórmula é $\mathbb{E}[T(K_2, G_n)] = |E(G_n)|/c$.
+          A cor da primeira ponta é livre; só a segunda precisa combiná-la, com probabilidade $1/c = 1/4$.
+          Logo $200/4 = 50$ arestas em média.</div>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p>Saber a média é só o começo. A pergunta profunda &mdash; e o coração do artigo &mdash; é:
+      <strong>como $T(H, G_n)$ flutua em torno da média quando a rede cresce?</strong>
+      A resposta passa por três exemplos clássicos (Parte II), por uma nova noção de limite para
+      grafos (Parte III) e por um teorema de distribuição limite surpreendente (Parte IV).</p>
+    </div>
+  </section>
+
+  <hr class="part-sep" />
+
+  <!-- ===== PARTE II ===== -->
+  <section class="part" id="parte-2">
+    <div class="part-header">
+      <div class="part-number">II</div>
+      <div class="part-info">
+        <h2>Por que isso importa? Três exemplos clássicos</h2>
+        <span class="part-tagline">Aniversários, testes estatísticos e ímãs de Ising</span>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p>Contadores monocromáticos parecem uma curiosidade de salão, mas aparecem &mdash; disfarçados &mdash;
+      em problemas que você provavelmente já conhece. Eis três deles, todos discutidos no artigo.</p>
+    </div>
+
+    <div class="question">
+      <div class="question-header">
+        <span class="q-badge">Ex. 1</span>
+        <h3>O problema do aniversário</h3>
+      </div>
+      <div class="question-body">
+        <p>Considere o <strong>grafo de amizade</strong> de uma rede social e &ldquo;colora&rdquo; cada pessoa
+        com o seu dia de aniversário: são $c = 365$ cores. Uma aresta monocromática é exatamente um par de
+        <em>amigos que fazem aniversário no mesmo dia</em>. Assim,</p>
+        <div class="math-block">
+          $$\mathbb{P}\left(T(K_2, G_n) &gt; 0\right)$$
+        </div>
+        <p>é a probabilidade de haver <em>alguma</em> coincidência de aniversário entre amigos &mdash; uma
+        variante do célebre <strong>problema do aniversário</strong>, que surpreende todo mundo: basta um
+        grupo de 23 pessoas (no grafo completo $K_{23}$, onde todos se conhecem) para que a chance de
+        coincidência passe de $50\%$.</p>
+        <p>A generalização é natural: <strong>multi-colisões</strong>, em que $r$ pessoas compartilham o
+        mesmo aniversário, correspondem a <em>cliques monocromáticos</em> $T(K_r, G_n)$. E o assunto é
+        sério: o artigo menciona aplicações em <strong>segurança de funções hash</strong> (uma
+        &ldquo;colisão de hash&rdquo; é um aniversário repetido, e ataques de aniversário exploram exatamente
+        isso), em <strong>testes de hipóteses para distribuições discretas</strong> e no estudo de
+        <strong>coincidências</strong> em geral.</p>
+      </div>
+    </div>
+
+    <div class="question">
+      <div class="question-header">
+        <span class="q-badge">Ex. 2</span>
+        <h3>Testes não-paramétricos de duas amostras baseados em grafos</h3>
+      </div>
+      <div class="question-body">
+        <p>Um problema clássico da estatística: observamos duas amostras e queremos testar</p>
+        <div class="math-block">
+          $$H_0:\; F = G \qquad \text{contra} \qquad H_1:\; F \neq G,$$
+        </div>
+        <p>isto é, decidir se as duas amostras vêm da mesma distribuição, <em>sem</em> assumir que as
+        distribuições têm algum formato conhecido (por isso &ldquo;não-paramétrico&rdquo;).</p>
+        <p>A estratégia baseada em grafos é engenhosa. Empilham-se as duas amostras em um único conjunto de
+        pontos e constrói-se um <strong>grafo geométrico</strong> sobre eles, ligando pontos próximos &mdash;
+        por exemplo a <strong>árvore geradora mínima</strong> do teste de Friedman&ndash;Rafsky, ou grafos de
+        <strong>vizinhos mais próximos</strong>. Os rótulos das amostras (amostra 1 ou amostra 2) funcionam
+        como <strong>cores</strong>: aqui $c = 2$.</p>
+        <ul class="sub-list">
+          <li>
+            <span class="sub-label">H₀</span>
+            <span>Se as amostras vêm da mesma distribuição, os pontos das duas amostras estão bem
+            misturados no espaço: arestas ligam frequentemente pontos de amostras diferentes, e há
+            poucas arestas monocromáticas.</span>
+          </li>
+          <li>
+            <span class="sub-label">H₁</span>
+            <span>Se as distribuições diferem, cada amostra ocupa sua própria região: pontos próximos
+            tendem a vir da mesma amostra, as arestas &ldquo;bicolores&rdquo; ficam raras e as arestas
+            monocromáticas abundam.</span>
+          </li>
+        </ul>
+        <p>Logo, <strong>rejeita-se $H_0$ quando $T(K_2, G_n)$ é grande demais</strong>. E para calibrar
+        o que é &ldquo;grande demais&rdquo;, é preciso entender a <em>distribuição nula</em> de $T(K_2, G_n)$
+        &mdash; ou seja, estudar exatamente o contador monocromático com $c = 2$ que definimos na Parte I.
+        Teoria de grafos aleatórios coloridos a serviço da estatística.</p>
+      </div>
+    </div>
+
+    <!-- INTERACTIVE: MCQ testes de duas amostras -->
+    <div class="ic" id="mcq-duas-amostras">
+      <div class="ic-header">
+        <span class="ic-badge">Teste rápido</span>
+        <h4>Intuição do teste de Friedman&ndash;Rafsky</h4>
+      </div>
+      <div class="ic-body">
+        <p>No grafo geométrico construído sobre a amostra combinada, observamos um número
+        <strong>muito alto</strong> de arestas monocromáticas (ligando pontos da mesma amostra).
+        O que isso sugere?</p>
+        <div class="mcq-opt" data-g="g2" data-c="0"><span class="opt-lbl">A</span>
+          <span>Que $H_0$ deve ser aceita: as amostras estão perfeitamente misturadas</span>
+          <span class="opt-arr"></span></div>
+        <div class="mcq-opt" data-g="g2" data-c="1"><span class="opt-lbl">B</span>
+          <span>Que $H_0$ deve ser rejeitada: as amostras ocupam regiões diferentes do espaço</span>
+          <span class="opt-arr"></span></div>
+        <div class="mcq-opt" data-g="g2" data-c="0"><span class="opt-lbl">C</span>
+          <span>Nada: o número de arestas monocromáticas não depende das distribuições</span>
+          <span class="opt-arr"></span></div>
+        <div class="mcq-fb" id="g2-ok">Correto! Sob $H_1$, pontos próximos tendem a vir da mesma amostra,
+          gerando muitas arestas monocromáticas e poucas arestas &ldquo;cruzadas&rdquo;. Um $T(K_2, G_n)$
+          grande demais (acima do que a distribuição nula prevê) é evidência contra $H_0$.</div>
+        <div class="mcq-fb" id="g2-bad">Não é bem assim. Se as amostras viessem da mesma distribuição,
+          elas estariam misturadas e veríamos muitas arestas ligando amostras diferentes. Excesso de
+          arestas monocromáticas indica <em>segregação</em> &mdash; evidência de que $F \neq G$.</div>
+      </div>
+    </div>
+
+    <div class="question">
+      <div class="question-header">
+        <span class="q-badge">Ex. 3</span>
+        <h3>Caos quadrático de Rademacher e o modelo de Ising</h3>
+      </div>
+      <div class="question-body">
+        <p>No caso de duas cores ($c = 2$), troque os rótulos de cor por variáveis
+        $Y_u \in \{-1, +1\}$ independentes com $\mathbb{P}(Y_u = 1) = \mathbb{P}(Y_u = -1) = 1/2$
+        &mdash; as chamadas <strong>variáveis de Rademacher</strong>. Um truque algébrico simpático,
+        $\mathbf{1}\{X_u = X_v\} = \tfrac{1}{2}(1 + Y_u Y_v)$, revela uma identidade surpreendente:</p>
+        <div class="math-block">
+          $$T(K_2, G_n) - \mathbb{E}\left[T(K_2, G_n)\right] \;=\; \frac{1}{4}\sum_{u \neq v} a_{uv}(G_n)\, Y_u Y_v$$
+        </div>
+        <p>Do lado direito temos uma <strong>forma quadrática aleatória</strong> &mdash; um
+        &ldquo;caos quadrático de Rademacher&rdquo;. Estruturas idênticas aparecem em vários lugares:</p>
+        <ul class="sub-list">
+          <li>
+            <span class="sub-label">Física</span>
+            <span>O <strong>Hamiltoniano do modelo de Ising</strong> &mdash; o modelo clássico de
+            magnetismo, em que &ldquo;spins&rdquo; $\pm 1$ interagem ao longo das arestas de uma rede &mdash;
+            tem exatamente a forma $\sum_{u,v} a_{uv}\, Y_u Y_v$.</span>
+          </li>
+          <li>
+            <span class="sub-label">Comb.</span>
+            <span>A <strong>teoria de Ramsey</strong> estuda justamente subestruturas monocromáticas
+            inevitáveis em colorações de grafos.</span>
+          </li>
+          <li>
+            <span class="sub-label">Estat.</span>
+            <span>Formas quadráticas desse tipo aparecem em <strong>testes de independência</strong>
+            e no estudo de esquemas de urna e estatísticas de coincidência.</span>
+          </li>
+        </ul>
+        <p>Moral da história: entender as flutuações de $T(H, G_n)$ é entender um objeto que a física,
+        a combinatória e a estatística já encontraram, cada uma por seu caminho.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="part-sep" />
+
+  <!-- ===== PARTE III ===== -->
+  <section class="part" id="parte-3">
+    <div class="part-header">
+      <div class="part-number">III</div>
+      <div class="part-info">
+        <h2>O limite dos grafos: graphons</h2>
+        <span class="part-tagline">Apertando os olhos para uma matriz de adjacência infinita</span>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p>Para entender o que acontece com $T(H, G_n)$ quando $n \to \infty$, precisamos primeiro responder
+      a uma pergunta mais básica: <strong>o que significa uma sequência de grafos convergir?</strong></p>
+      <p>Pense na matriz de adjacência de um grafo como uma imagem de pixels: um quadradinho claro na
+      posição $(i, j)$ se existe aresta entre $i$ e $j$, escuro caso contrário. À medida que $n$ cresce,
+      os quadradinhos ficam cada vez menores. Se você &ldquo;apertar os olhos&rdquo;, o mosaico de pixels
+      se funde em uma imagem contínua com tons de cinza &mdash; como uma foto vista de longe.
+      Esse objeto contínuo é o <strong>graphon</strong> (de <em>graph</em> + <em>function</em>).</p>
+    </div>
+
+    <div class="question">
+      <div class="question-header">
+        <span class="q-badge">Definição</span>
+        <h3>Graphon e graphon empírico</h3>
+      </div>
+      <div class="question-body">
+        <p>Um <strong>graphon</strong> é uma função simétrica e mensurável</p>
+        <div class="math-block">
+          $$W: [0,1]^2 \to [0,1], \qquad W(x,y) = W(y,x),$$
+        </div>
+        <p>em que $W(x,y)$ se interpreta como a <strong>probabilidade de conexão</strong> entre os
+        &ldquo;pontos&rdquo; $x$ e $y$. O intervalo $[0,1]$ representa o &ldquo;continuum&rdquo; de vértices
+        no limite $n \to \infty$.</p>
+        <p>O caminho de volta, do discreto ao contínuo, é feito pelo <strong>graphon empírico</strong>
+        $W^{G_n}$: divide-se o quadrado $[0,1]^2$ em $n^2$ quadradinhos de lado $1/n$ e atribui-se ao
+        quadradinho $(i,j)$ o valor $1$ se $(i,j)$ é aresta de $G_n$ e $0$ caso contrário. É exatamente
+        a matriz de adjacência desenhada como uma função escada &mdash; a &ldquo;imagem de pixels&rdquo;
+        da nossa analogia.</p>
+        <div class="hint">
+          <span class="hint-icon">&#9432;</span>
+          <span><strong>Por que valores em $[0,1]$?</strong> Porque $W(x,y)$ é uma probabilidade.
+          Um graphon constante $W \equiv p$ corresponde ao limite dos grafos aleatórios de
+          Erdős&ndash;Rényi $G(n,p)$: qualquer par de vértices se conecta com probabilidade $p$,
+          sem estrutura alguma. Graphons não-constantes capturam estrutura: comunidades,
+          hierarquias, geometria.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- INTERACTIVE: simulacao graphon -->
+    <div class="ic" id="graphon-sim">
+      <div class="ic-header">
+        <span class="ic-badge">Simulação</span>
+        <h4>Da matriz de adjacência ao graphon</h4>
+      </div>
+      <div class="ic-body">
+        <p>Escolha um graphon $W$ abaixo. O painel da <strong>direita</strong> mostra $W$ como uma imagem
+        contínua (tons dourados = maior probabilidade de conexão). O painel da <strong>esquerda</strong>
+        mostra a matriz de adjacência de um grafo aleatório de $n$ vértices gerado a partir de $W$:
+        o vértice $i$ &ldquo;vive&rdquo; na posição $x_i = (i-\tfrac12)/n$ e cada par $(i,j)$ se conecta,
+        independentemente, com probabilidade $W(x_i, x_j)$. Arraste o slider e veja a imagem discreta
+        <em>convergir</em> para o graphon.</p>
+
+        <div class="sl-row">
+          <span class="sl-lbl">$n$ (vértices)</span>
+          <input type="range" class="sl" id="gx-n" min="10" max="200" step="5" value="40" />
+          <span class="sl-val" id="gxv-n">40</span>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-s on" id="gx-btn-cos" type="button">$W(x,y)=\frac{1+\cos(2\pi(x-y))}{2}$</button>
+          <button class="btn btn-s" id="gx-btn-prod" type="button">$W(x,y)=xy$</button>
+          <button class="btn btn-s" id="gx-btn-block" type="button">Blocos (3 comunidades)</button>
+          <button class="btn btn-p" id="gx-resample" type="button">Reamostrar grafo</button>
+        </div>
+
+        <div style="display:flex;gap:1rem;align-items:flex-start;flex-wrap:wrap;margin-top:1rem">
+          <div class="cv-box">
+            <canvas id="gx-canvas" width="320" height="320"></canvas>
+            <div class="cv-cap">matriz de adjacência amostrada ($n \times n$ pixels)</div>
+          </div>
+          <div class="cv-box">
+            <canvas id="gx-canvas-w" width="320" height="320"></canvas>
+            <div class="cv-cap">o graphon $W(x,y)$ (limite contínuo)</div>
+          </div>
+        </div>
+
+        <div class="out-grid">
+          <div class="out-cell">
+            <div class="out-lbl">arestas observadas</div>
+            <div class="out-val" id="gx-edges">&mdash;</div>
+          </div>
+          <div class="out-cell">
+            <div class="out-lbl">arestas esperadas</div>
+            <div class="out-val" id="gx-exp">&mdash;</div>
+          </div>
+        </div>
+        <p style="margin-top:.9rem;margin-bottom:0">No graphon de blocos, vértices do mesmo bloco se
+        conectam com probabilidade $0{,}8$ e de blocos diferentes com probabilidade $0{,}1$ &mdash;
+        o retrato de uma rede com comunidades. Note como o ruído da amostragem vai desaparecendo
+        conforme $n$ cresce: é a lei dos grandes números em ação, pixel a pixel.</p>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p>De volta à teoria: como formalizar a ideia de que $G_n$ &ldquo;se aproxima&rdquo; de $W$?
+      A resposta usa contagens de padrões &mdash; os mesmos padrões da Parte I, agora <em>sem cores</em>.</p>
+    </div>
+
+    <div class="question">
+      <div class="question-header">
+        <span class="q-badge">Definição</span>
+        <h3>Densidades de homomorfismo</h3>
+      </div>
+      <div class="question-body">
+        <p>Para um grafo pequeno $F$ (digamos, um triângulo), a <strong>densidade de homomorfismo</strong>
+        $t(F, G)$ mede a frequência com que $F$ aparece em $G$: é a probabilidade de que um mapa aleatório
+        dos vértices de $F$ para os vértices de $G$ envie cada aresta de $F$ em uma aresta de $G$.
+        No mundo contínuo, a soma vira integral:</p>
+        <div class="math-block">
+          $$t(F, W) \;=\; \int_{[0,1]^{|V(F)|}} \prod_{(i,j)\,\in\, E(F)} W(x_i, x_j)\; dx_1 \cdots dx_{|V(F)|}$$
+        </div>
+        <p>O exemplo a se guardar é o triângulo $F = K_3$: o produto sobre as arestas tem três fatores,
+        e a fórmula vira a integral tripla</p>
+        <div class="math-block">
+          $$t(K_3, W) \;=\; \int_0^1\!\!\int_0^1\!\!\int_0^1 W(x,y)\,W(y,z)\,W(x,z)\; dx\,dy\,dz$$
+        </div>
+        <p>Leia assim: sorteie três pontos $x, y, z$ uniformemente em $[0,1]$; a integral é a probabilidade
+        de que <em>todas as três</em> conexões do triângulo se realizem. Cada fator $W$ cuida de uma aresta.</p>
+        <div class="hint">
+          <span class="hint-icon">&#9432;</span>
+          <span><strong>Sanity check:</strong> se $W \equiv p$ é constante (o limite de Erdős&ndash;Rényi),
+          o produto sai da integral e obtemos $t(K_3, W) = p^3$ &mdash; exatamente a probabilidade de três
+          vértices formarem um triângulo no $G(n,p)$. As fórmulas contínuas reproduzem a intuição discreta.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="question">
+      <div class="question-header">
+        <span class="q-badge">Teorema</span>
+        <h3>Convergência e a distância de corte (Lovász&ndash;Szegedy)</h3>
+      </div>
+      <div class="question-body">
+        <p>Dizemos que <strong>$G_n$ converge para $W$</strong> quando as densidades de <em>todos</em> os
+        padrões finitos se estabilizam:</p>
+        <div class="math-block">
+          $$G_n \to W \quad \Longleftrightarrow \quad t(F, G_n) \to t(F, W) \;\; \text{para todo grafo finito } F$$
+        </div>
+        <p>A teoria dos limites de grafos, desenvolvida por Lovász, Szegedy e colaboradores, mostra que essa
+        noção equivale a ser uma sequência de Cauchy na <strong>distância de corte</strong>, definida a partir
+        da <em>norma de corte</em>:</p>
+        <div class="math-block">
+          $$\|W\|_{\square} \;=\; \sup_{A,\, B \,\subseteq\, [0,1]} \left| \int_{A \times B} W(x,y)\, dx\, dy \right|$$
+        </div>
+        <p>A intuição é a de um <strong>fiscal de densidades</strong>: escolha qualquer bloco de vértices
+        $A$ e qualquer bloco $B$ e meça a massa de conexões entre eles. A norma de corte é a
+        <em>pior discrepância possível</em> entre blocos. Se dois graphons estão próximos nessa norma,
+        nenhum teste do tipo &ldquo;compare a densidade entre estes dois grupos&rdquo; consegue
+        distingui-los. (Tecnicamente, a distância de corte $\delta_\square$ ainda permite reetiquetar os
+        vértices, ou seja, aplicar uma permutação de $[0,1]$ que preserve medida &mdash; o grafo limite
+        não depende da ordem em que listamos os vértices.)</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="part-sep" />
+
+  <!-- ===== PARTE IV ===== -->
+  <section class="part" id="parte-4">
+    <div class="part-header">
+      <div class="part-number">IV</div>
+      <div class="part-info">
+        <h2>O teorema central: o que acontece com $T(H, G_n)$ quando $n \to \infty$</h2>
+        <span class="part-tagline">Nem sempre Gaussiana: um limite com duas personalidades</span>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p>Temos o cenário (Parte I), as motivações (Parte II) e a linguagem dos limites (Parte III).
+      Agora a pergunta de um milhão de dólares: <strong>se $G_n$ é uma sequência de grafos densos que
+      converge para um graphon $W$, qual é a distribuição limite das flutuações de $T(H, G_n)$?</strong></p>
+      <p>Pelo teorema central do limite clássico, esperaríamos uma Gaussiana. Afinal, $T(H, G_n)$ é uma
+      soma de muitas parcelas. Mas há um detalhe: as parcelas <em>não são independentes</em> &mdash;
+      duas cópias de $H$ que dividem um vértice têm cores correlacionadas. E essa dependência muda tudo.</p>
+    </div>
+
+    <div class="question">
+      <div class="question-header">
+        <span class="q-badge">Resultado</span>
+        <h3>Um limite com duas componentes independentes</h3>
+      </div>
+      <div class="question-body">
+        <p>Em grafos densos, $T(H, G_n)$ centrado e devidamente normalizado <strong>não</strong> converge,
+        em geral, para uma Gaussiana. O limite é a soma de <em>duas componentes independentes</em>:</p>
+        <ul class="sub-list">
+          <li>
+            <span class="sub-label">(i)</span>
+            <span>uma <strong>variável Gaussiana</strong> $Z$, que herda as flutuações &ldquo;lineares&rdquo;
+            &mdash; grosso modo, o efeito de cada vértice individualmente através do seu grau;</span>
+          </li>
+          <li>
+            <span class="sub-label">(ii)</span>
+            <span>uma <strong>soma de variáveis qui-quadrado</strong> (centradas), que pode ser escrita como
+            uma <em>integral estocástica de Wiener&ndash;Itô dupla</em>
+            $$\int_{[0,1]^2} W_H(x,y)\, dB_x\, dB_y,$$
+            em que $(B_x)_{x \in [0,1]}$ é um movimento Browniano e os pesos vêm do espectro do
+            <strong>kernel condicional de 2 pontos</strong> $W_H$, um operador construído a partir do
+            graphon limite $W$ e do padrão $H$.</span>
+          </li>
+        </ul>
+        <p>Mais precisamente: se $\lambda_1 \geq \lambda_2 \geq \cdots$ são os autovalores do operador
+        integral associado a $W_H$, a segunda componente tem a forma
+        $\sum_{k \geq 1} \lambda_k\, (\xi_k^2 - 1)$, com $\xi_k$ Gaussianas padrão independentes.
+        Cada $\xi_k^2$ é uma qui-quadrado com 1 grau de liberdade &mdash; daí o nome.</p>
+        <p>Para o caso mais simples, $H = K_2$ (arestas monocromáticas), o kernel é apenas o próprio
+        graphon (vezes dois):</p>
+        <div class="math-block">
+          $$W_{K_2}(x,y) \;=\; 2\,W(x,y)$$
+        </div>
+        <p>Quando a componente Gaussiana domina, o limite é normal; quando os autovalores $\lambda_k$
+        são relevantes, a cauda qui-quadrado aparece e o limite fica assimétrico, com cauda pesada à
+        direita &mdash; nada parecido com o sino da Gaussiana.</p>
+      </div>
+    </div>
+
+    <div class="question">
+      <div class="question-header">
+        <span class="q-badge">Fenômeno</span>
+        <h3>O critério do quarto momento</h3>
+      </div>
+      <div class="question-body">
+        <p>Como decidir, na prática, se o limite é Gaussiano? Há um critério notavelmente simples, na linha
+        do chamado <strong>fenômeno do quarto momento</strong>: normalizando $T(K_2, G_n)$ para ter média
+        $0$ e variância $1$,</p>
+        <div class="math-block">
+          $$T(K_2, G_n) \text{ é assintoticamente normal } \;\Longleftrightarrow\; \mathbb{E}\left[\,\widehat{T}(K_2, G_n)^4\,\right] \to 3$$
+        </div>
+        <p>onde $\widehat{T}$ denota a versão padronizada. O número $3$ não é mágico: é o quarto momento de
+        uma Gaussiana padrão, $\mathbb{E}[Z^4] = 3$. Se o quarto momento converge para $3$, o limite só pode
+        ser Gaussiano; se converge para algo maior, há componente qui-quadrado no limite.</p>
+        <div class="hint">
+          <span class="hint-icon">&#9432;</span>
+          <span><strong>Por que o quarto momento basta?</strong> Intuitivamente, a componente qui-quadrado
+          é construída de <em>quadrados</em> de Gaussianas, e quadrados têm quarto momento inflado:
+          $\mathbb{E}[\xi^4] = 3$, mas uma qui-quadrado centrada $\xi^2 - 1$ tem quarto momento $60$.
+          Qualquer presença desses quadrados &ldquo;vaza&rdquo; para o quarto momento total, delatando a
+          não-normalidade. Resultados desse tipo (Nualart&ndash;Peccati, em espaços de caos Gaussiano)
+          são uma ferramenta poderosa da probabilidade moderna.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="question">
+      <div class="question-header">
+        <span class="q-badge">Artigo</span>
+        <h3>A novidade: redes multiplex</h3>
+      </div>
+      <div class="question-body">
+        <p>O artigo de Andrade &amp; Bhattacharya dá um passo além: em vez de uma única rede, considera
+        <strong>várias camadas de grafos sobre os mesmos vértices</strong> &mdash; uma
+        <strong>rede multiplex</strong>. Pense nas mesmas pessoas conectadas simultaneamente por laços de
+        amizade, de trabalho e de família: três camadas, um único conjunto de vértices, <em>uma única
+        coloração aleatória</em> compartilhada por todas as camadas.</p>
+        <p>Como as cores são as mesmas em todas as camadas, os contadores monocromáticos
+        $T(H_1, G_n^{(1)}), T(H_2, G_n^{(2)}), \ldots$ de camadas diferentes são <strong>dependentes</strong>.
+        A contribuição central do artigo é derivar a <strong>distribuição limite conjunta</strong> desses
+        contadores, provando convergência em uma métrica de corte <em>conjunta</em> (várias camadas vistas
+        como um único objeto). O limite tem a forma:</p>
+        <ul class="sub-list">
+          <li>
+            <span class="sub-label">Z</span>
+            <span>uma <strong>Gaussiana multivariada</strong>, independente da outra componente, cuja
+            matriz de covariância codifica as sobreposições entre camadas;</span>
+          </li>
+          <li>
+            <span class="sub-label">$\chi^2$</span>
+            <span>uma <strong>soma de integrais estocásticas bivariadas</strong> &mdash; mas todas tomadas
+            em relação ao <em>mesmo</em> movimento Browniano $(B_x)$. É esse compartilhamento do ruído
+            que captura a dependência entre as camadas: as flutuações quadráticas de todas as camadas
+            &ldquo;ouvem&rdquo; o mesmo Browniano, porque a coloração aleatória é a mesma para todas.</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="question">
+      <div class="question-header">
+        <span class="q-badge">Prova</span>
+        <h3>O ingrediente-chave: o princípio de invariância</h3>
+      </div>
+      <div class="question-body">
+        <p>Como se prova um teorema desses? A estratégia, explicada por alto, tem dois movimentos:</p>
+        <ul class="sub-list">
+          <li>
+            <span class="sub-label">1.</span>
+            <span><strong>Princípio de invariância:</strong> as variáveis de cor $X_u$ (discretas, uniformes
+            em $c$ cores) podem ser substituídas por variáveis <em>Gaussianas</em> com a mesma média,
+            variância e covariância, <em>sem alterar a distribuição limite</em>. É uma versão sofisticada
+            do teorema central do limite: no limite, só os dois primeiros momentos importam, então podemos
+            trocar uma distribuição complicada por uma conveniente. (É a mesma filosofia por trás do
+            método de Lindeberg e dos &ldquo;universality principles&rdquo; em matrizes aleatórias.)</span>
+          </li>
+          <li>
+            <span class="sub-label">2.</span>
+            <span><strong>Só o quadrático sobrevive:</strong> depois da troca, expande-se o contador em
+            &ldquo;caos&rdquo; de ordens crescentes &mdash; termos lineares, quadráticos, cúbicos etc.
+            Na escala densa, os termos de ordem $\geq 3$ se tornam desprezíveis após a normalização, e
+            restam apenas o termo linear (que vira a Gaussiana $Z$) e o quadrático (que vira a soma de
+            qui-quadrados / integral de Wiener&ndash;Itô).</span>
+          </li>
+        </ul>
+        <p>É por isso que o limite tem exatamente duas personalidades: uma linear (Gaussiana) e uma
+        quadrática (qui-quadrado). A estrutura do graphon $W$ e do padrão $H$ determinam, via kernel
+        $W_H$, o peso de cada uma.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="part-sep" />
+
+  <!-- ===== PARTE V ===== -->
+  <section class="part" id="parte-5">
+    <div class="part-header">
+      <div class="part-number">V</div>
+      <div class="part-info">
+        <h2>Aplicação: graph matching e redes multiplex correlacionadas</h2>
+        <span class="part-tagline">Quando duas redes são, secretamente, a mesma rede</span>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p>Para ilustrar a força da teoria, o artigo discute o <strong>multiplex de Erdős&ndash;Rényi
+      correlacionado</strong>: duas (ou mais) camadas em que cada aresta aparece de forma correlacionada
+      entre camadas &mdash; como duas fotos ruidosas da mesma rede subjacente.</p>
+      <p>Esse modelo é o banco de provas natural do problema de <strong>graph matching</strong>:
+      dadas duas redes observadas, descobrir se elas são &ldquo;a mesma&rdquo; rede com os vértices
+      permutados &mdash; e, em caso afirmativo, <em>recuperar a permutação</em>. Não é curiosidade
+      acadêmica: é a matemática por trás da <strong>desanonimização de redes sociais</strong>
+      (cruzar uma rede anônima com uma rede pública para reidentificar usuários) e de problemas de
+      <strong>visão computacional</strong> (casar pontos entre duas imagens do mesmo objeto).</p>
+      <p>Onde entram os contadores monocromáticos? As <strong>estatísticas monocromáticas conjuntas</strong>
+      &mdash; que contam, simultaneamente em várias camadas, padrões da mesma cor &mdash; funcionam como
+      impressões digitais da correlação entre camadas. O teorema limite conjunto da Parte IV diz exatamente
+      como essas estatísticas flutuam e como se correlacionam, permitindo construir testes para
+      <em>detectar</em> correlação entre camadas e quantificá-la com garantias assintóticas.</p>
+    </div>
+
+    <div class="question">
+      <div class="question-header">
+        <span class="q-badge">Fim</span>
+        <h3>Para saber mais</h3>
+      </div>
+      <div class="question-body">
+        <ul class="sub-list">
+          <li>
+            <span class="sub-label">Art.</span>
+            <span>M. D. Andrade &amp; B. B. Bhattacharya,
+            <em>Monochromatic Subgraphs in Randomly Colored Dense Multiplex Networks</em>,
+            arXiv:2501.07821 (2025) &mdash; o artigo que inspirou esta apostila.</span>
+          </li>
+          <li>
+            <span class="sub-label">Livro</span>
+            <span>L. Lovász, <em>Large Networks and Graph Limits</em>, AMS Colloquium Publications
+            (2012) &mdash; a referência clássica sobre graphons, densidades de homomorfismo e a
+            distância de corte.</span>
+          </li>
+        </ul>
+        <p style="margin-top:.9rem">Boa leitura &mdash; e da próxima vez que dois amigos fizerem aniversário
+        no mesmo dia, lembre-se: você acabou de observar um subgrafo monocromático.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer style="border-top: 1px solid var(--border); padding: 1.5rem 2rem; text-align: center; font-size: 0.8rem; color: var(--text-dim);">
+  COLMEA 2026 &nbsp;&middot;&nbsp; UERJ &nbsp;&middot;&nbsp; Lucas Rafael de Andrade
+</footer>
+
+<script>
+(function(){
+"use strict";
+function g(id){return document.getElementById(id);}
+
+/* ---------- sliders: preenchimento dourado ---------- */
+function fillSlider(el){
+  if(!el)return;
+  var mn=+el.min,mx=+el.max,v=+el.value;
+  var pct=((v-mn)/(mx-mn)*100).toFixed(1)+"%";
+  el.style.background="linear-gradient(to right,var(--accent-dim) 0%,var(--accent-dim) "+pct+",#2a3349 "+pct+")";
+}
+document.querySelectorAll(".sl").forEach(fillSlider);
+
+/* ---------- hints colapsaveis ---------- */
+document.querySelectorAll(".hint").forEach(function(h){
+  var spans=h.querySelectorAll("span");
+  var ct=spans[spans.length-1];
+  if(!ct)return;
+  ct.classList.add("hint-content");
+  var tog=document.createElement("span");
+  tog.className="hint-toggle";
+  tog.textContent="Dica";
+  h.insertBefore(tog,ct);
+  h.classList.add("collapsed");
+  h.addEventListener("click",function(){h.classList.toggle("collapsed");});
+});
+
+/* ---------- MCQ handler ---------- */
+document.querySelectorAll(".mcq-opt").forEach(function(opt){
+  opt.addEventListener("click",function(){
+    var grp=this.dataset.g;
+    var all=document.querySelectorAll("[data-g='"+grp+"']");
+    if([].some.call(all,function(o){return o.classList.contains("ok")||o.classList.contains("bad");}))return;
+    var ok=(this.dataset.c==="1");
+    this.classList.add(ok?"ok":"bad");
+    var arr=this.querySelector(".opt-arr");
+    if(arr)arr.textContent=ok?"\u2713":"\u2717";
+    if(!ok)all.forEach(function(o){
+      if(o.dataset.c==="1"){o.classList.add("ok");var a=o.querySelector(".opt-arr");if(a)a.textContent="\u2713";}
+    });
+    var fb=g(grp+(ok?"-ok":"-bad"));
+    if(fb)fb.classList.add(ok?"ok":"bad");
+  });
+});
+
+/* ---------- simulacao: da matriz de adjacencia ao graphon ---------- */
+(function(){
+  var cvG=g("gx-canvas"),cvW=g("gx-canvas-w"),sl=g("gx-n"),sv=g("gxv-n");
+  if(!cvG||!cvW||!sl)return;
+  var ctxG=cvG.getContext("2d"),ctxW=cvW.getContext("2d"),S=cvG.width;
+
+  var graphons={
+    cos:{f:function(x,y){return 0.5*(1+Math.cos(2*Math.PI*(x-y)));}},
+    prod:{f:function(x,y){return x*y;}},
+    block:{f:function(x,y){
+      var bx=Math.min(2,Math.floor(3*x)),by=Math.min(2,Math.floor(3*y));
+      return bx===by?0.8:0.1;
+    }}
+  };
+  var cur="cos";
+
+  function shade(v){
+    var r=Math.round(15+v*(201-15));
+    var gg=Math.round(17+v*(169-17));
+    var b=Math.round(23+v*(110-23));
+    return "rgb("+r+","+gg+","+b+")";
+  }
+
+  function drawGraphon(){
+    var R=160,cell=S/R,f=graphons[cur].f;
+    for(var i=0;i<R;i++)for(var j=0;j<R;j++){
+      ctxW.fillStyle=shade(f((i+0.5)/R,(j+0.5)/R));
+      ctxW.fillRect(i*cell,j*cell,cell+0.6,cell+0.6);
+    }
+  }
+
+  function sample(){
+    var n=+sl.value,f=graphons[cur].f,cell=S/n,i,j,p;
+    sv.textContent=n;fillSlider(sl);
+    var edges=0,exp=0;
+    var adj=[];
+    for(i=0;i<n;i++)adj.push(new Uint8Array(n));
+    for(i=0;i<n;i++)for(j=i+1;j<n;j++){
+      p=f((i+0.5)/n,(j+0.5)/n);
+      exp+=p;
+      if(Math.random()<p){adj[i][j]=1;adj[j][i]=1;edges++;}
+    }
+    ctxG.fillStyle="#0b0e15";ctxG.fillRect(0,0,S,S);
+    ctxG.fillStyle="#c9a96e";
+    var px=Math.max(1,cell);
+    for(i=0;i<n;i++)for(j=0;j<n;j++)if(adj[i][j])ctxG.fillRect(i*cell,j*cell,px,px);
+    var e1=g("gx-edges"),e2=g("gx-exp");
+    if(e1)e1.textContent=edges;
+    if(e2)e2.textContent=Math.round(exp);
+  }
+
+  function setGraphon(key,btn){
+    cur=key;
+    ["gx-btn-cos","gx-btn-prod","gx-btn-block"].forEach(function(id){
+      var b=g(id);if(b)b.classList.remove("on");
+    });
+    if(btn)btn.classList.add("on");
+    drawGraphon();
+    sample();
+  }
+
+  var bCos=g("gx-btn-cos"),bProd=g("gx-btn-prod"),bBlock=g("gx-btn-block"),bRe=g("gx-resample");
+  if(bCos)bCos.addEventListener("click",function(){setGraphon("cos",bCos);});
+  if(bProd)bProd.addEventListener("click",function(){setGraphon("prod",bProd);});
+  if(bBlock)bBlock.addEventListener("click",function(){setGraphon("block",bBlock);});
+  if(bRe)bRe.addEventListener("click",sample);
+  sl.addEventListener("input",sample);
+
+  drawGraphon();
+  sample();
+})();
+})();
+</script>
+</body>
+</html>

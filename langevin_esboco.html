@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ruído Multiplicativo: da Equação de Langevin ao Funcional Gerador</title>
+  <meta name="description" content="Apostila de divulgação científica sobre o artigo de Zochil González Arenas e Daniel G. Barci (arXiv:0912.0301): processos estocásticos multiplicativos, prescrição-α e o funcional gerador." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [["$","$"],["\\(","\\)"]],
+        displayMath: [["$$","$$"],["\\[","\\]"]]
+      },
+      options: { skipHtmlTags: ["script","noscript","style","textarea"] }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+  <style>
+    :root {
+      --bg:          #0f1117;
+      --bg-card:     #161b27;
+      --bg-card-2:   #1c2233;
+      --border:      #2a3349;
+      --border-light:#334060;
+      --accent:      #c9a96e;
+      --accent-dim:  #8a6d3b;
+      --accent-glow: rgba(201,169,110,0.12);
+      --text:        #dde4f0;
+      --text-muted:  #7a8aa8;
+      --text-dim:    #4e5f7a;
+      --blue:        #74a7e8;
+      --radius:      10px;
+      --radius-sm:   6px;
+      --shadow:      0 4px 24px rgba(0,0,0,0.5);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      font-size: 16px;
+      min-height: 100vh;
+    }
+
+    /* Top bar */
+    .top-bar {
+      background: linear-gradient(135deg, #0a0e18 0%, #131929 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+    }
+    .top-bar-title { font-family: 'Lora', serif; font-size: 0.95rem; color: var(--accent); letter-spacing: 0.04em; }
+    .top-bar-meta  { font-size: 0.78rem; color: var(--text-muted); letter-spacing: 0.02em; }
+
+    /* Hero (apenas gradiente CSS, sem imagem) */
+    .hero {
+      position: relative; text-align: center; padding: 5rem 2rem 4rem;
+      border-bottom: 1px solid var(--border); overflow: hidden;
+      background:
+        radial-gradient(ellipse 60% 55% at 50% -10%, rgba(201,169,110,0.16), transparent 70%),
+        radial-gradient(ellipse 55% 45% at 88% 115%, rgba(116,167,232,0.10), transparent 70%),
+        linear-gradient(180deg, #11141d 0%, #0f1117 100%);
+    }
+    .hero-inner { position: relative; z-index: 1; }
+    .hero-label {
+      display: inline-block; font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--accent); background: rgba(201,169,110,0.1); border: 1px solid rgba(201,169,110,0.25);
+      padding: 0.3rem 0.9rem; border-radius: 99px; margin-bottom: 1.4rem;
+    }
+    .hero h1 {
+      font-family: 'Lora', serif; font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 600;
+      color: #f0e8d5; line-height: 1.25; margin-bottom: 1rem; text-shadow: 0 2px 20px rgba(0,0,0,0.8);
+    }
+    .hero-subtitle { font-size: 1rem; color: #b8c6dc; max-width: 680px; margin: 0 auto 1.6rem; }
+    .hero-divider  { width: 60px; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent); margin: 0 auto; }
+
+    /* Layout */
+    .page-wrap { max-width: 860px; margin: 0 auto; padding: 3rem 1.5rem 6rem; }
+
+    /* Part */
+    .part { margin-bottom: 3.5rem; }
+    .part-header { display: flex; align-items: flex-start; gap: 1.2rem; margin-bottom: 2rem; padding-bottom: 1.2rem; border-bottom: 1px solid var(--border); }
+    .part-number {
+      flex-shrink: 0; width: 44px; height: 44px; border-radius: 50%;
+      background: var(--accent-glow); border: 1.5px solid var(--accent-dim);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Lora', serif; font-size: 1rem; color: var(--accent); margin-top: 0.15rem;
+    }
+    .part-info h2    { font-family: 'Lora', serif; font-size: 1.4rem; font-weight: 600; color: #eae0cc; margin-bottom: 0.3rem; }
+    .part-info .part-tagline { font-size: 0.88rem; color: var(--text-muted); font-style: italic; }
+
+    /* Narrative */
+    .narrative {
+      background: var(--bg-card); border: 1px solid var(--border); border-left: 3px solid var(--accent-dim);
+      border-radius: var(--radius); padding: 1.2rem 1.4rem; margin-bottom: 2rem;
+      font-family: 'Lora', serif; font-size: 0.97rem; color: #c8d4e8; line-height: 1.85;
+    }
+    .narrative p + p { margin-top: 0.75rem; }
+
+    /* Question card */
+    .question { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 1.5rem; overflow: hidden; transition: border-color 0.2s ease, box-shadow 0.2s ease; }
+    .question:hover { border-color: var(--border-light); box-shadow: 0 0 0 1px var(--border-light), var(--shadow); }
+    .question-header { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.25rem; background: var(--bg-card-2); border-bottom: 1px solid var(--border); }
+    .q-badge {
+      flex-shrink: 0; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; font-weight: 500;
+      color: var(--accent); background: var(--accent-glow); border: 1px solid rgba(201,169,110,0.2);
+      border-radius: var(--radius-sm); padding: 0.2rem 0.55rem; letter-spacing: 0.05em;
+    }
+    .question-header h3 { font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.95rem; color: #dde4f0; flex: 1; }
+    .question-body { padding: 1.2rem 1.25rem 1.4rem; }
+    .question-body p { margin-bottom: 0.7rem; font-size: 0.95rem; color: var(--text); }
+
+    /* Sub-items */
+    .sub-list { list-style: none; margin-top: 1rem; display: flex; flex-direction: column; gap: 0.85rem; }
+    .sub-list li {
+      display: flex; gap: 0.9rem; align-items: flex-start; padding: 0.75rem 1rem;
+      background: rgba(255,255,255,0.025); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); font-size: 0.93rem; line-height: 1.65; transition: background 0.18s ease;
+    }
+    .sub-list li:hover { background: rgba(201,169,110,0.04); }
+    .sub-label { flex-shrink: 0; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; font-weight: 500; color: var(--accent); margin-top: 0.1rem; min-width: 20px; }
+
+    /* Math */
+    .math-block { overflow-x: auto; padding: 0.6rem 0; margin: 0.4rem 0; }
+
+    /* Hint */
+    .hint {
+      display: flex; gap: 0.75rem; margin-top: 0.9rem; padding: 0.75rem 1rem;
+      background: rgba(116,167,232,0.06); border: 1px solid rgba(116,167,232,0.2);
+      border-radius: var(--radius-sm); font-size: 0.87rem; color: #8ab4d8;
+    }
+    .hint-icon { flex-shrink: 0; font-size: 0.85rem; margin-top: 0.05rem; opacity: 0.8; }
+
+    .part-sep { border: none; border-top: 1px dashed var(--border); margin: 3rem 0; }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 3px; }
+
+    @media (max-width: 600px) {
+      .top-bar-meta { display: none; }
+      .hero { padding: 2.5rem 1rem 2rem; }
+      .page-wrap { padding: 2rem 1rem 4rem; }
+    }
+
+    /* ── Elementos interativos ────────────────────────────────────────────── */
+    .hint          { cursor: pointer; user-select: none; }
+    .hint-toggle   { margin-left: auto; flex-shrink: 0; font-size: 0.75rem;
+                     font-weight: 600; letter-spacing: 0.06em;
+                     color: var(--blue); white-space: nowrap; }
+    .hint-content  { transition: max-height 0.35s ease, opacity 0.3s ease;
+                     max-height: 400px; overflow: hidden; opacity: 1; }
+    .hint.collapsed .hint-content { max-height: 0; opacity: 0; pointer-events: none; }
+
+    /* Interactive card */
+    .ic { background: linear-gradient(135deg,#0e1828 0%,#141f35 100%);
+          border: 1px solid #2a3f6a; border-radius: var(--radius);
+          margin-bottom: 1.8rem; overflow: hidden; }
+    .ic-header { display:flex; align-items:center; gap:.9rem;
+                 padding:.85rem 1.2rem; border-bottom:1px solid #2a3f6a;
+                 background:rgba(255,255,255,.025); }
+    .ic-badge  { font-family:'JetBrains Mono',monospace; font-size:.68rem;
+                 font-weight:600; letter-spacing:.08em; text-transform:uppercase;
+                 color:#74a7e8; background:rgba(116,167,232,.12);
+                 border:1px solid rgba(116,167,232,.28);
+                 border-radius:var(--radius-sm); padding:.18rem .55rem; }
+    .ic-header h4 { font-family:'Inter',sans-serif; font-size:.9rem;
+                    font-weight:600; color:#cdd8f0; }
+    .ic-body { padding:1.1rem 1.2rem 1.4rem; }
+    .ic-body p { font-size:.9rem; color:var(--text-muted); margin-bottom:.9rem; }
+
+    /* Sliders */
+    .sl-row   { display:flex; align-items:center; gap:.9rem;
+                margin-bottom:.75rem; flex-wrap:wrap; }
+    .sl-lbl   { font-family:'JetBrains Mono',monospace; font-size:.8rem;
+                color:var(--accent); min-width:100px; }
+    input[type=range].sl {
+        flex:1; min-width:120px; max-width:260px;
+        -webkit-appearance:none; height:4px; border-radius:2px;
+        background:linear-gradient(to right,var(--accent-dim) 0%,
+          var(--accent-dim) var(--v,50%),#2a3349 var(--v,50%));
+        outline:none; cursor:pointer; }
+    input[type=range].sl::-webkit-slider-thumb {
+        -webkit-appearance:none; width:14px; height:14px; border-radius:50%;
+        background:var(--accent); cursor:pointer;
+        box-shadow:0 0 0 3px rgba(201,169,110,.2); }
+    .sl-val { font-family:'JetBrains Mono',monospace; font-size:.8rem;
+              color:#dde4f0; min-width:64px; text-align:right; }
+
+    /* Buttons */
+    .btn-row  { display:flex; gap:.65rem; margin-top:.9rem; flex-wrap:wrap;
+                align-items:center; }
+    .btn { font-family:'Inter',sans-serif; font-size:.82rem; font-weight:600;
+           padding:.48rem 1.1rem; border-radius:99px; border:none; cursor:pointer;
+           transition:transform .15s,box-shadow .15s,opacity .15s; }
+    .btn:active { transform:scale(.96); }
+    .btn:disabled { opacity:.35; cursor:not-allowed; }
+    .btn-p { background:linear-gradient(135deg,#c9a96e,#9a6f38); color:#0f1117; }
+    .btn-p:hover { box-shadow:0 0 14px rgba(201,169,110,.35); }
+    .btn-s { background:rgba(255,255,255,.07); color:var(--text-muted);
+             border:1px solid var(--border); }
+    .btn-s:hover { background:rgba(255,255,255,.11); color:var(--text); }
+    .btn-s.on { background:rgba(201,169,110,.16); color:var(--accent);
+                border-color:rgba(201,169,110,.45); }
+
+    /* MCQ */
+    .mcq-opt { display:flex; align-items:center; gap:.7rem; padding:.6rem .85rem;
+               border-radius:var(--radius-sm); border:1px solid var(--border);
+               margin-bottom:.4rem; cursor:pointer; font-size:.88rem;
+               color:var(--text); transition:border-color .18s,background .18s; }
+    .mcq-opt:hover { border-color:var(--border-light); background:rgba(255,255,255,.03); }
+    .mcq-opt.ok  { border-color:#52b788; background:rgba(82,183,136,.08); color:#86d9b0; }
+    .mcq-opt.bad { border-color:#e07070; background:rgba(224,112,112,.08); color:#e89090; }
+    .opt-lbl { font-family:'JetBrains Mono',monospace; font-size:.72rem;
+               font-weight:600; color:var(--accent); min-width:16px; }
+    .opt-arr { margin-left:auto; }
+    .mcq-fb  { font-size:.84rem; padding:.6rem .85rem; border-radius:var(--radius-sm);
+               margin-top:.5rem; display:none; line-height:1.6; }
+    .mcq-fb.ok  { display:block; background:rgba(82,183,136,.1); color:#86d9b0;
+                  border:1px solid rgba(82,183,136,.3); }
+    .mcq-fb.bad { display:block; background:rgba(224,112,112,.1); color:#e89090;
+                  border:1px solid rgba(224,112,112,.3); }
+  </style>
+</head>
+<body>
+
+<div class="top-bar">
+  <span class="top-bar-title">Ruído Multiplicativo &mdash; Apostila de Divulgação</span>
+  <span class="top-bar-meta">COLMEA 2026 &nbsp;&middot;&nbsp; UERJ &nbsp;&middot;&nbsp; Lucas Rafael de Andrade</span>
+</div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <span class="hero-label">COLMEA 2026 &middot; UERJ</span>
+    <h1>Ruído Multiplicativo:<br>da Equação de Langevin ao Funcional Gerador</h1>
+    <p class="hero-subtitle">
+      Uma apostila de divulgação científica sobre o artigo de Zochil González Arenas e Daniel G. Barci,
+      <em>&ldquo;A generating functional for multiplicative stochastic processes&rdquo;</em> (arXiv:0912.0301):
+      por que um ruído que depende do estado do sistema gera um paradoxo matemático, e como a teoria de
+      campos o resolve &mdash; com Itô, Stratonovich e Hänggi&ndash;Klimontovich morando dentro de um único número.
+    </p>
+    <div class="hero-divider"></div>
+  </div>
+</header>
+
+<main class="page-wrap">
+
+  <!-- ===== PARTE I ===== -->
+  <section class="part" id="parte-1">
+    <div class="part-header">
+      <div class="part-number">I</div>
+      <div class="part-info">
+        <h2>A equação de Langevin e o ruído</h2>
+        <span class="part-tagline">Do grão de pólen de Robert Brown à distinção entre ruído aditivo e multiplicativo</span>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p>Em 1827, o botânico Robert Brown observou ao microscópio grãos de pólen suspensos em água e notou que
+      eles dançavam sem parar, em zigue-zague, como empurrados por mãos invisíveis. Hoje sabemos quem empurra:
+      as moléculas do líquido, em agitação térmica, bombardeiam o grão bilhões de vezes por segundo, de todos
+      os lados e com intensidades ligeiramente desiguais a cada instante.</p>
+      <p>Em 1908, Paul Langevin propôs uma maneira engenhosa de escrever a física desse movimento sem precisar
+      acompanhar cada molécula: separar a força que o meio exerce sobre o grão em duas parcelas. Uma é
+      <strong>determinística</strong> &mdash; o arrasto viscoso, que sempre se opõe ao movimento. A outra é
+      <strong>aleatória</strong> &mdash; uma força que chuta para todo lado, com média zero, herdada dos choques
+      moleculares. Nasce aí a equação de Langevin, a espinha dorsal desta apostila.</p>
+    </div>
+
+    <div class="question" id="s11">
+      <div class="question-header">
+        <span class="q-badge">§ I.1</span>
+        <h3>A anatomia da equação</h3>
+      </div>
+      <div class="question-body">
+        <p>Para uma variável $x(t)$ (pense na posição do grão), a equação de Langevin mais geral que nos
+        interessa é</p>
+        <div class="math-block">
+          $$\frac{dx(t)}{dt} = f\big(x(t)\big) + g\big(x(t)\big)\,\eta(t)$$
+        </div>
+        <p>onde $\eta(t)$ é um <strong>ruído branco gaussiano</strong>, inteiramente caracterizado por</p>
+        <div class="math-block">
+          $$\langle \eta(t) \rangle = 0,
+          \qquad
+          \langle \eta(t)\,\eta(t') \rangle = \delta(t - t')$$
+        </div>
+        <p>Os dois símbolos novos merecem nome e sobrenome:</p>
+        <ul class="sub-list">
+          <li>
+            <span class="sub-label">$f$</span>
+            <span>A <strong>deriva</strong> (<em>drift</em>): a parte previsível da dinâmica. Se $f(x) = -x$,
+            por exemplo, o sistema é sempre puxado de volta para a origem, como uma bolinha numa tigela
+            (um poço harmônico).</span>
+          </li>
+          <li>
+            <span class="sub-label">$g$</span>
+            <span>A raiz quadrada da <strong>função de difusão</strong>: a intensidade dos chutes aleatórios.
+            O nome &ldquo;ruído branco&rdquo; vem da segunda correlação acima: $\delta(t-t')$ significa que o
+            chute de agora não guarda <em>nenhuma</em> memória do chute de um instante atrás &mdash; todas as
+            frequências contribuem igualmente, como na luz branca.</span>
+          </li>
+        </ul>
+        <p style="margin-top:0.9rem">Note já um detalhe que será crucial: a correlação
+        $\langle \eta(t)\eta(t)\rangle = \delta(0)$ é <strong>infinita</strong>. O ruído branco é um objeto
+        idealizado &mdash; útil, mas matematicamente feroz. Guarde isso para a Parte II.</p>
+      </div>
+    </div>
+
+    <div class="question" id="s12">
+      <div class="question-header">
+        <span class="q-badge">§ I.2</span>
+        <h3>Aditivo ou multiplicativo: onde mora o ruído?</h3>
+      </div>
+      <div class="question-body">
+        <p>Se $g$ é uma <strong>constante</strong>, o chute aleatório tem sempre a mesma intensidade, não
+        importa onde o sistema esteja: dizemos que o ruído é <strong>aditivo</strong>, pois ele simplesmente se
+        soma à dinâmica. Mas se $g$ <strong>depende do estado</strong> $x$, o ruído muda de intensidade
+        conforme o sistema se move &mdash; é o <strong>ruído multiplicativo</strong>, porque o estado
+        <em>multiplica</em> o ruído. E, como veremos, essa pequena mudança vira a matemática de cabeça para
+        baixo.</p>
+        <p>Ruído multiplicativo não é exotismo: o artigo de Arenas e Barci lista exemplos bem concretos.</p>
+        <ul class="sub-list">
+          <li>
+            <span class="sub-label">(a)</span>
+            <span><strong>Difusão dependente do estado.</strong> Uma partícula em suspensão que se move perto de
+            uma parede: o coeficiente de difusão depende da distância à parede (a parede atrapalha o escoamento
+            do fluido em volta da partícula), logo $g = g(x)$.</span>
+          </li>
+          <li>
+            <span class="sub-label">(b)</span>
+            <span><strong>Nanopartículas magnéticas.</strong> A equação estocástica de
+            Landau&ndash;Lifshitz&ndash;Gilbert, que descreve momentos magnéticos de nanopartículas em
+            agitação térmica, é uma equação de Langevin com ruído multiplicativo.</span>
+          </li>
+          <li>
+            <span class="sub-label">(c)</span>
+            <span><strong>Química e econometria.</strong> Em certos modelos, o que chamamos de &ldquo;ruído
+            branco&rdquo; é na verdade o limite de processos com <em>saltos</em> discretos (tipo Poisson) &mdash;
+            reações que ocorrem em eventos contados, negócios que chegam um a um num mercado. Nesses casos, a
+            interpretação de Itô (que veremos já já) é a mais adequada.</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <hr class="part-sep" />
+
+  <!-- ===== PARTE II ===== -->
+  <section class="part" id="parte-2">
+    <div class="part-header">
+      <div class="part-number">II</div>
+      <div class="part-info">
+        <h2>O paradoxo: o produto mal-definido</h2>
+        <span class="part-tagline">Por que multiplicar o estado pelo ruído branco é uma operação ambígua — e a prescrição-α</span>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p>Aqui chegamos ao coração do problema. Na equação de Langevin aparece o produto
+      $g\big(x(t)\big)\,\eta(t)$: o estado <em>vezes</em> o ruído. Com ruído aditivo ($g$ constante), não há
+      mistério. Mas com ruído multiplicativo, esse produto simplesmente <strong>não está bem
+      definido</strong> &mdash; e a culpa é da delta de Dirac.</p>
+      <p>Como $\langle\eta(t)^2\rangle = \delta(0) = \infty$, o ruído branco tem variância infinita em cada
+      instante: ele oscila violentamente em escalas de tempo arbitrariamente pequenas. Multiplicar uma função
+      suave por um monstro desses exige cuidado &mdash; e o resultado depende de <em>como</em> fazemos a
+      multiplicação.</p>
+    </div>
+
+    <div class="question" id="s21">
+      <div class="question-header">
+        <span class="q-badge">§ II.1</span>
+        <h3>A integral que depende de um detalhe</h3>
+      </div>
+      <div class="question-body">
+        <p>Para dar sentido à equação, é preciso integrá-la no tempo. Escrevendo $dW(t) = \eta(t)\,dt$ (o
+        chamado processo de Wiener), a integral do termo de ruído é calculada como uma soma sobre pequenos
+        intervalos $[t_j, t_{j+1}]$. E aí aparece a ambiguidade: <strong>em que ponto do intervalo avaliamos
+        $g$?</strong> Como $x(t)$ se mexe violentamente dentro de cada intervalo (carregado pelos chutes do
+        ruído), a escolha muda o valor da soma &mdash; e a diferença <em>não desaparece</em> quando o
+        intervalo encolhe.</p>
+        <p>A saída é declarar a escolha explicitamente, com a <strong>prescrição-α generalizada</strong>
+        (às vezes chamada de Stratonovich generalizado): avalia-se $g$ no ponto intermediário</p>
+        <div class="math-block">
+          $$(1-\alpha)\,x(t_j) + \alpha\,x(t_{j+1}), \qquad 0 \le \alpha \le 1,$$
+        </div>
+        <p>de modo que a integral estocástica vira</p>
+        <div class="math-block">
+          $$\int g\big(x(t)\big)\,dW(t)
+          \;\simeq\;
+          \sum_j g\Big((1-\alpha)\,x(t_j) + \alpha\,x(t_{j+1})\Big)\,
+          \Big[W(t_{j+1}) - W(t_j)\Big]$$
+        </div>
+        <p>Cada valor de $\alpha$ define um <em>cálculo estocástico</em> diferente &mdash; e, potencialmente,
+        um processo físico diferente.</p>
+      </div>
+    </div>
+
+    <div class="question" id="s22">
+      <div class="question-header">
+        <span class="q-badge">§ II.2</span>
+        <h3>Três sabores famosos</h3>
+      </div>
+      <div class="question-body">
+        <ul class="sub-list">
+          <li>
+            <span class="sub-label">$\alpha{=}0$</span>
+            <span><strong>Itô</strong> (pré-ponto): avalia-se $g$ no início do intervalo. A regra é
+            <em>causal</em> &mdash; o chute futuro não conversa com o estado de agora &mdash; e por isso é a
+            favorita em finanças e nos processos com saltos discretos da química e da econometria.</span>
+          </li>
+          <li>
+            <span class="sub-label">$\alpha{=}\tfrac12$</span>
+            <span><strong>Stratonovich</strong> (ponto médio): equivale a substituir o ruído branco por um
+            ruído levemente <em>colorido</em> (com uma memória curtíssima, como o ruído físico de verdade) e
+            depois tomar o limite em que a memória some. É a escolha natural na maior parte da física, e vale
+            a regra da cadeia do cálculo ordinário.</span>
+          </li>
+          <li>
+            <span class="sub-label">$\alpha{=}1$</span>
+            <span><strong>Hänggi&ndash;Klimontovich</strong> (pós-ponto): avalia-se $g$ no fim do intervalo.
+            Aparece naturalmente em certos problemas de cinética.</span>
+          </li>
+        </ul>
+        <p style="margin-top:0.9rem"><strong>Qual é a &ldquo;certa&rdquo;?</strong> Nenhuma, em abstrato &mdash;
+        e essa é a mensagem importante. A escolha de $\alpha$ <strong>não é uma convenção arbitrária</strong>:
+        ela é ditada pela física microscópica do problema (a origem do ruído, os tempos de correlação do banho
+        térmico, a natureza dos saltos). Pergunta para a natureza, não para o matemático.</p>
+        <div class="hint">
+          <span class="hint-icon">&#9432;</span>
+          <span><strong>Por que Stratonovich é &ldquo;natural&rdquo; em física?</strong> Ruídos físicos reais
+          nunca são exatamente brancos: eles têm um tempo de correlação $\tau$ pequeno mas finito. Um teorema
+          clássico (Wong&ndash;Zakai) diz que, ao tomar o limite $\tau \to 0$ de uma equação com ruído
+          colorido, obtém-se a equação de Langevin interpretada à la Stratonovich. É por isso que
+          experimentalistas costumam encontrar $\alpha = 1/2$ quando derivam o modelo com cuidado.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MCQ 1 -->
+    <div class="ic" id="mcq-ambig">
+      <div class="ic-header">
+        <span class="ic-badge">Teste rápido</span>
+        <h4>Antes de seguir: teste sua intuição</h4>
+      </div>
+      <div class="ic-body">
+        <p>Por que o produto $g\big(x(t)\big)\,\eta(t)$ é ambíguo quando $g$ depende de $x$?</p>
+        <div class="mcq-opt" data-g="g1" data-c="0"><span class="opt-lbl">A</span>
+          <span>Porque $\eta(t)$ tem média zero, e produtos com média zero não podem ser integrados</span>
+          <span class="opt-arr"></span></div>
+        <div class="mcq-opt" data-g="g1" data-c="1"><span class="opt-lbl">B</span>
+          <span>Porque $\eta$ é delta-correlacionado (variância infinita em cada instante), de modo que a
+          integral $\int g\,dW$ depende do ponto do intervalo em que $g$ é avaliada</span>
+          <span class="opt-arr"></span></div>
+        <div class="mcq-opt" data-g="g1" data-c="0"><span class="opt-lbl">C</span>
+          <span>Porque $g(x)$ pode ser negativa, o que tornaria a variância negativa</span>
+          <span class="opt-arr"></span></div>
+        <div class="mcq-fb" id="g1-ok">Exato! A delta de Dirac dá variância infinita ao ruído branco; a soma
+        que define a integral estocástica converge para valores diferentes conforme o ponto de avaliação de
+        $g$ &mdash; e cada escolha é uma prescrição-α diferente.</div>
+        <div class="mcq-fb" id="g1-bad">Não é bem isso. Média zero não impede integração, e $g^2 \ge 0$ sempre.
+        O problema é a variância <em>infinita</em> do ruído branco: dentro de cada intervalinho de tempo,
+        $x(t)$ se move o suficiente para que o ponto de avaliação de $g$ faça diferença finita.</div>
+      </div>
+    </div>
+
+    <!-- SIMULAÇÃO -->
+    <div class="ic" id="langevin-lab">
+      <div class="ic-header">
+        <span class="ic-badge">Laboratório</span>
+        <h4>Veja com seus próprios olhos: α muda o processo</h4>
+      </div>
+      <div class="ic-body">
+        <p>Simulamos a equação de Langevin com $f(x) = -x$ (o poço harmônico) e ruído multiplicativo
+        $g(x) = g_0\sqrt{|x| + \varepsilon}$ (com $\varepsilon = 0{,}05$ para estabilidade numérica).
+        Integração por Euler&ndash;Maruyama com passo $\Delta t = 0{,}01$: a prescrição-α equivale a um
+        esquema de Itô com a deriva corrigida $f_{\mathrm{eff}} = f + \alpha\, g\, g'$, ou seja,</p>
+        <div class="math-block">
+          $$x \;\leftarrow\; x + \Big[f(x) + \alpha\, g(x)\,g'(x)\Big]\,\Delta t
+          + g(x)\,\sqrt{\Delta t}\;N(0,1)$$
+        </div>
+        <p>O painel de cima mostra três trajetórias individuais; o de baixo, o histograma de um enxame de
+        centenas de partículas (a distribuição quase-estacionária), comparado à solução teórica
+        $P(x) \propto g(x)^{-2}\exp\!\big[2\int_0^x f_{\mathrm{eff}}(y)/g(y)^2\,dy\big]$ em azul.
+        <strong>Varra o slider de $\alpha$:</strong> com ruído multiplicativo, a distribuição muda de forma.
+        Depois mude para o modo <em>aditivo</em> e repita: $\alpha$ deixa de fazer qualquer diferença &mdash;
+        exatamente o que a teoria da Parte V explica.</p>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem 1.2rem;margin-bottom:.8rem">
+          <div class="sl-row"><span class="sl-lbl" style="min-width:110px">$\alpha$ (prescrição)</span>
+            <input type="range" class="sl" id="lg-alpha" min="0" max="1" step="0.05" value="0.5">
+            <span class="sl-val" id="lgv-alpha">0.50</span></div>
+          <div class="sl-row"><span class="sl-lbl" style="min-width:110px">$g_0$ (intensidade)</span>
+            <input type="range" class="sl" id="lg-g0" min="0.3" max="1.5" step="0.05" value="0.9">
+            <span class="sl-val" id="lgv-g0">0.90</span></div>
+        </div>
+
+        <div class="btn-row" style="margin-top:.2rem">
+          <span style="font-size:.78rem;color:var(--text-muted)">Atalhos de $\alpha$:</span>
+          <button class="btn btn-s" id="lg-a0">Itô&nbsp;($\alpha{=}0$)</button>
+          <button class="btn btn-s" id="lg-a05">Stratonovich&nbsp;($\tfrac12$)</button>
+          <button class="btn btn-s" id="lg-a1">Hänggi&ndash;Klimontovich&nbsp;($1$)</button>
+        </div>
+        <div class="btn-row">
+          <span style="font-size:.78rem;color:var(--text-muted)">Tipo de ruído:</span>
+          <button class="btn btn-s on" id="lg-mode-mult">Multiplicativo $g(x)=g_0\sqrt{|x|{+}\varepsilon}$</button>
+          <button class="btn btn-s" id="lg-mode-add">Aditivo $g = g_0$</button>
+          <button class="btn btn-s" id="lg-reset">&#8635; Reiniciar</button>
+        </div>
+
+        <canvas id="lg-cv-traj" width="820" height="170"
+          style="width:100%;border-radius:8px;background:#080c16;display:block;margin-top:1rem"></canvas>
+        <canvas id="lg-cv-hist" width="820" height="180"
+          style="width:100%;border-radius:8px;background:#080c16;display:block;margin-top:.6rem"></canvas>
+
+        <div style="display:flex;gap:1rem;margin-top:.6rem;flex-wrap:wrap;font-size:.75rem;font-family:'JetBrains Mono',monospace">
+          <span><span style="color:#74a7e8">&#9473;</span> trajetórias $x(t)$</span>
+          <span><span style="color:#c9a96e">&#9608;</span> histograma do enxame</span>
+          <span><span style="color:#74a7e8">&#9473;</span> distribuição estacionária teórica</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="part-sep" />
+
+  <!-- ===== PARTE III ===== -->
+  <section class="part" id="parte-3">
+    <div class="part-header">
+      <div class="part-number">III</div>
+      <div class="part-info">
+        <h2>O funcional gerador</h2>
+        <span class="part-tagline">Trocar "resolver para cada ruído" por uma única integral sobre todos os caminhos</span>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p>O que queremos, no fim das contas, não é saber a trajetória exata de um grão de pólen (impossível),
+      mas quantidades <strong>estatísticas</strong>: as correlações $\langle x(t_1)\,x(t_2)\cdots
+      x(t_n)\rangle$, que dizem como o sistema flutua e como responde a perturbações. Resolver a equação de
+      Langevin para cada realização do ruído e depois tirar médias é trabalho de formiga. O artigo de Arenas
+      e Barci mostra como fazer tudo de uma vez, com um único objeto: o <strong>funcional gerador</strong>
+      &mdash; a mesma ideia que a teoria quântica de campos usa para calcular qualquer coisa.</p>
+    </div>
+
+    <div class="question" id="s31">
+      <div class="question-header">
+        <span class="q-badge">§ III.1</span>
+        <h3>A máquina de fazer correlações</h3>
+      </div>
+      <div class="question-body">
+        <p>Para cada realização $\eta(t)$ do ruído, a equação de Langevin tem solução
+        $\bar{x}_{[\eta]}(t)$. Define-se então</p>
+        <div class="math-block">
+          $$Z[J] = \left\langle
+          \exp\!\left( \int dt\, J(t)\,\bar{x}_{[\eta]}(t) \right)
+          \right\rangle_{\!\eta}$$
+        </div>
+        <p>onde $J(t)$ é uma função auxiliar (uma &ldquo;fonte&rdquo;), e $\langle\cdots\rangle_\eta$ é a média
+        sobre todas as realizações do ruído. O truque: cada derivada funcional em relação a $J$ &ldquo;puxa
+        para baixo&rdquo; um fator $\bar{x}$ do expoente. Logo,</p>
+        <div class="math-block">
+          $$\langle x(t_1)\cdots x(t_n) \rangle
+          = \left.
+          \frac{\delta^n Z[J]}{\delta J(t_1)\,\cdots\,\delta J(t_n)}
+          \right|_{J = 0}$$
+        </div>
+        <p>Todas as correlações do processo vivem dentro de $Z[J]$, como as passagens de um baú. E há uma
+        propriedade de higiene essencial: $Z[0] = \langle 1 \rangle_\eta = 1$ &mdash; a <strong>conservação de
+        probabilidade</strong>. Qualquer formalismo que viole isso está errado.</p>
+      </div>
+    </div>
+
+    <div class="question" id="s32">
+      <div class="question-header">
+        <span class="q-badge">§ III.2</span>
+        <h3>Os quatro truques da construção</h3>
+      </div>
+      <div class="question-body">
+        <p>Transformar a média sobre o ruído em algo calculável usa quatro ideias em sequência. Cada uma é um
+        truque clássico da física teórica &mdash; e cada uma tem um papel preciso.</p>
+        <ul class="sub-list">
+          <li>
+            <span class="sub-label">1.</span>
+            <span><strong>Delta funcional.</strong> Em vez de resolver a equação, inserimos a solução
+            &ldquo;à força&rdquo;, integrando sobre <em>todos</em> os caminhos $x(t)$ e deixando que uma delta
+            funcional selecione os que obedecem à dinâmica:
+            $$Z[J] = \int \mathcal{D}x\; e^{\int dt\, J x}\,
+            \big\langle \delta\big[x - \bar{x}_{[\eta]}\big] \big\rangle_{\!\eta}$$
+            É como trocar &ldquo;encontre o caminho certo&rdquo; por &ldquo;considere todos os caminhos e
+            penalize os errados com peso zero&rdquo;.</span>
+          </li>
+          <li>
+            <span class="sub-label">2.</span>
+            <span><strong>Troca de variáveis.</strong> Escrevemos a delta em termos do operador da equação de
+            Langevin, $\hat{O}(x) = \dot{x} - f(x) - g(x)\eta(t)$, que vale zero sobre as soluções:
+            $$\delta\big[x - \bar{x}\big] = \delta\big[\hat{O}(x)\big]\,
+            \det\!\left( \frac{\delta \hat{O}}{\delta x} \right)$$
+            O determinante é o <strong>Jacobiano</strong> da troca de variáveis &mdash; o &ldquo;imposto&rdquo;
+            que a mudança de coordenadas cobra. Ponto crucial: com ruído <em>multiplicativo</em>, esse
+            determinante <strong>depende do ruído</strong> $\eta$ (porque $g' \neq 0$). No caso aditivo,
+            $g' = 0$ e o Jacobiano nem percebe o ruído &mdash; toda a complicação vem daí.</span>
+          </li>
+          <li>
+            <span class="sub-label">3.</span>
+            <span><strong>Fourier.</strong> A delta funcional vira uma integral exponencial sobre um campo
+            auxiliar $\varphi(t)$, o <strong>campo de resposta</strong>:
+            $$\delta\big[\hat{O}\big] = \int \mathcal{D}\varphi\;
+            \exp\!\left( i \int dt\, \varphi\,\hat{O} \right)$$
+            (é a versão contínua de $\delta(x) = \int \frac{dk}{2\pi} e^{ikx}$). Como o argumento é
+            <em>linear</em> em $\eta$, a média gaussiana sobre o ruído agora pode ser feita
+            analiticamente.</span>
+          </li>
+          <li>
+            <span class="sub-label">4.</span>
+            <span><strong>Grassmann.</strong> O determinante (Jacobiano) vira uma integral sobre variáveis de
+            Grassmann $\xi(t)$ e $\bar{\xi}(t)$ &mdash; &ldquo;férmions fictícios&rdquo; que
+            <em>anticomutam</em>, com $\xi^2 = \bar{\xi}^2 = 0$ (a chamada integral de Berezin):
+            $$\det M = \int \mathcal{D}\bar{\xi}\,\mathcal{D}\xi\;
+            \exp\!\left( -\int dt\, \bar{\xi}\, M\, \xi \right)$$
+            Parece exótico, mas é apenas contabilidade: esses &ldquo;fantasmas&rdquo; existem para colocar o
+            determinante no expoente, onde ele pode participar da ação.</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="question" id="s33">
+      <div class="question-header">
+        <span class="q-badge">§ III.3</span>
+        <h3>A ação &mdash; e o nascimento da deriva espúria</h3>
+      </div>
+      <div class="question-body">
+        <p>Depois de tomar a média sobre o ruído, o funcional gerador fica
+        $Z[J] = \int \mathcal{D}x\,\mathcal{D}\varphi\,\mathcal{D}\bar{\xi}\,\mathcal{D}\xi\;
+        e^{-S + \int Jx}$, com a <strong>ação</strong></p>
+        <div class="math-block">
+          $$S = \int dt\left\{
+          -\bar{\xi}\,\dot{\xi} + f'(x)\,\bar{\xi}\xi
+          + \tfrac{1}{2}\varphi^2 g(x)^2
+          + i\varphi\Big[ \dot{x} - f(x) + g(x)\,g'(x)\,\bar{\xi}\xi \Big]
+          \right\}$$
+        </div>
+        <p>Leia os termos em voz alta: $\tfrac12 \varphi^2 g^2$ é a assinatura do ruído gaussiano; $i\varphi
+        (\dot{x} - f)$ impõe a equação de Langevin; os termos com $\bar{\xi}\xi$ carregam o Jacobiano.
+        E repare no termo proporcional a $g\,g'$: ele <strong>só existe no caso multiplicativo</strong>
+        (quando $g$ é constante, $g' = 0$ e ele some). Esse termo é a origem da famosa
+        <strong>deriva espúria</strong> (<em>spurious drift</em>) &mdash; a correção efetiva na deriva que
+        distingue as prescrições de Itô, Stratonovich e Hänggi&ndash;Klimontovich.</p>
+        <p>Um detalhe bonito: poderíamos temer termos com $(g')^2$, mas eles <strong>não aparecem</strong> no
+        caso de uma única variável &mdash; e a razão é puramente algébrica.</p>
+        <div class="hint">
+          <span class="hint-icon">&#9432;</span>
+          <span><strong>Por que $\xi^2 = 0$ elimina os termos em $(g')^2$?</strong> Variáveis de Grassmann
+          anticomutam: $\xi\xi = -\xi\xi$, logo $\xi^2 = 0$. Qualquer termo da expansão que trouxesse
+          <em>dois</em> campos fantasmas no mesmo ponto do tempo (como $(\bar{\xi}\xi)^2$) se anula
+          identicamente. Os termos com $(g')^2$ viriam acompanhados exatamente dessas potências &mdash; e
+          morrem de morte algébrica antes de nascer. Em sistemas com várias variáveis a história é mais rica,
+          mas para um único grau de liberdade é isso que mantém a ação simples.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="part-sep" />
+
+  <!-- ===== PARTE IV ===== -->
+  <section class="part" id="parte-4">
+    <div class="part-header">
+      <div class="part-number">IV</div>
+      <div class="part-info">
+        <h2>Onde o α se esconde</h2>
+        <span class="part-tagline">Um formalismo em tempo contínuo que, mesmo assim, guarda toda a ambiguidade em θ(0)</span>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p>A construção da Parte III foi feita por <strong>métodos funcionais</strong>, trabalhando diretamente
+      com caminhos contínuos $x(t)$ &mdash; em nenhum momento discretizamos o tempo em intervalinhos. Seria de
+      esperar, então, que a ambiguidade da prescrição-α tivesse evaporado. Não evaporou: ela reaparece
+      sorrateiramente, num lugar inesperado e muito instrutivo.</p>
+    </div>
+
+    <div class="question" id="s41">
+      <div class="question-header">
+        <span class="q-badge">§ IV.1</span>
+        <h3>A função de Heaviside e o número mágico</h3>
+      </div>
+      <div class="question-body">
+        <p>Para integrar as variáveis de Grassmann é preciso inverter o operador diferencial $d/dt$ &mdash; ou
+        seja, definir a sua <strong>função de Green retardada</strong>, que nada mais é que a função de
+        Heaviside $\theta(t - t')$ (vale $0$ antes e $1$ depois). E aí a matemática pergunta: <strong>quanto
+        vale $\theta(0)$?</strong> Exatamente no salto, a função é ambígua. O artigo mostra que basta
+        declarar</p>
+        <div class="math-block">
+          $$\theta(0) = \alpha$$
+        </div>
+        <p>e <strong>toda</strong> a informação sobre a prescrição &mdash; Itô, Stratonovich,
+        Hänggi&ndash;Klimontovich, ou qualquer valor intermediário &mdash; fica codificada nesse único número.
+        Integrando os grassmannianos com essa escolha, a ação efetiva fica</p>
+        <div class="math-block">
+          $$S = \int dt\left\{
+          \tfrac{1}{2}\varphi^2 g^2
+          + i\varphi\Big[ \dot{x} - f + \alpha\, g\, g' \Big]
+          + \alpha f'
+          \right\}$$
+        </div>
+        <p>Reconheça a deriva espúria: ela aparece agora como $\alpha\, g\, g'$, exatamente a correção que a
+        discretização temporal com prescrição-α produz. O formalismo contínuo <strong>reproduz os resultados
+        obtidos antes por discretização</strong> &mdash; e com isso resolve a velha controvérsia entre as
+        abordagens de tempo discreto e de tempo contínuo: as duas falam a mesma língua, desde que se declare
+        $\theta(0)$.</p>
+        <div class="hint">
+          <span class="hint-icon">&#9432;</span>
+          <span><strong>O que é uma função de Green retardada, afinal?</strong> É a &ldquo;resposta ao
+          impulso&rdquo; de um operador. Para $d/dt$, perguntamos: qual função $G(t-t')$ satisfaz
+          $\frac{d}{dt}G(t-t') = \delta(t-t')$? A resposta é $G = \theta(t-t')$ (a causalidade escolhe a
+          versão <em>retardada</em>: o sistema só responde <em>depois</em> do empurrão). Intuitivamente,
+          $G(t-t')$ diz quanto o estado em $t$ &ldquo;lembra&rdquo; de um chute dado em $t'$. A ambiguidade em
+          $t = t'$ &mdash; o valor $\theta(0)$ &mdash; é o fantasma contínuo da pergunta discreta
+          &ldquo;em que ponto do intervalo avalio $g$?&rdquo;.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="question" id="s42">
+      <div class="question-header">
+        <span class="q-badge">§ IV.2</span>
+        <h3>A vantagem prática</h3>
+      </div>
+      <div class="question-body">
+        <p>O ganho dessa reformulação não é só estético. Pode-se trabalhar com <strong>uma única estrutura
+        matemática</strong> &mdash; uma ação, um conjunto de regras de Feynman, uma maquinaria de teoria de
+        campos &mdash; e <strong>fixar $\alpha$ só no final</strong>, quando a física microscópica do problema
+        já tiver sido decidida. Em vez de refazer a conta inteira para cada prescrição, varre-se o parâmetro
+        $\alpha$ como quem gira um botão &mdash; exatamente o que você fez no laboratório da Parte II.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="part-sep" />
+
+  <!-- ===== PARTE V ===== -->
+  <section class="part" id="parte-5">
+    <div class="part-header">
+      <div class="part-number">V</div>
+      <div class="part-info">
+        <h2>Simetrias: BRS e supersimetria</h2>
+        <span class="part-tagline">Por que, no caso aditivo, a Natureza não se importa com α — e no multiplicativo, se importa</span>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p>Toda grande teoria de campos tem suas simetrias, e esta não é exceção. Elas não são enfeites: são o
+      que garante que a teoria faz sentido &mdash; e são a chave para a pergunta que nos persegue desde a
+      Parte II: afinal, quando é que a escolha de $\alpha$ realmente importa?</p>
+    </div>
+
+    <div class="question" id="s51">
+      <div class="question-header">
+        <span class="q-badge">§ V.1</span>
+        <h3>Simetria BRS: a conservação de probabilidade disfarçada</h3>
+      </div>
+      <div class="question-body">
+        <p>A ação possui uma simetria de <strong>BRS</strong> (Becchi&ndash;Rouet&ndash;Stora), a mesma que
+        organiza as teorias de gauge: uma transformação <strong>nilpotente</strong> ($\delta^2 = 0$,
+        aplicá-la duas vezes dá zero) que troca as variáveis comuns (bôsonicas) pelas variáveis fantasmas
+        (fermiônicas) de Grassmann. Fisicamente, ela é a manifestação da <strong>conservação de
+        probabilidade</strong> $Z[0] = 1$.</p>
+        <p>E ela tem uma consequência palpável, uma identidade de Ward que conecta o mundo fantasma ao mundo
+        físico:</p>
+        <div class="math-block">
+          $$\big\langle x(t_1)\,\varphi(t_2) \big\rangle
+          = \big\langle \bar{\xi}(t_1)\,\xi(t_2) \big\rangle$$
+        </div>
+        <p>Leia devagar: a esquerda é a <strong>função de resposta</strong> &mdash; como o sistema reage a uma
+        perturbação externa (o campo $\varphi$ casou justamente com $\hat{O}$, a equação de movimento). A
+        direita é uma correlação entre <em>fantasmas</em>, objetos que inventamos por contabilidade. A
+        simetria decreta que são a mesma coisa. Os fantasmas pagam seu aluguel.</p>
+      </div>
+    </div>
+
+    <div class="question" id="s52">
+      <div class="question-header">
+        <span class="q-badge">§ V.2</span>
+        <h3>Superespaço: colocando as simetrias à vista</h3>
+      </div>
+      <div class="question-body">
+        <p>Há uma reformulação elegante em que essas simetrias ficam <em>manifestas</em>: estende-se o tempo a
+        um <strong>superespaço</strong> $(t, \theta, \bar{\theta})$, com duas coordenadas anticomutativas
+        extras, e empacota-se tudo ($x$, $\varphi$, $\xi$, $\bar{\xi}$) num único <strong>supercampo</strong>
+        $\Phi(t, \theta, \bar{\theta})$. As transformações de simetria viram simples &ldquo;translações&rdquo;
+        nas coordenadas de Grassmann &mdash; geometria, em vez de álgebra.</p>
+      </div>
+    </div>
+
+    <div class="question" id="s53">
+      <div class="question-header">
+        <span class="q-badge">§ V.3</span>
+        <h3>Supersimetria: o ponto em que α deixa de importar</h3>
+      </div>
+      <div class="question-body">
+        <p>Agora o resultado mais bonito. Considere o caso <strong>aditivo</strong> ($g$ constante) com a
+        deriva derivando de um potencial, $f = \partial V/\partial x$ &mdash; como a bolinha na tigela,
+        $f = -x$ com $V = -x^2/2$. Nesse caso a ação ganha uma simetria ainda maior: a
+        <strong>supersimetria (SUSY)</strong>, que mistura de forma balanceada os graus de liberdade bôsonicos
+        e fermiônicos.</p>
+        <p>E a SUSY faz um milagre contábil: os diagramas de <strong>&ldquo;tadpole&rdquo;</strong> &mdash;
+        laços que saem e voltam do mesmo vértice, e que são <em>justamente</em> onde mora a dependência em
+        $\alpha$ (lembre-se: $\theta(0)$ aparece em laços avaliados a tempos iguais) &mdash;
+        <strong>cancelam identicamente, a todas as ordens da teoria de perturbação</strong>. Bósons e férmions
+        se anulam em pares. Consequência direta:</p>
+        <ul class="sub-list">
+          <li>
+            <span class="sub-label">(a)</span>
+            <span>As correlações <strong>não dependem de $\alpha$</strong>: o processo estocástico é único,
+            não importa a prescrição. Era o que você viu no laboratório ao ligar o modo aditivo.</span>
+          </li>
+          <li>
+            <span class="sub-label">(b)</span>
+            <span>Fisicamente, a SUSY implica <strong>invariância por translação temporal</strong> das
+            correlações e o <strong>teorema de flutuação-dissipação</strong>: a resposta do sistema a uma
+            perturbação é determinada pelas suas flutuações espontâneas.</span>
+          </li>
+          <li>
+            <span class="sub-label">(c)</span>
+            <span>E garante a <strong>convergência ao equilíbrio termodinâmico</strong> em tempos longos
+            &mdash; a assinatura de um sistema bem-comportado em contato com um banho térmico.</span>
+          </li>
+        </ul>
+        <p style="margin-top:0.9rem">No caso <strong>multiplicativo genérico</strong>, essa simetria extra
+        <em>não existe</em>: os tadpoles com acoplamentos derivativos (os termos $g\,g'$) não cancelam, e cada
+        valor de $\alpha$ define de fato um <strong>processo estocástico diferente</strong>. Por isso a física
+        microscópica precisa decidir a prescrição &mdash; a matemática, sozinha, não decide por você.</p>
+      </div>
+    </div>
+
+    <!-- MCQ 2 -->
+    <div class="ic" id="mcq-susy">
+      <div class="ic-header">
+        <span class="ic-badge">Teste rápido</span>
+        <h4>O que a supersimetria compra de graça?</h4>
+      </div>
+      <div class="ic-body">
+        <p>No caso aditivo com deriva derivando de um potencial ($f = \partial V/\partial x$), o que a
+        supersimetria da ação garante?</p>
+        <div class="mcq-opt" data-g="g2" data-c="0"><span class="opt-lbl">A</span>
+          <span>Que apenas a prescrição $\alpha = 1$ descreve o equilíbrio termodinâmico</span>
+          <span class="opt-arr"></span></div>
+        <div class="mcq-opt" data-g="g2" data-c="0"><span class="opt-lbl">B</span>
+          <span>Que o ruído deixa de ser gaussiano em tempos longos</span>
+          <span class="opt-arr"></span></div>
+        <div class="mcq-opt" data-g="g2" data-c="1"><span class="opt-lbl">C</span>
+          <span>Que os tadpoles (onde mora a dependência em $\alpha$) cancelam a todas as ordens, logo as
+          correlações não dependem de $\alpha$ e o sistema relaxa ao equilíbrio</span>
+          <span class="opt-arr"></span></div>
+        <div class="mcq-fb" id="g2-ok">Isso! A SUSY faz bósons e férmions cancelarem os diagramas de tadpole
+        &mdash; que são justamente os sensíveis a $\theta(0) = \alpha$. Sem dependência em $\alpha$, o processo
+        é único; e a mesma simetria implica flutuação-dissipação e o equilíbrio em tempos longos.</div>
+        <div class="mcq-fb" id="g2-bad">Cuidado: no caso aditivo com potencial, <em>nenhuma</em> prescrição é
+        privilegiada &mdash; a SUSY cancela a dependência em $\alpha$ a todas as ordens, e todas descrevem o
+        mesmo processo. É no caso multiplicativo genérico que cada $\alpha$ define um processo distinto.</div>
+      </div>
+    </div>
+
+    <div class="question" id="s54">
+      <div class="question-header">
+        <span class="q-badge">§ V.4</span>
+        <h3>O que o artigo entrega</h3>
+      </div>
+      <div class="question-body">
+        <p>A conclusão de Arenas e Barci é uma síntese. O formalismo do funcional gerador
+        <strong>unifica as prescrições</strong> (Itô, Stratonovich, Hänggi&ndash;Klimontovich são apenas valores
+        de $\theta(0)$ numa única ação); <strong>esclarece a controvérsia</strong> entre as abordagens de tempo
+        discreto e contínuo, mostrando que elas concordam quando a ambiguidade é tratada com honestidade; e,
+        uma vez escrita a dinâmica como teoria de campos, <strong>toda a maquinaria</strong> dessa área
+        &mdash; diagramas de Feynman, identidades de Ward e inclusive o <strong>grupo de renormalização
+        dinâmico</strong> &mdash; fica disponível para estudar correlações e o comportamento assintótico de
+        processos estocásticos multiplicativos.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="part-sep" />
+
+  <!-- ===== PARA SABER MAIS ===== -->
+  <section class="part" id="referencias">
+    <div class="part-header">
+      <div class="part-number">&#9733;</div>
+      <div class="part-info">
+        <h2>Para saber mais</h2>
+        <span class="part-tagline">O artigo e as referências clássicas por trás dele</span>
+      </div>
+    </div>
+    <div class="question">
+      <div class="question-body">
+        <ul class="sub-list">
+          <li>
+            <span class="sub-label">&#9656;</span>
+            <span>Z. González Arenas &amp; D. G. Barci, <em>&ldquo;A generating functional for multiplicative
+            stochastic processes&rdquo;</em>, <strong>arXiv:0912.0301</strong> &mdash; o artigo desta apostila,
+            com todas as contas que aqui só contamos por alto.</span>
+          </li>
+          <li>
+            <span class="sub-label">&#9656;</span>
+            <span>N. G. van Kampen, <em>Stochastic Processes in Physics and Chemistry</em> &mdash; a referência
+            clássica sobre ruído, equações de Langevin e a discussão Itô &times; Stratonovich.</span>
+          </li>
+          <li>
+            <span class="sub-label">&#9656;</span>
+            <span>J. Zinn-Justin, <em>Quantum Field Theory and Critical Phenomena</em> &mdash; a maquinaria de
+            teoria de campos (funcionais geradores, Grassmann, BRS, renormalização) usada na Parte III em
+            diante.</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer style="border-top: 1px solid var(--border); padding: 1.5rem 2rem; text-align: center; font-size: 0.8rem; color: var(--text-dim);">
+  COLMEA 2026 &nbsp;&middot;&nbsp; UERJ &nbsp;&middot;&nbsp; Lucas Rafael de Andrade
+</footer>
+
+<script>
+(function(){
+"use strict";
+function g(id){return document.getElementById(id);}
+
+/* ── Sliders: preenchimento visual ─────────────────────────────────────── */
+function fillSlider(el){if(!el)return;var mn=+el.min,mx=+el.max,v=+el.value;var pct=((v-mn)/(mx-mn)*100).toFixed(1)+"%";el.style.background="linear-gradient(to right,var(--accent-dim) 0%,var(--accent-dim) "+pct+",#2a3349 "+pct+")";}
+document.querySelectorAll(".sl").forEach(fillSlider);
+
+/* ── Dicas colapsáveis ─────────────────────────────────────────────────── */
+document.querySelectorAll(".hint").forEach(function(h){
+  var spans=h.querySelectorAll("span");
+  var ct=spans[spans.length-1];
+  if(!ct)return;
+  ct.classList.add("hint-content");
+  var tog=document.createElement("span");
+  tog.className="hint-toggle";
+  tog.textContent="Dica";
+  h.insertBefore(tog,ct);
+  h.classList.add("collapsed");
+  h.addEventListener("click",function(){h.classList.toggle("collapsed");});
+});
+
+/* ── MCQ ───────────────────────────────────────────────────────────────── */
+document.querySelectorAll(".mcq-opt").forEach(function(opt){
+  opt.addEventListener("click",function(){
+    var grp=this.dataset.g;
+    var all=document.querySelectorAll(".mcq-opt[data-g='"+grp+"']");
+    var done=false;
+    all.forEach(function(o){if(o.classList.contains("ok")||o.classList.contains("bad"))done=true;});
+    if(done)return;
+    var ok=(this.dataset.c==="1");
+    this.classList.add(ok?"ok":"bad");
+    var arr=this.querySelector(".opt-arr");
+    if(arr)arr.textContent=ok?"\u2713":"\u2717";
+    if(!ok){all.forEach(function(o){if(o.dataset.c==="1"){o.classList.add("ok");var a=o.querySelector(".opt-arr");if(a)a.textContent="\u2713";}});}
+    var fb=g(grp+"-"+(ok?"ok":"bad"));
+    if(fb){fb.classList.add(ok?"ok":"bad");if(window.MathJax&&MathJax.typesetPromise)MathJax.typesetPromise([fb]).catch(function(){});}
+  });
+});
+
+/* ── Laboratório: Langevin com ruído multiplicativo ────────────────────── */
+(function(){
+  var cvt=g("lg-cv-traj"),cvh=g("lg-cv-hist");
+  if(!cvt||!cvh)return;
+  var tctx=cvt.getContext("2d"),hctx=cvh.getContext("2d");
+  var TW=cvt.width,TH=cvt.height,HW=cvh.width,HH=cvh.height;
+  var sA=g("lg-alpha"),sG=g("lg-g0"),vA=g("lgv-alpha"),vG=g("lgv-g0");
+  var bA0=g("lg-a0"),bA05=g("lg-a05"),bA1=g("lg-a1");
+  var bMult=g("lg-mode-mult"),bAdd=g("lg-mode-add"),bRe=g("lg-reset");
+
+  var DT=0.01, SQDT=Math.sqrt(DT);
+  var NW=500;            // partículas do enxame (histograma)
+  var NTR=3;             // trajetórias individuais desenhadas
+  var XMAX=3.2;          // janela em x
+  var TWIN=30;           // janela temporal das trajetórias
+  var BURN=4;            // tempo de burn-in descartado
+  var EPS=0.05;
+  var STEPS=12;          // passos de integração por frame
+  var NB=64;             // bins do histograma
+
+  var mode="mult";
+  var walkers=[],trajs=[],theory=[];
+
+  function gauss(){var u=0,v=0;while(u===0)u=Math.random();while(v===0)v=Math.random();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);}
+  function gfun(x,g0){return mode==="add"?g0:g0*Math.sqrt(Math.abs(x)+EPS);}
+  function ggp(x,g0){if(mode==="add")return 0;return 0.5*g0*g0*(x>0?1:(x<0?-1:0));} // g*g' = ½ (g²)' = ½ g0² sign(x)
+  function feff(y,g0,al){return -y+al*ggp(y,g0);}
+
+  /* Distribuição estacionária teórica: P(x) ∝ g(x)^{-2} exp(2∫0^x f_eff/g² dy) */
+  function buildTheory(){
+    var g0=+sG.value, al=+sA.value;
+    var dy=0.005, n=Math.ceil(XMAX/dy);
+    var Ipos=[0]; // I(x) para x>=0 (ímpar em x)
+    var acc=0;
+    for(var i=0;i<n;i++){
+      var ym=(i+0.5)*dy;
+      acc += 2*feff(ym,g0,al)/(gfun(ym,g0)*gfun(ym,g0))*dy;
+      Ipos.push(acc);
+    }
+    theory=[];
+    for(var b=0;b<NB;b++){
+      var x=-XMAX+(b+0.5)*2*XMAX/NB;
+      var ax=Math.abs(x), k=Math.min(n,Math.floor(ax/dy));
+      var fr=(ax-k*dy)/dy;
+      var Ia=Ipos[k]+(Ipos[Math.min(n,k+1)]-Ipos[k])*fr;
+      var gg=gfun(x,g0);
+      var p=Math.exp(Math.max(-60,Math.min(60,Ia)))/(gg*gg);
+      theory.push({x:x,p:p});
+    }
+    var norm=0; theory.forEach(function(t){norm+=t.p;});
+    if(norm>0)theory.forEach(function(t){t.p/=(norm*2*XMAX/NB);});
+  }
+
+  function stepAll(){
+    var g0=+sG.value, al=+sA.value;
+    var i,x,gx;
+    for(i=0;i<NW;i++){
+      x=walkers[i]; gx=gfun(x,g0);
+      x+=(-x+al*ggp(x,g0))*DT+gx*SQDT*gauss();
+      if(x>8)x=8;else if(x<-8)x=-8;
+      walkers[i]=x;
+    }
+    for(i=0;i<NTR;i++){
+      var t=trajs[i]; x=t.x; gx=gfun(x,g0);
+      x+=(-x+al*ggp(x,g0))*DT+gx*SQDT*gauss();
+      if(x>8)x=8;else if(x<-8)x=-8;
+      t.x=x; t.pts.push(x);
+      var cap=Math.round(TWIN/DT);
+      if(t.pts.length>cap)t.pts.shift();
+    }
+  }
+
+  function reset(){
+    var g0=+sG.value;
+    var i;
+    walkers=[]; trajs=[];
+    for(i=0;i<NW;i++)walkers.push((Math.random()*2-1)*1.2);
+    for(i=0;i<NTR;i++)trajs.push({x:(Math.random()*2-1)*2,pts:[]});
+    buildTheory();
+    var burnSteps=Math.round(BURN/DT);
+    for(i=0;i<burnSteps;i++)stepAll();
+    trajs.forEach(function(t){t.pts=[];}); // trajetórias desenhadas só após o burn-in
+  }
+
+  var TCOL=["#74a7e8","#c9a96e","#7ec87e"];
+  function yOf(x){return TH/2-(x/XMAX)*(TH/2-10);}
+  function xOfT(f){return 8+f*(TW-16);}
+
+  function drawTraj(){
+    tctx.clearRect(0,0,TW,TH);
+    // eixo x=0
+    tctx.strokeStyle="rgba(122,138,168,0.25)";
+    tctx.setLineDash([4,4]);
+    tctx.beginPath();tctx.moveTo(0,yOf(0));tctx.lineTo(TW,yOf(0));tctx.stroke();
+    tctx.setLineDash([]);
+    // bordas ±XMAX
+    tctx.fillStyle="rgba(78,95,122,0.9)";
+    tctx.font="10px 'JetBrains Mono',monospace";
+    tctx.fillText("+"+XMAX.toFixed(1),6,14);
+    tctx.fillText("-"+XMAX.toFixed(1),6,TH-8);
+    tctx.fillText("x(t)",TW-36,14);
+    tctx.fillText("t →",TW-30,TH-8);
+    for(var j=0;j<NTR;j++){
+      var pts=trajs[j].pts, n=pts.length;
+      if(n<2)continue;
+      var stride=Math.max(1,Math.ceil(n/(TW-16)));
+      tctx.strokeStyle=TCOL[j];
+      tctx.globalAlpha=0.85;
+      tctx.lineWidth=1.2;
+      tctx.beginPath();
+      for(var i=0;i<n;i+=stride){
+        var f=i/(Math.round(TWIN/DT)-1);
+        var px=xOfT(f), py=yOf(Math.max(-XMAX,Math.min(XMAX,pts[i])));
+        if(i===0)tctx.moveTo(px,py);else tctx.lineTo(px,py);
+      }
+      tctx.stroke();
+      tctx.globalAlpha=1;
+    }
+  }
+
+  function drawHist(){
+    hctx.clearRect(0,0,HW,HH);
+    var counts=new Array(NB).fill(0);
+    var bw=2*XMAX/NB;
+    for(var i=0;i<NW;i++){
+      var x=walkers[i];
+      if(x<=-XMAX||x>=XMAX)continue;
+      counts[Math.floor((x+XMAX)/bw)]++;
+    }
+    var dens=counts.map(function(c){return c/(NW*bw);});
+    var mx=0;
+    dens.forEach(function(d){if(d>mx)mx=d;});
+    theory.forEach(function(t){if(t.p>mx)mx=t.p;});
+    if(mx<=0)mx=1;
+    var pad=14, plotH=HH-2*pad;
+    function hx(x){return pad+((x+XMAX)/(2*XMAX))*(HW-2*pad);}
+    function hy(p){return HH-pad-(p/mx)*plotH;}
+    // barras
+    hctx.fillStyle="rgba(201,169,110,0.55)";
+    for(var b=0;b<NB;b++){
+      var x0=-XMAX+b*bw;
+      hctx.fillRect(hx(x0)+0.5,hy(dens[b]),(HW-2*pad)/NB-1,HH-pad-hy(dens[b]));
+    }
+    // curva teórica
+    if(theory.length===NB){
+      hctx.strokeStyle="#74a7e8";
+      hctx.lineWidth=1.6;
+      hctx.beginPath();
+      theory.forEach(function(t,i){
+        var px=hx(t.x),py=hy(t.p);
+        if(i===0)hctx.moveTo(px,py);else hctx.lineTo(px,py);
+      });
+      hctx.stroke();
+    }
+    // rótulos
+    hctx.fillStyle="rgba(78,95,122,0.9)";
+    hctx.font="10px 'JetBrains Mono',monospace";
+    hctx.fillText("-"+XMAX.toFixed(1),pad,HH-3);
+    hctx.fillText("0",hx(0)-3,HH-3);
+    hctx.fillText("+"+XMAX.toFixed(1),HW-pad-26,HH-3);
+    hctx.fillText("P(x)",pad,12);
+    // linha vertical em x=0
+    hctx.strokeStyle="rgba(122,138,168,0.25)";
+    hctx.setLineDash([4,4]);
+    hctx.beginPath();hctx.moveTo(hx(0),pad);hctx.lineTo(hx(0),HH-pad);hctx.stroke();
+    hctx.setLineDash([]);
+  }
+
+  function loop(){
+    for(var s=0;s<STEPS;s++)stepAll();
+    drawTraj();
+    drawHist();
+    requestAnimationFrame(loop);
+  }
+
+  function syncLabels(){
+    var al=+sA.value, g0=+sG.value;
+    var nome = al===0 ? " (Itô)" : (Math.abs(al-0.5)<1e-9 ? " (Strat.)" : (al===1 ? " (H–K)" : ""));
+    if(vA)vA.textContent=al.toFixed(2)+nome;
+    if(vG)vG.textContent=g0.toFixed(2);
+    fillSlider(sA);fillSlider(sG);
+  }
+
+  function applyAndReset(){syncLabels();reset();}
+
+  if(sA)sA.addEventListener("input",applyAndReset);
+  if(sG)sG.addEventListener("input",applyAndReset);
+  function setAlpha(v){if(!sA)return;sA.value=String(v);applyAndReset();}
+  if(bA0)bA0.addEventListener("click",function(){setAlpha(0);});
+  if(bA05)bA05.addEventListener("click",function(){setAlpha(0.5);});
+  if(bA1)bA1.addEventListener("click",function(){setAlpha(1);});
+  function setMode(m){mode=m;
+    if(bMult)bMult.classList.toggle("on",m==="mult");
+    if(bAdd)bAdd.classList.toggle("on",m==="add");
+    applyAndReset();}
+  if(bMult)bMult.addEventListener("click",function(){setMode("mult");});
+  if(bAdd)bAdd.addEventListener("click",function(){setMode("add");});
+  if(bRe)bRe.addEventListener("click",applyAndReset);
+
+  syncLabels();
+  reset();
+  requestAnimationFrame(loop);
+})();
+})();
+</script>
+</body>
+</html>
