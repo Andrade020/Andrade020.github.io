@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aula 01 — Contexto histórico e fundamentos · Economia Ambiental · UERJ</title>
+<link rel="icon" type="image/png" href="assets/marca-ambiental.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ============ TOKENS ============ */
+  :root {
+    --verde:        #14532D;
+    --verde-claro:  #4ADE80;
+    --dourado:      #C9A227;
+    --papel:        #FAF9F6;
+    --tinta:        #1C1917;
+    --cinza:        #6B7280;
+    --terracota:    #B45309;
+    --petroleo:     #155E75;
+    --f-titulo: 'Archivo', sans-serif;
+    --f-texto:  'Source Serif 4', Georgia, serif;
+    --f-mono:   'IBM Plex Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--f-texto);
+    font-size: 11pt;
+    line-height: 1.7;
+    color: var(--tinta);
+    background: #e8e6e1;
+  }
+
+  .pagina {
+    background: var(--papel);
+    max-width: 21cm;
+    margin: 24px auto;
+    padding: 2.5cm;
+    box-shadow: 0 2px 12px rgba(0,0,0,.12);
+  }
+
+  /* ============ CAPA ============ */
+  .capa {
+    display: flex;
+    flex-direction: column;
+  }
+  .capa .marca { width: 96px; height: 96px; }
+  .capa .filete {
+    width: 72px; height: 5px;
+    background: var(--dourado);
+    margin: 20px 0;
+  }
+  .capa h1 {
+    font-family: var(--f-titulo);
+    font-size: 42pt;
+    font-weight: 800;
+    line-height: 1.08;
+    color: var(--verde);
+    letter-spacing: -0.5px;
+  }
+  .capa .subtitulo {
+    font-family: var(--f-titulo);
+    font-size: 15pt;
+    font-weight: 500;
+    color: var(--cinza);
+    margin-top: 14px;
+  }
+  .capa .rodape-capa {
+    margin-top: 1.6cm;
+    border-top: 2px solid var(--verde);
+    padding-top: 16px;
+    font-family: var(--f-titulo);
+    font-size: 10.5pt;
+    color: var(--tinta);
+  }
+  .capa .rodape-capa strong { color: var(--verde); }
+  .capa .rodape-capa .inst {
+    letter-spacing: 1.5px;
+    font-size: 9pt;
+    color: var(--cinza);
+    margin-top: 4px;
+  }
+
+  /* ============ TIPOGRAFIA ============ */
+  h1.capitulo {
+    font-family: var(--f-titulo);
+    font-size: 26pt;
+    font-weight: 800;
+    color: var(--verde);
+    line-height: 1.15;
+    margin: 0 0 6pt;
+  }
+  .num-capitulo {
+    font-family: var(--f-titulo);
+    font-size: 10pt;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: var(--dourado);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 8pt;
+  }
+  .regua-capitulo {
+    border: none;
+    border-top: 3px solid var(--verde);
+    width: 100%;
+    margin: 10pt 0 22pt;
+  }
+  h2 {
+    font-family: var(--f-titulo);
+    font-size: 17pt;
+    font-weight: 700;
+    color: var(--verde);
+    margin: 26pt 0 10pt;
+  }
+  h2 .num { color: var(--dourado); margin-right: 6pt; }
+  h3 {
+    font-family: var(--f-titulo);
+    font-size: 13pt;
+    font-weight: 600;
+    color: var(--tinta);
+    margin: 18pt 0 8pt;
+  }
+  p { margin-bottom: 10pt; text-align: justify; hyphens: auto; }
+  strong { font-weight: 600; }
+  .versalete {
+    font-family: var(--f-titulo);
+    font-size: 9pt;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--cinza);
+  }
+
+  ul, ol { margin: 0 0 10pt 22pt; }
+  li { margin-bottom: 4pt; }
+  li::marker { color: var(--verde); font-weight: 700; }
+
+  /* ============ CAIXAS SEMÂNTICAS ============ */
+  .caixa {
+    border-radius: 6px;
+    padding: 12pt 14pt 6pt;
+    margin: 14pt 0;
+    page-break-inside: avoid;
+  }
+  .caixa .rotulo {
+    font-family: var(--f-titulo);
+    font-size: 9pt;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 6pt;
+  }
+  .definicao { background: #EBF5EE; border-left: 4px solid var(--verde); }
+  .definicao .rotulo { color: var(--verde); }
+  .exemplo   { background: #EBF3F5; border-left: 4px solid var(--petroleo); }
+  .exemplo .rotulo { color: var(--petroleo); }
+  .atencao   { background: #FAF1E6; border-left: 4px solid var(--terracota); }
+  .atencao .rotulo { color: var(--terracota); }
+  .destaque  { background: #FAF6E8; border-left: 4px solid var(--dourado); }
+  .destaque .rotulo { color: #8a7014; }
+
+  /* ============ FÓRMULAS E TABELAS ============ */
+  .formula {
+    font-family: var(--f-mono);
+    font-size: 11pt;
+    text-align: center;
+    background: #fff;
+    border: 1px solid #ddd8cd;
+    border-radius: 6px;
+    padding: 10pt;
+    margin: 12pt 0;
+  }
+  .math { font-family: var(--f-mono); font-size: 0.92em; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14pt 0;
+    font-size: 10pt;
+  }
+  thead th {
+    font-family: var(--f-titulo);
+    font-weight: 700;
+    font-size: 9.5pt;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    background: var(--verde);
+    color: var(--papel);
+    padding: 7pt 10pt;
+    text-align: left;
+  }
+  tbody td {
+    padding: 6pt 10pt;
+    border-bottom: 1px solid #ddd8cd;
+  }
+  tbody tr:nth-child(even) { background: #fff; }
+  td.num, th.num { font-family: var(--f-mono); text-align: right; }
+
+  figure { margin: 16pt 0; text-align: center; page-break-inside: avoid; }
+  figure img, figure svg { max-width: 100%; }
+  figcaption {
+    font-family: var(--f-titulo);
+    font-size: 9pt;
+    font-weight: 500;
+    color: var(--cinza);
+    margin-top: 6pt;
+  }
+  figcaption strong { color: var(--verde); }
+
+  blockquote {
+    border-left: 3px solid var(--dourado);
+    padding: 4pt 0 4pt 14pt;
+    margin: 14pt 0;
+    font-style: italic;
+    color: #44403c;
+  }
+  blockquote .fonte {
+    display: block;
+    font-style: normal;
+    font-family: var(--f-titulo);
+    font-size: 9pt;
+    color: var(--cinza);
+    margin-top: 4pt;
+  }
+
+  /* ============ WIDGETS INTERATIVOS ============ */
+  .widget {
+    background: #fff;
+    border: 1px solid #ddd8cd;
+    border-radius: 6px;
+    padding: 12pt 14pt 10pt;
+    margin: 14pt 0;
+    page-break-inside: avoid;
+  }
+  .widget .rotulo {
+    font-family: var(--f-titulo);
+    font-size: 9pt;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--verde);
+    display: block;
+    margin-bottom: 8pt;
+  }
+  .widget svg { display: block; width: 100%; height: auto; }
+  .widget .controles {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 8pt 16pt;
+    margin-top: 8pt;
+    font-family: var(--f-titulo);
+    font-size: 9pt;
+    color: var(--cinza);
+  }
+  .widget .controles label {
+    display: flex;
+    flex-direction: column;
+    gap: 3pt;
+    font-weight: 500;
+    letter-spacing: .5px;
+  }
+  .widget .controles label.check { flex-direction: row; align-items: center; gap: 6pt; }
+  .widget .controles .valor { font-family: var(--f-mono); color: var(--tinta); }
+  .widget input[type="range"] { accent-color: var(--verde); width: 150px; }
+  .widget input[type="checkbox"] { accent-color: var(--verde); }
+  .widget button {
+    font-family: var(--f-titulo);
+    font-size: 9pt;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background: var(--verde);
+    color: var(--papel);
+    border: 1px solid var(--verde);
+    border-radius: 4px;
+    padding: 6pt 10pt;
+    cursor: pointer;
+  }
+  .widget button.sec { background: #fff; color: var(--verde); }
+  .widget .nota {
+    font-family: var(--f-titulo);
+    font-size: 9pt;
+    color: var(--cinza);
+    margin: 8pt 0 0;
+    text-align: left;
+    hyphens: none;
+  }
+  .widget .dupla { display: flex; gap: 14pt; }
+  .widget .dupla figure { flex: 1; margin: 0; }
+  .widget canvas {
+    width: 100%;
+    height: auto;
+    display: block;
+    background: var(--papel);
+    border: 1px solid #ddd8cd;
+    border-radius: 6px;
+  }
+  .widget .big-y {
+    font-family: var(--f-mono);
+    font-size: 14pt;
+    text-align: center;
+    margin-bottom: 6pt;
+  }
+  .widget > .trilho { margin-bottom: 8pt; }
+  .barras { margin: 6pt 0 2pt; }
+  .barra {
+    display: grid;
+    grid-template-columns: 140pt 1fr 44pt;
+    align-items: center;
+    gap: 8pt;
+    margin-bottom: 6pt;
+    font-family: var(--f-titulo);
+    font-size: 9pt;
+    color: var(--tinta);
+  }
+  .trilho { background: #f0ede6; border-radius: 4px; height: 14pt; overflow: hidden; }
+  .preench { height: 100%; width: 0; background: var(--petroleo); transition: width .8s ease; }
+  .preench.wta { background: var(--terracota); }
+  .preench.verde { background: var(--verde); }
+  @media screen and (max-width: 720px) {
+    .widget .dupla { flex-direction: column; }
+    .barra { grid-template-columns: 100pt 1fr 40pt; }
+  }
+
+  /* ============ IMPRESSÃO ============ */
+  @page {
+    size: A4;
+    margin: 2.5cm;
+    @bottom-center {
+      content: counter(page);
+      font-family: 'Archivo', sans-serif;
+      font-size: 9pt;
+      color: #6B7280;
+    }
+  }
+  @media print {
+    body { background: none; }
+    .pagina { box-shadow: none; margin: 0; max-width: none; padding: 0; }
+    .capa { page-break-after: always; }
+    h1.capitulo { page-break-before: always; }
+    h2, h3 { page-break-after: avoid; }
+    a { color: var(--tinta); text-decoration: none; }
+    .widget .controles, .widget button { display: none; }
+    .no-print { display: none; }
+  }
+  @media screen and (max-width: 720px) {
+    .pagina { margin: 0; padding: 24px 18px; }
+    .capa h1 { font-size: 30pt; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="no-print" style="max-width:21cm;margin:16px auto 0;padding:0 2.5cm;font-family:'Archivo',sans-serif;">
+  <a href="ambiental-index.html" style="font-size:0.8rem;color:#6B7280;text-decoration:none;">&larr; Economia Ambiental &middot; todas as aulas</a>
+</nav>
+
+<div class="pagina">
+
+  <!-- ================= CAPA ================= -->
+  <section class="capa">
+    <div>
+      <!-- Marca -->
+      <img class="marca" src="assets/marca-ambiental.png" alt="" style="height:96px;width:auto;" aria-hidden="true">
+      <div class="filete"></div>
+      <h1>Economia<br>Ambiental</h1>
+      <p class="subtitulo">Aula 01 · Contexto histórico e fundamentos</p>
+    </div>
+    <footer class="rodape-capa">
+      <strong>Prof. Ronaldo Seroa da Motta</strong>
+      <div class="inst">UNIVERSIDADE DO ESTADO DO RIO DE JANEIRO · UERJ</div>
+      <div class="inst" style="margin-top:8px;">Notas de aula elaboradas por <strong style="color:var(--verde);letter-spacing:normal;text-transform:none;font-size:10.5pt;">Lucas R. Andrade</strong></div>
+    </footer>
+  </section>
+
+  <!-- ================= CAPÍTULO ================= -->
+  <span class="num-capitulo">Aula 01 · Nota de revisão</span>
+  <h1 class="capitulo">Contexto histórico e fundamentos</h1>
+  <hr class="regua-capitulo">
+
+  <blockquote>
+    Nota de revisão gerada a partir das anotações de aula. A nota original está
+    em "Notas Humanas/Aula 01" (Obsidian).
+    <span class="fonte">— Ronaldo Seroa, UERJ</span>
+  </blockquote>
+
+  <h2><span class="num">1.1</span>O problema nasce na economia clássica</h2>
+
+  <p>A preocupação com limites ambientais não é nova — ela atravessa a história
+  do pensamento econômico:</p>
+
+  <ul>
+    <li><strong>Ricardo</strong>: já questionava as condições urbanas e
+    industriais do seu tempo. Mais importante para nós: sua ideia de
+    <strong>renda de escassez</strong> volta depois no Lema de Hotelling.</li>
+    <li><strong>Jevons</strong> (<em>The Coal Question</em>, 1865): duvidava que
+    o crescimento pudesse continuar dependendo do carvão, um recurso limitado. A
+    lógica era malthusiana aplicada à energia — um "<strong>malthusiano de
+    energia</strong>". Com a chegada do petróleo, Jevons pareceu errado: a
+    economia trocou de recurso e seguiu crescendo.</li>
+  </ul>
+
+  <div class="caixa destaque">
+    <span class="rotulo">Intuição</span>
+    <p>A previsão de Jevons falhou não porque a lógica estivesse errada, mas
+    porque apareceu um substituto. Essa tensão — recurso acaba vs. tecnologia
+    substitui — é o coração da disciplina até hoje.</p>
+  </div>
+
+  <h2><span class="num">1.2</span>O século XX: de problema local a problema internacional</h2>
+
+  <ul>
+    <li><strong>Limites do Crescimento</strong> (relatório do Clube de Roma,
+    1972): marco que colocou a questão do crescimento com recursos finitos no
+    debate público.</li>
+    <li><strong>EPA</strong> (agência ambiental americana): no começo
+    <strong>não protegia a natureza em si</strong> — protegia apenas humanos que
+    ficassem doentes. O meio ambiente importava enquanto afetava pessoas.</li>
+    <li><strong>OECD</strong>: criada a lógica de revisões de desempenho
+    ambiental entre países, com a ideia de <strong>não cometer os mesmos
+    erros</strong> dos que se desenvolveram antes.</li>
+    <li>Poluição <strong>transfronteiriça</strong> — chuva ácida, casos no Golfo
+    — mostrou que o problema não cabe nas fronteiras nacionais. Nasce a
+    pergunta: existe um <strong>órgão global</strong> para isso? O problema se
+    internacionaliza e se politiza/polariza em torno do "<em>sustainable
+    growth</em>".</li>
+  </ul>
+
+  <h3>Por que CFC foi (relativamente) fácil e clima não?</h3>
+
+  <p>Os CFCs eram produzidos por <strong>10–15 fábricas</strong> no mundo.
+  Controlar meia dúzia de plantas é viável. Já o CO₂ vem de <strong>milhões de
+  fontes</strong> — fábricas, carros, usinas. É por isso que o Protocolo de
+  Montreal (CFCs) funcionou e o problema do clima arrasta décadas de
+  negociação.</p>
+
+  <div class="widget" id="w-cfc">
+    <span class="rotulo">Visualização · CFC vs CO₂</span>
+    <div class="dupla">
+      <figure>
+        <canvas id="cfc-a" width="210" height="160" role="img" aria-label="15 pontos representando as fábricas de CFC"></canvas>
+        <figcaption><strong>CFC</strong> — ~15 fábricas no mundo</figcaption>
+      </figure>
+      <figure>
+        <canvas id="cfc-b" width="210" height="160" role="img" aria-label="Nuvem de milhares de pontos representando as fontes de CO₂"></canvas>
+        <figcaption><strong>CO₂</strong> — milhões de fontes</figcaption>
+      </figure>
+    </div>
+    <p class="nota">Cada ponto é uma fonte de emissão. Com ~15 pontos, dá para
+    sentar todo mundo na mesa e fiscalizar um a um — por isso o Protocolo de
+    Montreal funcionou. Com milhões de fontes, não há mesa que dê conta: é o
+    drama das negociações de clima.</p>
+  </div>
+
+  <h2><span class="num">1.3</span>O Brasil nesse tabuleiro</h2>
+
+  <ul>
+    <li><strong>Época do milagre econômico</strong>: a postura dominante era
+    "<strong>poluo, mas produzo</strong>" e "<strong>o Brasil é pobre demais
+    para pensar em meio ambiente</strong>". Ambiente era visto como luxo de país
+    rico.</li>
+    <li><strong>Rio-92 (ECO-92)</strong>: a ONU traz a conferência para o Rio de
+    Janeiro e o Brasil entra no centro do debate.</li>
+    <li><strong>Itamaraty desenvolvimentista</strong> (Sarney/Collor):
+    estratégia de dar ênfase ao <strong>clima</strong> para sufocar o foco na
+    <strong>floresta</strong> — o desmatamento era alto e constrangedor. Falar
+    de clima desviava o holofote e rendia "<em>soft power</em>".</li>
+    <li><strong>Matriz energética</strong>: o Brasil tinha (e tem) um argumento
+    real — hidrelétricas e álcool são <strong>relativamente</strong> melhores
+    que carvão e petróleo.</li>
+    <li><strong>IBAMA</strong>: criado juntando vários órgãos, no modelo
+    francês.</li>
+    <li><strong>"Desmato para produzir"</strong>: não há evidências dessa
+    relação como regra geral; a grosso modo, o argumento é "razoável" no caso da
+    Mata Atlântica (historica).</li>
+    <li>Detalhe institucional: a <strong>COP</strong> é do clima; a convenção de
+    <strong>desertificação</strong> anda bem mais devagar.</li>
+  </ul>
+
+  <div class="caixa atencao">
+    <span class="rotulo">⚠️ Verificar</span>
+    <p><strong>China</strong>: fica de fora desse arranjo — a anotação da aula
+    ficou marcada como <strong>VERIFICAR</strong> o que isso significa
+    exatamente.</p>
+  </div>
+
+  <h2><span class="num">1.4</span>As respostas teóricas</h2>
+
+  <h3>Economia Ecológica</h3>
+
+  <p>Corrente que queria um <strong>paradigma diferente</strong> da
+  <em>welfare economics</em> (economia do bem-estar neoclássica): em vez de
+  encaixar o ambiente nos modelos existentes, repensar a economia dentro dos
+  limites do ecossistema.</p>
+
+  <h3>Recursos exauríveis</h3>
+
+  <ul>
+    <li><em>Theory of Exhaustible Resources</em>: livro datado, mas importante
+    na época.</li>
+    <li>Distinção fundamental: <strong>reservas físicas</strong> (o que existe
+    no subsolo) ≠ <strong>reservas econômicas</strong> (o que vale a pena
+    extrair ao preço e à tecnologia atuais). O recurso "acabar" economicamente
+    vem antes de acabar fisicamente.</li>
+  </ul>
+
+  <div class="caixa definicao">
+    <span class="rotulo">Definição</span>
+    <p><strong>Backstop technology</strong>: uma tecnologia hoje <strong>muito
+    cara</strong>, que se torna viável quando o recurso escasseia e o preço
+    sobe. É a "saída de emergência" — quando o petróleo ficar caro o suficiente,
+    a alternativa aparece.</p>
+  </div>
+
+  <h3>Hotelling e a renda de escassez</h3>
+
+  <p>Voltando a Ricardo: o preço de um recurso exaurível é</p>
+
+  <div class="formula">P = Cmg + renda de escassez</div>
+
+  <p>Ou seja: além do custo marginal de extração, cobra-se algo a mais
+  <strong>porque o recurso vai acabar</strong> — quem extrai hoje abre mão de
+  extrair (mais caro) no futuro. Detalhes no Lema de Hotelling.</p>
+
+  <div class="caixa exemplo">
+    <span class="rotulo">Exemplo</span>
+    <p>Exemplo intuitivo da aula: o motorista de Uber deveria cobrar pensando
+    que o carro vai se desgastar/quebrar — ou precificar considerando a troca de
+    indústria. O desgaste do ativo entra no preço, como a escassez entra no
+    preço do recurso.</p>
+  </div>
+
+  <div class="widget" id="w-hotelling">
+    <span class="rotulo">Simulação · Hotelling e a backstop</span>
+    <svg id="ht-svg" viewBox="0 0 460 240" role="img" aria-label="Trajetória do preço do recurso até o preço da backstop"></svg>
+    <div class="controles">
+      <label>Taxa de juros <span class="valor" id="ht-r-v">3%</span>
+        <input type="range" id="ht-r" min="1" max="10" value="3" step="0.5">
+      </label>
+      <label>Custo marginal (Cmg) <span class="valor" id="ht-c-v">20</span>
+        <input type="range" id="ht-c" min="5" max="50" value="20" step="1">
+      </label>
+      <label>Preço da backstop <span class="valor" id="ht-b-v">110</span>
+        <input type="range" id="ht-b" min="60" max="150" value="110" step="5">
+      </label>
+    </div>
+    <p class="nota">O preço do recurso é P = Cmg + renda de escassez, e a renda
+    de escassez cresce à taxa de juros (regra de Hotelling). Quando P atinge o
+    teto da backstop (linha dourada), a tecnologia alternativa vira viável e o
+    preço para de subir — a "saída de emergência". Junte os sliders e veja como
+    juros altos antecipam o encontro com a backstop.</p>
+  </div>
+
+  <h3>O caso da Noruega</h3>
+
+  <p>O famoso fundo soberano norueguês <strong>funcionou por sorte</strong>: a
+  ideia original do fundo <strong>não era</strong> poupar a renda do petróleo
+  para as futuras gerações, e sim <strong>estabilizar preços</strong>. O
+  resultado virtuoso veio de tabela.</p>
+
+  <h3>Sustentabilidade neoclássica</h3>
+
+  <p>A resposta neoclássica ao esgotamento é o <strong>progresso
+  técnico</strong>. Modelo com função de produção:</p>
+
+  <div class="formula">Y = K<sup>a</sup> · R<sup>b</sup> · L<sup>c</sup></div>
+
+  <p>onde <span class="math">K</span> é capital, <span class="math">R</span> são
+  recursos naturais e <span class="math">L</span> é trabalho.</p>
+
+  <ul>
+    <li><strong>Perrings, Faly, Pearce</strong>: é difícil defender que os
+    recursos acabam mais rápido que o crescimento quando <span
+    class="math">K</span> <strong>depende de</strong> <span
+    class="math">R</span> — o capital humano e o técnico não existem
+    independentemente do natural.</li>
+    <li>A pergunta que fica: <strong>qual o R ótimo?</strong> (E a questão em
+    aberto de <em>endogenous technical change</em>.)</li>
+    <li><strong>Rio+20 / PNUMA 2011</strong>: simulações mostravam que, com
+    restrições ambientais, o PIB <strong>cairia primeiro e subiria
+    depois</strong> — custo de curto prazo, ganho de longo.</li>
+  </ul>
+
+  <div class="widget" id="w-prod">
+    <span class="rotulo">Simulação · Função de produção Y = K<sup>a</sup> · R<sup>b</sup> · L<sup>c</sup></span>
+    <p class="big-y">Y = <span id="pd-y">—</span></p>
+    <div class="trilho"><div class="preench verde" id="pd-bar"></div></div>
+    <div class="controles">
+      <label>Capital K <span class="valor" id="pd-k-v">60</span>
+        <input type="range" id="pd-k" min="1" max="100" value="60">
+      </label>
+      <label>Recursos naturais R <span class="valor" id="pd-r-v">60</span>
+        <input type="range" id="pd-r" min="1" max="100" value="60">
+      </label>
+      <label>Trabalho L <span class="valor" id="pd-l-v">60</span>
+        <input type="range" id="pd-l" min="1" max="100" value="60">
+      </label>
+      <label class="check"><input type="checkbox" id="pd-coup"> K depende de R (Perrings, Faly, Pearce)</label>
+    </div>
+    <p class="nota">Expoentes fixos (a = 0,35; b = 0,30; c = 0,35). No modelo
+    neoclássico puro, R pode cair quase a zero que Y se segura — o capital
+    compensa. Agora ligue "K depende de R" e arraste R para baixo: o capital
+    rui junto com o recurso natural e o produto desaba. É a crítica de
+    Perrings, Faly e Pearce — K não existe independentemente de R.</p>
+  </div>
+
+  <h2><span class="num">1.5</span>Valor e comportamento</h2>
+
+  <ul>
+    <li><strong>Economia comportamental</strong> conseguiu demonstrar
+    empiricamente o <strong>valor de existência</strong>: as coisas valem mesmo
+    sem uso direto.</li>
+  </ul>
+
+  <div class="caixa exemplo">
+    <span class="rotulo">Exemplo</span>
+    <p><strong>O experimento da caneca</strong>: sorteia-se uma caneca entre os
+    participantes. Quem a recebe passa a exigir um valor muito maior para
+    vendê-la do que pagaria por ela antes. O objeto ganha um valor
+    <strong>intrínseco/simbólico</strong> só por ser "meu". Analogia: as
+    pessoas atribuem valor à natureza mesmo sem "usá-la".</p>
+  </div>
+
+  <div class="widget" id="w-caneca">
+    <span class="rotulo">Experimento · A caneca (WTP × WTA)</span>
+    <div class="barras">
+      <div class="barra">
+        <span>Quanto <strong>pagaria</strong> por ela (WTP)</span>
+        <div class="trilho"><div class="preench" id="cn-wtp"></div></div>
+        <span class="math" id="cn-wtp-v">R$ 15</span>
+      </div>
+      <div class="barra">
+        <span>Quanto <strong>exigiria</strong> para vendê-la (WTA)</span>
+        <div class="trilho"><div class="preench wta" id="cn-wta"></div></div>
+        <span class="math" id="cn-wta-v">—</span>
+      </div>
+    </div>
+    <div class="controles">
+      <button type="button" id="cn-btn">Sortear a caneca para você</button>
+      <span class="valor" id="cn-status">Você ainda não tem a caneca.</span>
+    </div>
+    <p class="nota">Clique no botão para "ganhar" a caneca. Antes de ela ser
+    sua, você pagaria pouco (WTP). Depois que ela é sua, você exige muito mais
+    para abrir mão dela (WTA) — o objeto ganha valor intrínseco só por ser
+    "meu". É a demonstração empírica do valor de existência.</p>
+  </div>
+
+  <h2><span class="num">1.6</span>Curva de Kuznets Ambiental</h2>
+
+  <ul>
+    <li><strong>Kuznets</strong> (original): relação <strong>quadrática</strong>
+    entre renda e distribuição de renda — a desigualdade primeiro sobe, depois
+    cai com o crescimento (curva em U invertido).</li>
+    <li><strong>Kuznets Ambiental</strong>: mesma ideia para poluição —
+    degradação cresce com a renda até um <strong>ponto de inflexão</strong>
+    (<em>turning point</em>), a partir do qual o país "fica rico o bastante"
+    para limpar.
+      <ul>
+        <li>Exemplos clássicos: os rios <strong>Tâmisa</strong> e
+        <strong>Sena</strong>, poluídos na industrialização e recuperados
+        depois.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <div class="caixa atencao">
+    <span class="rotulo">Atenção</span>
+    <p>Ressalva importante da aula: o turning point já aconteceu para
+    <strong>problemas urbanos</strong> (água, saneamento, ar local). Para
+    problemas como <strong>mudança do clima e extinção de espécies</strong>, o
+    processo <strong>demora muito</strong> — e pode não haver tempo de esperar a
+    curva virar sozinha.</p>
+  </div>
+
+  <div class="widget" id="w-kuznets">
+    <span class="rotulo">Simulação · Curva de Kuznets Ambiental</span>
+    <svg id="kz-svg" viewBox="0 0 460 240" role="img" aria-label="Curva em U invertido de degradação por renda, com turning point móvel"></svg>
+    <div class="controles">
+      <button type="button" data-kz="60">Problemas urbanos</button>
+      <button type="button" class="sec" data-kz="170">Clima / extinção</button>
+      <label>Renda do turning point
+        <input type="range" id="kz-t" min="40" max="190" value="60" step="1">
+      </label>
+    </div>
+    <p class="nota">Degradação (eixo vertical) × renda per capita (eixo
+    horizontal). Mova o slider — ou use os botões — para escolher onde a curva
+    vira. Para problemas urbanos, o turning point vem cedo e o país "fica rico
+    o bastante" para limpar. Para clima e extinção, ele fica longe demais: pode
+    não dar tempo de a curva virar sozinha.</p>
+  </div>
+
+  <h2><span class="num">1.7</span>Poupança e capital natural</h2>
+
+  <p><strong>Atkinson &amp; Pearce (1993)</strong>: a sustentabilidade pode ser
+  lida como um problema de <strong>poupança</strong> — é preciso manter o
+  estoque total de capital (capital produzido <strong>+ capital
+  natural</strong>). Quanto do capital natural pode ser convertido em outras
+  formas de capital sem empobrecer o futuro?</p>
+
+  <h2><span class="num">1.8</span>Próxima aula</h2>
+
+  <div class="caixa destaque">
+    <span class="rotulo">Próxima aula</span>
+    <p><strong>Como precificar o ambiente e encontrar o nível de degradação
+    eficiente</strong> — a ponte entre a teoria desta aula e a política
+    ambiental concreta.</p>
+  </div>
+
+  <h3>Mapa rápido de revisão</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Conceito</th>
+        <th>Ideia-chave</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Jevons</strong></td><td>Recurso limitado trava crescimento (falhou por causa do petróleo)</td></tr>
+      <tr><td><strong>CFC vs CO₂</strong></td><td>Poucas fontes = fácil regular; milhões de fontes = difícil</td></tr>
+      <tr><td><strong>Backstop</strong></td><td>Tecnologia cara que vira viável quando o recurso encarece</td></tr>
+      <tr><td><strong>Hotelling</strong></td><td><span class="math">P = Cmg +</span> renda de escassez</td></tr>
+      <tr><td><strong>Kuznets Ambiental</strong></td><td>Poluição sobe e depois cai com a renda — mas nem sempre a tempo</td></tr>
+      <tr><td><strong>Atkinson &amp; Pearce</strong></td><td>Sustentabilidade como poupança: capital + capital natural</td></tr>
+    </tbody>
+  </table>
+
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var NS = 'http://www.w3.org/2000/svg';
+
+  function el(name, attrs, parent) {
+    var e = document.createElementNS(NS, name);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function txt(parent, x, y, str, attrs) {
+    var t = el('text', attrs || {}, parent);
+    t.setAttribute('x', x);
+    t.setAttribute('y', y);
+    t.setAttribute('font-family', 'Archivo, sans-serif');
+    t.textContent = str;
+    return t;
+  }
+  function axes(svg, x0, y0, x1, y1, xlab, ylab) {
+    el('line', {x1: x0, y1: y1, x2: x0, y2: y0, stroke: '#1C1917', 'stroke-width': 1.5}, svg);
+    el('line', {x1: x0, y1: y0, x2: x1, y2: y0, stroke: '#1C1917', 'stroke-width': 1.5}, svg);
+    txt(svg, x1, y0 + 16, xlab, {'font-size': 10, fill: '#6B7280', 'text-anchor': 'end'});
+    txt(svg, x0 + 2, y1 - 4, ylab, {'font-size': 10, fill: '#6B7280', 'text-anchor': 'start'});
+  }
+
+  /* ---------- CFC vs CO2: nuvens de pontos ---------- */
+  (function () {
+    var a = document.getElementById('cfc-a');
+    var b = document.getElementById('cfc-b');
+    if (!a || !b) return;
+    var seed = 42;
+    function rnd() { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; }
+    var ctxA = a.getContext('2d');
+    ctxA.fillStyle = '#14532D';
+    for (var i = 0; i < 15; i++) {
+      ctxA.beginPath();
+      ctxA.arc(15 + rnd() * 180, 15 + rnd() * 130, 5, 0, Math.PI * 2);
+      ctxA.fill();
+    }
+    var ctxB = b.getContext('2d');
+    ctxB.fillStyle = 'rgba(180,83,9,.55)';
+    for (var j = 0; j < 4000; j++) {
+      ctxB.fillRect(rnd() * 210, rnd() * 160, 1.6, 1.6);
+    }
+  })();
+
+  /* ---------- Hotelling: preço cresce à taxa de juros até a backstop ---------- */
+  (function () {
+    var svg = document.getElementById('ht-svg');
+    var rS = document.getElementById('ht-r');
+    var cS = document.getElementById('ht-c');
+    var bS = document.getElementById('ht-b');
+    if (!svg || !rS || !cS || !bS) return;
+    var rV = document.getElementById('ht-r-v');
+    var cV = document.getElementById('ht-c-v');
+    var bV = document.getElementById('ht-b-v');
+    var X0 = 46, X1 = 440, Y0 = 208, Y1 = 18, TMAX = 60, YMAX = 160, L0 = 5;
+    function px(t) { return X0 + (t / TMAX) * (X1 - X0); }
+    function py(y) { return Y0 - (y / YMAX) * (Y0 - Y1); }
+    function draw() {
+      var r = +rS.value, C = +cS.value, B = +bS.value;
+      rV.textContent = r.toFixed(1).replace('.', ',') + '%';
+      cV.textContent = C;
+      bV.textContent = B;
+      while (svg.firstChild) svg.removeChild(svg.firstChild);
+      axes(svg, X0, Y0, X1, Y1, 'tempo (anos) →', 'preço');
+      el('line', {x1: X0, y1: py(B), x2: X1, y2: py(B), stroke: '#C9A227', 'stroke-width': 2, 'stroke-dasharray': '6 4'}, svg);
+      txt(svg, X1, py(B) - 6, 'preço da backstop', {'font-size': 10, 'font-weight': 700, fill: '#8a7014', 'text-anchor': 'end'});
+      var tStar = B > C + L0 ? Math.log((B - C) / L0) / (r / 100) : 0;
+      var d = '', t, P;
+      var tEnd = Math.min(tStar, TMAX);
+      for (t = 0; t <= tEnd; t += 0.5) {
+        P = C + L0 * Math.exp((r / 100) * t);
+        if (P > YMAX) break;
+        d += (d === '' ? 'M' : 'L') + px(t).toFixed(1) + ' ' + py(P).toFixed(1) + ' ';
+      }
+      el('path', {d: d, fill: 'none', stroke: '#14532D', 'stroke-width': 3, 'stroke-linecap': 'round'}, svg);
+      if (tStar <= TMAX) {
+        el('line', {x1: px(tStar), y1: py(B), x2: X1, y2: py(B), stroke: '#155E75', 'stroke-width': 3}, svg);
+        el('circle', {cx: px(tStar), cy: py(B), r: 5, fill: '#155E75'}, svg);
+        txt(svg, px(tStar) + (tStar > 42 ? -8 : 8), Y0 - 4,
+          'backstop viável · t* ≈ ' + Math.round(tStar) + ' anos',
+          {'font-size': 10, 'font-weight': 700, fill: '#155E75', 'text-anchor': tStar > 42 ? 'end' : 'start'});
+      } else {
+        txt(svg, X1, Y1 + 12, 'backstop fora do horizonte de 60 anos',
+          {'font-size': 10, 'font-weight': 700, fill: '#B45309', 'text-anchor': 'end'});
+      }
+    }
+    [rS, cS, bS].forEach(function (s) { s.addEventListener('input', draw); });
+    draw();
+  })();
+
+  /* ---------- Função de produção Y = K^a · R^b · L^c ---------- */
+  (function () {
+    var K = document.getElementById('pd-k');
+    var R = document.getElementById('pd-r');
+    var L = document.getElementById('pd-l');
+    var coup = document.getElementById('pd-coup');
+    if (!K || !R || !L || !coup) return;
+    var yEl = document.getElementById('pd-y');
+    var bar = document.getElementById('pd-bar');
+    var kv = document.getElementById('pd-k-v');
+    var rv = document.getElementById('pd-r-v');
+    var lv = document.getElementById('pd-l-v');
+    function draw() {
+      var k = +K.value, r = +R.value, l = +L.value;
+      kv.textContent = k; rv.textContent = r; lv.textContent = l;
+      var keff = coup.checked ? k * Math.min(1, r / 25) : k;
+      var Y = Math.pow(keff, 0.35) * Math.pow(r, 0.30) * Math.pow(l, 0.35);
+      yEl.textContent = Y.toFixed(1).replace('.', ',');
+      bar.style.width = Y.toFixed(1) + '%';
+      bar.className = (coup.checked && Y < 30) ? 'preench wta' : 'preench verde';
+    }
+    [K, R, L].forEach(function (s) { s.addEventListener('input', draw); });
+    coup.addEventListener('change', draw);
+    draw();
+  })();
+
+  /* ---------- Caneca: WTP x WTA ---------- */
+  (function () {
+    var btn = document.getElementById('cn-btn');
+    if (!btn) return;
+    var wtp = document.getElementById('cn-wtp');
+    var wta = document.getElementById('cn-wta');
+    var wtaV = document.getElementById('cn-wta-v');
+    var status = document.getElementById('cn-status');
+    var owned = false;
+    function render() {
+      wtp.style.width = '33%';
+      wta.style.width = owned ? '100%' : '0';
+      wtaV.textContent = owned ? 'R$ 45' : '—';
+      status.textContent = owned ? 'A caneca é sua. Por quanto venderia?' : 'Você ainda não tem a caneca.';
+      btn.textContent = owned ? 'Devolver a caneca' : 'Sortear a caneca para você';
+    }
+    btn.addEventListener('click', function () { owned = !owned; render(); });
+    render();
+  })();
+
+  /* ---------- Kuznets Ambiental: turning point móvel ---------- */
+  (function () {
+    var svg = document.getElementById('kz-svg');
+    var slider = document.getElementById('kz-t');
+    if (!svg || !slider) return;
+    var X0 = 46, X1 = 440, Y0 = 208, Y1 = 18, XMAX = 220, YMAX = 115;
+    function px(x) { return X0 + (x / XMAX) * (X1 - X0); }
+    function py(y) { return Y0 - (y / YMAX) * (Y0 - Y1); }
+    function deg(x, T) { return 100 * (x / T) * Math.exp(1 - x / T); }
+    function draw() {
+      var T = +slider.value;
+      while (svg.firstChild) svg.removeChild(svg.firstChild);
+      axes(svg, X0, Y0, X1, Y1, 'renda per capita →', 'degradação');
+      var d = '';
+      for (var x = 0; x <= XMAX; x += 2) {
+        d += (x === 0 ? 'M' : 'L') + px(x).toFixed(1) + ' ' + py(deg(x, T)).toFixed(1) + ' ';
+      }
+      el('path', {d: d, fill: 'none', stroke: '#14532D', 'stroke-width': 3, 'stroke-linecap': 'round'}, svg);
+      el('line', {x1: px(T), y1: Y0, x2: px(T), y2: py(100), stroke: '#C9A227', 'stroke-width': 1.5, 'stroke-dasharray': '5 4'}, svg);
+      el('circle', {cx: px(T), cy: py(100), r: 5, fill: '#C9A227'}, svg);
+      txt(svg, px(T), py(100) - 10, 'turning point',
+        {'font-size': 10, 'font-weight': 700, fill: '#8a7014',
+         'text-anchor': T > 150 ? 'end' : (T < 60 ? 'start' : 'middle')});
+      if (T >= 150) {
+        txt(svg, X1, Y0 - 8, '⚠ demora muito — pode não dar tempo',
+          {'font-size': 10, 'font-weight': 700, fill: '#B45309', 'text-anchor': 'end'});
+      }
+    }
+    slider.addEventListener('input', draw);
+    var btns = document.querySelectorAll('[data-kz]');
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].addEventListener('click', function () {
+        slider.value = this.getAttribute('data-kz');
+        draw();
+      });
+    }
+    draw();
+  })();
+})();
+</script>
+
+</body>
+</html>

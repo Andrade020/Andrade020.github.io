@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fase 1 · A pergunta e o protocolo — A Macroeconomia Viaja?</title>
+  <meta name="description" content="Fase 1 do curso: a pergunta científica, as nove leis macroeconômicas clássicas, o protocolo único pré-especificado e o framework de leis como teoremas condicionais." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [["$","$"],["\\(","\\)"]],
+        displayMath: [["$$","$$"],["\\[","\\]"]]
+      },
+      options: { skipHtmlTags: ["script","noscript","style","textarea"] }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+  <style>
+    :root {
+      --bg:          #0f1117;
+      --bg-card:     #161b27;
+      --bg-card-2:   #1c2233;
+      --border:      #2a3349;
+      --border-light:#334060;
+      --accent:      #dd6b55;
+      --accent-dim:  #9a4632;
+      --accent-glow: rgba(221,107,85,0.12);
+      --gold:        #c9a96e;
+      --text:        #dde4f0;
+      --text-muted:  #7a8aa8;
+      --text-dim:    #4e5f7a;
+      --blue:        #74a7e8;
+      --radius:      10px;
+      --radius-sm:   6px;
+      --shadow:      0 4px 24px rgba(0,0,0,0.5);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      font-size: 16px;
+      min-height: 100vh;
+    }
+
+    .top-bar {
+      background: linear-gradient(135deg, #0a0e18 0%, #131929 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+    }
+    .top-bar-title { font-family: 'Lora', serif; font-size: 0.95rem; color: var(--accent); letter-spacing: 0.04em; }
+    .top-bar-meta  { font-size: 0.78rem; color: var(--text-muted); letter-spacing: 0.02em; }
+
+    .hero { position: relative; text-align: center; padding: 4rem 2rem 3rem; border-bottom: 1px solid var(--border); overflow: hidden;
+      background:
+        radial-gradient(ellipse 60% 55% at 50% -10%, rgba(221,107,85,0.16), transparent 70%),
+        radial-gradient(ellipse 55% 45% at 88% 115%, rgba(116,167,232,0.10), transparent 70%),
+        linear-gradient(180deg, #11141d 0%, #0f1117 100%);
+    }
+    .hero-inner { position: relative; z-index: 1; }
+    .hero-label {
+      display: inline-block; font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--accent); background: rgba(221,107,85,0.1); border: 1px solid rgba(221,107,85,0.25);
+      padding: 0.3rem 0.9rem; border-radius: 99px; margin-bottom: 1.4rem;
+    }
+    .hero h1 {
+      font-family: 'Lora', serif; font-size: clamp(1.7rem, 3.6vw, 2.5rem); font-weight: 600;
+      color: #f0e3d5; line-height: 1.25; margin-bottom: 1rem; text-shadow: 0 2px 20px rgba(0,0,0,0.8);
+    }
+    .hero-subtitle { font-size: 1rem; color: #b8c6dc; max-width: 680px; margin: 0 auto 1.6rem; }
+    .hero-divider  { width: 60px; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent); margin: 0 auto; }
+
+    .page-wrap { max-width: 860px; margin: 0 auto; padding: 3rem 1.5rem 4rem; }
+
+    .part { margin-bottom: 3.5rem; }
+    .part-header { display: flex; align-items: flex-start; gap: 1.2rem; margin-bottom: 2rem; padding-bottom: 1.2rem; border-bottom: 1px solid var(--border); }
+    .part-number {
+      flex-shrink: 0; width: 44px; height: 44px; border-radius: 50%;
+      background: var(--accent-glow); border: 1.5px solid var(--accent-dim);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Lora', serif; font-size: 1rem; color: var(--accent); margin-top: 0.15rem;
+    }
+    .part-info h2    { font-family: 'Lora', serif; font-size: 1.4rem; font-weight: 600; color: #eaccdd; margin-bottom: 0.3rem; }
+    .part-info .part-tagline { font-size: 0.88rem; color: var(--text-muted); font-style: italic; }
+
+    .narrative {
+      background: var(--bg-card); border: 1px solid var(--border); border-left: 3px solid var(--accent-dim);
+      border-radius: var(--radius); padding: 1.2rem 1.4rem; margin-bottom: 2rem;
+      font-family: 'Lora', serif; font-size: 0.97rem; color: #c8d4e8; line-height: 1.85;
+    }
+    .narrative p + p { margin-top: 0.75rem; }
+
+    .question { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 1.5rem; overflow: hidden; transition: border-color 0.2s ease, box-shadow 0.2s ease; }
+    .question:hover { border-color: var(--border-light); box-shadow: 0 0 0 1px var(--border-light), var(--shadow); }
+    .question-header { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.25rem; background: var(--bg-card-2); border-bottom: 1px solid var(--border); }
+    .q-badge {
+      flex-shrink: 0; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; font-weight: 500;
+      color: var(--accent); background: var(--accent-glow); border: 1px solid rgba(221,107,85,0.2);
+      border-radius: var(--radius-sm); padding: 0.2rem 0.55rem; letter-spacing: 0.05em;
+    }
+    .question-header h3 { font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.95rem; color: #dde4f0; flex: 1; }
+    .question-body { padding: 1.2rem 1.25rem 1.4rem; }
+    .question-body p { margin-bottom: 0.7rem; font-size: 0.95rem; color: var(--text); }
+
+    .sub-list { list-style: none; margin-top: 1rem; display: flex; flex-direction: column; gap: 0.85rem; }
+    .sub-list li {
+      display: flex; gap: 0.9rem; align-items: flex-start; padding: 0.75rem 1rem;
+      background: rgba(255,255,255,0.025); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); font-size: 0.93rem; line-height: 1.65; transition: background 0.18s ease;
+    }
+    .sub-list li:hover { background: rgba(221,107,85,0.04); }
+    .sub-label { flex-shrink: 0; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; font-weight: 500; color: var(--accent); margin-top: 0.1rem; min-width: 34px; }
+
+    .math-block { overflow-x: auto; padding: 0.6rem 0; margin: 0.4rem 0; }
+
+    .hint {
+      display: flex; gap: 0.75rem; margin-top: 0.9rem; padding: 0.75rem 1rem;
+      background: rgba(116,167,232,0.06); border: 1px solid rgba(116,167,232,0.2);
+      border-radius: var(--radius-sm); font-size: 0.87rem; color: #8ab4d8;
+      cursor: pointer; user-select: none;
+    }
+    .hint-icon { flex-shrink: 0; font-size: 0.85rem; margin-top: 0.05rem; opacity: 0.8; }
+    .hint-toggle   { margin-left: auto; flex-shrink: 0; font-size: 0.75rem;
+                     font-weight: 600; letter-spacing: 0.06em;
+                     color: var(--blue); white-space: nowrap; }
+    .hint-content  { transition: max-height 0.35s ease, opacity 0.3s ease;
+                     max-height: 420px; overflow: hidden; opacity: 1; }
+    .hint.collapsed .hint-content { max-height: 0; opacity: 0; pointer-events: none; }
+
+    .part-sep { border: none; border-top: 1px dashed var(--border); margin: 3rem 0; }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 3px; }
+
+    @media (max-width: 600px) {
+      .top-bar-meta { display: none; }
+      .hero { padding: 2.5rem 1rem 2rem; }
+      .page-wrap { padding: 2rem 1rem 4rem; }
+    }
+
+    /* ── Interactive card ── */
+    .ic { background: linear-gradient(135deg,#0e1828 0%,#141f35 100%);
+          border: 1px solid #2a3f6a; border-radius: var(--radius);
+          margin-bottom: 1.8rem; overflow: hidden; }
+    .ic-header { display:flex; align-items:center; gap:.9rem;
+                 padding:.85rem 1.2rem; border-bottom:1px solid #2a3f6a;
+                 background:rgba(255,255,255,.025); }
+    .ic-badge  { font-family:'JetBrains Mono',monospace; font-size:.68rem;
+                 font-weight:600; letter-spacing:.08em; text-transform:uppercase;
+                 color:#74a7e8; background:rgba(116,167,232,.12);
+                 border:1px solid rgba(116,167,232,.28);
+                 border-radius:var(--radius-sm); padding:.18rem .55rem; }
+    .ic-header h4 { font-family:'Inter',sans-serif; font-size:.9rem;
+                    font-weight:600; color:#cdd8f0; }
+    .ic-body { padding:1.1rem 1.2rem 1.4rem; }
+    .ic-body p { font-size:.9rem; color:var(--text-muted); margin-bottom:.9rem; }
+
+    .sl-row   { display:flex; align-items:center; gap:.9rem;
+                margin-bottom:.75rem; flex-wrap:wrap; }
+    .sl-lbl   { font-family:'JetBrains Mono',monospace; font-size:.8rem;
+                color:var(--accent); min-width:170px; }
+    input[type=range].sl {
+        flex:1; min-width:120px; max-width:260px;
+        -webkit-appearance:none; height:4px; border-radius:2px;
+        background:#2a3349; outline:none; cursor:pointer; }
+    input[type=range].sl::-webkit-slider-thumb {
+        -webkit-appearance:none; width:14px; height:14px; border-radius:50%;
+        background:var(--accent); cursor:pointer;
+        box-shadow:0 0 0 3px rgba(221,107,85,.2); }
+    .sl-val { font-family:'JetBrains Mono',monospace; font-size:.8rem;
+              color:#dde4f0; min-width:44px; text-align:right; }
+
+    .btn-row  { display:flex; gap:.65rem; margin-top:.9rem; flex-wrap:wrap;
+                align-items:center; }
+    .btn { font-family:'Inter',sans-serif; font-size:.82rem; font-weight:600;
+           padding:.48rem 1.1rem; border-radius:99px; border:none; cursor:pointer;
+           transition:transform .15s,box-shadow .15s,opacity .15s; }
+    .btn:active { transform:scale(.96); }
+    .btn-p { background:linear-gradient(135deg,#dd6b55,#a94832); color:#0f1117; }
+    .btn-p:hover { box-shadow:0 0 14px rgba(221,107,85,.35); }
+    .btn-s { background:rgba(255,255,255,.07); color:var(--text-muted);
+             border:1px solid var(--border); }
+    .btn-s:hover { background:rgba(255,255,255,.11); color:var(--text); }
+    .btn-s.on { background:rgba(221,107,85,.16); color:var(--accent);
+                border-color:rgba(221,107,85,.45); }
+
+    .mcq-opt { display:flex; align-items:center; gap:.7rem; padding:.6rem .85rem;
+               border-radius:var(--radius-sm); border:1px solid var(--border);
+               margin-bottom:.4rem; cursor:pointer; font-size:.88rem;
+               color:var(--text); transition:border-color .18s,background .18s; }
+    .mcq-opt:hover { border-color:var(--border-light); background:rgba(255,255,255,.03); }
+    .mcq-opt.ok  { border-color:#52b788; background:rgba(82,183,136,.08); color:#86d9b0; }
+    .mcq-opt.bad { border-color:#e07070; background:rgba(224,112,112,.08); color:#e89090; }
+    .opt-lbl { font-family:'JetBrains Mono',monospace; font-size:.72rem;
+               font-weight:600; color:var(--accent); min-width:16px; }
+    .opt-arr { margin-left:auto; }
+    .mcq-fb  { font-size:.84rem; padding:.6rem .85rem; border-radius:var(--radius-sm);
+               margin-top:.5rem; display:none; line-height:1.6; }
+    .mcq-fb.ok  { display:block; background:rgba(82,183,136,.1); color:#86d9b0;
+                  border:1px solid rgba(82,183,136,.3); }
+    .mcq-fb.bad { display:block; background:rgba(224,112,112,.1); color:#e89090;
+                  border:1px solid rgba(224,112,112,.3); }
+
+    .out-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+                gap:.65rem; margin-top:.9rem; }
+    .out-cell { background:rgba(0,0,0,.2); border:1px solid #2a3349;
+                border-radius:var(--radius-sm); padding:.6rem .85rem; text-align:center; }
+    .out-lbl  { font-size:.7rem; color:var(--text-muted); margin-bottom:.22rem;
+                font-family:'JetBrains Mono',monospace; }
+    .out-val  { font-family:'JetBrains Mono',monospace; font-size:1rem;
+                font-weight:600; color:var(--accent); }
+
+    .cv-box { border:1px solid #2a3349; border-radius:var(--radius-sm);
+              background:#0b0e15; padding:.5rem; text-align:center; }
+    .cv-box canvas { display:block; margin:0 auto; max-width:100%; }
+    .cv-cap { font-family:'JetBrains Mono',monospace; font-size:.68rem;
+              color:var(--text-muted); margin-top:.4rem; }
+
+    .vb { display:inline-block; font-family:'JetBrains Mono',monospace; font-size:.7rem;
+          font-weight:600; letter-spacing:.04em; padding:.15rem .5rem;
+          border-radius:99px; white-space:nowrap; }
+    .vb-fail { color:#e89090; background:rgba(224,112,112,.1); border:1px solid rgba(224,112,112,.35); }
+    .vb-hold { color:#86d9b0; background:rgba(82,183,136,.1); border:1px solid rgba(82,183,136,.35); }
+    .vb-mod  { color:#d9b96f; background:rgba(201,169,110,.1); border:1px solid rgba(201,169,110,.35); }
+    .vb-na   { color:#9aa8c0; background:rgba(122,138,168,.1); border:1px solid rgba(122,138,168,.35); }
+
+    .nav-bottom{display:flex;justify-content:space-between;gap:1rem;margin-top:3rem;
+                padding-top:1.2rem;border-top:1px dashed var(--border);flex-wrap:wrap;}
+    .nav-bottom a{font-size:.85rem;font-weight:600;color:var(--text-muted);text-decoration:none;
+                  padding:.45rem 1rem;border:1px solid var(--border);border-radius:99px;
+                  transition:color .18s,border-color .18s,background .18s;}
+    .nav-bottom a:hover{color:var(--accent);border-color:var(--accent-dim);background:var(--accent-glow);}
+    .nav-bottom a.next{color:var(--accent);border-color:var(--accent-dim);background:var(--accent-glow);}
+  </style>
+</head>
+<body>
+
+<div class="top-bar">
+  <span class="top-bar-title">Does Macroeconomics Travel? &mdash; Curso</span>
+  <span class="top-bar-meta">Fase 1 de 5 &middot; A pergunta e o protocolo</span>
+</div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <span class="hero-label">Fase 1 &middot; A pergunta e o protocolo</span>
+    <h1>Antes de olhar para qualquer dado:<br>o que exatamente vamos testar?</h1>
+    <p class="hero-subtitle">
+      Toda investiga&ccedil;&atilde;o s&eacute;ria come&ccedil;a antes dos dados: na pergunta, no protocolo e nas
+      regras que impedem o pesquisador de se enganar. Nesta fase: o que s&atilde;o as &ldquo;leis&rdquo; da
+      macroeconomia, quais nove leis entram no teste, como o desenho foi travado de antem&atilde;o &mdash;
+      e o pequeno framework que prev&ecirc; o padr&atilde;o dos resultados.
+    </p>
+    <div class="hero-divider"></div>
+  </div>
+</header>
+
+<main class="page-wrap">
+
+  <!-- ===== PARTE I ===== -->
+  <section class="part" id="parte-1">
+    <div class="part-header">
+      <div class="part-number">I</div>
+      <div class="part-info">
+        <h2>A pergunta</h2>
+        <span class="part-tagline">Regularidades emp&iacute;ricas, a cr&iacute;tica de Lucas e a valida&ccedil;&atilde;o externa</span>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p>Chame de $G_n$ n&atilde;o um grafo, mas o mundo: pa&iacute;ses crescendo, pessoas trabalhando, pre&ccedil;os
+      subindo. A macroeconomia aprendeu sobre esse mundo medindo <strong>regularidades</strong>: padr&otilde;es que se
+      repetem em dados de muitos pa&iacute;ses e &eacute;pocas. O crescimento fraco vem com desemprego alto (Okun).
+      O desemprego alto vem com infla&ccedil;&atilde;o menor (Phillips). Moeda crescendo muito acima da produ&ccedil;&atilde;o
+      vem, no longo prazo, com infla&ccedil;&atilde;o alta (teoria quantitativa). Consumo e investimento sobem e descem
+      juntos (comovimento c&iacute;clico). O Estado cresce com a renda (Wagner).</p>
+      <p>Aqui est&aacute; o problema: quase tudo isso foi medido em <strong>economias de mercado</strong>. Cada
+      regularidade assume, em sil&ecirc;ncio, que existem institui&ccedil;&otilde;es de mercado funcionando &mdash;
+      firmas que demitem e contratam conforme a demanda, investimento que responde a retornos esperados, cr&eacute;dito
+      que tem pre&ccedil;o. A ideia de que uma rela&ccedil;&atilde;o estimada sob um regime pode n&atilde;o sobreviver
+      a outro regime &eacute; a c&eacute;lebre <strong>cr&iacute;tica de Lucas (1976)</strong>, originalmente sobre
+      regimes de pol&iacute;tica dentro de uma economia de mercado. Nakamura e Steinsson (2018) colocaram o problema
+      moderno em uma frase: o valor de um momento estimado depende de <em>at&eacute; onde ele viaja</em> al&eacute;m
+      do cen&aacute;rio que o produziu.</p>
+      <p>Nosso experimento leva essa pergunta atrav&eacute;s de fronteiras <strong>institucionais</strong>, n&atilde;o
+      apenas de pol&iacute;tica. A China &eacute; a &uacute;nica economia grande o bastante, medida bem o bastante e
+      institucionalmente diferente o bastante para respond&ecirc;-la: l&aacute;, o trabalho no curto prazo e o capital
+      s&atilde;o, em medida importante, <strong>pre&ccedil;os administrados pelo Estado</strong>. A pergunta do curso
+      &eacute; uma s&oacute;: <em>quais leis sobrevivem &agrave; travessia, e o padr&atilde;o das que caem diz algo
+      sobre o que cada lei pressup&otilde;e?</em></p>
+    </div>
+
+    <div class="question">
+      <div class="question-header">
+        <span class="q-badge">Defini&ccedil;&atilde;o</span>
+        <h3>O que &eacute; uma &ldquo;lei&rdquo; emp&iacute;rica em macroeconomia</h3>
+      </div>
+      <div class="question-body">
+        <p>N&atilde;o &eacute; lei no sentido da f&iacute;sica. &Eacute; uma <strong>rela&ccedil;&atilde;o estat&iacute;stica
+        est&aacute;vel</strong> entre grandezas, que aparece em muitos pa&iacute;ses e per&iacute;odos quando medida
+        do mesmo modo. O exemplo-guia deste curso &eacute; a <strong>lei de Okun</strong>, na sua forma de taxa de
+        crescimento:</p>
+        <div class="math-block">
+          $$\Delta u_t \;=\; \alpha + \beta\, g_t + \varepsilon_t, \qquad \beta &lt; 0$$
+        </div>
+        <p>onde $\Delta u_t$ &eacute; a varia&ccedil;&atilde;o da taxa de desemprego, $g_t$ &eacute; o crescimento do
+        PIB e $\varepsilon_t$ &eacute; o resto que a rela&ccedil;&atilde;o n&atilde;o explica. A literatura internacional
+        encontra $\beta$ entre $-0{,}15$ (Jap&atilde;o) e $-0{,}85$ (Espanha) em economias avan&ccedil;adas, e cerca
+        de metade disso em emergentes &mdash; mas <em>sempre negativo</em>. &Eacute; esse tipo de n&uacute;mero,
+        replic&aacute;vel, que chamamos de regularidade.</p>
+        <div class="hint">
+          <span class="hint-icon">&#9432;</span>
+          <span><strong>Por que &ldquo;lei&rdquo; entre aspas?</strong> Porque uma regress&atilde;o como a de cima
+          &eacute; uma <em>forma reduzida</em>: um resumo estat&iacute;stico de como v&aacute;rios mecanismos se
+          combinam (demanda, demiss&otilde;es, entrada e sa&iacute;da da for&ccedil;a de trabalho). O que a Fase 1
+          argumenta &eacute; que cada forma reduzida depende de uma <em>margem de ajuste</em> espec&iacute;fica &mdash;
+          e &eacute; a&iacute; que as institui&ccedil;&otilde;es chinesas entram.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ic" id="mcq-okun">
+      <div class="ic-header">
+        <span class="ic-badge">Teste r&aacute;pido</span>
+        <h4>Aquecimento: reconhecendo a lei de Okun</h4>
+      </div>
+      <div class="ic-body">
+        <p>Qual das afirma&ccedil;&otilde;es abaixo &eacute; a lei de Okun?</p>
+        <div class="mcq-opt" data-g="g1" data-c="0"><span class="opt-lbl">A</span>
+          <span>Quando a moeda cresce r&aacute;pido, a infla&ccedil;&atilde;o sobe no longo prazo</span>
+          <span class="opt-arr"></span></div>
+        <div class="mcq-opt" data-g="g1" data-c="1"><span class="opt-lbl">B</span>
+          <span>Quando o PIB cresce acima do normal, o desemprego cai</span>
+          <span class="opt-arr"></span></div>
+        <div class="mcq-opt" data-g="g1" data-c="0"><span class="opt-lbl">C</span>
+          <span>Quando o desemprego sobe, a infla&ccedil;&atilde;o de amanh&atilde; cai em rela&ccedil;&atilde;o &agrave; de hoje</span>
+          <span class="opt-arr"></span></div>
+        <div class="mcq-fb" id="g1-ok">Isso. Crescimento forte &rarr; firms contratam &rarr; desemprego cai. Na
+          regress&atilde;o, $\beta &lt; 0$. A op&ccedil;&atilde;o A &eacute; a teoria quantitativa (L3) e a C &eacute;
+          a curva de Phillips aceleracionista (L2) &mdash; as tr&ecirc;s se distinguem pelas vari&aacute;veis que
+          ligam, e voc&ecirc; vai reencontr&aacute;-las na Fase 3.</div>
+        <div class="mcq-fb" id="g1-bad">Essa &eacute; outra lei (A &eacute; a teoria quantitativa, L3; C &eacute; a
+          curva de Phillips, L2). Okun liga <em>produto</em> e <em>emprego</em>: crescimento acima do normal
+          &rarr; contrata&ccedil;&otilde;es &rarr; desemprego caindo, ou seja, $\Delta u = \alpha + \beta g$ com
+          $\beta &lt; 0$.</div>
+      </div>
+    </div>
+
+    <div class="question">
+      <div class="question-header">
+        <span class="q-badge">Caixa de ferramentas</span>
+        <h3>Estat&iacute;stica m&iacute;nima em 60 segundos</h3>
+      </div>
+      <div class="question-body">
+        <p>Tudo o que o curso usa cabe nesta lista. Volte aqui quando precisar.</p>
+        <ul class="sub-list">
+          <li><span class="sub-label">corr</span><span><strong>Correla&ccedil;&atilde;o</strong> &mdash; n&uacute;mero
+          entre $-1$ e $+1$ que mede se duas s&eacute;ries sobem e descem juntas ($+1$), em oposição ($-1$) ou sem
+          rela&ccedil;&atilde;o ($0$).</span></li>
+          <li><span class="sub-label">reg</span><span><strong>Regress&atilde;o (OLS)</strong> &mdash; a reta que
+          melhor passa por uma nuvem de pontos, no sentido de minimizar os erros quadr&aacute;ticos. A inclina&ccedil;&atilde;o
+          $\beta$ diz quanto $y$ muda quando $x$ sobe uma unidade.</span></li>
+          <li><span class="sub-label">R&sup2;</span><span><strong>$R^2$</strong> &mdash; fra&ccedil;&atilde;o da
+          varia&ccedil;&atilde;o de $y$ explicada pela reta, entre $0$ e $1$. A lei de Okun nos EUA tem $R^2 = 0{,}64$:
+          dois ter&ccedil;os do movimento do desemprego s&atilde;o o crescimento. Na China, $R^2 = 0{,}006$.</span></li>
+          <li><span class="sub-label">pct</span><span><strong>Percentil</strong> &mdash; posi&ccedil;&atilde;o na
+          distribui&ccedil;&atilde;o: estar no percentil 95 significa estar acima de 95% dos casos. Vamos localizar a
+          China em distribui&ccedil;&otilde;es de 39 pa&iacute;ses.</span></li>
+          <li><span class="sub-label">p</span><span><strong>Valor-p</strong> &mdash; probabilidade de observar algo
+          t&atilde;o extremo quanto o visto se nada de especial estivesse acontecendo. Valor-p pequeno &rarr; o
+          &ldquo; nada de especial&rdquo; fica dif&iacute;cil de sustentar.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <hr class="part-sep" />
+
+  <!-- ===== PARTE II ===== -->
+  <section class="part" id="parte-2">
+    <div class="part-header">
+      <div class="part-number">II</div>
+      <div class="part-info">
+        <h2>As nove leis do teste</h2>
+        <span class="part-tagline">Escolhidas antes de qualquer resultado &mdash; e uma exclu&iacute;da por regra</span>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p>O teste s&oacute; &eacute; cr&iacute;vel se as leis forem escolhidas <em>antes</em> de olhar os resultados.
+      Foram escolhidas nove regularidades &ldquo;de manual&rdquo;, com uma especifica&ccedil;&atilde;o can&ocirc;nica
+      cada, r&oacute;tulos L1 a L10, e uma regra pr&eacute;-fixada de exclus&atilde;o/rebaixamento (mais abaixo).
+      Em uma frase cada:</p>
+    </div>
+
+    <div class="question">
+      <div class="question-header">
+        <span class="q-badge">Lista</span>
+        <h3>L1 a L10, em linguagem corriqueira</h3>
+      </div>
+      <div class="question-body">
+        <ul class="sub-list">
+          <li><span class="sub-label">L1</span><span><strong>Okun</strong> &mdash; crescimento forte reduz o
+          desemprego. Forma: $\Delta u = \alpha + \beta g$, $\beta &lt; 0$ esperado.</span></li>
+          <li><span class="sub-label">L2</span><span><strong>Phillips aceleracionista</strong> &mdash; desemprego
+          alto derruba a <em>varia&ccedil;&atilde;o</em> da infla&ccedil;&atilde;o.</span></li>
+          <li><span class="sub-label">L3</span><span><strong>Teoria quantitativa da moeda</strong> &mdash; no longo
+          prazo, moeda crescendo acima do produto vira infla&ccedil;&atilde;o.</span></li>
+          <li><span class="sub-label">L4</span><span><strong>Comovimento C&times;I</strong> &mdash; consumo e
+          investimento s&atilde;o ambos pr&oacute;-c&iacute;clicos e andam juntos.</span></li>
+          <li><span class="sub-label">L5</span><span><strong>Renda permanente</strong> &mdash; o consumo depende da
+          renda esperada ao longo da vida, n&atilde;o da renda de hoje (e o mundo inteiro rejeita a vers&atilde;o
+          estrita).</span></li>
+          <li><span class="sub-label">L6</span><span><strong>Cr&eacute;dito e desacelera&ccedil;&atilde;o</strong>
+          &mdash; booms de cr&eacute;dito privado antecedem crises e crescimento futuro menor.</span></li>
+          <li><span class="sub-label">L7</span><span><strong>Wagner</strong> &mdash; a despesa p&uacute;blica cresce
+          com a renda (elasticidade positiva).</span></li>
+          <li><span class="sub-label">L8</span><span><strong>Converg&ecirc;ncia</strong> &mdash; economias mais
+          pobres crescem mais r&aacute;pido (fracamente, na forma incondicional).</span></li>
+          <li><span class="sub-label">L10</span><span><strong>Parcela do trabalho</strong> &mdash; a tend&ecirc;ncia
+          de longo prazo da fatia da renda que vai ao trabalho.</span></li>
+        </ul>
+        <div class="hint">
+          <span class="hint-icon">&#9432;</span>
+          <span><strong>E o L9?</strong> O multiplicador fiscal. Foi exclu&iacute;do <em>antes</em> de qualquer
+          estimativa, por um crit&eacute;rio definido no desenho: n&atilde;o h&aacute; forma cr&iacute;vel de
+          identific&aacute;-lo em dados anuais de painel internacional. Manter o r&oacute;tulo L9 vazio &eacute; uma
+          pequena cerim&ocirc;nia de honestidade: mostra que a exclus&atilde;o n&atilde;o foi escolhida a dedo
+          <em>depois</em> de ver resultados.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="part-sep" />
+
+  <!-- ===== PARTE III ===== -->
+  <section class="part" id="parte-3">
+    <div class="part-header">
+      <div class="part-number">III</div>
+      <div class="part-info">
+        <h2>O protocolo &uacute;nico</h2>
+        <span class="part-tagline">Cinco passos, 39 economias, e regras que travam o pesquisador</span>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p>O risco n&uacute;mero um de qualquer tese de &ldquo;excepcionalismo chin&ecirc;s&rdquo; &eacute; que ela
+      n&atilde;o possa ser refutada: se qualquer desvio em qualquer dire&ccedil;&atilde;o conta como prova, a tese
+      n&atilde;o diz nada. O desenho do estudo trava isso de tr&ecirc;s maneiras &mdash; dire&ccedil;&otilde;es de
+      falha pr&eacute;-fixadas, o mesmo protocolo para todos os pa&iacute;ses (inclusive os &ldquo;normais&rdquo;),
+      e a obriga&ccedil;&atilde;o de reportar os casos em que a China parece&hellip; comum.</p>
+    </div>
+
+    <div class="question">
+      <div class="question-header">
+        <span class="q-badge">Protocolo</span>
+        <h3>Os cinco passos, para cada lei</h3>
+      </div>
+      <div class="question-body">
+        <ul class="sub-list">
+          <li><span class="sub-label">1&ordm;</span><span>Estimar a especifica&ccedil;&atilde;o padr&atilde;o
+          <strong>pa&iacute;s a pa&iacute;s</strong>, por MQO, com m&iacute;nimo de 25 observa&ccedil;&otilde;es anuais
+          e erros-padr&atilde;o robustos &agrave; autocorrela&ccedil;&atilde;o (HAC).</span></li>
+          <li><span class="sub-label">2&ordm;</span><span><strong>Validar o m&eacute;todo</strong>: a distribui&ccedil;&atilde;o
+          das economias avan&ccedil;adas tem que reproduzir os números da literatura (Ball&ndash;Leigh&ndash;Loungani
+          para Okun, McCandless&ndash;Weber para moeda, Campbell&ndash;Mankiw para consumo&hellip;). Um m&eacute;todo
+          que n&atilde;o recupera Okun nos EUA n&atilde;o tem licen&ccedil;a para test&aacute;-lo na China.</span></li>
+          <li><span class="sub-label">3&ordm;</span><span>Reportar o coeficiente da China <strong>com intervalo de
+          confian&ccedil;a</strong>, de todas as s&eacute;ries dispon&iacute;veis (inclusive as alternativas &agrave;
+          oficial).</span></li>
+          <li><span class="sub-label">4&ordm;</span><span>Localizar a China na <strong>distribui&ccedil;&atilde;o
+          pa&iacute;s a pa&iacute;s</strong> e computar o valor-p exato de randomiza&ccedil;&atilde;o (Fase 5).</span></li>
+          <li><span class="sub-label">5&ordm;</span><span>Classificar: <span class="vb vb-hold">VALE</span>,
+          <span class="vb vb-mod">VALE MODIFICADA</span>, <span class="vb vb-fail">N&Atilde;O VALE</span>,
+          <span class="vb vb-na">N&Atilde;O IDENTIFIC&Aacute;VEL</span> &mdash; com regra de classifica&ccedil;&atilde;o
+          fixada antes de ver os resultados.</span></li>
+        </ul>
+        <p>O grupo de compara&ccedil;&atilde;o: <strong>23 economias avan&ccedil;adas</strong> (o n&uacute;cleo da OCDE
+        pr&eacute;-1990, sem microestados) + <strong>15 emergentes</strong> (Brasil, Chile, Col&ocirc;mbia,
+        Indon&eacute;sia, &Iacute;ndia, Coreia, M&eacute;xico, Mal&aacute;sia, Peru, Filipinas, Pol&ocirc;nia,
+        R&uacute;ssia, Tail&acirc;ndia, Turquia e &Aacute;frica do Sul) + China = <strong>39 economias</strong> com
+        qualidade de dados compar&aacute;vel.</p>
+        <div class="hint">
+          <span class="hint-icon">&#9432;</span>
+          <span><strong>A regra de rebaixamento.</strong> Duas leis foram marcadas <em>de antem&atilde;o</em> como
+          rebaix&aacute;veis a &ldquo;n&atilde;o identific&aacute;vel&rdquo; se a rela&ccedil;&atilde;o falhasse no
+          pr&oacute;prio grupo de compara&ccedil;&atilde;o, ou se a infer&ecirc;ncia dependesse s&oacute; do
+          &uacute;nico pa&iacute;s tratado. As duas coisas aconteceram (L2 e L6) &mdash; e report&aacute;-las
+          abertamente &eacute; o que impede o protocolo de fabricar anomalias chinesas.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ic" id="mcq-falsif">
+      <div class="ic-header">
+        <span class="ic-badge">Teste r&aacute;pido</span>
+        <h4>Por que fixar a dire&ccedil;&atilde;o da falha antes de estimar?</h4>
+      </div>
+      <div class="ic-body">
+        <p>Suponha que um pesquisador declare: &ldquo;a China &eacute; excepcional; qualquer desvio grande em
+        qualquer lei, para qualquer lado, confirma minha tese&rdquo;. Qual o problema?</p>
+        <div class="mcq-opt" data-g="g2" data-c="0"><span class="opt-lbl">A</span>
+          <span>Nenhum: flexibilidade &eacute; boa ci&ecirc;ncia</span>
+          <span class="opt-arr"></span></div>
+        <div class="mcq-opt" data-g="g2" data-c="1"><span class="opt-lbl">B</span>
+          <span>Com 9 leis e 2 dire&ccedil;&otilde;es cada, quase todo pa&iacute;s teria algum &ldquo;desvio extremo&rdquo; por puro azar &mdash; a tese fica irrefut&aacute;vel e n&atilde;o informa nada</span>
+          <span class="opt-arr"></span></div>
+        <div class="mcq-opt" data-g="g2" data-c="0"><span class="opt-lbl">C</span>
+          <span>O problema &eacute; &eacute;tico, n&atilde;o estat&iacute;stico</span>
+          <span class="opt-arr"></span></div>
+        <div class="mcq-fb" id="g2-ok">Exato. &Eacute; o problema do m&uacute;ltiplo teste disfar&ccedil;ado: se
+          qualquer extremo conta, o pa&iacute;s mais &ldquo;an&ocirc;malo&rdquo; ser&aacute; apenas o que teve mais
+          sorte (ou azar) na amostra. A solu&ccedil;&atilde;o do desenho: para cada lei, a dire&ccedil;&atilde;o de
+          falha foi declarada <em>antes</em> (Okun falha <em>na dire&ccedil;&atilde;o de zero</em>, comovimento falha
+          <em>na dire&ccedil;&atilde;o de correla&ccedil;&atilde;o negativa</em>, etc.), e o placebo Coreia (Fase 4)
+          checa se o m&eacute;todo marca economias normais como normais.</div>
+        <div class="mcq-fb" id="g2-bad">Pense em m&uacute;ltiplos testes: com 9 leis e extremos contando para os dois
+          lados, praticamente qualquer pa&iacute;s exibiria algum &ldquo;desvio&rdquo; por acaso. A tese deixaria de
+          ter conte&uacute;do emp&iacute;rico &mdash; irrefut&aacute;vel, portanto vazia. A solu&ccedil;&atilde;o
+          est&aacute; no desenho: dire&ccedil;&otilde;es pr&eacute;-fixadas + placebo + reportar os casos comuns.</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="part-sep" />
+
+  <!-- ===== PARTE IV ===== -->
+  <section class="part" id="parte-4">
+    <div class="part-header">
+      <div class="part-number">IV</div>
+      <div class="part-info">
+        <h2>O framework: leis como teoremas condicionais</h2>
+        <span class="part-tagline">Cada lei &eacute; a forma reduzida de uma margem de ajuste &mdash; e cada margem tem um pre&ccedil;o</span>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p>O framework do artigo &eacute; deliberadamente pequeno. Ele n&atilde;o &eacute; um modelo completo:
+      &eacute; uma <em>contabilidade de mecanismos</em>. Cada lei &eacute; o resultado de um ajuste de equil&iacute;brio
+      que passa por uma margem espec&iacute;fica, e cada margem se ajusta a um pre&ccedil;o. A pergunta decisiva
+      para cada lei &eacute;: <strong>essa margem funciona a um pre&ccedil;o de mercado &mdash; ou a um pre&ccedil;o
+      administrado pelo Estado chin&ecirc;s?</strong></p>
+      <p>Comece pela margem do <strong>trabalho</strong>. Numa economia de mercado, as firmas atendem &agrave;
+      demanda ajustando o emprego &mdash; e a&iacute; nasce a lei de Okun. Agora suponha que uma fra&ccedil;&atilde;o $s$ do emprego
+      esteja <em>protegida da demanda por pol&iacute;tica</em> (empregadores estatais com dever expl&iacute;cito de
+      estabiliza&ccedil;&atilde;o) e que uma fra&ccedil;&atilde;o $m$ do ajuste real de trabalho aconte&ccedil;a por
+      fluxos de <em>migra&ccedil;&atilde;o</em> que a estat&iacute;stica de desemprego n&atilde;o enxerga (o sistema
+      de registro residencial <em>hukou</em> devolve trabalhadores deslocados a um setor rural fora da pesquisa). O
+      coeficiente <em>medido</em> fica:</p>
+      <div class="math-block">
+        $$\beta \;=\; (1 - s - m)\,\beta^{*} \tag{1}$$
+      </div>
+      <p>onde $\beta^{*}$ &eacute; a resposta de mercado (&aacute; a dos EUA: em torno de $-0{,}45$ a $-0{,}60$).
+      Conforme $s + m$ se aproxima de 1, o Okun medido vai a zero &mdash; <em>n&atilde;o importa qu&atilde;o bem
+      otimizem os lares e as firmas</em>. A equa&ccedil;&atilde;o tamb&eacute;m prev&ecirc; din&acirc;mica: com a
+      marketiza&ccedil;&atilde;o ($s$ caindo, <em>hukou</em> afrouxando), $\beta$ deve se afastar de zero. A Fase 4
+      testa exatamente isso.</p>
+      <p>A margem do <strong>investimento</strong> tem estrutura an&aacute;loga (equa&ccedil;&atilde;o (2), detalhada
+      na Fase 3): investimento privado &eacute; pr&oacute;-c&iacute;clico; investimento dirigido pelo Estado segue uma
+      regra de estabiliza&ccedil;&atilde;o, <em>indo contra</em> o ciclo. Quando a segunda componente domina, a
+      correla&ccedil;&atilde;o do investimento com o ciclo muda de sinal &mdash; e a lei de comovimento (L4) morre,
+      <em>enquanto o ciclo do consumo, decis&atilde;o das fam&iacute;lias, permanece normal</em>. Essa assimetria
+      &eacute; a assinatura mais n&iacute;tida do framework.</p>
+    </div>
+
+    <!-- SIMULADOR eq (1) -->
+    <div class="ic" id="sim-okun-wedge">
+      <div class="ic-header">
+        <span class="ic-badge">Simula&ccedil;&atilde;o</span>
+        <h4>Matando a lei de Okun sem tocar nos agentes: a equa&ccedil;&atilde;o (1) em a&ccedil;&atilde;o</h4>
+      </div>
+      <div class="ic-body">
+        <p>Controle as duas fatias que amortecem a lei: $s$ (emprego protegido por pol&iacute;tica) e $m$ (ajuste
+        invis&iacute;vel &agrave; pesquisa, via migra&ccedil;&atilde;o). A nuvem de pontos &eacute; uma simula&ccedil;&atilde;o
+        calibrada com $\beta^{*} = -0{,}45$ (padr&atilde;o de mercado). Repare: a &uacute;nica coisa que muda &eacute;
+        o <em>atrito institucional</em> &mdash; a reta vai se deitando at&eacute; virar uma nuvem sem informa&ccedil;&atilde;o.</p>
+
+        <div class="sl-row">
+          <span class="sl-lbl">emprego protegido $s$</span>
+          <input type="range" class="sl" id="ow-s" min="0" max="0.9" step="0.01" value="0" />
+          <span class="sl-val" id="owv-s">0.00</span>
+        </div>
+        <div class="sl-row">
+          <span class="sl-lbl">ajuste invis&iacute;vel $m$</span>
+          <input type="range" class="sl" id="ow-m" min="0" max="0.9" step="0.01" value="0" />
+          <span class="sl-val" id="owv-m">0.00</span>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-s on" id="ow-btn-mkt" type="button">Mercado ($s{=}m{=}0$)</button>
+          <button class="btn btn-s" id="ow-btn-mix" type="button">Misto ($s{=}m{=}0{,}3$)</button>
+          <button class="btn btn-p" id="ow-btn-chn" type="button">China ($s{+}m \approx 0{,}99$)</button>
+        </div>
+
+        <div class="cv-box" style="margin-top:1rem">
+          <canvas id="ow-canvas" width="480" height="300"></canvas>
+          <div class="cv-cap">cada ponto &eacute; um ano: crescimento (x) &times; varia&ccedil;&atilde;o do desemprego (y)</div>
+        </div>
+
+        <div class="out-grid">
+          <div class="out-cell">
+            <div class="out-lbl">&beta; medido</div>
+            <div class="out-val" id="ow-beta">&mdash;</div>
+          </div>
+          <div class="out-cell">
+            <div class="out-lbl">R&sup2; da simula&ccedil;&atilde;o</div>
+            <div class="out-val" id="ow-r2">&mdash;</div>
+          </div>
+          <div class="out-cell">
+            <div class="out-lbl">estado da lei</div>
+            <div class="out-val" id="ow-verdict" style="font-size:.82rem">&mdash;</div>
+          </div>
+        </div>
+        <p style="margin-top:.9rem;margin-bottom:0">Refer&ecirc;ncia do estudo: nos EUA, $\beta = -0{,}60$ com
+        $R^2 = 0{,}64$; na China, $\beta = -0{,}006$ com $R^2 = 0{,}006$ &mdash; o coeficiente mais pr&oacute;ximo
+        de zero entre as 39 economias. A simula&ccedil;&atilde;o mostra que esse resultado n&atilde;o exige agentes
+        estranhos: exige apenas $s + m$ perto de 1.</p>
+      </div>
+    </div>
+
+    <div class="question">
+      <div class="question-header">
+        <span class="q-badge">Predi&ccedil;&otilde;es</span>
+        <h3>Cinco apostas direcionais, feitas antes das estimativas</h3>
+      </div>
+      <div class="question-body">
+        <p>Um framework s&oacute; presta se se arriscar. Estas s&atilde;o as cinco predi&ccedil;&otilde;es,
+        todas direcionais &mdash; cada uma pode falhar nos dados:</p>
+        <ul class="sub-list">
+          <li><span class="sub-label">P1</span><span>A lei de Okun falha <strong>na dire&ccedil;&atilde;o de
+          zero</strong> (n&atilde;o &ldquo;para qualquer lado&rdquo;).</span></li>
+          <li><span class="sub-label">P2</span><span>A pr&oacute;-circularidade do investimento falha
+          <strong>enquanto o ciclo do consumo permanece normal</strong> (a assimetria como restri&ccedil;&atilde;o
+          de sobreidentifica&ccedil;&atilde;o).</span></li>
+          <li><span class="sub-label">P3</span><span>As leis de longo prazo (moeda, Wagner, converg&ecirc;ncia)
+          <strong>valem</strong>, no m&aacute;ximo com deslocamentos de n&iacute;vel ou tend&ecirc;ncia.</span></li>
+          <li><span class="sub-label">P4</span><span>As duas falhas c&iacute;clicas <strong>encolhem conforme a
+          marketiza&ccedil;&atilde;o avan&ccedil;a</strong> ($s$ e $\phi$ caem com o tempo).</span></li>
+          <li><span class="sub-label">P5</span><span>Corre&ccedil;&otilde;es que reescaliam o crescimento do PIB
+          <strong>n&atilde;o ressuscitam as leis mortas</strong>: nenhuma transforma&ccedil;&atilde;o do eixo-x cria covari&acirc;ncia
+          com uma vari&aacute;vel (desemprego) que n&atilde;o se move. Esta &eacute; a muni&ccedil;&atilde;o da Fase 4.</span></li>
+        </ul>
+        <div class="hint">
+          <span class="hint-icon">&#9432;</span>
+          <span><strong>O que falsificaria o framework?</strong> Falhas espalhadas sem padr&atilde;o (moeda quebrando,
+          Okun intacto); a assimetria C&times;I n&atilde;o aparecendo; ou as falhas <em>crescendo</em> com a
+          marketiza&ccedil;&atilde;o. Guarde esta lista: as Fases 3 e 4 v&atilde;o confront&aacute;-la com os dados,
+          lei a lei.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p><strong>O que levamos para a Fase 2:</strong> uma pergunta false&aacute;vel, nove leis com especifica&ccedil;&otilde;es
+      can&ocirc;nicas, um protocolo que roda id&ecirc;ntico para 39 economias e um framework com cinco apostas
+      direcionais. Falta a mat&eacute;ria-prima: os dados &mdash; e as peculiaridades da estat&iacute;stica chinesa
+      que amea&ccedil;am contaminar tudo.</p>
+    </div>
+  </section>
+
+  <nav class="nav-bottom">
+    <a href="china-index.html">&larr; Mapa do curso</a>
+    <a class="next" href="china-fase2_dados.html">Fase 2 · Os dados &rarr;</a>
+  </nav>
+
+</main>
+
+<footer style="border-top: 1px solid var(--border); padding: 1.5rem 2rem; text-align: center; font-size: 0.8rem; color: var(--text-dim);">
+  Does Macroeconomics Travel? &mdash; curso interativo &middot; Fase 1 &middot; Lucas Rafael de Andrade &middot; 2026
+</footer>
+
+<script>
+(function(){
+"use strict";
+function g(id){return document.getElementById(id);}
+
+/* ---------- sliders: preenchimento ---------- */
+function fillSlider(el){
+  if(!el)return;
+  var mn=+el.min,mx=+el.max,v=+el.value;
+  var pct=((v-mn)/(mx-mn)*100).toFixed(1)+"%";
+  el.style.background="linear-gradient(to right,var(--accent-dim) 0%,var(--accent-dim) "+pct+",#2a3349 "+pct+")";
+}
+document.querySelectorAll(".sl").forEach(fillSlider);
+
+/* ---------- hints colapsaveis ---------- */
+document.querySelectorAll(".hint").forEach(function(h){
+  var spans=h.querySelectorAll("span");
+  var ct=spans[spans.length-1];
+  if(!ct)return;
+  ct.classList.add("hint-content");
+  var tog=document.createElement("span");
+  tog.className="hint-toggle";
+  tog.textContent="Dica";
+  h.insertBefore(tog,ct);
+  h.classList.add("collapsed");
+  h.addEventListener("click",function(){h.classList.toggle("collapsed");});
+});
+
+/* ---------- MCQ handler ---------- */
+document.querySelectorAll(".mcq-opt").forEach(function(opt){
+  opt.addEventListener("click",function(){
+    var grp=this.dataset.g;
+    var all=document.querySelectorAll("[data-g='"+grp+"']");
+    if([].some.call(all,function(o){return o.classList.contains("ok")||o.classList.contains("bad");}))return;
+    var ok=(this.dataset.c==="1");
+    this.classList.add(ok?"ok":"bad");
+    var arr=this.querySelector(".opt-arr");
+    if(arr)arr.textContent=ok?"\u2713":"\u2717";
+    if(!ok)all.forEach(function(o){
+      if(o.dataset.c==="1"){o.classList.add("ok");var a=o.querySelector(".opt-arr");if(a)a.textContent="\u2713";}
+    });
+    var fb=g(grp+(ok?"-ok":"-bad"));
+    if(fb)fb.classList.add(ok?"ok":"bad");
+  });
+});
+
+/* ---------- utilidades numericas ---------- */
+function RNG(seed){var s=seed>>>0;return function(){s=(1664525*s+1013904223)>>>0;return s/4294967296;};}
+function gauss(rnd){var u=0,v=0;while(u===0)u=rnd();while(v===0)v=rnd();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);}
+function mean(a){var s=0,i;for(i=0;i<a.length;i++)s+=a[i];return s/a.length;}
+function olsBeta(xs,ys){var mx=mean(xs),my=mean(ys),sxy=0,sxx=0,i;for(i=0;i<xs.length;i++){sxy+=(xs[i]-mx)*(ys[i]-my);sxx+=(xs[i]-mx)*(xs[i]-mx);}return sxx>0?sxy/sxx:0;}
+function r2Of(xs,ys,b){var mx=mean(xs),my=mean(ys),sse=0,sst=0,i;for(i=0;i<xs.length;i++){var e=ys[i]-(my+b*(xs[i]-mx));sse+=e*e;sst+=(ys[i]-my)*(ys[i]-my);}return sst>0?1-sse/sst:0;}
+function orth(xs,eps){var b=olsBeta(xs,eps),mx=mean(xs),out=[],i;for(i=0;i<eps.length;i++)out.push(eps[i]-b*(xs[i]-mx));return out;}
+function fmt(v,d){return (v===null||isNaN(v))?"\u2014":v.toFixed(d===undefined?2:d);}
+
+/* ---------- simulacao: cunha institucional em Okun ---------- */
+(function(){
+  var cv=g("ow-canvas"),slS=g("ow-s"),slM=g("ow-m"),vS=g("owv-s"),vM=g("owv-m");
+  if(!cv||!slS||!slM)return;
+  var ctx=cv.getContext("2d"),W=cv.width,H=cv.height;
+  var BSTAR=-0.45,NSD=0.35,N=45;
+
+  var rnd=new RNG(42),xs=[],i;
+  for(i=0;i<N;i++){var x=2.5+2*gauss(rnd);if(x<-3)x=-3;if(x>9)x=9;xs.push(x);}
+  rnd=new RNG(7);
+  var eps0=[];
+  for(i=0;i<N;i++)eps0.push(NSD*gauss(rnd));
+  var eps=orth(xs,eps0);
+
+  function draw(){
+    var s=+slS.value,m=+slM.value,b=(1-s-m)*BSTAR;
+    vS.textContent=fmt(s,2);vM.textContent=fmt(m,2);fillSlider(slS);fillSlider(slM);
+    var ys=[],i;
+    for(i=0;i<N;i++)ys.push(b*(xs[i]-mean(xs))+eps[i]);
+
+    var xmin=-3,xmax=9,ymin=1e9,ymax=-1e9;
+    for(i=0;i<N;i++){if(ys[i]<ymin)ymin=ys[i];if(ys[i]>ymax)ymax=ys[i];}
+    ymin=Math.min(ymin,-0.5)-0.3;ymax=Math.max(ymax,0.5)+0.3;
+
+    var mL=46,mR=12,mT=12,mB=34;
+    function px(x){return mL+(x-xmin)/(xmax-xmin)*(W-mL-mR);}
+    function py(y){return H-mB-(y-ymin)/(ymax-ymin)*(H-mT-mB);}
+
+    ctx.fillStyle="#0b0e15";ctx.fillRect(0,0,W,H);
+    ctx.font="10px 'JetBrains Mono',monospace";ctx.fillStyle="#7a8aa8";
+    var k;
+    for(k=0;k<=5;k++){
+      var xv=xmin+(xmax-xmin)*k/5,X=px(xv);
+      ctx.strokeStyle="rgba(42,51,73,0.55)";ctx.beginPath();ctx.moveTo(X,mT);ctx.lineTo(X,H-mB);ctx.stroke();
+      ctx.fillText(fmt(xv,0),X-8,H-16);
+    }
+    for(k=0;k<=4;k++){
+      var yv=ymin+(ymax-ymin)*k/4,Y=py(yv);
+      ctx.strokeStyle="rgba(42,51,73,0.55)";ctx.beginPath();ctx.moveTo(mL,Y);ctx.lineTo(W-mR,Y);ctx.stroke();
+      ctx.fillText(fmt(yv,1),8,Y+3);
+    }
+    ctx.strokeStyle="#2a3349";ctx.strokeRect(mL,mT,W-mL-mR,H-mT-mB);
+    ctx.fillStyle="#7a8aa8";
+    ctx.fillText("crescimento do PIB (%)",W/2-70,H-4);
+    ctx.save();ctx.translate(11,H/2+52);ctx.rotate(-Math.PI/2);ctx.fillText("\u0394u (p.p.)",0,0);ctx.restore();
+
+    var mY=mean(ys),mxv=mean(xs);
+    ctx.strokeStyle="#c9a96e";ctx.lineWidth=1.6;ctx.beginPath();
+    ctx.moveTo(px(xmin),py(mY+b*(xmin-mxv)));ctx.lineTo(px(xmax),py(mY+b*(xmax-mxv)));ctx.stroke();
+    ctx.lineWidth=1;
+
+    ctx.fillStyle="#dd6b55";
+    for(i=0;i<N;i++)ctx.fillRect(px(xs[i])-2,py(ys[i])-2,4,4);
+
+    var r2=r2Of(xs,ys,b);
+    var eB=g("ow-beta"),eR=g("ow-r2"),eV=g("ow-verdict");
+    if(eB)eB.textContent=fmt(b,3);
+    if(eR)eR.textContent=fmt(Math.max(0,r2),2);
+    if(eV){
+      var ab=Math.abs(b);
+      if(ab>=0.30){eV.textContent="vige";eV.style.color="#86d9b0";}
+      else if(ab>=0.10){eV.textContent="amortecida";eV.style.color="#d9b96f";}
+      else{eV.textContent="morta";eV.style.color="#e89090";}
+    }
+  }
+
+  function preset(s,m){
+    slS.value=s;slM.value=m;
+    ["ow-btn-mkt","ow-btn-mix","ow-btn-chn"].forEach(function(id){var b=g(id);if(b)b.classList.remove("on");});
+    draw();
+  }
+  var bMkt=g("ow-btn-mkt"),bMix=g("ow-btn-mix"),bChn=g("ow-btn-chn");
+  if(bMkt)bMkt.addEventListener("click",function(){preset(0,0);bMkt.classList.add("on");});
+  if(bMix)bMix.addEventListener("click",function(){preset(0.3,0.3);bMix.classList.add("on");});
+  if(bChn)bChn.addEventListener("click",function(){preset(0.55,0.44);bChn.classList.add("on");});
+  slS.addEventListener("input",draw);
+  slM.addEventListener("input",draw);
+
+  draw();
+})();
+})();
+</script>
+</body>
+</html>

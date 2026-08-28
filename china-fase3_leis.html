@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fase 3 · Nove leis sob o mesmo protocolo — A Macroeconomia Viaja?</title>
+  <meta name="description" content="Fase 3 do curso: Okun, Phillips, teoria quantitativa, comovimento, renda permanente, crédito, Wagner, convergência e parcela do trabalho — estimadas país a país, com a China localizada na distribuição internacional." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [["$","$"],["\\(","\\)"]],
+        displayMath: [["$$","$$"],["\\[","\\]"]]
+      },
+      options: { skipHtmlTags: ["script","noscript","style","textarea"] }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+  <style>
+    :root {
+      --bg:          #0f1117;
+      --bg-card:     #161b27;
+      --bg-card-2:   #1c2233;
+      --border:      #2a3349;
+      --border-light:#334060;
+      --accent:      #dd6b55;
+      --accent-dim:  #9a4632;
+      --accent-glow: rgba(221,107,85,0.12);
+      --gold:        #c9a96e;
+      --text:        #dde4f0;
+      --text-muted:  #7a8aa8;
+      --text-dim:    #4e5f7a;
+      --blue:        #74a7e8;
+      --radius:      10px;
+      --radius-sm:   6px;
+      --shadow:      0 4px 24px rgba(0,0,0,0.5);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      font-size: 16px;
+      min-height: 100vh;
+    }
+
+    .top-bar {
+      background: linear-gradient(135deg, #0a0e18 0%, #131929 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+    }
+    .top-bar-title { font-family: 'Lora', serif; font-size: 0.95rem; color: var(--accent); letter-spacing: 0.04em; }
+    .top-bar-meta  { font-size: 0.78rem; color: var(--text-muted); letter-spacing: 0.02em; }
+
+    .hero { position: relative; text-align: center; padding: 4rem 2rem 3rem; border-bottom: 1px solid var(--border); overflow: hidden;
+      background:
+        radial-gradient(ellipse 60% 55% at 50% -10%, rgba(221,107,85,0.16), transparent 70%),
+        radial-gradient(ellipse 55% 45% at 88% 115%, rgba(116,167,232,0.10), transparent 70%),
+        linear-gradient(180deg, #11141d 0%, #0f1117 100%);
+    }
+    .hero-inner { position: relative; z-index: 1; }
+    .hero-label {
+      display: inline-block; font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--accent); background: rgba(221,107,85,0.1); border: 1px solid rgba(221,107,85,0.25);
+      padding: 0.3rem 0.9rem; border-radius: 99px; margin-bottom: 1.4rem;
+    }
+    .hero h1 {
+      font-family: 'Lora', serif; font-size: clamp(1.7rem, 3.6vw, 2.5rem); font-weight: 600;
+      color: #f0e3d5; line-height: 1.25; margin-bottom: 1rem; text-shadow: 0 2px 20px rgba(0,0,0,0.8);
+    }
+    .hero-subtitle { font-size: 1rem; color: #b8c6dc; max-width: 700px; margin: 0 auto 1.6rem; }
+    .hero-divider  { width: 60px; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent); margin: 0 auto; }
+
+    .page-wrap { max-width: 860px; margin: 0 auto; padding: 3rem 1.5rem 4rem; }
+
+    .part { margin-bottom: 3.5rem; }
+    .part-header { display: flex; align-items: flex-start; gap: 1.2rem; margin-bottom: 2rem; padding-bottom: 1.2rem; border-bottom: 1px solid var(--border); }
+    .part-number {
+      flex-shrink: 0; min-width: 44px; height: 44px; border-radius: 50%; padding: 0 .3rem;
+      background: var(--accent-glow); border: 1.5px solid var(--accent-dim);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Lora', serif; font-size: 0.95rem; color: var(--accent); margin-top: 0.15rem;
+    }
+    .part-info h2    { font-family: 'Lora', serif; font-size: 1.35rem; font-weight: 600; color: #eaccdd; margin-bottom: 0.3rem; }
+    .part-info .part-tagline { font-size: 0.88rem; color: var(--text-muted); font-style: italic; }
+
+    .narrative {
+      background: var(--bg-card); border: 1px solid var(--border); border-left: 3px solid var(--accent-dim);
+      border-radius: var(--radius); padding: 1.2rem 1.4rem; margin-bottom: 2rem;
+      font-family: 'Lora', serif; font-size: 0.97rem; color: #c8d4e8; line-height: 1.85;
+    }
+    .narrative p + p { margin-top: 0.75rem; }
+
+    .question { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 1.5rem; overflow: hidden; transition: border-color 0.2s ease, box-shadow 0.2s ease; }
+    .question:hover { border-color: var(--border-light); box-shadow: 0 0 0 1px var(--border-light), var(--shadow); }
+    .question-header { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.25rem; background: var(--bg-card-2); border-bottom: 1px solid var(--border); }
+    .q-badge {
+      flex-shrink: 0; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; font-weight: 500;
+      color: var(--accent); background: var(--accent-glow); border: 1px solid rgba(221,107,85,0.2);
+      border-radius: var(--radius-sm); padding: 0.2rem 0.55rem; letter-spacing: 0.05em;
+    }
+    .question-header h3 { font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.95rem; color: #dde4f0; flex: 1; }
+    .question-body { padding: 1.2rem 1.25rem 1.4rem; }
+    .question-body p { margin-bottom: 0.7rem; font-size: 0.95rem; color: var(--text); }
+
+    .sub-list { list-style: none; margin-top: 1rem; display: flex; flex-direction: column; gap: 0.85rem; }
+    .sub-list li {
+      display: flex; gap: 0.9rem; align-items: flex-start; padding: 0.75rem 1rem;
+      background: rgba(255,255,255,0.025); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); font-size: 0.93rem; line-height: 1.65; transition: background 0.18s ease;
+    }
+    .sub-list li:hover { background: rgba(221,107,85,0.04); }
+    .sub-label { flex-shrink: 0; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; font-weight: 500; color: var(--accent); margin-top: 0.1rem; min-width: 34px; }
+
+    .math-block { overflow-x: auto; padding: 0.6rem 0; margin: 0.4rem 0; }
+
+    .hint {
+      display: flex; gap: 0.75rem; margin-top: 0.9rem; padding: 0.75rem 1rem;
+      background: rgba(116,167,232,0.06); border: 1px solid rgba(116,167,232,0.2);
+      border-radius: var(--radius-sm); font-size: 0.87rem; color: #8ab4d8;
+      cursor: pointer; user-select: none;
+    }
+    .hint-icon { flex-shrink: 0; font-size: 0.85rem; margin-top: 0.05rem; opacity: 0.8; }
+    .hint-toggle   { margin-left: auto; flex-shrink: 0; font-size: 0.75rem;
+                     font-weight: 600; letter-spacing: 0.06em;
+                     color: var(--blue); white-space: nowrap; }
+    .hint-content  { transition: max-height 0.35s ease, opacity 0.3s ease;
+                     max-height: 460px; overflow: hidden; opacity: 1; }
+    .hint.collapsed .hint-content { max-height: 0; opacity: 0; pointer-events: none; }
+
+    .part-sep { border: none; border-top: 1px dashed var(--border); margin: 3rem 0; }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 3px; }
+
+    @media (max-width: 600px) {
+      .top-bar-meta { display: none; }
+      .hero { padding: 2.5rem 1rem 2rem; }
+      .page-wrap { padding: 2rem 1rem 4rem; }
+    }
+
+    .ic { background: linear-gradient(135deg,#0e1828 0%,#141f35 100%);
+          border: 1px solid #2a3f6a; border-radius: var(--radius);
+          margin-bottom: 1.8rem; overflow: hidden; }
+    .ic-header { display:flex; align-items:center; gap:.9rem;
+                 padding:.85rem 1.2rem; border-bottom:1px solid #2a3f6a;
+                 background:rgba(255,255,255,.025); }
+    .ic-badge  { font-family:'JetBrains Mono',monospace; font-size:.68rem;
+                 font-weight:600; letter-spacing:.08em; text-transform:uppercase;
+                 color:#74a7e8; background:rgba(116,167,232,.12);
+                 border:1px solid rgba(116,167,232,.28);
+                 border-radius:var(--radius-sm); padding:.18rem .55rem; }
+    .ic-header h4 { font-family:'Inter',sans-serif; font-size:.9rem;
+                    font-weight:600; color:#cdd8f0; }
+    .ic-body { padding:1.1rem 1.2rem 1.4rem; }
+    .ic-body p { font-size:.9rem; color:var(--text-muted); margin-bottom:.9rem; }
+
+    .sl-row   { display:flex; align-items:center; gap:.9rem;
+                margin-bottom:.75rem; flex-wrap:wrap; }
+    .sl-lbl   { font-family:'JetBrains Mono',monospace; font-size:.8rem;
+                color:var(--accent); min-width:170px; }
+    input[type=range].sl {
+        flex:1; min-width:120px; max-width:260px;
+        -webkit-appearance:none; height:4px; border-radius:2px;
+        background:#2a3349; outline:none; cursor:pointer; }
+    input[type=range].sl::-webkit-slider-thumb {
+        -webkit-appearance:none; width:14px; height:14px; border-radius:50%;
+        background:var(--accent); cursor:pointer;
+        box-shadow:0 0 0 3px rgba(221,107,85,.2); }
+    .sl-val { font-family:'JetBrains Mono',monospace; font-size:.8rem;
+              color:#dde4f0; min-width:48px; text-align:right; }
+
+    .btn-row  { display:flex; gap:.65rem; margin-top:.9rem; flex-wrap:wrap;
+                align-items:center; }
+    .btn { font-family:'Inter',sans-serif; font-size:.82rem; font-weight:600;
+           padding:.48rem 1.1rem; border-radius:99px; border:none; cursor:pointer;
+           transition:transform .15s,box-shadow .15s,opacity .15s; }
+    .btn:active { transform:scale(.96); }
+    .btn-p { background:linear-gradient(135deg,#dd6b55,#a94832); color:#0f1117; }
+    .btn-p:hover { box-shadow:0 0 14px rgba(221,107,85,.35); }
+    .btn-s { background:rgba(255,255,255,.07); color:var(--text-muted);
+             border:1px solid var(--border); }
+    .btn-s:hover { background:rgba(255,255,255,.11); color:var(--text); }
+    .btn-s.on { background:rgba(221,107,85,.16); color:var(--accent);
+                border-color:rgba(221,107,85,.45); }
+
+    .mcq-opt { display:flex; align-items:center; gap:.7rem; padding:.6rem .85rem;
+               border-radius:var(--radius-sm); border:1px solid var(--border);
+               margin-bottom:.4rem; cursor:pointer; font-size:.88rem;
+               color:var(--text); transition:border-color .18s,background .18s; }
+    .mcq-opt:hover { border-color:var(--border-light); background:rgba(255,255,255,.03); }
+    .mcq-opt.ok  { border-color:#52b788; background:rgba(82,183,136,.08); color:#86d9b0; }
+    .mcq-opt.bad { border-color:#e07070; background:rgba(224,112,112,.08); color:#e89090; }
+    .opt-lbl { font-family:'JetBrains Mono',monospace; font-size:.72rem;
+               font-weight:600; color:var(--accent); min-width:16px; }
+    .opt-arr { margin-left:auto; }
+    .mcq-fb  { font-size:.84rem; padding:.6rem .85rem; border-radius:var(--radius-sm);
+               margin-top:.5rem; display:none; line-height:1.6; }
+    .mcq-fb.ok  { display:block; background:rgba(82,183,136,.1); color:#86d9b0;
+                  border:1px solid rgba(82,183,136,.3); }
+    .mcq-fb.bad { display:block; background:rgba(224,112,112,.1); color:#e89090;
+                  border:1px solid rgba(224,112,112,.3); }
+
+    .out-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+                gap:.65rem; margin-top:.9rem; }
+    .out-cell { background:rgba(0,0,0,.2); border:1px solid #2a3349;
+                border-radius:var(--radius-sm); padding:.6rem .85rem; text-align:center; }
+    .out-lbl  { font-size:.7rem; color:var(--text-muted); margin-bottom:.22rem;
+                font-family:'JetBrains Mono',monospace; }
+    .out-val  { font-family:'JetBrains Mono',monospace; font-size:1rem;
+                font-weight:600; color:var(--accent); }
+
+    .cv-box { border:1px solid #2a3349; border-radius:var(--radius-sm);
+              background:#0b0e15; padding:.5rem; text-align:center; }
+    .cv-box canvas { display:block; margin:0 auto; max-width:100%; }
+    .cv-cap { font-family:'JetBrains Mono',monospace; font-size:.68rem;
+              color:var(--text-muted); margin-top:.4rem; }
+    .lg { display:inline-block; width:18px; height:3px; border-radius:2px; vertical-align:middle; margin:0 4px 2px 10px; }
+
+    .vb { display:inline-block; font-family:'JetBrains Mono',monospace; font-size:.7rem;
+          font-weight:600; letter-spacing:.04em; padding:.15rem .5rem;
+          border-radius:99px; white-space:nowrap; }
+    .vb-fail { color:#e89090; background:rgba(224,112,112,.1); border:1px solid rgba(224,112,112,.35); }
+    .vb-hold { color:#86d9b0; background:rgba(82,183,136,.1); border:1px solid rgba(82,183,136,.35); }
+    .vb-mod  { color:#d9b96f; background:rgba(201,169,110,.1); border:1px solid rgba(201,169,110,.35); }
+    .vb-na   { color:#9aa8c0; background:rgba(122,138,168,.1); border:1px solid rgba(122,138,168,.35); }
+
+    .tbl-wrap { overflow-x:auto; }
+    .tbl { width:100%; border-collapse:collapse; font-size:.84rem; }
+    .tbl th { font-family:'JetBrains Mono',monospace; font-size:.68rem; letter-spacing:.05em;
+              text-transform:uppercase; color:var(--accent); text-align:left;
+              padding:.5rem .6rem; border-bottom:1px solid var(--border-light); }
+    .tbl td { padding:.5rem .6rem; border-bottom:1px solid var(--border); color:var(--text); vertical-align:top; }
+    .tbl tr:hover td { background:rgba(221,107,85,.03); }
+
+    .nav-bottom{display:flex;justify-content:space-between;gap:1rem;margin-top:3rem;
+                padding-top:1.2rem;border-top:1px dashed var(--border);flex-wrap:wrap;}
+    .nav-bottom a{font-size:.85rem;font-weight:600;color:var(--text-muted);text-decoration:none;
+                  padding:.45rem 1rem;border:1px solid var(--border);border-radius:99px;
+                  transition:color .18s,border-color .18s,background .18s;}
+    .nav-bottom a:hover{color:var(--accent);border-color:var(--accent-dim);background:var(--accent-glow);}
+    .nav-bottom a.next{color:var(--accent);border-color:var(--accent-dim);background:var(--accent-glow);}
+  </style>
+</head>
+<body>
+
+<div class="top-bar">
+  <span class="top-bar-title">Does Macroeconomics Travel? &mdash; Curso</span>
+  <span class="top-bar-meta">Fase 3 de 5 &middot; Nove leis sob o mesmo protocolo</span>
+</div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <span class="hero-label">Fase 3 &middot; A primeira passada econom&eacute;trica</span>
+    <h1>Nove leis, nove vereditos:<br>a China no espelho do mundo</h1>
+    <p class="hero-subtitle">
+      O cora&ccedil;&atilde;o emp&iacute;rico do projeto. Cada lei estimada pa&iacute;s a pa&iacute;s, com a mesma
+      especifica&ccedil;&atilde;o, o mesmo filtro de dados e o mesmo grupo de compara&ccedil;&atilde;o de 39
+      economias. Voc&ecirc; vai ver a lei de Okun morrer num gr&aacute;fico, a teoria quantitativa dobrar sem
+      quebrar, e a assimetria entre consumo e investimento que se tornaria a assinatura do paper.
+    </p>
+    <div class="hero-divider"></div>
+  </div>
+</header>
+
+<main class="page-wrap">
+
+  <!-- ===== VALIDACAO ===== -->
+  <section class="part" id="parte-0">
+    <div class="part-header">
+      <div class="part-number">&sect;</div>
+      <div class="part-info">
+        <h2>Antes de testar, validar</h2>
+        <span class="part-tagline">Se o m&eacute;todo n&atilde;o recupera a lei nos EUA, ele n&atilde;o pode test&aacute;-la na China</span>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p>O protocolo s&oacute; ganha licen&ccedil;a para julgar a China depois de passar por uma
+      peneira: <strong>reproduzir os n&uacute;meros da literatura</strong> no grupo de compara&ccedil;&atilde;o.
+      E ele passa. Okun: mediana de $\beta = -0{,}19$ entre avan&ccedil;adas (87% estatisticamente negativas) e
+      $-0{,}15$ entre emergentes, colando com Ball&ndash;Leigh&ndash;Loungani. Moeda: a correla&ccedil;&atilde;o
+      de longo prazo entre crescimento monet&aacute;rio e infla&ccedil;&atilde;o d&aacute; 0,945 em 147
+      pa&iacute;ses, o valor cl&aacute;ssico de McCandless&ndash;Weber. Consumo: o excesso de sensibilidade
+      mundial (&lambda; mediano 0,79&ndash;0,95) na linha de Campbell&ndash;Mankiw. O cano est&aacute; limpo.
+      Agora, sim: as leis.</p>
+    </div>
+  </section>
+
+  <hr class="part-sep" />
+
+  <!-- ===== L1 OKUN ===== -->
+  <section class="part" id="parte-l1">
+    <div class="part-header">
+      <div class="part-number">L1</div>
+      <div class="part-info">
+        <h2>Okun: a lei morre</h2>
+        <span class="part-tagline">Crescimento sem desemprego: uma diferen&ccedil;a em g&ecirc;nero, n&atilde;o em grau</span>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p>Lembre a forma: $\Delta u = \alpha + \beta g$ com $\beta &lt; 0$. No mundo, $\beta$ vai de
+      $-0{,}15$ (Jap&atilde;o) a $-0{,}85$ (Espanha); emergentes t&ecirc;m coeficientes menores, mas
+      <em>existem</em>. Nos EUA, nossa estima&ccedil;&atilde;o d&aacute; $\beta = -0{,}60$ com $R^2 = 0{,}64$:
+      o crescimento explica dois ter&ccedil;os do movimento do desemprego.</p>
+      <p>Na China: $\beta = -0{,}006$ (IC 95% de $[-0{,}035, +0{,}023]$, p = 0,69, $R^2 = 0{,}006$), com a
+      s&eacute;rie OIT de 1992 a 2024. Com a s&eacute;rie nacional, $\beta = -0{,}031$ (p = 0,19). O crescimento
+      chin&ecirc;s n&atilde;o carrega informa&ccedil;&atilde;o alguma sobre desemprego. Entre 2019 e 2022, o
+      crescimento saltou de 6,1% para 2,3%, depois 8,6%, depois 3,1% &mdash; e o desemprego medido se moveu
+      dentro de meio ponto. A China tem o coeficiente <strong>menos negativo das 39 economias</strong>: o valor-p
+      de permuta&ccedil;&atilde;o atinge o limite matem&aacute;tico da amostra, 1/39 = 0,026.</p>
+    </div>
+
+    <div class="ic" id="ok-lab">
+      <div class="ic-header">
+        <span class="ic-badge">Laborat&oacute;rio</span>
+        <h4>A nuvem de Okun, pa&iacute;s a pa&iacute;s</h4>
+      </div>
+      <div class="ic-body">
+        <p>Cada bot&atilde;o gera uma nuvem de pontos calibrada com os par&acirc;metros estimados no estudo
+        (simula&ccedil;&atilde;o did&aacute;tica; os n&uacute;meros oficiais est&atilde;o nos pain&eacute;is).
+        Compare a inclina&ccedil;&atilde;o nos EUA com a da China &mdash; e repare no que acontece com o
+        $R^2$ quando a reta se deita.</p>
+
+        <div class="btn-row" style="margin-top:0">
+          <button class="btn btn-s" id="ok-btn-usa" type="button">EUA (&beta;=&minus;0,60)</button>
+          <button class="btn btn-s" id="ok-btn-esp" type="button">Espanha (&minus;0,85)</button>
+          <button class="btn btn-s" id="ok-btn-jap" type="button">Jap&atilde;o (&minus;0,15)</button>
+          <button class="btn btn-s" id="ok-btn-eme" type="button">Emergentes (&minus;0,15)</button>
+          <button class="btn btn-p" id="ok-btn-chn" type="button">China (&minus;0,006)</button>
+        </div>
+
+        <div class="cv-box" style="margin-top:1rem">
+          <canvas id="ok-canvas" width="480" height="300"></canvas>
+          <div class="cv-cap">cada ponto &eacute; um ano: crescimento do PIB (x) &times; varia&ccedil;&atilde;o do desemprego (y)</div>
+        </div>
+
+        <div class="out-grid">
+          <div class="out-cell"><div class="out-lbl">&beta; (simula&ccedil;&atilde;o)</div><div class="out-val" id="ok-beta">&mdash;</div></div>
+          <div class="out-cell"><div class="out-lbl">R&sup2; (simula&ccedil;&atilde;o)</div><div class="out-val" id="ok-r2">&mdash;</div></div>
+          <div class="out-cell"><div class="out-lbl">pa&iacute;s</div><div class="out-val" id="ok-name" style="font-size:.82rem">&mdash;</div></div>
+        </div>
+        <p style="margin-top:.9rem;margin-bottom:0" id="ok-note">N&uacute;meros do estudo &mdash; EUA:
+        $\beta=-0{,}60$, $R^2=0{,}64$ (1992&ndash;2024). China: $\beta=-0{,}006$, p=0,69, $R^2=0{,}006$,
+        coeficiente menos negativo das 39 economias (p de permuta&ccedil;&atilde;o 0,026).</p>
+      </div>
+    </div>
+
+    <div class="question">
+      <div class="question-header">
+        <span class="q-badge">Veredito</span>
+        <h3>L1 &mdash; n&atilde;o vale na China</h3>
+      </div>
+      <div class="question-body">
+        <p><span class="vb vb-fail">N&Atilde;O VALE</span>&nbsp; Diferen&ccedil;a em g&ecirc;nero, n&atilde;o em
+        grau: emergentes t&ecirc;m Okun menor que avan&ccedil;adas &mdash; a China n&atilde;o tem Okun. O
+        mecanismo &eacute; a equa&ccedil;&atilde;o (1) da Fase 1: <em>hukou</em> ($m$) + empregadores estatais
+        com dever de estabiliza&ccedil;&atilde;o ($s$) esvaziam a rela&ccedil;&atilde;o. E h&aacute; uma
+        fresta din&acirc;mica que a Fase 4 vai explorar: p&oacute;s-2008, $\beta = -0{,}058$ (p = 0,045) &mdash;
+        significativo pela primeira vez, ainda que um d&eacute;cimo do valor dos EUA.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="part-sep" />
+
+  <!-- ===== L2 PHILLIPS ===== -->
+  <section class="part" id="parte-l2">
+    <div class="part-header">
+      <div class="part-number">L2</div>
+      <div class="part-info">
+        <h2>Phillips: o espelho que n&atilde;o enxerga</h2>
+        <span class="part-tagline">Uma lei fraca em casa n&atilde;o pode condenar ningu&eacute;m longe</span>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p>A forma aceleracionista: $\Delta\pi_t = \alpha + \beta\, u_t$, com $\beta &lt; 0$ esperado. A
+      valida&ccedil;&atilde;o <strong>falha</strong>: em dados anuais, s&oacute; 4% das economias
+      avan&ccedil;adas mostram $\beta$ significativamente negativo; nos EUA, $\beta = -0{,}10$ com p = 0,53.
+      Uma rela&ccedil;&atilde;o que quase n&atilde;o existe no seu pr&oacute;prio territ&oacute;rio de origem
+      n&atilde;o pode ser usada para dizer que a China &eacute; estranha. O ponto estimado da China
+      ($-0{,}37$, IC de $[-3{,}4, +2{,}6]$) &eacute; in&uacute;til porque o regressor (desemprego) quase n&atilde;o
+      varia &mdash; lembra a Fase 2?</p>
+    </div>
+
+    <div class="ic" id="mcq-phillips">
+      <div class="ic-header">
+        <span class="ic-badge">Teste r&aacute;pido</span>
+        <h4>Por que reportar uma lei que &ldquo;deu ruim&rdquo; no mundo todo?</h4>
+      </div>
+      <div class="ic-body">
+        <p>Ao incluir a Phillips, o estudo descobriu que ela &eacute; fraca em toda parte. Por que isso
+        fortalece, em vez de enfraquecer, os demais vereditos?</p>
+        <div class="mcq-opt" data-g="g1" data-c="0"><span class="opt-lbl">A</span>
+          <span>Porque mostrou que os dados est&atilde;o errados em todos os pa&iacute;ses</span>
+          <span class="opt-arr"></span></div>
+        <div class="mcq-opt" data-g="g1" data-c="1"><span class="opt-lbl">B</span>
+          <span>Porque demonstra que o protocolo n&atilde;o fabrica anomalias: quando a lei &eacute; fraca em todo lugar, o veredito honesto &eacute; &ldquo;n&atilde;o identific&aacute;vel&rdquo;</span>
+          <span class="opt-arr"></span></div>
+        <div class="mcq-opt" data-g="g1" data-c="0"><span class="opt-lbl">C</span>
+          <span>Porque economias avan&ccedil;adas deviam ser exclu&iacute;das da amostra</span>
+          <span class="opt-arr"></span></div>
+        <div class="mcq-fb" id="g1-ok">Exato. &Eacute; o controle de qualidade do desenho: o mesmo
+          protocolo que condena a China em Okun e comovimento <em>absolve</em> em Phillips &mdash; porque
+          l&aacute; o problema &eacute; da lei, n&atilde;o do pa&iacute;s. Veredito: N&Atilde;O
+          IDENTIFIC&Aacute;VEL.</div>
+        <div class="mcq-fb" id="g1-bad">Pelo contr&aacute;rio: &eacute; a prova de que o protocolo tem
+          freio. Se ele &ldquo;descobrisse&rdquo; anomalias chinesas em toda lei, incluindo as frágeis no
+          mundo inteiro, seria suspeito. Ao decretar N&Atilde;O IDENTIFIC&Aacute;VEL, mostra que separa
+          falha da lei de falha do pa&iacute;s.</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="part-sep" />
+
+  <!-- ===== L3 QTM ===== -->
+  <section class="part" id="parte-l3">
+    <div class="part-header">
+      <div class="part-number">L3</div>
+      <div class="part-info">
+        <h2>Teoria quantitativa: dobra, n&atilde;o quebra</h2>
+        <span class="part-tagline">38 anos de moeda a 17,9% ao ano &mdash; e infla&ccedil;&atilde;o de 4,5%</span>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p>A identidade por tr&aacute;s da lei: $M \cdot V = P \cdot Y$ (moeda vezes velocidade = pre&ccedil;os
+      vezes produto). Em taxas de crescimento de longo prazo, infla&ccedil;&atilde;o &asymp; crescimento da
+      moeda &minus; crescimento real, <em>se</em> a velocidade for constante. Nos dados mundiais, a
+      rela&ccedil;&atilde;o &eacute; fortíssima: correla&ccedil;&atilde;o 0,945 entre crescimento monet&aacute;rio
+      e infla&ccedil;&atilde;o de longo prazo em 147 pa&iacute;ses (McCandless&ndash;Weber, replicado).</p>
+      <p>A China est&aacute; <em>na</em> linha, mas num extremo dela. M2 cresceu 17,9% ao ano por 38 anos;
+      infla&ccedil;&atilde;o m&eacute;dia de 4,5%; crescimento real de 8,7%. O res&iacute;duo da lei &mdash;
+      infla&ccedil;&atilde;o observada menos a prevista &mdash; &eacute; de <strong>&minus;4,7 pontos por
+      ano</strong> (percentil 16; p de permuta&ccedil;&atilde;o 0,23: cauda, mas n&atilde;o singular). A
+      dire&ccedil;&atilde;o est&aacute; certa; o tamanho aponta para uma queda grande e persistente da
+      <strong>velocidade da moeda</strong> &mdash; compat&iacute;vel com a monetiza&ccedil;&atilde;o de uma
+      economia antes planejada e quatro d&eacute;cadas de aprofundamento financeiro.</p>
+    </div>
+
+    <div class="ic" id="qtm-lab">
+      <div class="ic-header">
+        <span class="ic-badge">Laborat&oacute;rio</span>
+        <h4>Onde foi parar o dinheiro? A velocidade da moeda em a&ccedil;&atilde;o</h4>
+      </div>
+      <div class="ic-body">
+        <p>A China em azul: crescimento monet&aacute;rio em excesso de 9,2 p.p. ao ano (moeda 17,9% &minus;
+        produto real 8,7%). Se a velocidade fosse constante, a infla&ccedil;&atilde;o esperada seria a pr&oacute;pria
+        leitura da reta. Arraste a queda tendencial da velocidade e veja o ponto descer at&eacute; a
+        infla&ccedil;&atilde;o efetivamente observada (4,5%).</p>
+
+        <div class="sl-row">
+          <span class="sl-lbl">queda da velocidade (p.p./ano)</span>
+          <input type="range" class="sl" id="qt-v" min="0" max="6" step="0.1" value="0" />
+          <span class="sl-val" id="qtv-v">0.0</span>
+        </div>
+
+        <div class="cv-box" style="margin-top:1rem">
+          <canvas id="qt-canvas" width="480" height="320"></canvas>
+          <div class="cv-cap">147 pa&iacute;ses (nuvem simulada) &middot; reta: infla&ccedil;&atilde;o prevista pela lei</div>
+        </div>
+
+        <div class="out-grid">
+          <div class="out-cell"><div class="out-lbl">infla&ccedil;&atilde;o impl&iacute;cita</div><div class="out-val" id="qt-pi">&mdash;</div></div>
+          <div class="out-cell"><div class="out-lbl">res&iacute;duo vs. lei</div><div class="out-val" id="qt-res">&mdash;</div></div>
+          <div class="out-cell"><div class="out-lbl">infla&ccedil;&atilde;o observada</div><div class="out-val">4,5%</div></div>
+        </div>
+        <p style="margin-top:.9rem;margin-bottom:0">N&uacute;meros do estudo: res&iacute;duo de &minus;4,7 p.p.
+        (percentil 16, p = 0,23); com a corre&ccedil;&atilde;o de crescimento de Chen et al. (Fase 4), o
+        res&iacute;duo <em>aprofunda</em> para &minus;7,2 &mdash; a anomalia n&atilde;o &eacute; artefato de
+        medida. A lei vale em forma modificada: mecanismo presente + tend&ecirc;ncia de velocidade
+        transit&oacute;ria por cima.</p>
+      </div>
+    </div>
+
+    <div class="question">
+      <div class="question-header">
+        <span class="q-badge">Veredito</span>
+        <h3>L3 &mdash; vale, modificada</h3>
+      </div>
+      <div class="question-body">
+        <p><span class="vb vb-mod">VALE MODIFICADA</span>&nbsp; Exatamente como o framework previa para uma
+        lei de contabilidade de longo prazo que n&atilde;o passa por nenhuma margem administrada: o
+        mecanismo funciona, com uma tend&ecirc;ncia espec&iacute;fica de transi&ccedil;&atilde;o (velocidade
+        caindo) por cima.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="part-sep" />
+
+  <!-- ===== L4 COMOVIMENTO ===== -->
+  <section class="part" id="parte-l4">
+    <div class="part-header">
+      <div class="part-number">L4</div>
+      <div class="part-info">
+        <h2>Comovimento C&times;I: a falha assim&eacute;trica</h2>
+        <span class="part-tagline">Consumo normal, investimento morto &mdash; a assinatura do Estado estabilizador</span>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p>No manual, consumo e investimento s&atilde;o ambos pr&oacute;-c&iacute;clicos e andam juntos. O mundo
+      confirma: correla&ccedil;&atilde;o mediana entre os ciclos de consumo e investimento de $+0{,}58$
+      (avan&ccedil;adas) e $+0{,}54$ (emergentes); nos EUA, $+0{,}75$, com correla&ccedil;&atilde;o
+      investimento-produto de $+0{,}92$.</p>
+      <p>A China: <strong>&minus;0,16</strong> &mdash; perto do fundo da distribui&ccedil;&atilde;o mundial (p
+      de permuta&ccedil;&atilde;o 0,056, um pa&iacute;s aqu&eacute;m do limite). Mas a decomposi&ccedil;&atilde;o
+      vale mais que o n&uacute;mero-manchete, porque &eacute; a restri&ccedil;&atilde;o de sobreidentifica&ccedil;&atilde;o
+      do framework: o ciclo do investimento n&atilde;o tem rela&ccedil;&atilde;o alguma com o do produto
+      ($-0{,}02$: investimento <strong>ac&iacute;clico</strong>), enquanto o ciclo do consumo &eacute; normal
+      ($+0{,}67$). Uma economia simplesmente mal medida produziria os dois ciclos mortos &mdash; n&atilde;o um
+      vivo e outro morto. Um Estado que usa o investimento como instrumento de estabiliza&ccedil;&atilde;o,
+      sim: 2009 e 2010 mostram o mecanismo em estado bruto. &Eacute; o cora&ccedil;&atilde;o do achado de
+      Chang et al. (2016), replicado com dados e m&eacute;todo independentes.</p>
+    </div>
+
+    <div class="ic" id="cm-lab">
+      <div class="ic-header">
+        <span class="ic-badge">Laborat&oacute;rio</span>
+        <h4>Dois ciclos, tr&ecirc;s economias</h4>
+      </div>
+      <div class="ic-body">
+        <p>Os componentes c&iacute;clicos (filtro HP) de consumo (dourado) e investimento (azul), calibrados
+        com as correla&ccedil;&otilde;es estimadas. Nos EUA, as duas linhas dan&ccedil;am juntas; na China, o
+        investimento ignora o consumo &mdash; e ignora o pr&oacute;prio ciclo do produto.</p>
+
+        <div class="btn-row" style="margin-top:0">
+          <button class="btn btn-s" id="cm-btn-usa" type="button">EUA (corr +0,75)</button>
+          <button class="btn btn-s" id="cm-btn-adv" type="button">Avan&ccedil;adas (+0,58)</button>
+          <button class="btn btn-p" id="cm-btn-chn" type="button">China (&minus;0,16)</button>
+        </div>
+
+        <div class="cv-box" style="margin-top:1rem">
+          <canvas id="cm-canvas" width="560" height="260"></canvas>
+          <div class="cv-cap">
+            <span class="lg" style="background:#c9a96e"></span>ciclo do consumo
+            <span class="lg" style="background:#74a7e8"></span>ciclo do investimento
+            &nbsp;&middot;&nbsp; 1995&ndash;2024 (simulado)
+          </div>
+        </div>
+
+        <div class="out-grid">
+          <div class="out-cell"><div class="out-lbl">corr(C,I) na simula&ccedil;&atilde;o</div><div class="out-val" id="cm-corr">&mdash;</div></div>
+          <div class="out-cell"><div class="out-lbl">corr(I,Y) estudo</div><div class="out-val" id="cm-iy">&mdash;</div></div>
+          <div class="out-cell"><div class="out-lbl">corr(C,Y) estudo</div><div class="out-val" id="cm-cy">&mdash;</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ic" id="eq2-lab">
+      <div class="ic-header">
+        <span class="ic-badge">Simula&ccedil;&atilde;o</span>
+        <h4>A equa&ccedil;&atilde;o (2): quem manda no ciclo do investimento?</h4>
+      </div>
+      <div class="ic-body">
+        <p>Escreva o investimento como soma de uma parcela privada (peso $\omega$, sensibilidade
+        pr&oacute;-c&iacute;clica $\psi$) e uma parcela estatal que se estabiliza <em>contra</em> o ciclo
+        (intensidade $\phi$). A circularidade do total tem o sinal de:</p>
+        <div class="math-block">
+          $$\text{coef. c&iacute;clico de } I \;=\; \omega\,\psi \;-\; (1-\omega)\,\phi \tag{2}$$
+        </div>
+
+        <div class="sl-row">
+          <span class="sl-lbl">peso privado $\omega$</span>
+          <input type="range" class="sl" id="eq-w" min="0" max="1" step="0.01" value="0.9" />
+          <span class="sl-val" id="eqv-w">0.90</span>
+        </div>
+        <div class="sl-row">
+          <span class="sl-lbl">estabiliza&ccedil;&atilde;o estatal $\phi$</span>
+          <input type="range" class="sl" id="eq-p" min="0" max="3" step="0.05" value="0.2" />
+          <span class="sl-val" id="eqv-p">0.20</span>
+        </div>
+
+        <div class="cv-box" style="margin-top:1rem">
+          <canvas id="eq-canvas" width="480" height="110"></canvas>
+          <div class="cv-cap">coeficiente c&iacute;clico do investimento ($\psi=1$ fixo)</div>
+        </div>
+
+        <div class="out-grid">
+          <div class="out-cell"><div class="out-lbl">coeficiente</div><div class="out-val" id="eq-coef">&mdash;</div></div>
+          <div class="out-cell"><div class="out-lbl">leitura</div><div class="out-val" id="eq-read" style="font-size:.8rem">&mdash;</div></div>
+        </div>
+        <p style="margin-top:.9rem;margin-bottom:0">Presets impl&iacute;citos: mercado ($\omega$ alto,
+        $\phi$ baixo) &rarr; coeficiente fortemente positivo, como nos EUA; China ($\omega$ menor,
+        $\phi$ alto) &rarr; coeficiente perto de zero ou negativo. A Fase 4 mostra a fresta din&acirc;mica:
+        corr(C,I) sobe de &minus;0,37 (1995&ndash;2007) para +0,01 (2008&ndash;2024) &mdash; ainda longe da
+        norma de +0,6.</p>
+      </div>
+    </div>
+
+    <div class="question">
+      <div class="question-header">
+        <span class="q-badge">Veredito</span>
+        <h3>L4 &mdash; n&atilde;o vale na China, com a assinatura prevista</h3>
+      </div>
+      <div class="question-body">
+        <p><span class="vb vb-fail">N&Atilde;O VALE</span>&nbsp; Investimento ac&iacute;clico ($-0{,}02$ com o
+        produto), consumo normal ($+0{,}67$), correla&ccedil;&atilde;o C&times;I de &minus;0,16 (percentil 9 da
+        distribui&ccedil;&atilde;o; p = 0,056). Robusto ao filtro de Hamilton (+0,13 vs. mediana +0,63).
+        Falha exatamente na dire&ccedil;&atilde;o e no formato que a equa&ccedil;&atilde;o (2) previa.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="part-sep" />
+
+  <!-- ===== L5 PIH ===== -->
+  <section class="part" id="parte-l5">
+    <div class="part-header">
+      <div class="part-number">L5</div>
+      <div class="part-info">
+        <h2>Renda permanente: o mundo inteiro rejeita, a China tamb&eacute;m</h2>
+        <span class="part-tagline">Um caso extremo de um padr&atilde;o global &mdash; n&atilde;o uma viola&ccedil;&atilde;o</span>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p>A hip&oacute;tese estrita diz: o consumo de hoje depende da <em>renda esperada ao longo da vida</em>,
+      n&atilde;o da renda de hoje. Campbell e Mankiw (1989) propuseram medir o quanto o consumo &ldquo;cola&rdquo;
+      na renda corrente com o par&acirc;metro $\lambda$: $\lambda = 0$ &eacute; o mundo da renda permanente
+      (consumo suave); $\lambda = 1$ &eacute; o mundo hand-to-mouth (consumo igual &agrave; renda).</p>
+      <p>O resultado mundial: a rejei&ccedil;&atilde;o &eacute; a norma. $\lambda$ mediano de 0,79
+      (avan&ccedil;adas) e 0,95 (emergentes). A China: $\lambda = 1{,}04$ por MQO, 0,81 por IV (primeiro
+      est&aacute;gio F = 14). E como instrumentos defasados s&atilde;o fracos em dados anuais, o estudo
+      inverte o teste de Anderson&ndash;Rubin, v&aacute;lido mesmo com instrumentos fracos: o intervalo de 95%
+      da China &eacute; $[0{,}29, 1{,}01]$ &mdash; <strong>exclui o zero</strong> (rejei&ccedil;&atilde;o da
+      hip&oacute;tese estrita com p = 0,024), independente de vi&eacute;s de instrumento fraco.</p>
+    </div>
+
+    <div class="ic" id="pih-lab">
+      <div class="ic-header">
+        <span class="ic-badge">Laborat&oacute;rio</span>
+        <h4>O dial de $\lambda$: do consumo suave ao hand-to-mouth</h4>
+      </div>
+      <div class="ic-body">
+        <p>A linha azul &eacute; a renda (com ciclos e solavancos); a linha vermelha &eacute; o consumo que
+        resulta de misturar renda permanente suave e renda corrente na propor&ccedil;&atilde;o
+        $c = \lambda\,y + (1-\lambda)\,y^{perm}$. Arraste o dial at&eacute; os marcos do estudo.</p>
+
+        <div class="sl-row">
+          <span class="sl-lbl">excesso de sensibilidade $\lambda$</span>
+          <input type="range" class="sl" id="pi-l" min="0" max="1.1" step="0.01" value="0" />
+          <span class="sl-val" id="piv-l">0.00</span>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-s" id="pi-btn-0" type="button">PIH estrito (0)</button>
+          <button class="btn btn-s" id="pi-btn-adv" type="button">Avan&ccedil;adas (0,79)</button>
+          <button class="btn btn-s" id="pi-btn-eme" type="button">Emergentes (0,95)</button>
+          <button class="btn btn-p" id="pi-btn-chn" type="button">China (1,04)</button>
+        </div>
+
+        <div class="cv-box" style="margin-top:1rem">
+          <canvas id="pi-canvas" width="560" height="260"></canvas>
+          <div class="cv-cap">
+            <span class="lg" style="background:#74a7e8"></span>renda
+            <span class="lg" style="background:#dd6b55"></span>consumo
+            &nbsp;&middot;&nbsp; simula&ccedil;&atilde;o
+          </div>
+        </div>
+        <p style="margin-top:.9rem;margin-bottom:0">O que distingue a China n&atilde;o &eacute; $\lambda$, e
+        sim a <strong>taxa de poupan&ccedil;a das fam&iacute;lias</strong> &mdash; um fato sobre
+        <em>n&iacute;veis</em>, com literatura institucional pr&oacute;pria (o fardo privado com moradia,
+        educa&ccedil;&atilde;o e sa&uacute;de; Chamon&ndash;Prasad 2010). Por isso o veredito fala em
+        &ldquo;caso extremo do padr&atilde;o global&rdquo;, n&atilde;o em viola&ccedil;&atilde;o.</p>
+      </div>
+    </div>
+
+    <div class="question">
+      <div class="question-header">
+        <span class="q-badge">Veredito</span>
+        <h3>L5 &mdash; a rejei&ccedil;&atilde;o vale, como em todo lugar</h3>
+      </div>
+      <div class="question-body">
+        <p><span class="vb vb-hold">VALE (A REJEI&Ccedil;&Atilde;O DO PIH)</span>&nbsp; $\lambda$ chin&ecirc;s
+        no alto da distribui&ccedil;&atilde;o mundial (percentil alto, p de permuta&ccedil;&atilde;o 0,18
+        &mdash; dentro do padr&atilde;o, n&atilde;o fora dele). A honestidade metodol&oacute;gica tamb&eacute;m
+        aparece aqui: nos EUA, os instrumentos s&atilde;o irrelevantes em dados anuais (F = 0,9) e o
+        conjunto AR &eacute; ilimitado; o estudo reporta isso em vez de esconder.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="part-sep" />
+
+  <!-- ===== L6 L7 L8 L10 ===== -->
+  <section class="part" id="parte-l6">
+    <div class="part-header">
+      <div class="part-number">L6</div>
+      <div class="part-info">
+        <h2>Cr&eacute;dito e desacelera&ccedil;&atilde;o: o caso que ficaria aberto</h2>
+        <span class="part-tagline">Um cluster tratado n&atilde;o faz infer&ecirc;ncia</span>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p>Schularick&ndash;Taylor (2012) e Mian&ndash;Sufi&ndash;Verner (2017): booms de cr&eacute;dito privado
+      antecedem crises e crescimento futuro menor. No painel do estudo, a rela&ccedil;&atilde;o aparece:
+      crescimento m&eacute;dio dos tr&ecirc;s anos seguintes sobre a varia&ccedil;&atilde;o quinquenal do
+      cr&eacute;dito/PIB d&aacute; $\beta = -0{,}013$ (p = 0,054) com efeitos fixos de pa&iacute;s e ano;
+      $-0{,}009$ (p = 0,047) com tend&ecirc;ncias por pa&iacute;s.</p>
+      <p>E a China? A intera&ccedil;&atilde;o &eacute; grande e negativa &mdash; mas &eacute; identificada a
+      partir de <strong>um &uacute;nico cluster tratado</strong> cujo crescimento cai enquanto o cr&eacute;dito
+      sobe, exatamente a configura&ccedil;&atilde;o que a Fase 1 marcou como non grata. O que se pode dizer
+      sem infer&ecirc;ncia fr&aacute;gil: o cr&eacute;dito privado chin&ecirc;s chegou a <strong>194% do PIB em
+      2024</strong> &mdash; patamar que em outros lugares veio com crise, e que l&aacute; ainda n&atilde;o
+      produziu uma, plausivelmente porque o balan&ccedil;o do Estado absorve o que em outra economia seria
+      uma corrida (Brunnermeier&ndash;Sockin&ndash;Xiong 2022). <span class="vb vb-na">INCONCLUSIVO</span></p>
+    </div>
+  </section>
+
+  <hr class="part-sep" />
+
+  <section class="part" id="parte-l7">
+    <div class="part-header">
+      <div class="part-number">L7</div>
+      <div class="part-info">
+        <h2>Wagner: o Estado cresce, mas a r&eacute;gua errada mede pouco</h2>
+        <span class="part-tagline">Elasticidade de um ter&ccedil;o do padr&atilde;o &mdash; com ressalva que joga a favor da China</span>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p>Regress&otilde;es intra-pa&iacute;s do log da participa&ccedil;&atilde;o do consumo do governo no PIB
+      sobre o log da renda per capita: elasticidade mediana de $+0{,}27$ (avan&ccedil;adas, 70% significativas)
+      e $+0{,}24$ (emergentes). A China: $+0{,}08$ &mdash; significativa, mas cerca de um ter&ccedil;o do
+      tamanho t&iacute;pico (percentil baixo, p de permuta&ccedil;&atilde;o 0,23).</p>
+      <p>A ressalva &eacute; honesta e corre <em>a favor</em> da China: consumo do governo &eacute; a r&eacute;gua
+      errada para um Estado que age via investimento p&uacute;blico e ve&iacute;culos extraor&ccedil;ament&aacute;rios
+      &mdash; provavelmente <em>subestima</em> quanto o Estado chin&ecirc;s cresceu. A lacuna de mensura&ccedil;&atilde;o
+      &eacute; vis&iacute;vel nos pr&oacute;prios dados: a s&eacute;rie de despesa consolidada do governo do WDI
+      simplesmente n&atilde;o existe para a China. <span class="vb vb-mod">VALE MODIFICADA</span></p>
+    </div>
+  </section>
+
+  <hr class="part-sep" />
+
+  <section class="part" id="parte-l8">
+    <div class="part-header">
+      <div class="part-number">L8</div>
+      <div class="part-info">
+        <h2>Converg&ecirc;ncia: outlier de res&iacute;duo, n&atilde;o de lei</h2>
+        <span class="part-tagline">O milagre &eacute; o crescimento, n&atilde;o a quebra da rela&ccedil;&atilde;o</span>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p>Converg&ecirc;ncia incondicional &eacute; fraca no mundo: $\beta = -0{,}32$ com $R^2 = 0{,}08$ em 159
+      pa&iacute;ses (1980&ndash;2019) &mdash; e essa fraqueza &eacute; o padr&atilde;o hist&oacute;rico
+      documentado por Kremer&ndash;Willis&ndash;You (2022). A China n&atilde;o dobra essa rela&ccedil;&atilde;o.
+      Ela &eacute; o extremo dela como <strong>res&iacute;duo</strong>: crescimento per capita de 8,1% contra
+      2,1% previstos pelo seu ponto de partida &mdash; seis pontos por ano, o maior res&iacute;duo da amostra
+      (Coreia em segundo, com quatro).</p>
+    </div>
+
+    <div class="ic" id="conv-lab">
+      <div class="ic-header">
+        <span class="ic-badge">Gr&aacute;fico</span>
+        <h4>A reta da converg&ecirc;ncia e os dois milagres</h4>
+      </div>
+      <div class="ic-body">
+        <p>Nuvem esquem&aacute;tica (posi&ccedil;&otilde;es ilustrativas; coeficientes do estudo):
+        renda inicial (x, escala log) contra crescimento 1980&ndash;2019 (y). A China e a Coreia est&atilde;o
+        <em>acima</em> da reta &mdash; milagres de crescimento &mdash; mas a inclina&ccedil;&atilde;o da
+        rela&ccedil;&atilde;o &eacute; a mesma do resto do mundo.</p>
+        <div class="cv-box">
+          <canvas id="cv-canvas2" width="480" height="320"></canvas>
+          <div class="cv-cap">159 pa&iacute;ses (nuvem simulada) &middot; $\beta = -0{,}32$, $R^2=0{,}08$</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="question">
+      <div class="question-header">
+        <span class="q-badge">Veredito</span>
+        <h3>L8 &mdash; vale como no mundo</h3>
+      </div>
+      <div class="question-body">
+        <p><span class="vb vb-hold">VALE COMO NO MUNDO</span>&nbsp; O que precisa de explica&ccedil;&atilde;o
+        &eacute; o res&iacute;duo (o milagre), objeto da literatura de crescimento &mdash; n&atilde;o a
+        inclina&ccedil;&atilde;o da lei. Como a inclina&ccedil;&atilde;o &eacute; um coeficiente
+        &uacute;nico cross-country, e n&atilde;o uma estat&iacute;stica pa&iacute;s a pa&iacute;s, a L8 n&atilde;o
+        entra em &iacute;ndices nem ganha p de permuta&ccedil;&atilde;o.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="part-sep" />
+
+  <section class="part" id="parte-l10">
+    <div class="part-header">
+      <div class="part-number">L10</div>
+      <div class="part-info">
+        <h2>Parcela do trabalho: dois dados, duas hist&oacute;rias</h2>
+        <span class="part-tagline">Quando o veredito &eacute; um artefato do esquema de imputa&ccedil;&atilde;o</span>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p>Na Penn World Table 10.01, a parcela do trabalho na China &eacute;&hellip; comum: tend&ecirc;ncia de
+      $-0{,}6$ ponto por d&eacute;cada, percentil 54 da distribui&ccedil;&atilde;o (mediana das avan&ccedil;adas:
+      $-1{,}5$), dentro do decl&iacute;nio global documentado por Karabarbounis&ndash;Neiman (2014); p de
+      permuta&ccedil;&atilde;o 0,79 &mdash; a infer&ecirc;ncia de randomiza&ccedil;&atilde;o confirma a
+      <em>n&atilde;o</em>-falha em vez de fabricar uma falha. Mas Chang et al. (2016), com as contas nacionais
+      chinesas, documentam uma queda forte.</p>
+      <p>A explica&ccedil;&atilde;o prov&aacute;vel &eacute; mec&acirc;nica e instrutiva: a PWT imputa a renda
+      do trabalho por conta pr&oacute;pria &mdash; que &eacute; a maior parte do trabalho agr&iacute;cola
+      chin&ecirc;s &mdash; com pressupostos que <em>suavizam</em> exatamente a mudan&ccedil;a estrutural que
+      gera a queda nas contas nacionais. Moral para a macro comparada: em economias em transi&ccedil;&atilde;o,
+      um veredito pode ser artefato do esquema de imputa&ccedil;&atilde;o. <span class="vb vb-na">DEPENDE DA FONTE</span></p>
+    </div>
+  </section>
+
+  <hr class="part-sep" />
+
+  <!-- ===== SINTESE DA FASE ===== -->
+  <section class="part" id="parte-sintese">
+    <div class="part-header">
+      <div class="part-number">&#9881;</div>
+      <div class="part-info">
+        <h2>A primeira passada, em uma tabela</h2>
+        <span class="part-tagline">Vereditos provis&oacute;rios &mdash; pendentes de robustez (Fase 4)</span>
+      </div>
+    </div>
+
+    <div class="question">
+      <div class="question-header">
+        <span class="q-badge">Tabela</span>
+        <h3>Nove leis, nove vereditos (com p de permuta&ccedil;&atilde;o onde h&aacute; estat&iacute;stica pa&iacute;s a pa&iacute;s)</h3>
+      </div>
+      <div class="question-body">
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>Lei</th><th>China vs. mundo</th><th>p perm.</th><th>Veredito</th></tr></thead>
+            <tbody>
+              <tr><td><strong>L1</strong> Okun</td><td>&beta;=&minus;0,006 contra &minus;0,15 a &minus;0,60</td><td>0,026</td><td><span class="vb vb-fail">N&Atilde;O VALE</span></td></tr>
+              <tr><td><strong>L2</strong> Phillips</td><td>fraca no mundo todo; regressor sem varia&ccedil;&atilde;o</td><td>&mdash;</td><td><span class="vb vb-na">N&Atilde;O IDENTIFIC&Aacute;VEL</span></td></tr>
+              <tr><td><strong>L3</strong> Quantitativa</td><td>res&iacute;duo &minus;4,7 p.p. (percentil 16)</td><td>0,23</td><td><span class="vb vb-mod">VALE MODIFICADA</span></td></tr>
+              <tr><td><strong>L4</strong> Comovimento</td><td>corr C&times;I &minus;0,16; investimento ac&iacute;clico</td><td>0,056</td><td><span class="vb vb-fail">N&Atilde;O VALE</span></td></tr>
+              <tr><td><strong>L5</strong> Renda permanente</td><td>&lambda;=1,04; AR [0,29; 1,01] exclui 0</td><td>0,18</td><td><span class="vb vb-hold">REJEITA PIH, COMO O MUNDO</span></td></tr>
+              <tr><td><strong>L6</strong> Cr&eacute;dito</td><td>cr&eacute;dito/PIB 194% sem crise; 1 cluster tratado</td><td>&mdash;</td><td><span class="vb vb-na">INCONCLUSIVO</span></td></tr>
+              <tr><td><strong>L7</strong> Wagner</td><td>&eta;=+0,08 contra +0,24 a +0,27</td><td>0,23</td><td><span class="vb vb-mod">VALE MODIFICADA</span></td></tr>
+              <tr><td><strong>L8</strong> Converg&ecirc;ncia</td><td>res&iacute;duo +6,0 p.p./ano (percentil 100)</td><td>&mdash;</td><td><span class="vb vb-hold">VALE COMO NO MUNDO</span></td></tr>
+              <tr><td><strong>L10</strong> Parcela do trabalho</td><td>PWT: t&iacute;pica; contas nacionais: queda forte</td><td>0,79</td><td><span class="vb vb-na">DEPENDE DA FONTE</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="hint">
+          <span class="hint-icon">&#9432;</span>
+          <span><strong>Olhe o padr&atilde;o, n&atilde;o s&oacute; a lista.</strong> As duas falhas cabais (L1, L4)
+          s&atilde;o exatamente as leis que passam pelas margens administradas &mdash; trabalho de curto prazo e
+          investimento. As de longo prazo dobram (L3, L7) ou seguem o mundo (L5, L8). E tr&ecirc;s vereditos de
+          honestidade (L2, L6, L10) mostram o protocolo se policiando. Mas nada disso est&aacute; seguro
+          enquanto a suspeita de dados ruins estiver no ar &mdash; &eacute; a&iacute; que entra a Fase 4.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p><strong>O que levamos para a Fase 4:</strong> duas falhas dram&aacute;ticas e seletivas, quatro
+      sobreviv&ecirc;ncias com estilo, tr&ecirc;s vereditos de honestidade &mdash; e uma obje&ccedil;&atilde;o
+      inteira por responder: &ldquo;tudo bem, mas os dados chineses s&atilde;o confi&aacute;veis?&rdquo;. A
+      resposta vai vir em forma de bracketing bidirecional, placebo e subamostras.</p>
+    </div>
+  </section>
+
+  <nav class="nav-bottom">
+    <a href="china-fase2_dados.html">&larr; Fase 2 · Os dados</a>
+    <a href="china-index.html">Mapa do curso</a>
+    <a class="next" href="china-fase4_robustez.html">Fase 4 · Robustez &rarr;</a>
+  </nav>
+
+</main>
+
+<footer style="border-top: 1px solid var(--border); padding: 1.5rem 2rem; text-align: center; font-size: 0.8rem; color: var(--text-dim);">
+  Does Macroeconomics Travel? &mdash; curso interativo &middot; Fase 3 &middot; Lucas Rafael de Andrade &middot; 2026
+</footer>
+
+<script>
+(function(){
+"use strict";
+function g(id){return document.getElementById(id);}
+
+function fillSlider(el){
+  if(!el)return;
+  var mn=+el.min,mx=+el.max,v=+el.value;
+  var pct=((v-mn)/(mx-mn)*100).toFixed(1)+"%";
+  el.style.background="linear-gradient(to right,var(--accent-dim) 0%,var(--accent-dim) "+pct+",#2a3349 "+pct+")";
+}
+document.querySelectorAll(".sl").forEach(fillSlider);
+
+document.querySelectorAll(".hint").forEach(function(h){
+  var spans=h.querySelectorAll("span");
+  var ct=spans[spans.length-1];
+  if(!ct)return;
+  ct.classList.add("hint-content");
+  var tog=document.createElement("span");
+  tog.className="hint-toggle";
+  tog.textContent="Dica";
+  h.insertBefore(tog,ct);
+  h.classList.add("collapsed");
+  h.addEventListener("click",function(){h.classList.toggle("collapsed");});
+});
+
+document.querySelectorAll(".mcq-opt").forEach(function(opt){
+  opt.addEventListener("click",function(){
+    var grp=this.dataset.g;
+    var all=document.querySelectorAll("[data-g='"+grp+"']");
+    if([].some.call(all,function(o){return o.classList.contains("ok")||o.classList.contains("bad");}))return;
+    var ok=(this.dataset.c==="1");
+    this.classList.add(ok?"ok":"bad");
+    var arr=this.querySelector(".opt-arr");
+    if(arr)arr.textContent=ok?"\u2713":"\u2717";
+    if(!ok)all.forEach(function(o){
+      if(o.dataset.c==="1"){o.classList.add("ok");var a=o.querySelector(".opt-arr");if(a)a.textContent="\u2713";}
+    });
+    var fb=g(grp+(ok?"-ok":"-bad"));
+    if(fb)fb.classList.add(ok?"ok":"bad");
+  });
+});
+
+function RNG(seed){var s=seed>>>0;return function(){s=(1664525*s+1013904223)>>>0;return s/4294967296;};}
+function gauss(rnd){var u=0,v=0;while(u===0)u=rnd();while(v===0)v=rnd();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);}
+function mean(a){var s=0,i;for(i=0;i<a.length;i++)s+=a[i];return s/a.length;}
+function sd(a){var m=mean(a),s=0,i;for(i=0;i<a.length;i++)s+=(a[i]-m)*(a[i]-m);return Math.sqrt(s/a.length);}
+function corrF(xs,ys){var mx=mean(xs),my=mean(ys),sxy=0,sxx=0,syy=0,i;for(i=0;i<xs.length;i++){sxy+=(xs[i]-mx)*(ys[i]-my);sxx+=(xs[i]-mx)*(xs[i]-mx);syy+=(ys[i]-my)*(ys[i]-my);}var d=Math.sqrt(sxx*syy);return d>0?sxy/d:0;}
+function olsBeta(xs,ys){var mx=mean(xs),my=mean(ys),sxy=0,sxx=0,i;for(i=0;i<xs.length;i++){sxy+=(xs[i]-mx)*(ys[i]-my);sxx+=(xs[i]-mx)*(xs[i]-mx);}return sxx>0?sxy/sxx:0;}
+function r2Of(xs,ys,b){var mx=mean(xs),my=mean(ys),sse=0,sst=0,i;for(i=0;i<xs.length;i++){var e=ys[i]-(my+b*(xs[i]-mx));sse+=e*e;sst+=(ys[i]-my)*(ys[i]-my);}return sst>0?1-sse/sst:0;}
+function orth(xs,eps){var b=olsBeta(xs,eps),mx=mean(xs),out=[],i;for(i=0;i<eps.length;i++)out.push(eps[i]-b*(xs[i]-mx));return out;}
+function fmt(v,d){return (v===null||isNaN(v))?"\u2014":v.toFixed(d===undefined?2:d);}
+
+/* ============ L1: laboratorio de Okun ============ */
+(function(){
+  var cv=g("ok-canvas");
+  if(!cv)return;
+  var ctx=cv.getContext("2d"),W=cv.width,H=cv.height;
+  var presets={
+    usa:{lbl:"EUA",beta:-0.60,r2:0.64,gmu:2.3,gsd:2.1,note:"N\u00fameros do estudo \u2014 EUA: \u03b2=\u22120,60, R\u00b2=0,64 (1992\u20132024). Okun \u00e9 forte e est\u00e1vel: o crescimento explica dois ter\u00e7os do movimento do desemprego."},
+    esp:{lbl:"Espanha",beta:-0.85,r2:0.55,gmu:2.0,gsd:2.4,note:"N\u00fameros do estudo \u2014 Espanha: o extremo mundial da lei (\u03b2=\u22120,85 em BLL 2017). Mercado de trabalho flex\u00edvel: cada ponto de crescimento move muito o desemprego."},
+    jap:{lbl:"Jap\u00e3o",beta:-0.15,r2:0.30,gmu:1.2,gsd:2.0,note:"N\u00fameros do estudo \u2014 Jap\u00e3o: o outro extremo entre avan\u00e7adas (\u03b2=\u22120,15). Emprego vital\u00edcio amortece a lei \u2014 mas ela ainda existe, negativa e identific\u00e1vel."},
+    eme:{lbl:"Emergentes",beta:-0.15,r2:0.25,gmu:3.5,gsd:2.8,note:"N\u00fameros do estudo \u2014 mediana emergente: \u03b2=\u22120,15. Menor que o das avan\u00e7adas (metade do tamanho, em BLL 2019), mas negativo e significativo."},
+    chn:{lbl:"China",beta:-0.006,r2:0.006,gmu:8.7,gsd:2.4,note:"N\u00fameros do estudo \u2014 China: \u03b2=\u22120,006, p=0,69, R\u00b2=0,006; coeficiente menos negativo das 39 economias (p de permuta\u00e7\u00e3o 0,026). O crescimento n\u00e3o cont\u00e9m informa\u00e7\u00e3o sobre desemprego."}
+  };
+  var btns={usa:"ok-btn-usa",esp:"ok-btn-esp",jap:"ok-btn-jap",eme:"ok-btn-eme",chn:"ok-btn-chn"};
+  var N=33;
+
+  function gen(p,seed){
+    var rnd=new RNG(seed),xs=[],i,x;
+    for(i=0;i<N;i++){x=p.gmu+p.gsd*gauss(rnd);if(x<p.gmu-2.5*p.gsd)x=p.gmu-2.5*p.gsd;if(x>p.gmu+2.5*p.gsd)x=p.gmu+2.5*p.gsd;xs.push(x);}
+    var vx=sd(xs)*sd(xs),vb=p.beta*p.beta*vx,ve=Math.max(vb*(1/Math.max(p.r2,0.01)-1),0.15*0.15);
+    var eps=[],rnd2=new RNG(seed+9);
+    for(i=0;i<N;i++)eps.push(Math.sqrt(ve)*gauss(rnd2));
+    eps=orth(xs,eps);
+    var ys=[],mxv=mean(xs);
+    for(i=0;i<N;i++)ys.push(p.beta*(xs[i]-mxv)+eps[i]);
+    return {xs:xs,ys:ys};
+  }
+
+  function show(key){
+    var p=presets[key],d=gen(p,key.charCodeAt(0)*17+5);
+    var i,xmin=1e9,xmax=-1e9,ymin=1e9,ymax=-1e9;
+    for(i=0;i<N;i++){
+      if(d.xs[i]<xmin)xmin=d.xs[i];if(d.xs[i]>xmax)xmax=d.xs[i];
+      if(d.ys[i]<ymin)ymin=d.ys[i];if(d.ys[i]>ymax)ymax=d.ys[i];
+    }
+    xmin=Math.min(xmin,0)-0.8;xmax+=0.8;
+    var ypad=Math.max(0.35,(ymax-ymin)*0.12);ymin-=ypad;ymax+=ypad;
+
+    var mL=46,mR=12,mT=12,mB=34;
+    function px(x){return mL+(x-xmin)/(xmax-xmin)*(W-mL-mR);}
+    function py(y){return H-mB-(y-ymin)/(ymax-ymin)*(H-mT-mB);}
+
+    ctx.fillStyle="#0b0e15";ctx.fillRect(0,0,W,H);
+    ctx.font="10px 'JetBrains Mono',monospace";ctx.fillStyle="#7a8aa8";
+    var k;
+    for(k=0;k<=5;k++){var xv=xmin+(xmax-xmin)*k/5,X=px(xv);
+      ctx.strokeStyle="rgba(42,51,73,0.55)";ctx.beginPath();ctx.moveTo(X,mT);ctx.lineTo(X,H-mB);ctx.stroke();
+      ctx.fillText(fmt(xv,0),X-10,H-16);}
+    for(k=0;k<=4;k++){var yv=ymin+(ymax-ymin)*k/4,Y=py(yv);
+      ctx.strokeStyle="rgba(42,51,73,0.55)";ctx.beginPath();ctx.moveTo(mL,Y);ctx.lineTo(W-mR,Y);ctx.stroke();
+      ctx.fillText(fmt(yv,Math.abs(ymax-ymin)<1?2:1),8,Y+3);}
+    ctx.strokeStyle="#2a3349";ctx.strokeRect(mL,mT,W-mL-mR,H-mT-mB);
+    ctx.fillStyle="#7a8aa8";
+    ctx.fillText("crescimento do PIB (%)",W/2-70,H-4);
+    ctx.save();ctx.translate(11,H/2+46);ctx.rotate(-Math.PI/2);ctx.fillText("\u0394u (p.p.)",0,0);ctx.restore();
+
+    var mxv=mean(d.xs),my=mean(d.ys);
+    ctx.strokeStyle="#c9a96e";ctx.lineWidth=1.6;ctx.beginPath();
+    ctx.moveTo(px(xmin),py(my+p.beta*(xmin-mxv)));ctx.lineTo(px(xmax),py(my+p.beta*(xmax-mxv)));ctx.stroke();
+    ctx.lineWidth=1;
+    ctx.fillStyle=key==="chn"?"#dd6b55":"#74a7e8";
+    for(i=0;i<N;i++)ctx.fillRect(px(d.xs[i])-2.2,py(d.ys[i])-2.2,4.4,4.4);
+    ctx.fillStyle="#dde4f0";ctx.font="11px 'JetBrains Mono',monospace";
+    ctx.fillText(p.lbl,px(d.xs[N-1])-30,py(d.ys[N-1])-10);
+
+    var r2=Math.max(0,r2Of(d.xs,d.ys,p.beta));
+    var eB=g("ok-beta"),eR=g("ok-r2"),eN=g("ok-name"),note=g("ok-note");
+    if(eB)eB.textContent=fmt(p.beta,3);
+    if(eR)eR.textContent=fmt(r2,2);
+    if(eN)eN.textContent=p.lbl;
+    if(note)note.textContent=p.note;
+  }
+
+  Object.keys(btns).forEach(function(key){
+    var b=g(btns[key]);
+    if(b)b.addEventListener("click",function(){
+      Object.keys(btns).forEach(function(k2){var o=g(btns[k2]);if(o)o.classList.remove("on");});
+      b.classList.add("on");
+      show(key);
+    });
+  });
+  var b0=g("ok-btn-usa");if(b0)b0.classList.add("on");
+  show("usa");
+})();
+
+/* ============ L3: laboratorio QTM ============ */
+(function(){
+  var cv=g("qt-canvas"),sl=g("qt-v"),sv=g("qtv-v");
+  if(!cv||!sl)return;
+  var ctx=cv.getContext("2d"),W=cv.width,H=cv.height;
+  var A=-3.8,B=1.41,CHX=9.2;
+  var pts=[],i,rnd=new RNG(99);
+  for(i=0;i<40;i++){
+    var x=-1+24*Math.pow(rnd(),1.6);
+    var y=A+B*x+2.2*gauss(rnd);
+    pts.push([x,y]);
+  }
+  var xmin=-2,xmax=26,ymin=-6,ymax=34;
+  var mL=46,mR=12,mT=12,mB=36;
+  function px(x){return mL+(x-xmin)/(xmax-xmin)*(W-mL-mR);}
+  function py(y){return H-mB-(y-ymin)/(ymax-ymin)*(H-mT-mB);}
+
+  function draw(){
+    var v=+sl.value;
+    sv.textContent=fmt(v,1);fillSlider(sl);
+    var chy=CHX-v;
+
+    ctx.fillStyle="#0b0e15";ctx.fillRect(0,0,W,H);
+    ctx.font="10px 'JetBrains Mono',monospace";ctx.fillStyle="#7a8aa8";
+    var k;
+    for(k=0;k<=5;k++){var xv=xmin+(xmax-xmin)*k/5,X=px(xv);
+      ctx.strokeStyle="rgba(42,51,73,0.55)";ctx.beginPath();ctx.moveTo(X,mT);ctx.lineTo(X,H-mB);ctx.stroke();
+      ctx.fillText(fmt(xv,0),X-10,H-16);}
+    for(k=0;k<=4;k++){var yv=ymin+(ymax-ymin)*k/4,Y=py(yv);
+      ctx.strokeStyle="rgba(42,51,73,0.55)";ctx.beginPath();ctx.moveTo(mL,Y);ctx.lineTo(W-mR,Y);ctx.stroke();
+      ctx.fillText(fmt(yv,0),8,Y+3);}
+    ctx.strokeStyle="#2a3349";ctx.strokeRect(mL,mT,W-mL-mR,H-mT-mB);
+    ctx.fillStyle="#7a8aa8";
+    ctx.fillText("moeda em excesso (% a.a.)",W/2-80,H-4);
+    ctx.save();ctx.translate(11,H/2+66);ctx.rotate(-Math.PI/2);ctx.fillText("infla\u00e7\u00e3o m\u00e9dia (% a.a.)",0,0);ctx.restore();
+
+    ctx.fillStyle="#5c6f92";
+    for(i=0;i<pts.length;i++)ctx.fillRect(px(pts[i][0])-2,py(pts[i][1])-2,4,4);
+
+    ctx.strokeStyle="#c9a96e";ctx.lineWidth=1.6;ctx.beginPath();
+    ctx.moveTo(px(xmin),py(A+B*xmin));ctx.lineTo(px(xmax),py(A+B*xmax));ctx.stroke();
+    ctx.lineWidth=1;
+
+    var pred=A+B*CHX;
+    ctx.strokeStyle="rgba(221,107,85,0.6)";ctx.setLineDash([4,4]);
+    ctx.beginPath();ctx.moveTo(px(CHX),py(pred));ctx.lineTo(px(CHX),py(chy));ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.fillStyle="#dd6b55";
+    ctx.beginPath();ctx.arc(px(CHX),py(chy),6,0,2*Math.PI);ctx.fill();
+    ctx.fillStyle="#f0c9bd";ctx.font="11px 'JetBrains Mono',monospace";
+    ctx.fillText("China",px(CHX)-16,py(chy)+22);
+
+    var eP=g("qt-pi"),eR=g("qt-res");
+    if(eP)eP.textContent=fmt(Math.max(0,chy),1)+"%";
+    if(eR)eR.textContent=fmt(chy-pred,1)+" p.p.";
+  }
+  sl.addEventListener("input",draw);
+  draw();
+})();
+
+/* ============ L4a: ondas de comovimento ============ */
+(function(){
+  var cv=g("cm-canvas");
+  if(!cv)return;
+  var ctx=cv.getContext("2d"),W=cv.width,H=cv.height,T=30;
+  var modes={
+    usa:{lbl:"EUA",rho:0.75,iy:"+0,92",cy:"~+0,8"},
+    adv:{lbl:"Avan\u00e7adas",rho:0.58,iy:"~+0,6",cy:"~+0,7"},
+    chn:{lbl:"China",rho:-0.16,iy:"\u22120,02",cy:"+0,67"}
+  };
+  var btns={usa:"cm-btn-usa",adv:"cm-btn-adv",chn:"cm-btn-chn"};
+
+  var i,rnd=new RNG(31),c=[],e=[];
+  for(i=0;i<T;i++)c.push(Math.sin(2*Math.PI*i/7)+0.5*Math.sin(2*Math.PI*i/3+0.7)+0.35*gauss(rnd));
+  for(i=0;i<T;i++)e.push(Math.sin(2*Math.PI*i/5+2.1)+0.6*Math.sin(2*Math.PI*i/2.6+4.0)+0.5*gauss(rnd));
+  function stdize(a){var m=mean(a),s=sd(a)||1,out=[];for(var i=0;i<a.length;i++)out.push((a[i]-m)/s);return out;}
+  var cz=stdize(c),ez=stdize(orth(c,e));
+
+  function draw(mode){
+    var rho=mode.rho,I=[];
+    for(i=0;i<T;i++)I.push(rho*cz[i]+Math.sqrt(Math.max(0,1-rho*rho))*ez[i]);
+
+    var mL=40,mR=10,mT=14,mB=24,yr=2.4;
+    function px(t){return mL+t/(T-1)*(W-mL-mR);}
+    function py(y){return H-mB-(y+yr)/(2*yr)*(H-mT-mB);}
+
+    ctx.fillStyle="#0b0e15";ctx.fillRect(0,0,W,H);
+    ctx.font="9px 'JetBrains Mono',monospace";ctx.fillStyle="#7a8aa8";
+    ctx.strokeStyle="rgba(42,51,73,0.55)";
+    ctx.beginPath();ctx.moveTo(mL,py(0));ctx.lineTo(W-mR,py(0));ctx.stroke();
+    for(i=0;i<T;i+=5)ctx.fillText(String(1995+i),px(i)-12,H-10);
+    ctx.fillText("+2",14,py(2)+3);ctx.fillText("0",14,py(0)+3);ctx.fillText("-2",14,py(-2)+3);
+    ctx.strokeStyle="#2a3349";ctx.strokeRect(mL,mT,W-mL-mR,H-mT-mB);
+
+    ctx.lineWidth=1.6;
+    ctx.strokeStyle="#c9a96e";ctx.beginPath();
+    for(i=0;i<T;i++){var X=px(i),Y=py(Math.max(-yr,Math.min(yr,cz[i])));if(i===0)ctx.moveTo(X,Y);else ctx.lineTo(X,Y);}
+    ctx.stroke();
+    ctx.strokeStyle="#74a7e8";ctx.beginPath();
+    for(i=0;i<T;i++){var X2=px(i),Y2=py(Math.max(-yr,Math.min(yr,I[i])));if(i===0)ctx.moveTo(X2,Y2);else ctx.lineTo(X2,Y2);}
+    ctx.stroke();ctx.lineWidth=1;
+
+    var rc=corrF(cz,I);
+    var eC=g("cm-corr"),eI=g("cm-iy"),eY=g("cm-cy");
+    if(eC)eC.textContent=(rc>=0?"+":"")+fmt(rc,2);
+    if(eI)eI.textContent=mode.iy;
+    if(eY)eY.textContent=mode.cy;
+  }
+
+  Object.keys(btns).forEach(function(key){
+    var b=g(btns[key]);
+    if(b)b.addEventListener("click",function(){
+      Object.keys(btns).forEach(function(k2){var o=g(btns[k2]);if(o)o.classList.remove("on");});
+      b.classList.add("on");
+      draw(modes[key]);
+    });
+  });
+  var b0=g("cm-btn-usa");if(b0)b0.classList.add("on");
+  draw(modes.usa);
+})();
+
+/* ============ L4b: equacao (2) ============ */
+(function(){
+  var cv=g("eq-canvas"),slW=g("eq-w"),slP=g("eq-p"),vw=g("eqv-w"),vp=g("eqv-p");
+  if(!cv||!slW||!slP)return;
+  var ctx=cv.getContext("2d"),W=cv.width,H=cv.height;
+
+  function draw(){
+    var w=+slW.value,p=+slP.value;
+    vw.textContent=fmt(w,2);vp.textContent=fmt(p,2);fillSlider(slW);fillSlider(slP);
+    var coef=w*1-(1-w)*p;
+
+    ctx.fillStyle="#0b0e15";ctx.fillRect(0,0,W,H);
+    var cx=W/2,scale=(W/2-30)/2;
+    ctx.strokeStyle="#2a3349";ctx.strokeRect(8,8,W-16,H-16);
+    ctx.strokeStyle="rgba(42,51,73,0.55)";
+    ctx.beginPath();ctx.moveTo(cx,14);ctx.lineTo(cx,H-14);ctx.stroke();
+    ctx.font="9px 'JetBrains Mono',monospace";ctx.fillStyle="#7a8aa8";
+    ctx.fillText("-2",cx-scale-4,H-16);ctx.fillText("0",cx-3,H-16);ctx.fillText("+2",cx+scale-6,H-16);
+
+    ctx.fillStyle="rgba(82,183,136,0.10)";ctx.fillRect(cx+0.3*scale,16,(2-0.3)*scale,H-32);
+    ctx.fillStyle="rgba(224,112,112,0.10)";ctx.fillRect(cx-2*scale,16,(2-0.3)*scale,H-32);
+
+    var mxx=cx+Math.max(-2,Math.min(2,coef))*scale;
+    ctx.fillStyle=coef>0.3?"#52b788":(coef<-0.3?"#e07070":"#9aa8c0");
+    ctx.fillRect(Math.min(cx,mxx),H/2-9,Math.abs(mxx-cx)||2,18);
+    ctx.beginPath();ctx.arc(mxx,H/2,6,0,2*Math.PI);ctx.fill();
+
+    var eC=g("eq-coef"),eR=g("eq-read");
+    if(eC)eC.textContent=(coef>=0?"+":"")+fmt(coef,2);
+    if(eR){
+      if(coef>0.3){eR.textContent="pr\u00f3-c\u00edclico";eR.style.color="#86d9b0";}
+      else if(coef<-0.3){eR.textContent="contrac\u00edclico";eR.style.color="#e89090";}
+      else{eR.textContent="ac\u00edclico";eR.style.color="#d9b96f";}
+    }
+  }
+  slW.addEventListener("input",draw);
+  slP.addEventListener("input",draw);
+  draw();
+})();
+
+/* ============ L5: dial de lambda ============ */
+(function(){
+  var cv=g("pi-canvas"),sl=g("pi-l"),sv=g("piv-l");
+  if(!cv||!sl)return;
+  var ctx=cv.getContext("2d"),W=cv.width,H=cv.height,T=30;
+
+  var i,rnd=new RNG(55),y=[],perm=[];
+  for(i=0;i<T;i++){
+    var trend=100*(1+0.022*i/(T-1));
+    y.push(trend+6*Math.sin(2*Math.PI*i/6.5)+3*Math.sin(2*Math.PI*i/2.7+1)+2*gauss(rnd));
+    perm.push(trend+1.2*Math.sin(2*Math.PI*i/18));
+  }
+
+  function draw(){
+    var lam=+sl.value;
+    sv.textContent=fmt(lam,2);fillSlider(sl);
+    var c=[];
+    for(i=0;i<T;i++)c.push(lam*y[i]+(1-lam)*perm[i]);
+
+    var mL=42,mR=10,mT=14,mB=24;
+    var ymin=1e9,ymax=-1e9;
+    for(i=0;i<T;i++){
+      var lo=Math.min(y[i],c[i]),hi=Math.max(y[i],c[i]);
+      if(lo<ymin)ymin=lo;if(hi>ymax)ymax=hi;
+    }
+    var pad=(ymax-ymin)*0.08;ymin-=pad;ymax+=pad;
+    function px(t){return mL+t/(T-1)*(W-mL-mR);}
+    function py(v){return H-mB-(v-ymin)/(ymax-ymin)*(H-mT-mB);}
+
+    ctx.fillStyle="#0b0e15";ctx.fillRect(0,0,W,H);
+    ctx.font="9px 'JetBrains Mono',monospace";ctx.fillStyle="#7a8aa8";
+    for(i=0;i<T;i+=5)ctx.fillText(String(1+i),px(i)-6,H-10);
+    ctx.fillText(fmt(ymax,0),8,py(ymax)+3);
+    ctx.fillText(fmt(ymin,0),8,py(ymin)+3);
+    ctx.strokeStyle="#2a3349";ctx.strokeRect(mL,mT,W-mL-mR,H-mT-mB);
+
+    ctx.strokeStyle="#74a7e8";ctx.lineWidth=1.2;ctx.beginPath();
+    for(i=0;i<T;i++){if(i===0)ctx.moveTo(px(i),py(y[i]));else ctx.lineTo(px(i),py(y[i]));}
+    ctx.stroke();
+    ctx.strokeStyle="#dd6b55";ctx.lineWidth=2.2;ctx.beginPath();
+    for(i=0;i<T;i++){if(i===0)ctx.moveTo(px(i),py(c[i]));else ctx.lineTo(px(i),py(c[i]));}
+    ctx.stroke();ctx.lineWidth=1;
+  }
+
+  function setL(v){sl.value=v;draw();}
+  var b0=g("pi-btn-0"),ba=g("pi-btn-adv"),be=g("pi-btn-eme"),bc=g("pi-btn-chn");
+  if(b0)b0.addEventListener("click",function(){setL(0);});
+  if(ba)ba.addEventListener("click",function(){setL(0.79);});
+  if(be)be.addEventListener("click",function(){setL(0.95);});
+  if(bc)bc.addEventListener("click",function(){setL(1.04);});
+  sl.addEventListener("input",draw);
+  draw();
+})();
+
+/* ============ L8: scatter de convergencia ============ */
+(function(){
+  var cv=g("cv-canvas2");
+  if(!cv)return;
+  var ctx=cv.getContext("2d"),W=cv.width,H=cv.height;
+  var A=4.34,B=-0.32;
+  var i,rnd=new RNG(77),pts=[];
+  for(i=0;i<140;i++){
+    var x=5.5+5.2*Math.pow(rnd(),0.85);
+    pts.push([x,A+B*x+1.9*gauss(rnd)]);
+  }
+  var xmin=5.2,xmax=11,ymin=-2,ymax=10;
+  var mL=46,mR=12,mT=12,mB=36;
+  function px(x){return mL+(x-xmin)/(xmax-xmin)*(W-mL-mR);}
+  function py(y){return H-mB-(y-ymin)/(ymax-ymin)*(H-mT-mB);}
+
+  ctx.fillStyle="#0b0e15";ctx.fillRect(0,0,W,H);
+  ctx.font="10px 'JetBrains Mono',monospace";ctx.fillStyle="#7a8aa8";
+  var k;
+  for(k=0;k<=5;k++){var xv=xmin+(xmax-xmin)*k/5,X=px(xv);
+    ctx.strokeStyle="rgba(42,51,73,0.55)";ctx.beginPath();ctx.moveTo(X,mT);ctx.lineTo(X,H-mB);ctx.stroke();
+    ctx.fillText(fmt(xv,1),X-10,H-16);}
+  for(k=0;k<=4;k++){var yv=ymin+(ymax-ymin)*k/4,Y=py(yv);
+    ctx.strokeStyle="rgba(42,51,73,0.55)";ctx.beginPath();ctx.moveTo(mL,Y);ctx.lineTo(W-mR,Y);ctx.stroke();
+    ctx.fillText(fmt(yv,0),10,Y+3);}
+  ctx.strokeStyle="#2a3349";ctx.strokeRect(mL,mT,W-mL-mR,H-mT-mB);
+  ctx.fillStyle="#7a8aa8";
+  ctx.fillText("renda per capita inicial (log)",W/2-90,H-4);
+  ctx.save();ctx.translate(11,H/2+80);ctx.rotate(-Math.PI/2);ctx.fillText("crescimento % a.a.",0,0);ctx.restore();
+
+  ctx.fillStyle="#5c6f92";
+  for(i=0;i<pts.length;i++)ctx.fillRect(px(pts[i][0])-2,py(pts[i][1])-2,4,4);
+
+  ctx.strokeStyle="#c9a96e";ctx.lineWidth=1.6;ctx.beginPath();
+  ctx.moveTo(px(xmin),py(A+B*xmin));ctx.lineTo(px(xmax),py(A+B*xmax));ctx.stroke();
+  ctx.lineWidth=1;
+
+  function mark(x,yy,lbl,col){
+    ctx.strokeStyle="rgba(255,255,255,0.35)";ctx.setLineDash([3,4]);
+    ctx.beginPath();ctx.moveTo(px(x),py(A+B*x));ctx.lineTo(px(x),py(yy));ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle=col;
+    ctx.beginPath();ctx.arc(px(x),py(yy),6,0,2*Math.PI);ctx.fill();
+    ctx.fillStyle="#dde4f0";ctx.font="11px 'JetBrains Mono',monospace";
+    ctx.fillText(lbl,px(x)+8,py(yy)-8);
+  }
+  mark(7.0,8.1,"China (+6,0 p.p.)","#dd6b55");
+  mark(7.8,5.9,"Coreia (+4,0)","#74a7e8");
+  mark(10.3,2.2,"EUA","#9aa8c0");
+})();
+})();
+</script>
+</body>
+</html>

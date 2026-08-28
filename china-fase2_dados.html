@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fase 2 · Os dados — A Macroeconomia Viaja?</title>
+  <meta name="description" content="Fase 2 do curso: World Development Indicators, Penn World Table, a construção do painel internacional de comparação e as peculiaridades da estatística chinesa." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [["$","$"],["\\(","\\)"]],
+        displayMath: [["$$","$$"],["\\[","\\]"]]
+      },
+      options: { skipHtmlTags: ["script","noscript","style","textarea"] }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+  <style>
+    :root {
+      --bg:          #0f1117;
+      --bg-card:     #161b27;
+      --bg-card-2:   #1c2233;
+      --border:      #2a3349;
+      --border-light:#334060;
+      --accent:      #dd6b55;
+      --accent-dim:  #9a4632;
+      --accent-glow: rgba(221,107,85,0.12);
+      --gold:        #c9a96e;
+      --text:        #dde4f0;
+      --text-muted:  #7a8aa8;
+      --text-dim:    #4e5f7a;
+      --blue:        #74a7e8;
+      --radius:      10px;
+      --radius-sm:   6px;
+      --shadow:      0 4px 24px rgba(0,0,0,0.5);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      font-size: 16px;
+      min-height: 100vh;
+    }
+
+    .top-bar {
+      background: linear-gradient(135deg, #0a0e18 0%, #131929 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+    }
+    .top-bar-title { font-family: 'Lora', serif; font-size: 0.95rem; color: var(--accent); letter-spacing: 0.04em; }
+    .top-bar-meta  { font-size: 0.78rem; color: var(--text-muted); letter-spacing: 0.02em; }
+
+    .hero { position: relative; text-align: center; padding: 4rem 2rem 3rem; border-bottom: 1px solid var(--border); overflow: hidden;
+      background:
+        radial-gradient(ellipse 60% 55% at 50% -10%, rgba(221,107,85,0.16), transparent 70%),
+        radial-gradient(ellipse 55% 45% at 88% 115%, rgba(116,167,232,0.10), transparent 70%),
+        linear-gradient(180deg, #11141d 0%, #0f1117 100%);
+    }
+    .hero-inner { position: relative; z-index: 1; }
+    .hero-label {
+      display: inline-block; font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--accent); background: rgba(221,107,85,0.1); border: 1px solid rgba(221,107,85,0.25);
+      padding: 0.3rem 0.9rem; border-radius: 99px; margin-bottom: 1.4rem;
+    }
+    .hero h1 {
+      font-family: 'Lora', serif; font-size: clamp(1.7rem, 3.6vw, 2.5rem); font-weight: 600;
+      color: #f0e3d5; line-height: 1.25; margin-bottom: 1rem; text-shadow: 0 2px 20px rgba(0,0,0,0.8);
+    }
+    .hero-subtitle { font-size: 1rem; color: #b8c6dc; max-width: 680px; margin: 0 auto 1.6rem; }
+    .hero-divider  { width: 60px; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent); margin: 0 auto; }
+
+    .page-wrap { max-width: 860px; margin: 0 auto; padding: 3rem 1.5rem 4rem; }
+
+    .part { margin-bottom: 3.5rem; }
+    .part-header { display: flex; align-items: flex-start; gap: 1.2rem; margin-bottom: 2rem; padding-bottom: 1.2rem; border-bottom: 1px solid var(--border); }
+    .part-number {
+      flex-shrink: 0; width: 44px; height: 44px; border-radius: 50%;
+      background: var(--accent-glow); border: 1.5px solid var(--accent-dim);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Lora', serif; font-size: 1rem; color: var(--accent); margin-top: 0.15rem;
+    }
+    .part-info h2    { font-family: 'Lora', serif; font-size: 1.4rem; font-weight: 600; color: #eaccdd; margin-bottom: 0.3rem; }
+    .part-info .part-tagline { font-size: 0.88rem; color: var(--text-muted); font-style: italic; }
+
+    .narrative {
+      background: var(--bg-card); border: 1px solid var(--border); border-left: 3px solid var(--accent-dim);
+      border-radius: var(--radius); padding: 1.2rem 1.4rem; margin-bottom: 2rem;
+      font-family: 'Lora', serif; font-size: 0.97rem; color: #c8d4e8; line-height: 1.85;
+    }
+    .narrative p + p { margin-top: 0.75rem; }
+
+    .question { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 1.5rem; overflow: hidden; transition: border-color 0.2s ease, box-shadow 0.2s ease; }
+    .question:hover { border-color: var(--border-light); box-shadow: 0 0 0 1px var(--border-light), var(--shadow); }
+    .question-header { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.25rem; background: var(--bg-card-2); border-bottom: 1px solid var(--border); }
+    .q-badge {
+      flex-shrink: 0; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; font-weight: 500;
+      color: var(--accent); background: var(--accent-glow); border: 1px solid rgba(221,107,85,0.2);
+      border-radius: var(--radius-sm); padding: 0.2rem 0.55rem; letter-spacing: 0.05em;
+    }
+    .question-header h3 { font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.95rem; color: #dde4f0; flex: 1; }
+    .question-body { padding: 1.2rem 1.25rem 1.4rem; }
+    .question-body p { margin-bottom: 0.7rem; font-size: 0.95rem; color: var(--text); }
+
+    .sub-list { list-style: none; margin-top: 1rem; display: flex; flex-direction: column; gap: 0.85rem; }
+    .sub-list li {
+      display: flex; gap: 0.9rem; align-items: flex-start; padding: 0.75rem 1rem;
+      background: rgba(255,255,255,0.025); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); font-size: 0.93rem; line-height: 1.65; transition: background 0.18s ease;
+    }
+    .sub-list li:hover { background: rgba(221,107,85,0.04); }
+    .sub-label { flex-shrink: 0; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; font-weight: 500; color: var(--accent); margin-top: 0.1rem; min-width: 34px; }
+
+    .math-block { overflow-x: auto; padding: 0.6rem 0; margin: 0.4rem 0; }
+
+    .hint {
+      display: flex; gap: 0.75rem; margin-top: 0.9rem; padding: 0.75rem 1rem;
+      background: rgba(116,167,232,0.06); border: 1px solid rgba(116,167,232,0.2);
+      border-radius: var(--radius-sm); font-size: 0.87rem; color: #8ab4d8;
+      cursor: pointer; user-select: none;
+    }
+    .hint-icon { flex-shrink: 0; font-size: 0.85rem; margin-top: 0.05rem; opacity: 0.8; }
+    .hint-toggle   { margin-left: auto; flex-shrink: 0; font-size: 0.75rem;
+                     font-weight: 600; letter-spacing: 0.06em;
+                     color: var(--blue); white-space: nowrap; }
+    .hint-content  { transition: max-height 0.35s ease, opacity 0.3s ease;
+                     max-height: 420px; overflow: hidden; opacity: 1; }
+    .hint.collapsed .hint-content { max-height: 0; opacity: 0; pointer-events: none; }
+
+    .part-sep { border: none; border-top: 1px dashed var(--border); margin: 3rem 0; }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 3px; }
+
+    @media (max-width: 600px) {
+      .top-bar-meta { display: none; }
+      .hero { padding: 2.5rem 1rem 2rem; }
+      .page-wrap { padding: 2rem 1rem 4rem; }
+    }
+
+    .ic { background: linear-gradient(135deg,#0e1828 0%,#141f35 100%);
+          border: 1px solid #2a3f6a; border-radius: var(--radius);
+          margin-bottom: 1.8rem; overflow: hidden; }
+    .ic-header { display:flex; align-items:center; gap:.9rem;
+                 padding:.85rem 1.2rem; border-bottom:1px solid #2a3f6a;
+                 background:rgba(255,255,255,.025); }
+    .ic-badge  { font-family:'JetBrains Mono',monospace; font-size:.68rem;
+                 font-weight:600; letter-spacing:.08em; text-transform:uppercase;
+                 color:#74a7e8; background:rgba(116,167,232,.12);
+                 border:1px solid rgba(116,167,232,.28);
+                 border-radius:var(--radius-sm); padding:.18rem .55rem; }
+    .ic-header h4 { font-family:'Inter',sans-serif; font-size:.9rem;
+                    font-weight:600; color:#cdd8f0; }
+    .ic-body { padding:1.1rem 1.2rem 1.4rem; }
+    .ic-body p { font-size:.9rem; color:var(--text-muted); margin-bottom:.9rem; }
+
+    .sl-row   { display:flex; align-items:center; gap:.9rem;
+                margin-bottom:.75rem; flex-wrap:wrap; }
+    .sl-lbl   { font-family:'JetBrains Mono',monospace; font-size:.8rem;
+                color:var(--accent); min-width:170px; }
+    input[type=range].sl {
+        flex:1; min-width:120px; max-width:260px;
+        -webkit-appearance:none; height:4px; border-radius:2px;
+        background:#2a3349; outline:none; cursor:pointer; }
+    input[type=range].sl::-webkit-slider-thumb {
+        -webkit-appearance:none; width:14px; height:14px; border-radius:50%;
+        background:var(--accent); cursor:pointer;
+        box-shadow:0 0 0 3px rgba(221,107,85,.2); }
+    .sl-val { font-family:'JetBrains Mono',monospace; font-size:.8rem;
+              color:#dde4f0; min-width:44px; text-align:right; }
+
+    .btn-row  { display:flex; gap:.65rem; margin-top:.9rem; flex-wrap:wrap;
+                align-items:center; }
+    .btn { font-family:'Inter',sans-serif; font-size:.82rem; font-weight:600;
+           padding:.48rem 1.1rem; border-radius:99px; border:none; cursor:pointer;
+           transition:transform .15s,box-shadow .15s,opacity .15s; }
+    .btn:active { transform:scale(.96); }
+    .btn-p { background:linear-gradient(135deg,#dd6b55,#a94832); color:#0f1117; }
+    .btn-p:hover { box-shadow:0 0 14px rgba(221,107,85,.35); }
+    .btn-s { background:rgba(255,255,255,.07); color:var(--text-muted);
+             border:1px solid var(--border); }
+    .btn-s:hover { background:rgba(255,255,255,.11); color:var(--text); }
+    .btn-s.on { background:rgba(221,107,85,.16); color:var(--accent);
+                border-color:rgba(221,107,85,.45); }
+
+    .mcq-opt { display:flex; align-items:center; gap:.7rem; padding:.6rem .85rem;
+               border-radius:var(--radius-sm); border:1px solid var(--border);
+               margin-bottom:.4rem; cursor:pointer; font-size:.88rem;
+               color:var(--text); transition:border-color .18s,background .18s; }
+    .mcq-opt:hover { border-color:var(--border-light); background:rgba(255,255,255,.03); }
+    .mcq-opt.ok  { border-color:#52b788; background:rgba(82,183,136,.08); color:#86d9b0; }
+    .mcq-opt.bad { border-color:#e07070; background:rgba(224,112,112,.08); color:#e89090; }
+    .opt-lbl { font-family:'JetBrains Mono',monospace; font-size:.72rem;
+               font-weight:600; color:var(--accent); min-width:16px; }
+    .opt-arr { margin-left:auto; }
+    .mcq-fb  { font-size:.84rem; padding:.6rem .85rem; border-radius:var(--radius-sm);
+               margin-top:.5rem; display:none; line-height:1.6; }
+    .mcq-fb.ok  { display:block; background:rgba(82,183,136,.1); color:#86d9b0;
+                  border:1px solid rgba(82,183,136,.3); }
+    .mcq-fb.bad { display:block; background:rgba(224,112,112,.1); color:#e89090;
+                  border:1px solid rgba(224,112,112,.3); }
+
+    .out-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+                gap:.65rem; margin-top:.9rem; }
+    .out-cell { background:rgba(0,0,0,.2); border:1px solid #2a3349;
+                border-radius:var(--radius-sm); padding:.6rem .85rem; text-align:center; }
+    .out-lbl  { font-size:.7rem; color:var(--text-muted); margin-bottom:.22rem;
+                font-family:'JetBrains Mono',monospace; }
+    .out-val  { font-family:'JetBrains Mono',monospace; font-size:1rem;
+                font-weight:600; color:var(--accent); }
+
+    .cv-box { border:1px solid #2a3349; border-radius:var(--radius-sm);
+              background:#0b0e15; padding:.5rem; text-align:center; }
+    .cv-box canvas { display:block; margin:0 auto; max-width:100%; }
+    .cv-cap { font-family:'JetBrains Mono',monospace; font-size:.68rem;
+              color:var(--text-muted); margin-top:.4rem; }
+    .lg { display:inline-block; width:18px; height:3px; border-radius:2px; vertical-align:middle; margin:0 4px 2px 10px; }
+
+    .nav-bottom{display:flex;justify-content:space-between;gap:1rem;margin-top:3rem;
+                padding-top:1.2rem;border-top:1px dashed var(--border);flex-wrap:wrap;}
+    .nav-bottom a{font-size:.85rem;font-weight:600;color:var(--text-muted);text-decoration:none;
+                  padding:.45rem 1rem;border:1px solid var(--border);border-radius:99px;
+                  transition:color .18s,border-color .18s,background .18s;}
+    .nav-bottom a:hover{color:var(--accent);border-color:var(--accent-dim);background:var(--accent-glow);}
+    .nav-bottom a.next{color:var(--accent);border-color:var(--accent-dim);background:var(--accent-glow);}
+  </style>
+</head>
+<body>
+
+<div class="top-bar">
+  <span class="top-bar-title">Does Macroeconomics Travel? &mdash; Curso</span>
+  <span class="top-bar-meta">Fase 2 de 5 &middot; Os dados</span>
+</div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <span class="hero-label">Fase 2 &middot; Os dados</span>
+    <h1>Meio s&eacute;culo, 217 economias,<br>algumas armadilhas escondidas</h1>
+    <p class="hero-subtitle">
+      Um teste comparativo vale o que valem os dados que o alimentam. Nesta fase: de onde vêm os números
+      (Banco Mundial e Penn World Table), as escolhas t&eacute;cnicas que um analista precisa tomar &mdash;
+      e por que a estat&iacute;stica de desemprego da China quase n&atilde;o se move, antes de qualquer
+      economia entrar em cena.
+    </p>
+    <div class="hero-divider"></div>
+  </div>
+</header>
+
+<main class="page-wrap">
+
+  <!-- ===== PARTE I ===== -->
+  <section class="part" id="parte-1">
+    <div class="part-header">
+      <div class="part-number">I</div>
+      <div class="part-info">
+        <h2>De onde vêm os n&uacute;meros</h2>
+        <span class="part-tagline">Duas fontes p&uacute;blicas, um pipeline replic&aacute;vel</span>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p>O projeto inteiro roda sobre dados abertos. A fonte principal &eacute; o <strong>World Development
+      Indicators (WDI)</strong>, do Banco Mundial: a cole&ccedil;&atilde;o mais ampla de indicadores
+      macroecon&ocirc;micos compar&aacute;veis entre pa&iacute;ses que existe, baixada por API numa
+      &uacute;nica data (12 de junho de 2026) para garantir que todos os pa&iacute;ses sejam medidos na
+      mesma &ldquo;vintage&rdquo; dos dados. A fonte complementar &eacute; a <strong>Penn World Table 10.01</strong>,
+      usada para a parcela do trabalho (vari&aacute;vel <em>labsh</em>, dispon&iacute;vel para a China de
+      1952 a 2019).</p>
+      <p>Do download bruto ao painel de trabalho, tudo &eacute; c&oacute;digo: um script baixa, outro
+      limpa e constr&oacute;i o painel, e cada lei tem seu pr&oacute;prio script de estima&ccedil;&atilde;o.
+      Nada &eacute; digitado &agrave; m&atilde;o &mdash; qualquer n&uacute;mero do curso pode ser regenerado
+      do zero.</p>
+    </div>
+
+    <div class="question">
+      <div class="question-header">
+        <span class="q-badge">Em n&uacute;meros</span>
+        <h3>O painel de uma olhada</h3>
+      </div>
+      <div class="question-body">
+        <div class="out-grid">
+          <div class="out-cell"><div class="out-lbl">economias no WDI</div><div class="out-val">217</div></div>
+          <div class="out-cell"><div class="out-lbl">janela temporal</div><div class="out-val">1960&ndash;2025</div></div>
+          <div class="out-cell"><div class="out-lbl">indicadores baixados</div><div class="out-val">18</div></div>
+          <div class="out-cell"><div class="out-lbl">pa&iacute;s-anos no painel</div><div class="out-val">14.258</div></div>
+          <div class="out-cell"><div class="out-lbl">pa&iacute;ses do protocolo</div><div class="out-val">39</div></div>
+        </div>
+        <p style="margin-top:1rem">Os 18 indicadores cobrem PIB real e per capita, crescimento, duas
+        s&eacute;ries de desemprego (a modelada pela OIT e a estimativa nacional), infla&ccedil;&atilde;o ao
+        consumidor, moeda ampla (n&iacute;vel e crescimento), consumo das fam&iacute;lias, forma&ccedil;&atilde;o
+        bruta de capital, consumo do governo, cr&eacute;dito privado sobre PIB e popula&ccedil;&atilde;o.</p>
+        <div class="hint">
+          <span class="hint-icon">&#9432;</span>
+          <span><strong>Por que uma &uacute;nica data de corte importa.</strong> Dados oficiais s&atilde;o
+          revisados. Se os EUA fossem medidos numa vintage e a China noutra, parte da
+          &ldquo;diferen&ccedil;a&rdquo; entre eles seria apenas revis&atilde;o estat&iacute;stica. Fixar a
+          vintage &eacute; o equivalente a fotografar todos os pa&iacute;ses no mesmo instante.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="question">
+      <div class="question-header">
+        <span class="q-badge">Pipeline</span>
+        <h3>Do download &agrave; lei: a cadeia de replica&ccedil;&atilde;o</h3>
+      </div>
+      <div class="question-body">
+        <ul class="sub-list">
+          <li><span class="sub-label">01</span><span><code style="font-family:'JetBrains Mono',monospace;color:var(--gold)">01_download_wdi.py</code>
+          &mdash; baixa os 18 indicadores de 217 economias via API do Banco Mundial.</span></li>
+          <li><span class="sub-label">02</span><span><code style="font-family:'JetBrains Mono',monospace;color:var(--gold)">02_build_panel.py</code>
+          &mdash; limpa, classifica grupos (avan&ccedil;adas / emergentes / China) e monta o painel de
+          14.258 pa&iacute;s-anos.</span></li>
+          <li><span class="sub-label">10+</span><span>Um script por lei &mdash;
+          <code style="font-family:'JetBrains Mono',monospace;color:var(--gold)">10_okun.py</code>,
+          <code style="font-family:'JetBrains Mono',monospace;color:var(--gold)">12_money.py</code>,
+          <code style="font-family:'JetBrains Mono',monospace;color:var(--gold)">13_comovement.py</code>&hellip;
+          &mdash; todos com a mesma estrutura: estima&ccedil;&atilde;o pa&iacute;s a pa&iacute;s, valida&ccedil;&atilde;o
+          contra a literatura, posi&ccedil;&atilde;o da China na distribui&ccedil;&atilde;o.</span></li>
+          <li><span class="sub-label">18+</span><span>Robustez e s&iacute;ntese: &iacute;ndice de excepcionalidade,
+          &iacute;ndice direcional de falha, permuta&ccedil;&atilde;o, tabelas do ap&ecirc;ndice.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <hr class="part-sep" />
+
+  <!-- ===== PARTE II ===== -->
+  <section class="part" id="parte-2">
+    <div class="part-header">
+      <div class="part-number">II</div>
+      <div class="part-info">
+        <h2>As escolhas que importam</h2>
+        <span class="part-tagline">Moeda, filtros e cortes: decis&otilde;es t&eacute;cnicas com consequ&ecirc;ncias</span>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p>Antes de estimar qualquer lei, o analista toma decis&otilde;es aparentemente burocr&aacute;ticas que
+      mudam resultados. As do projeto, e o porqu&ecirc; de cada uma:</p>
+    </div>
+
+    <div class="question">
+      <div class="question-header">
+        <span class="q-badge">Decis&atilde;o 1</span>
+        <h3>Moeda local constante para ciclos, n&atilde;o d&oacute;lares</h3>
+      </div>
+      <div class="question-body">
+        <p>Para medir <em>dentro</em> de um pa&iacute;s como consumo e investimento se movem juntos, a
+        s&eacute;rie certa &eacute; o gasto real em <strong>moeda local constante</strong>. Converter para
+        d&oacute;lares acrescentaria &agrave; volatilidade do gasto a volatilidade do c&acirc;mbio &mdash;
+        ru&iacute;do que nada tem a ver com o ciclo. Detalhe pr&aacute;tico: o WDI n&atilde;o publica consumo
+        e investimento em d&oacute;lares constantes para a China, então o trabalho c&iacute;clico usa as
+        s&eacute;ries em moeda local, que para a China come&ccedil;am em 1995.</p>
+        <p>Decis&otilde;es irm&atilde;s: investimento medido pela <strong>forma&ccedil;&atilde;o bruta de capital
+        total</strong>; curva de Phillips estimada s&oacute; com infla&ccedil;&otilde;es de at&eacute; 40% ao ano
+        (hiperinfla&ccedil;&otilde;es deformam qualquer forma reduzida); ciclo extra&iacute;do com o filtro HP
+        com $\lambda = 6{,}25$, o valor recomendado para dados anuais (com o filtro de Hamilton como
+        robustez, na Fase 4).</p>
+        <div class="hint">
+          <span class="hint-icon">&#9432;</span>
+          <span><strong>O que &eacute; um filtro de ciclo?</strong> Uma s&eacute;rie de consumo, por exemplo,
+          mistura tend&ecirc;ncia (o pa&iacute;s fica mais rico) e ciclo (anos bons e ruins). O filtro HP
+          (Hodrick&ndash;Prescott) separa as duas; o que sobra depois de tirar a tend&ecirc;ncia &eacute; o
+          <em>componente c&iacute;clico</em> &mdash; &eacute; dele que se calculam as correla&ccedil;&otilde;es
+          de comovimento da lei L4. O par&acirc;metro $\lambda$ controla qu&atilde;o r&iacute;gida &eacute;
+          a tend&ecirc;ncia; 6,25 &eacute; o padr&atilde;o para dados anuais de Ravn&ndash;Uhlig (2002).</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ic" id="mcq-moeda">
+      <div class="ic-header">
+        <span class="ic-badge">Teste r&aacute;pido</span>
+        <h4>Qual s&eacute;rie usar para a correla&ccedil;&atilde;o de ciclo?</h4>
+      </div>
+      <div class="ic-body">
+        <p>Voc&ecirc; quer medir se, <em>na Coreia</em>, consumo e investimento andam juntos ao longo do ciclo.
+        Qual s&eacute;rie de consumo usar?</p>
+        <div class="mcq-opt" data-g="g1" data-c="0"><span class="opt-lbl">A</span>
+          <span>Consumo em d&oacute;lares correntes, para comparar com outros pa&iacute;ses depois</span>
+          <span class="opt-arr"></span></div>
+        <div class="mcq-opt" data-g="g1" data-c="1"><span class="opt-lbl">B</span>
+          <span>Consumo real em wons constantes &mdash; a compara&ccedil;&atilde;o &eacute; da s&eacute;rie com ela mesma, ao longo do tempo</span>
+          <span class="opt-arr"></span></div>
+        <div class="mcq-opt" data-g="g1" data-c="0"><span class="opt-lbl">C</span>
+          <span>Consumo nominal per capita em paridade de poder de compra</span>
+          <span class="opt-arr"></span></div>
+        <div class="mcq-fb" id="g1-ok">Correto. A correla&ccedil;&atilde;o de ciclo &eacute; <em>dentro</em> do
+          pa&iacute;s: a s&eacute;rie s&oacute; compete com ela mesma em outro ano. Em d&oacute;lares correntes,
+          o c&acirc;mbio e a infla&ccedil;&atilde;o mundial entrariam como ru&iacute;do. Compara&ccedil;&otilde;es
+          <em>entre</em> pa&iacute;ses (n&iacute;veis de renda, por exemplo) a&iacute; sim pedem PPP &mdash;
+          s&atilde;o perguntas diferentes.</div>
+        <div class="mcq-fb" id="g1-bad">Cuidado: converter moeda introduz o c&acirc;mbio e a infla&ccedil;&atilde;o
+          na volatilidade da s&eacute;rie &mdash; ru&iacute;do que n&atilde;o &eacute ciclo econ&ocirc;mico.
+          Para correla&ccedil;&atilde;o <em>dentro</em> do pa&iacute;s, use sempre a s&eacute;rie real em moeda
+          local constante. (PPP serve para comparar <em>n&iacute;veis entre</em> pa&iacute;ses, outra pergunta.)</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="part-sep" />
+
+  <!-- ===== PARTE III ===== -->
+  <section class="part" id="parte-3">
+    <div class="part-header">
+      <div class="part-number">III</div>
+      <div class="part-info">
+        <h2>A estat&iacute;stica chinesa sob suspeita</h2>
+        <span class="part-tagline">Duas cr&iacute;ticas em dire&ccedil;&otilde;es opostas &mdash; e o desemprego que n&atilde;o se move</span>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p>Qualquer estudo sobre a China encara duas desconfian&ccedil;as cl&aacute;ssicas, e o projeto as
+      transforma em desenho em vez de nota de rodap&eacute;. A primeira &eacute; sobre o <strong>PIB</strong>:
+      Chen, Chen, Hsieh e Song (2019), por contabilidade forense, conclu&iacute;ram que o crescimento oficial
+      foi <em>superestimado</em> em cerca de 1,7 ponto por ano entre 2008 e 2016; Clark, Pinkovskiy e
+      Sala-i-Martin (2020), por luzes noturnas de sat&eacute;lite, chegaram &agrave; conclus&atilde;o oposta
+      &mdash; o crescimento pode estar <em>subestimado</em>. Duas cr&iacute;ticas de sinais contr&aacute;rios
+      s&atilde;o um presente: se os vereditos sobrevivem &agrave;s duas corre&ccedil;&otilde;es, a mensura&ccedil;&atilde;o
+      n&atilde;o os explica (Fase 4 faz isso em detalhe).</p>
+      <p>A segunda &eacute; sobre o <strong>desemprego</strong>. A taxa registrada oficial &eacute; quase constante
+      <em>por constru&ccedil;&atilde;o</em>: ela conta quem se registra num sistema urbano que a maior parte dos
+      migrantes rurais n&atilde;o acessa. O ajuste do mercado de trabalho chin&ecirc;s acontece em grande parte
+      por <strong>fluxos de migra&ccedil;&atilde;o</strong> &mdash; regidos pelo sistema de registro residencial
+      <em>hukou</em> &mdash; que a pesquisa de desemprego simplesmente n&atilde;o enxerga. &Eacute; o termo $m$
+      da equa&ccedil;&atilde;o (1) da Fase 1, agora em carne e osso.</p>
+    </div>
+
+    <!-- SIM: moldura da pesquisa -->
+    <div class="ic" id="sim-frame">
+      <div class="ic-header">
+        <span class="ic-badge">Simula&ccedil;&atilde;o</span>
+        <h4>A &ldquo;moldura&rdquo; da pesquisa: o mesmo choque, dois mercados de trabalho</h4>
+      </div>
+      <div class="ic-body">
+        <p>Um mesmo ciclo econ&ocirc;mico (linha azul, em desvios da tend&ecirc;ncia) atinge duas economias.
+        &agrave; esquerda, numa economia de mercado, o desemprego (linha vermelha) respira junto &mdash; e
+        <em>invertido</em>: expans&atilde;o derruba desemprego. &agrave; direita, com a moldura
+        <em>hukou</em>, o mesmo choque &eacute; absorvido por migra&ccedil;&atilde;o invis&iacute;vel &agrave;
+        pesquisa: o desemprego medido fica plano. Repare nas m&eacute;tricas abaixo do gr&aacute;fico.</p>
+
+        <div class="btn-row" style="margin-top:0">
+          <button class="btn btn-s on" id="sf-btn-mkt" type="button">Mercado de trabalho (ajuste via emprego)</button>
+          <button class="btn btn-p" id="sf-btn-hukou" type="button">Moldura hukou (ajuste via migra&ccedil;&atilde;o)</button>
+        </div>
+
+        <div class="cv-box" style="margin-top:1rem">
+          <canvas id="sf-canvas" width="560" height="270"></canvas>
+          <div class="cv-cap">
+            <span class="lg" style="background:#74a7e8"></span>ciclo do produto (z)
+            <span class="lg" style="background:#dd6b55"></span>desemprego medido (z)
+            &nbsp;&middot;&nbsp; 1995&ndash;2024 (simulado)
+          </div>
+        </div>
+
+        <div class="out-grid">
+          <div class="out-cell">
+            <div class="out-lbl">corr(ciclo, &Delta;u)</div>
+            <div class="out-val" id="sf-corr">&mdash;</div>
+          </div>
+          <div class="out-cell">
+            <div class="out-lbl">leitura</div>
+            <div class="out-val" id="sf-read" style="font-size:.8rem">&mdash;</div>
+          </div>
+        </div>
+        <p style="margin-top:.9rem;margin-bottom:0">No estudo, a raz&atilde;o entre a volatilidade do desemprego e
+        a do crescimento &eacute; <strong>0,12 na China</strong> contra <strong>0,68 nos EUA</strong> (per&iacute;odo
+        2018&ndash;2024, com a moderna taxa urbana <em>pesquisada</em>, n&atilde;o a registrada). O desemprego
+        chin&ecirc;s se move pouco em rela&ccedil;&atilde;o ao produto &mdash; qualquer que seja a s&eacute;rie
+        usada. Essa &eacute; mat&eacute;ria-prima da Fase 4.</p>
+      </div>
+    </div>
+
+    <div class="ic" id="mcq-hukou">
+      <div class="ic-header">
+        <span class="ic-badge">Teste r&aacute;pido</span>
+        <h4>Por que a migra&ccedil;&atilde;o n&atilde;o aparece no desemprego urbano?</h4>
+      </div>
+      <div class="ic-body">
+        <p>Um trabalhador rural migrou para uma obra em Xangai; a constru&ccedil;&atilde;o desacelera e ele
+        retorna &agrave; prov&iacute;ncia natal, onde cultiva a terra da fam&iacute;lia. Na estat&iacute;stica
+        de desemprego urbano pesquisado, esse ajuste aparece como&hellip;</p>
+        <div class="mcq-opt" data-g="g2" data-c="0"><span class="opt-lbl">A</span>
+          <span>Desemprego urbano subindo, pois ele perdeu o emprego</span>
+          <span class="opt-arr"></span></div>
+        <div class="mcq-opt" data-g="g2" data-c="1"><span class="opt-lbl">B</span>
+          <span>Nada: ele saiu da moldura da pesquisa (voltou ao setor rural, fora do universo urbano amostrado)</span>
+          <span class="opt-arr"></span></div>
+        <div class="mcq-opt" data-g="g2" data-c="0"><span class="opt-lbl">C</span>
+          <span>Emprego formal crescendo, pois a agricultura conta como ocupa&ccedil;&atilde;o urbana</span>
+          <span class="opt-arr"></span></div>
+        <div class="mcq-fb" id="g2-ok">Exato &mdash; e essa &eacute; a ess&ecirc;ncia do termo $m$ da
+          equa&ccedil;&atilde;o (1). O ajuste de trabalho <em>aconteceu</em> (o trabalhador realocou), mas
+          fora do recorte que a pesquisa enxerga. O desemprego medido nem fica sabendo. Na Indon&eacute;sia
+          (setor informal) e no Luxemburgo (trabalhadores fronteiri&ccedil;os) acontece algo an&aacute;logo &mdash;
+          lembrar disso na Fase 5, quando esses dois pa&iacute;ses aparecerem ao lado da China no ranking.</div>
+        <div class="mcq-fb" id="g2-bad">Repare no desenho da pesquisa: ela cobre residentes urbanos
+          amostrados. Ao voltar &agrave; &aacute;rea rural, o trabalhador <em>sai da moldura</em> &mdash; para a
+          estat&iacute;stica, n&atilde;o houve desemprego, houve&hellip; nada. O ajuste real ocorreu, mas
+          invis&iacute;vel: &eacute; exatamente o $m$ da equa&ccedil;&atilde;o (1).</div>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p><strong>O que levamos para a Fase 3:</strong> um painel compar&aacute;vel (39 economias, mesma vintage,
+      especifica&ccedil;&otilde;es can&ocirc;nicas), escolhas t&eacute;cnicas justificadas &mdash; e duas
+      suspeitas de mensura&ccedil;&atilde;o transformadas em testes futuros. Agora sim: vamos estimar as nove
+      leis, uma a uma, come&ccedil;ando pela mais famosa de todas.</p>
+    </div>
+  </section>
+
+  <nav class="nav-bottom">
+    <a href="china-fase1_pergunta.html">&larr; Fase 1 · A pergunta</a>
+    <a href="china-index.html">Mapa do curso</a>
+    <a class="next" href="china-fase3_leis.html">Fase 3 · Nove leis &rarr;</a>
+  </nav>
+
+</main>
+
+<footer style="border-top: 1px solid var(--border); padding: 1.5rem 2rem; text-align: center; font-size: 0.8rem; color: var(--text-dim);">
+  Does Macroeconomics Travel? &mdash; curso interativo &middot; Fase 2 &middot; Lucas Rafael de Andrade &middot; 2026
+</footer>
+
+<script>
+(function(){
+"use strict";
+function g(id){return document.getElementById(id);}
+
+function fillSlider(el){
+  if(!el)return;
+  var mn=+el.min,mx=+el.max,v=+el.value;
+  var pct=((v-mn)/(mx-mn)*100).toFixed(1)+"%";
+  el.style.background="linear-gradient(to right,var(--accent-dim) 0%,var(--accent-dim) "+pct+",#2a3349 "+pct+")";
+}
+document.querySelectorAll(".sl").forEach(fillSlider);
+
+document.querySelectorAll(".hint").forEach(function(h){
+  var spans=h.querySelectorAll("span");
+  var ct=spans[spans.length-1];
+  if(!ct)return;
+  ct.classList.add("hint-content");
+  var tog=document.createElement("span");
+  tog.className="hint-toggle";
+  tog.textContent="Dica";
+  h.insertBefore(tog,ct);
+  h.classList.add("collapsed");
+  h.addEventListener("click",function(){h.classList.toggle("collapsed");});
+});
+
+document.querySelectorAll(".mcq-opt").forEach(function(opt){
+  opt.addEventListener("click",function(){
+    var grp=this.dataset.g;
+    var all=document.querySelectorAll("[data-g='"+grp+"']");
+    if([].some.call(all,function(o){return o.classList.contains("ok")||o.classList.contains("bad");}))return;
+    var ok=(this.dataset.c==="1");
+    this.classList.add(ok?"ok":"bad");
+    var arr=this.querySelector(".opt-arr");
+    if(arr)arr.textContent=ok?"\u2713":"\u2717";
+    if(!ok)all.forEach(function(o){
+      if(o.dataset.c==="1"){o.classList.add("ok");var a=o.querySelector(".opt-arr");if(a)a.textContent="\u2713";}
+    });
+    var fb=g(grp+(ok?"-ok":"-bad"));
+    if(fb)fb.classList.add(ok?"ok":"bad");
+  });
+});
+
+function RNG(seed){var s=seed>>>0;return function(){s=(1664525*s+1013904223)>>>0;return s/4294967296;};}
+function gauss(rnd){var u=0,v=0;while(u===0)u=rnd();while(v===0)v=rnd();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);}
+function mean(a){var s=0,i;for(i=0;i<a.length;i++)s+=a[i];return s/a.length;}
+function sd(a){var m=mean(a),s=0,i;for(i=0;i<a.length;i++)s+=(a[i]-m)*(a[i]-m);return Math.sqrt(s/a.length);}
+function corr(xs,ys){var mx=mean(xs),my=mean(ys),sxy=0,sxx=0,syy=0,i;for(i=0;i<xs.length;i++){sxy+=(xs[i]-mx)*(ys[i]-my);sxx+=(xs[i]-mx)*(xs[i]-mx);syy+=(ys[i]-my)*(ys[i]-my);}var d=Math.sqrt(sxx*syy);return d>0?sxy/d:0;}
+function fmt(v,d){return (v===null||isNaN(v))?"\u2014":v.toFixed(d===undefined?2:d);}
+
+/* ---------- simulacao: moldura da pesquisa de desemprego ---------- */
+(function(){
+  var cv=g("sf-canvas");
+  if(!cv)return;
+  var ctx=cv.getContext("2d"),W=cv.width,H=cv.height;
+  var bM=g("sf-btn-mkt"),bH=g("sf-btn-hukou");
+  var mode="mkt",T=30;
+
+  var cyc=[],i,rnd=new RNG(11);
+  for(i=0;i<T;i++){
+    var c=Math.sin(2*Math.PI*i/8)+0.45*Math.sin(2*Math.PI*i/3.4+1.2)+0.3*gauss(rnd);
+    cyc.push(c);
+  }
+  var cm=mean(cyc),cs=sd(cyc),z=[];
+  for(i=0;i<T;i++)z.push((cyc[i]-cm)/cs);
+
+  rnd=new RNG(23);
+  var e1=[],e2=[];
+  for(i=0;i<T;i++){e1.push(gauss(rnd));e2.push(gauss(rnd));}
+
+  function draw(){
+    var du=[],i;
+    if(mode==="mkt"){
+      for(i=0;i<T;i++)du.push(-0.8*z[i]+0.28*e1[i]);
+    }else{
+      for(i=0;i<T;i++)du.push(0.03*z[i]+0.16*e2[i]);
+    }
+    var dm=mean(du),ds=sd(du),zu=[];
+    for(i=0;i<T;i++)zu.push((du[i]-dm)/(ds||1));
+
+    var mL=40,mR=10,mT=14,mB=26,yr=2.3;
+    function px(t){return mL+t/(T-1)*(W-mL-mR);}
+    function py(yv){return H-mB-(yv+yr)/(2*yr)*(H-mT-mB);}
+
+    ctx.fillStyle="#0b0e15";ctx.fillRect(0,0,W,H);
+    ctx.font="9px 'JetBrains Mono',monospace";
+    ctx.strokeStyle="rgba(42,51,73,0.55)";
+    ctx.beginPath();ctx.moveTo(mL,py(0));ctx.lineTo(W-mR,py(0));ctx.stroke();
+    ctx.fillStyle="#7a8aa8";
+    for(i=0;i<T;i+=5)ctx.fillText(String(1995+i),px(i)-12,H-10);
+    ctx.fillText("+2\u03c3",8,py(2)+3);ctx.fillText("0",8,py(0)+3);ctx.fillText("-2\u03c3",8,py(-2)+3);
+    ctx.strokeStyle="#2a3349";ctx.strokeRect(mL,mT,W-mL-mR,H-mT-mB);
+
+    ctx.strokeStyle="#74a7e8";ctx.lineWidth=1.6;ctx.beginPath();
+    for(i=0;i<T;i++){var X=px(i),Y=py(Math.max(-yr,Math.min(yr,z[i])));if(i===0)ctx.moveTo(X,Y);else ctx.lineTo(X,Y);}
+    ctx.stroke();
+    ctx.strokeStyle="#dd6b55";ctx.beginPath();
+    for(i=0;i<T;i++){var X2=px(i),Y2=py(Math.max(-yr,Math.min(yr,zu[i])));if(i===0)ctx.moveTo(X2,Y2);else ctx.lineTo(X2,Y2);}
+    ctx.stroke();ctx.lineWidth=1;
+
+    var r=corr(z,du),eC=g("sf-corr"),eR=g("sf-read");
+    if(eC)eC.textContent=fmt(r,2);
+    if(eR){
+      if(r<-0.4){eR.textContent="Okun vivo";eR.style.color="#86d9b0";}
+      else if(r>-0.2){eR.textContent="Okun morto";eR.style.color="#e89090";}
+      else{eR.textContent="Okun fraco";eR.style.color="#d9b96f";}
+    }
+  }
+
+  function setMode(m,btn){
+    mode=m;
+    if(bM)bM.classList.remove("on");
+    if(bH)bH.classList.remove("on");
+    if(btn)btn.classList.add("on");
+    draw();
+  }
+  if(bM)bM.addEventListener("click",function(){setMode("mkt",bM);});
+  if(bH)bH.addEventListener("click",function(){setMode("hukou",bH);});
+  draw();
+})();
+})();
+</script>
+</body>
+</html>

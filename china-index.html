@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A Macroeconomia Viaja? — Curso interativo sobre as leis macroeconômicas e o caso chinês</title>
+  <meta name="description" content="Curso interativo baseado no manuscrito 'Does Macroeconomics Travel? A Systematic Test of Core Macroeconomic Regularities in China': nove leis macroeconômicas, um protocolo, e o teste sistemático do caso chinês, com simulações e gráficos interativos." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [["$","$"],["\\(","\\)"]],
+        displayMath: [["$$","$$"],["\\[","\\]"]]
+      },
+      options: { skipHtmlTags: ["script","noscript","style","textarea"] }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+  <style>
+    :root {
+      --bg:          #0f1117;
+      --bg-card:     #161b27;
+      --bg-card-2:   #1c2233;
+      --border:      #2a3349;
+      --border-light:#334060;
+      --accent:      #dd6b55;
+      --accent-dim:  #9a4632;
+      --accent-glow: rgba(221,107,85,0.12);
+      --gold:        #c9a96e;
+      --text:        #dde4f0;
+      --text-muted:  #7a8aa8;
+      --text-dim:    #4e5f7a;
+      --blue:        #74a7e8;
+      --radius:      10px;
+      --radius-sm:   6px;
+      --shadow:      0 4px 24px rgba(0,0,0,0.5);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      font-size: 16px;
+      min-height: 100vh;
+    }
+
+    .top-bar {
+      background: linear-gradient(135deg, #0a0e18 0%, #131929 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+    }
+    .top-bar-title { font-family: 'Lora', serif; font-size: 0.95rem; color: var(--accent); letter-spacing: 0.04em; }
+    .top-bar-meta  { font-size: 0.78rem; color: var(--text-muted); letter-spacing: 0.02em; }
+
+    .hero { position: relative; text-align: center; padding: 5rem 2rem 4rem; border-bottom: 1px solid var(--border); overflow: hidden; }
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 55% 45% at 18% 25%, rgba(221,107,85,0.20), transparent 65%),
+        radial-gradient(ellipse 50% 55% at 82% 72%, rgba(116,167,232,0.14), transparent 65%),
+        radial-gradient(ellipse 40% 40% at 60% 18%, rgba(201,169,110,0.10), transparent 70%),
+        linear-gradient(135deg, #0a0e18 0%, #131929 60%, #0f1117 100%);
+    }
+    .hero-bg::after { content:""; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(15,17,23,0.2) 0%, rgba(15,17,23,0.88) 100%); }
+    .hero-inner { position: relative; z-index: 1; }
+    .hero-label {
+      display: inline-block; font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--accent); background: rgba(221,107,85,0.1); border: 1px solid rgba(221,107,85,0.25);
+      padding: 0.3rem 0.9rem; border-radius: 99px; margin-bottom: 1.4rem;
+    }
+    .hero h1 {
+      font-family: 'Lora', serif; font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 600;
+      color: #f0e3d5; line-height: 1.25; margin-bottom: 1rem; text-shadow: 0 2px 20px rgba(0,0,0,0.8);
+    }
+    .hero-subtitle { font-size: 1rem; color: #b8c6dc; max-width: 700px; margin: 0 auto 1.6rem; }
+    .hero-divider  { width: 60px; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent); margin: 0 auto; }
+
+    .page-wrap { max-width: 860px; margin: 0 auto; padding: 3rem 1.5rem 6rem; }
+
+    .part { margin-bottom: 3.5rem; }
+    .part-header { display: flex; align-items: flex-start; gap: 1.2rem; margin-bottom: 2rem; padding-bottom: 1.2rem; border-bottom: 1px solid var(--border); }
+    .part-number {
+      flex-shrink: 0; width: 44px; height: 44px; border-radius: 50%;
+      background: var(--accent-glow); border: 1.5px solid var(--accent-dim);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Lora', serif; font-size: 1rem; color: var(--accent); margin-top: 0.15rem;
+    }
+    .part-info h2    { font-family: 'Lora', serif; font-size: 1.4rem; font-weight: 600; color: #eaccdd; margin-bottom: 0.3rem; }
+    .part-info .part-tagline { font-size: 0.88rem; color: var(--text-muted); font-style: italic; }
+
+    .narrative {
+      background: var(--bg-card); border: 1px solid var(--border); border-left: 3px solid var(--accent-dim);
+      border-radius: var(--radius); padding: 1.2rem 1.4rem; margin-bottom: 2rem;
+      font-family: 'Lora', serif; font-size: 0.97rem; color: #c8d4e8; line-height: 1.85;
+    }
+    .narrative p + p { margin-top: 0.75rem; }
+
+    .question { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 1.5rem; overflow: hidden; transition: border-color 0.2s ease, box-shadow 0.2s ease; }
+    .question:hover { border-color: var(--border-light); box-shadow: 0 0 0 1px var(--border-light), var(--shadow); }
+    .question-header { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.25rem; background: var(--bg-card-2); border-bottom: 1px solid var(--border); }
+    .q-badge {
+      flex-shrink: 0; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; font-weight: 500;
+      color: var(--accent); background: var(--accent-glow); border: 1px solid rgba(221,107,85,0.2);
+      border-radius: var(--radius-sm); padding: 0.2rem 0.55rem; letter-spacing: 0.05em;
+    }
+    .question-header h3 { font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.95rem; color: #dde4f0; flex: 1; }
+    .question-body { padding: 1.2rem 1.25rem 1.4rem; }
+    .question-body p { margin-bottom: 0.7rem; font-size: 0.95rem; color: var(--text); }
+
+    .sub-list { list-style: none; margin-top: 1rem; display: flex; flex-direction: column; gap: 0.85rem; }
+    .sub-list li {
+      display: flex; gap: 0.9rem; align-items: flex-start; padding: 0.75rem 1rem;
+      background: rgba(255,255,255,0.025); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); font-size: 0.93rem; line-height: 1.65; transition: background 0.18s ease;
+    }
+    .sub-list li:hover { background: rgba(221,107,85,0.04); }
+    .sub-label { flex-shrink: 0; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; font-weight: 500; color: var(--accent); margin-top: 0.1rem; min-width: 20px; }
+
+    .math-block { overflow-x: auto; padding: 0.6rem 0; margin: 0.4rem 0; }
+
+    .hint {
+      display: flex; gap: 0.75rem; margin-top: 0.9rem; padding: 0.75rem 1rem;
+      background: rgba(116,167,232,0.06); border: 1px solid rgba(116,167,232,0.2);
+      border-radius: var(--radius-sm); font-size: 0.87rem; color: #8ab4d8;
+      cursor: pointer; user-select: none;
+    }
+    .hint-icon { flex-shrink: 0; font-size: 0.85rem; margin-top: 0.05rem; opacity: 0.8; }
+    .hint-toggle   { margin-left: auto; flex-shrink: 0; font-size: 0.75rem;
+                     font-weight: 600; letter-spacing: 0.06em;
+                     color: var(--blue); white-space: nowrap; }
+    .hint-content  { transition: max-height 0.35s ease, opacity 0.3s ease;
+                     max-height: 400px; overflow: hidden; opacity: 1; }
+    .hint.collapsed .hint-content { max-height: 0; opacity: 0; pointer-events: none; }
+
+    .part-sep { border: none; border-top: 1px dashed var(--border); margin: 3rem 0; }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 3px; }
+
+    @media (max-width: 600px) {
+      .top-bar-meta { display: none; }
+      .hero { padding: 2.5rem 1rem 2rem; }
+      .page-wrap { padding: 2rem 1rem 4rem; }
+    }
+
+    /* ── Interactive card ── */
+    .ic { background: linear-gradient(135deg,#0e1828 0%,#141f35 100%);
+          border: 1px solid #2a3f6a; border-radius: var(--radius);
+          margin-bottom: 1.8rem; overflow: hidden; }
+    .ic-header { display:flex; align-items:center; gap:.9rem;
+                 padding:.85rem 1.2rem; border-bottom:1px solid #2a3f6a;
+                 background:rgba(255,255,255,.025); }
+    .ic-badge  { font-family:'JetBrains Mono',monospace; font-size:.68rem;
+                 font-weight:600; letter-spacing:.08em; text-transform:uppercase;
+                 color:#74a7e8; background:rgba(116,167,232,.12);
+                 border:1px solid rgba(116,167,232,.28);
+                 border-radius:var(--radius-sm); padding:.18rem .55rem; }
+    .ic-header h4 { font-family:'Inter',sans-serif; font-size:.9rem;
+                    font-weight:600; color:#cdd8f0; }
+    .ic-body { padding:1.1rem 1.2rem 1.4rem; }
+    .ic-body p { font-size:.9rem; color:var(--text-muted); margin-bottom:.9rem; }
+
+    .mcq-opt { display:flex; align-items:center; gap:.7rem; padding:.6rem .85rem;
+               border-radius:var(--radius-sm); border:1px solid var(--border);
+               margin-bottom:.4rem; cursor:pointer; font-size:.88rem;
+               color:var(--text); transition:border-color .18s,background .18s; }
+    .mcq-opt:hover { border-color:var(--border-light); background:rgba(255,255,255,.03); }
+    .mcq-opt.ok  { border-color:#52b788; background:rgba(82,183,136,.08); color:#86d9b0; }
+    .mcq-opt.bad { border-color:#e07070; background:rgba(224,112,112,.08); color:#e89090; }
+    .opt-lbl { font-family:'JetBrains Mono',monospace; font-size:.72rem;
+               font-weight:600; color:var(--accent); min-width:16px; }
+    .opt-arr { margin-left:auto; }
+    .mcq-fb  { font-size:.84rem; padding:.6rem .85rem; border-radius:var(--radius-sm);
+               margin-top:.5rem; display:none; line-height:1.6; }
+    .mcq-fb.ok  { display:block; background:rgba(82,183,136,.1); color:#86d9b0;
+                  border:1px solid rgba(82,183,136,.3); }
+    .mcq-fb.bad { display:block; background:rgba(224,112,112,.1); color:#e89090;
+                  border:1px solid rgba(224,112,112,.3); }
+
+    /* ── Phase cards ── */
+    .phase-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1rem; margin-top:1.5rem; }
+    .phase-card {
+      display:block; text-decoration:none;
+      background:linear-gradient(135deg,#0e1828 0%,#141f35 100%);
+      border:1px solid #2a3f6a; border-radius:var(--radius);
+      padding:1.1rem 1.2rem 1.2rem; transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+    .phase-card:hover { transform:translateY(-3px); box-shadow:var(--shadow); border-color:rgba(221,107,85,.55); }
+    .phase-num { font-family:'Lora',serif; font-size:.8rem; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+    .phase-card h3 { font-family:'Lora',serif; font-size:1.05rem; font-weight:600; color:#e8d5cd; margin:.35rem 0 .45rem; }
+    .phase-card p  { font-size:.84rem; color:var(--text-muted); line-height:1.6; }
+    .phase-card .phase-go { display:inline-block; margin-top:.7rem; font-family:'JetBrains Mono',monospace; font-size:.72rem; color:var(--gold); letter-spacing:.05em; }
+
+    /* ── Stat chips ── */
+    .out-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+                gap:.65rem; margin-top:.9rem; }
+    .out-cell { background:rgba(0,0,0,.2); border:1px solid #2a3349;
+                border-radius:var(--radius-sm); padding:.6rem .85rem; text-align:center; }
+    .out-lbl  { font-size:.7rem; color:var(--text-muted); margin-bottom:.22rem;
+                font-family:'JetBrains Mono',monospace; }
+    .out-val  { font-family:'JetBrains Mono',monospace; font-size:1rem;
+                font-weight:600; color:var(--accent); }
+
+    /* ── Verdict chips ── */
+    .vb { display:inline-block; font-family:'JetBrains Mono',monospace; font-size:.7rem;
+          font-weight:600; letter-spacing:.04em; padding:.15rem .5rem;
+          border-radius:99px; white-space:nowrap; }
+    .vb-fail { color:#e89090; background:rgba(224,112,112,.1); border:1px solid rgba(224,112,112,.35); }
+    .vb-hold { color:#86d9b0; background:rgba(82,183,136,.1); border:1px solid rgba(82,183,136,.35); }
+    .vb-mod  { color:#d9b96f; background:rgba(201,169,110,.1); border:1px solid rgba(201,169,110,.35); }
+    .vb-na   { color:#9aa8c0; background:rgba(122,138,168,.1); border:1px solid rgba(122,138,168,.35); }
+
+    /* ── Table ── */
+    .tbl-wrap { overflow-x:auto; }
+    .tbl { width:100%; border-collapse:collapse; font-size:.86rem; }
+    .tbl th { font-family:'JetBrains Mono',monospace; font-size:.7rem; letter-spacing:.05em;
+              text-transform:uppercase; color:var(--accent); text-align:left;
+              padding:.55rem .6rem; border-bottom:1px solid var(--border-light); }
+    .tbl td { padding:.55rem .6rem; border-bottom:1px solid var(--border); color:var(--text); vertical-align:top; }
+    .tbl tr:hover td { background:rgba(221,107,85,.03); }
+  </style>
+</head>
+<body>
+
+<div class="top-bar">
+  <span class="top-bar-title">Does Macroeconomics Travel? &mdash; Curso</span>
+  <span class="top-bar-meta">Macroeconomia comparada &middot; Caso chin&ecirc;s &middot; Lucas Rafael de Andrade</span>
+</div>
+
+<header class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-inner">
+    <span class="hero-label">Curso interativo &middot; 5 fases</span>
+    <h1>A macroeconomia viaja?<br>Nove leis, um protocolo e o caso chin&ecirc;s</h1>
+    <p class="hero-subtitle">
+      As &ldquo;leis&rdquo; do manual de macroeconomia &mdash; Okun, Phillips, a teoria quantitativa da moeda &mdash;
+      foram medidas em economias de mercado. Elas valem na segunda maior economia do mundo, onde o Estado
+      administra dois pre&ccedil;os-chave? Este curso reconstr&oacute;i, fase por fase, a investiga&ccedil;&atilde;o do
+      manuscrito <em>&ldquo;Does Macroeconomics Travel?&rdquo;</em>, com simula&ccedil;&otilde;es e gr&aacute;ficos
+      interativos &mdash; e sem exigir qualquer background pr&eacute;vio.
+    </p>
+    <div class="hero-divider"></div>
+  </div>
+</header>
+
+<main class="page-wrap">
+
+  <!-- ===== A tese em um parágrafo ===== -->
+  <section class="part" id="a-tese">
+    <div class="part-header">
+      <div class="part-number">&sect;</div>
+      <div class="part-info">
+        <h2>A ideia central, antes de qualquer f&oacute;rmula</h2>
+        <span class="part-tagline">O que este curso argumenta e como ele est&aacute; organizado</span>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p>Boa parte do que os macroeconomistas &ldquo;sabem&rdquo; n&atilde;o s&atilde;o leis universais: s&atilde;o
+      <strong>regularidades emp&iacute;ricas robustas</strong>, medidas quase todas em economias de mercado.
+      Cada uma delas pressup&otilde;e, em sil&ecirc;ncio, um conjunto de institui&ccedil;&otilde;es: um mercado de
+      trabalho que absorve choques de demanda via emprego, um investimento guiado por retornos privados,
+      um sistema financeiro que precifica cr&eacute;dito. A tese do curso &eacute; que essas leis s&atilde;o
+      <strong>teoremas com premissas institucionais</strong> &mdash; e que a China, que administra o pre&ccedil;o do
+      trabalho no curto prazo (via sistema de registro <em>hukou</em> e empregadoras estatais) e o pre&ccedil;o do
+      capital (via cr&eacute;dito dirigido), &eacute; o experimento natural que revela qual premissa cada teorema
+      precisa.</p>
+      <p>O teste foi feito com um &uacute;nico protocolo, pr&eacute;-especificado, aplicado a nove regularidades
+      (L1&ndash;L8 e L10) num painel internacional de 39 economias. O resultado: as leis que dependem das duas
+      margens administradas <strong>falham seletivamente</strong>; as de contabilidade de longo prazo
+      <strong>dobram, mas n&atilde;o quebram</strong>. E, conforme a China se marketiza, as falhas
+      <em>encolhem nas margens</em> &mdash; como a tese prev&ecirc;.</p>
+    </div>
+
+    <div class="ic" id="mcq-palpite">
+      <div class="ic-header">
+        <span class="ic-badge">Antes de come&ccedil;ar</span>
+        <h4>Qual &eacute; o seu palpite?</h4>
+      </div>
+      <div class="ic-body">
+        <p>Antes de ver qualquer dado: o que voc&ecirc; acha que acontece quando submetemos a China ao mesmo
+        teste que o resto do mundo?</p>
+        <div class="mcq-opt" data-g="g0" data-c="0"><span class="opt-lbl">A</span>
+          <span>A China quebra todas as leis &mdash; &eacute; outro mundo econ&ocirc;mico</span>
+          <span class="opt-arr"></span></div>
+        <div class="mcq-opt" data-g="g0" data-c="0"><span class="opt-lbl">B</span>
+          <span>A China cumpre todas as leis &mdash; s&oacute; tem n&uacute;meros mais ruidosos</span>
+          <span class="opt-arr"></span></div>
+        <div class="mcq-opt" data-g="g0" data-c="1"><span class="opt-lbl">C</span>
+          <span>A China quebra algumas leis &mdash; exatamente as que dependem das margens que seu Estado administra</span>
+          <span class="opt-arr"></span></div>
+        <div class="mcq-fb" id="g0-ok">Esse &eacute; o argumento que as cinco fases v&atilde;o construir &mdash; e
+          testar de forma false&aacute;vel. Repare no desenho do teste: dire&ccedil;&otilde;es de falha definidas
+          <em>antes</em> de estimar, um grupo de compara&ccedil;&atilde;o que valida o m&eacute;todo, e a
+          exig&ecirc;ncia de que o m&eacute;todo classifique economias &ldquo;normais&rdquo; como normais.</div>
+        <div class="mcq-fb" id="g0-bad">Um dos extremos? A resposta que os dados sustentam &eacute; mais
+          interessante que os dois: a China n&atilde;o &eacute; nem um outro mundo, nem uma economia comum barulhenta.
+          As falhas existem, s&atilde;o grandes &mdash; e t&ecirc;m um padr&atilde;o. Siga as fases.</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="part-sep" />
+
+  <!-- ===== Mapa do curso ===== -->
+  <section class="part" id="mapa">
+    <div class="part-header">
+      <div class="part-number">&#9673;</div>
+      <div class="part-info">
+        <h2>Mapa do curso: a investiga&ccedil;&atilde;o como ela aconteceu</h2>
+        <span class="part-tagline">Cada fase &eacute; uma p&aacute;gina interativa &mdash; ci&ecirc;ncia como processo, n&atilde;o como resultado</span>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p>Este n&atilde;o &eacute; um curso que apresenta uma conclus&atilde;o pronta. Ele reconstroi o caminho:
+      a pergunta e o protocolo, os dados, a primeira passada econom&eacute;trica lei a lei, os testes de
+      robustez contra a suspeita de dados ruins, e a s&iacute;ntese final &mdash; o &iacute;ndice de falha, a
+      infer&ecirc;ncia por permuta&ccedil;&atilde;o e a tese institucional. Cada p&aacute;gina traz o
+      conte&uacute;do necess&aacute;rio do zero (o que &eacute; uma regress&atilde;o, um percentil, um valor-p),
+      simuladores para brincar com os mecanismos, e quest&otilde;es r&aacute;pidas para checar o entendimento.</p>
+    </div>
+
+    <div class="phase-grid">
+      <a class="phase-card" href="china-fase1_pergunta.html">
+        <span class="phase-num">Fase 1</span>
+        <h3>A pergunta e o protocolo</h3>
+        <p>Por que perguntar se a macroeconomia &ldquo;viaja&rdquo;. As nove leis em linguagem simples, o
+        protocolo &uacute;nico, e a estrat&eacute;gia contra o excepcionalismo infalsific&aacute;vel.
+        Simulador: a equa&ccedil;&atilde;o que amortece a lei de Okun.</p>
+        <span class="phase-go">abrir &rarr;</span>
+      </a>
+      <a class="phase-card" href="china-fase2_dados.html">
+        <span class="phase-num">Fase 2</span>
+        <h3>Os dados</h3>
+        <p>Banco Mundial e Penn World Table, 217 pa&iacute;ses, meio s&eacute;culo. Como se monta um painel
+        de compara&ccedil;&atilde;o justo &mdash; e por que a estat&iacute;stica de desemprego chinesa quase
+        n&atilde;o se move. Simulador: a &ldquo;moldura&rdquo; da pesquisa de emprego.</p>
+        <span class="phase-go">abrir &rarr;</span>
+      </a>
+      <a class="phase-card" href="china-fase3_leis.html">
+        <span class="phase-num">Fase 3</span>
+        <h3>Nove leis sob o mesmo protocolo</h3>
+        <p>O cora&ccedil;&atilde;o emp&iacute;rico: Okun, Phillips, moeda, comovimento C&times;I, renda permanente,
+        cr&eacute;dito, Wagner, converg&ecirc;ncia e parcela do trabalho. Laborat&oacute;rios interativos lei a
+        lei, com os n&uacute;meros reais do estudo.</p>
+        <span class="phase-go">abrir &rarr;</span>
+      </a>
+      <a class="phase-card" href="china-fase4_robustez.html">
+        <span class="phase-num">Fase 4</span>
+        <h3>Robustez e mensura&ccedil;&atilde;o</h3>
+        <p>PIB chin&ecirc;s &eacute; superestimado ou subestimado? As duas cr&iacute;ticas apontam em
+        dire&ccedil;&otilde;es opostas &mdash; e o desenho sobrevive &agrave;s duas. Simulador: a corre&ccedil;&atilde;o
+        de Chen et al. e o placebo Coreia.</p>
+        <span class="phase-go">abrir &rarr;</span>
+      </a>
+      <a class="phase-card" href="china-fase5_sintese.html">
+        <span class="phase-num">Fase 5</span>
+        <h3>S&iacute;ntese: a tese</h3>
+        <p>&Iacute;ndice de falha, estat&iacute;stica de perfil e o teste exato de randomiza&ccedil;&atilde;o:
+        qu&atilde;o improv&aacute;vel &eacute; a posi&ccedil;&atilde;o da China sob o acaso? Simulador: permuta&ccedil;&atilde;o
+        de 39 pa&iacute;ses e o mapa de perfil.</p>
+        <span class="phase-go">abrir &rarr;</span>
+      </a>
+    </div>
+  </section>
+
+  <hr class="part-sep" />
+
+  <!-- ===== As nove leis ===== -->
+  <section class="part" id="leis">
+    <div class="part-header">
+      <div class="part-number">&#8477;</div>
+      <div class="part-info">
+        <h2>As nove leis testadas (e o veredito de cada uma)</h2>
+        <span class="part-tagline">Um mapa do territ&oacute;rio &mdash; sem medo de spoiler: o interesse est&aacute; no <em>porqu&ecirc;</em></span>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p>A tabela abaixo resume o que cada lei afirma e o veredito final do protocolo. Ela &eacute; o fio
+      condutor das Fases 3&ndash;5. A numera&ccedil;&atilde;o pula o L9 de prop&oacute;sito: o multiplicador
+      fiscal foi exclu&iacute;do <em>antes</em> de qualquer resultado, por um crit&eacute;rio pr&eacute;-fixado
+      (n&atilde;o h&aacute; identifica&ccedil;&atilde;o cr&iacute;vel em dados anuais de painel) &mdash; um
+      detalhe pequeno que mostra como o desenho disciplina a investiga&ccedil;&atilde;o.</p>
+    </div>
+
+    <div class="question">
+      <div class="question-header">
+        <span class="q-badge">Tabela</span>
+        <h3>Nove regularidades, um veredito cada</h3>
+      </div>
+      <div class="question-body">
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead>
+              <tr><th>Lei</th><th>O que afirma</th><th>Veredito p/ China</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>L1</strong> Okun</td><td>Crescimento forte reduz o desemprego (&beta; entre &minus;0,15 e &minus;0,60 no mundo)</td><td><span class="vb vb-fail">N&Atilde;O VALE</span> &mdash; &beta;=&minus;0,006, o mais pr&oacute;ximo de zero das 39 economias</td></tr>
+              <tr><td><strong>L2</strong> Phillips</td><td>Desemprego alto derruba a infla&ccedil;&atilde;o</td><td><span class="vb vb-na">N&Atilde;O IDENTIFIC&Aacute;VEL</span> &mdash; fraca no mundo todo em dados anuais</td></tr>
+              <tr><td><strong>L3</strong> Teoria quantitativa</td><td>No longo prazo, moeda em excesso vira infla&ccedil;&atilde;o</td><td><span class="vb vb-mod">VALE MODIFICADA</span> &mdash; na linha, com queda de velocidade (res&iacute;duo &minus;4,7 p.p.)</td></tr>
+              <tr><td><strong>L4</strong> Comovimento C&times;I</td><td>Consumo e investimento sobem e descem juntos no ciclo</td><td><span class="vb vb-fail">N&Atilde;O VALE</span> &mdash; corr &minus;0,16; investimento ac&iacute;clico</td></tr>
+              <tr><td><strong>L5</strong> Renda permanente</td><td>Consumo depende da renda esperada de vida, n&atilde;o da corrente</td><td><span class="vb vb-hold">REJEITADA COMO NO MUNDO</span> &mdash; &lambda;=1,04, caso extremo do padr&atilde;o global</td></tr>
+              <tr><td><strong>L6</strong> Cr&eacute;dito&rarr;desacelera&ccedil;&atilde;o</td><td>Booms de cr&eacute;dito antecedem crises e crescimento menor</td><td><span class="vb vb-na">INCONCLUSIVO</span> &mdash; 1 &uacute;nico cluster tratado</td></tr>
+              <tr><td><strong>L7</strong> Wagner</td><td>O Estado cresce com a renda (elasticidade +0,24 a +0,27)</td><td><span class="vb vb-mod">VALE MODIFICADA</span> &mdash; &eta;=+0,08, com ressalva de medida</td></tr>
+              <tr><td><strong>L8</strong> Converg&ecirc;ncia</td><td>Pa&iacute;ses mais pobres crescem mais r&aacute;pido (fracamente)</td><td><span class="vb vb-hold">VALE COMO NO MUNDO</span> &mdash; China &eacute; outlier de res&iacute;duo (+6 p.p.), n&atilde;o de inclina&ccedil;&atilde;o</td></tr>
+              <tr><td><strong>L10</strong> Parcela do trabalho</td><td>Tend&ecirc;ncia de longo prazo da renda do trabalho</td><td><span class="vb vb-na">DEPENDE DA FONTE</span> &mdash; PWT: t&iacute;pica; contas nacionais: queda forte</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="hint">
+          <span class="hint-icon">&#9432;</span>
+          <span><strong>Como ler os vereditos.</strong> &ldquo;N&Atilde;O VALE&rdquo; n&atilde;o &eacute; uma nota
+          moral: &eacute; uma declara&ccedil;&atilde;o estat&iacute;stica de que a rela&ccedil;&atilde;o can&ocirc;nica,
+          estimada do mesmo jeito que no resto do mundo, n&atilde;o se reproduz na China &mdash; e de que essa
+          posi&ccedil;&atilde;o &eacute; extrema na distribui&ccedil;&atilde;o internacional. &ldquo;N&Atilde;O
+          IDENTIFIC&Aacute;VEL&rdquo; e &ldquo;DEPENDE DA FONTE&rdquo; s&atilde;o vereditos de honestidade: dizem que
+          os dados n&atilde;o sustentam condenar <em>ningu&eacute;m</em>.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="part-sep" />
+
+  <!-- ===== Para quem / fontes ===== -->
+  <section class="part" id="para-quem">
+    <div class="part-header">
+      <div class="part-number">&#9878;</div>
+      <div class="part-info">
+        <h2>Para quem &eacute; este curso</h2>
+        <span class="part-tagline">Pr&eacute;-requisitos: curiosidade. O resto se aprende no caminho</span>
+      </div>
+    </div>
+
+    <div class="question">
+      <div class="question-header">
+        <span class="q-badge">P&uacute;blico</span>
+        <h3>Nenhum background em economia &eacute; exigido</h3>
+      </div>
+      <div class="question-body">
+        <p>O curso foi escrito para quem nunca viu macroeconomia ou econometria. As ferramentas
+        estat&iacute;sticas m&iacute;nimas &mdash; correla&ccedil;&atilde;o, regress&atilde;o, $R^2$, percentil,
+        valor-p &mdash; s&atilde;o introduzidas em cart&otilde;es r&aacute;pidos quando aparecem (Fase 1), e cada
+        lei &eacute; explicada em linguagem corriqueira antes de qualquer equa&ccedil;&atilde;o. Os simuladores
+        existem para que os mecanismos possam ser <em>sentidos</em>: arraste um controle e veja a lei morrer
+        ou sobreviver.</p>
+        <ul class="sub-list">
+          <li><span class="sub-label">&#9654;</span><span>Estudantes de economia ou &aacute;reas quantitativas que queiram ver um projeto de pesquisa completo, do desenho &agrave; s&iacute;ntese.</span></li>
+          <li><span class="sub-label">&#9654;</span><span>Pesquisadores de outras &aacute;reas interessados em China, m&eacute;todos comparativos ou em como se faz infer&ecirc;ncia com &ldquo;um pa&iacute;s tratado&rdquo;.</span></li>
+          <li><span class="sub-label">&#9654;</span><span>Curiosos em geral: as simula&ccedil;&otilde;es funcionam sozinhas, sem ler a teoria toda.</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="question">
+      <div class="question-header">
+        <span class="q-badge">Fontes</span>
+        <h3>Dados, c&oacute;digo e o manuscrito</h3>
+      </div>
+      <div class="question-body">
+        <ul class="sub-list">
+          <li><span class="sub-label">Dados</span><span>World Development Indicators (Banco Mundial, API, vintage 2026-06-12) e Penn World Table 10.01. Todos p&uacute;blicos e gratuitos.</span></li>
+          <li><span class="sub-label">C&oacute;digo</span><span>O pacote de replica&ccedil;&atilde;o do projeto (download, constru&ccedil;&atilde;o do painel, um script por lei, randomiza&ccedil;&atilde;o) regenera cada n&uacute;mero, tabela e figura do zero.</span></li>
+          <li><span class="sub-label">Texto</span><span>L. R. de Andrade, <em>Does Macroeconomics Travel? A Systematic Test of Core Macroeconomic Regularities in China</em> &mdash; <a href="https://bibliotheca.omnis.navigate.net.br/preprint/PRP-2026-000008" target="_blank" rel="noopener" style="color:var(--accent);">preprint PRP-2026-000008</a>. As 20 refer&ecirc;ncias do manuscrito foram auditadas contra as fontes prim&aacute;rias.</span></li>
+          <li><span class="sub-label">Nota</span><span>Nas simula&ccedil;&otilde;es, os dados s&atilde;o gerados artificialmente e calibrados com os par&acirc;metros estimados no estudo; os n&uacute;meros reais aparecem sempre destacados em pain&eacute;is ao lado dos gr&aacute;ficos.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <nav class="nav-bottom" style="display:flex;justify-content:space-between;gap:1rem;margin-top:3rem;padding-top:1.2rem;border-top:1px dashed var(--border);">
+    <span></span>
+    <a href="china-fase1_pergunta.html" style="font-size:.85rem;font-weight:600;color:var(--accent);text-decoration:none;padding:.45rem 1.1rem;border:1px solid var(--accent-dim);border-radius:99px;background:var(--accent-glow);">Come&ccedil;ar pela Fase 1 &rarr;</a>
+  </nav>
+
+</main>
+
+<footer style="border-top: 1px solid var(--border); padding: 1.5rem 2rem; text-align: center; font-size: 0.8rem; color: var(--text-dim);">
+  Curso interativo &middot; baseado no manuscrito &ldquo;Does Macroeconomics Travel?&rdquo; &middot; Lucas Rafael de Andrade &middot; 2026
+</footer>
+
+<script>
+(function(){
+"use strict";
+function g(id){return document.getElementById(id);}
+
+/* ---------- hints colapsaveis ---------- */
+document.querySelectorAll(".hint").forEach(function(h){
+  var spans=h.querySelectorAll("span");
+  var ct=spans[spans.length-1];
+  if(!ct)return;
+  ct.classList.add("hint-content");
+  var tog=document.createElement("span");
+  tog.className="hint-toggle";
+  tog.textContent="Dica";
+  h.insertBefore(tog,ct);
+  h.classList.add("collapsed");
+  h.addEventListener("click",function(){h.classList.toggle("collapsed");});
+});
+
+/* ---------- MCQ handler ---------- */
+document.querySelectorAll(".mcq-opt").forEach(function(opt){
+  opt.addEventListener("click",function(){
+    var grp=this.dataset.g;
+    var all=document.querySelectorAll("[data-g='"+grp+"']");
+    if([].some.call(all,function(o){return o.classList.contains("ok")||o.classList.contains("bad");}))return;
+    var ok=(this.dataset.c==="1");
+    this.classList.add(ok?"ok":"bad");
+    var arr=this.querySelector(".opt-arr");
+    if(arr)arr.textContent=ok?"\u2713":"\u2717";
+    if(!ok)all.forEach(function(o){
+      if(o.dataset.c==="1"){o.classList.add("ok");var a=o.querySelector(".opt-arr");if(a)a.textContent="\u2713";}
+    });
+    var fb=g(grp+(ok?"-ok":"-bad"));
+    if(fb)fb.classList.add(ok?"ok":"bad");
+  });
+});
+})();
+</script>
+</body>
+</html>

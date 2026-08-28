@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Economia Ambiental — Notas de Aula · UERJ</title>
+<meta name="description" content="Notas de aula de Economia Ambiental (UERJ, Prof. Ronaldo Seroa da Motta), elaboradas por Lucas R. Andrade. Curso em andamento.">
+<link rel="icon" type="image/png" href="assets/marca-ambiental.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --verde: #14532D; --verde-claro: #4ADE80; --dourado: #C9A227;
+    --papel: #FAF9F6; --tinta: #1C1917; --cinza: #6B7280;
+    --f-titulo: 'Archivo', sans-serif;
+    --f-texto: 'Source Serif 4', Georgia, serif;
+    --f-mono: 'IBM Plex Mono', monospace;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--f-texto); color: var(--tinta); background: #e8e6e1; line-height: 1.7; }
+
+  .top-bar {
+    background: var(--verde); color: var(--papel);
+    padding: 0 1.6rem; height: 52px;
+    display: flex; align-items: center; justify-content: space-between;
+    font-family: var(--f-titulo); font-size: 0.8rem; letter-spacing: 0.02em;
+  }
+  .top-bar b { font-weight: 700; }
+  .top-bar span { opacity: 0.85; }
+
+  .hero {
+    background: var(--papel);
+    max-width: 21cm; margin: 24px auto 0; padding: 3.5rem 2.5rem 2.5rem;
+    box-shadow: 0 2px 12px rgba(0,0,0,.12);
+    text-align: center;
+  }
+  .hero img { height: 84px; width: auto; margin: 0 auto 1.2rem; display: block; }
+  .hero .rotulo {
+    display: inline-block; font-family: var(--f-titulo); font-size: 0.72rem;
+    letter-spacing: 0.16em; text-transform: uppercase; color: var(--dourado);
+    border: 1px solid var(--dourado); border-radius: 99px; padding: 0.3rem 0.9rem;
+    margin-bottom: 1.2rem;
+  }
+  .hero h1 {
+    font-family: var(--f-titulo); font-weight: 800; font-size: clamp(2rem, 5vw, 2.9rem);
+    color: var(--verde); line-height: 1.1; margin-bottom: 0.8rem;
+  }
+  .hero p { max-width: 620px; margin: 0 auto; color: #44403c; font-size: 1.02rem; }
+  .hero .creditos {
+    margin-top: 1.6rem; padding-top: 1.2rem; border-top: 1px solid #ddd8cd;
+    font-family: var(--f-titulo); font-size: 0.85rem; color: var(--cinza);
+  }
+  .hero .creditos strong { color: var(--verde); }
+
+  .wrap {
+    max-width: 21cm; margin: 0 auto 4rem; padding: 2.4rem 2.5rem;
+    background: var(--papel);
+  }
+  .wrap .section-label {
+    display: block; font-family: var(--f-titulo); font-size: 0.75rem; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase; color: var(--dourado); margin-bottom: 0.6rem;
+  }
+  .wrap h2 {
+    font-family: var(--f-titulo); font-weight: 700; font-size: 1.4rem; color: var(--verde);
+    margin-bottom: 1.6rem;
+  }
+
+  .aulas { display: flex; flex-direction: column; gap: 14px; }
+  .aula-card {
+    display: grid; grid-template-columns: 60px 1fr auto; align-items: center; gap: 18px;
+    padding: 18px 20px; border: 1px solid #ddd8cd; border-radius: 8px;
+    text-decoration: none; color: inherit; transition: border-color .15s, background .15s;
+  }
+  .aula-card:hover { border-color: var(--verde); background: #f2f6f3; }
+  .aula-num {
+    font-family: var(--f-titulo); font-weight: 800; font-size: 1.1rem; color: var(--verde);
+    text-align: center;
+  }
+  .aula-card h3 { font-family: var(--f-titulo); font-size: 1.02rem; font-weight: 700; color: var(--tinta); margin-bottom: 4px; }
+  .aula-card p { font-size: 0.88rem; color: var(--cinza); }
+  .aula-go { font-family: var(--f-mono); font-size: 0.78rem; color: var(--dourado); white-space: nowrap; }
+
+  .aula-card.em-breve {
+    border-style: dashed; color: var(--cinza); cursor: default;
+  }
+  .aula-card.em-breve:hover { border-color: #ddd8cd; background: transparent; }
+  .aula-card.em-breve .aula-num { color: var(--cinza); }
+  .aula-card.em-breve h3 { color: var(--cinza); }
+  .aula-card.em-breve .aula-go { color: var(--cinza); }
+
+  footer {
+    max-width: 21cm; margin: 0 auto 3rem; padding: 1.4rem 2.5rem 0;
+    font-family: var(--f-titulo); font-size: 0.78rem; color: var(--cinza); text-align: center;
+  }
+  footer strong { color: var(--verde); }
+
+  @media (max-width: 640px) {
+    .hero, .wrap, footer { padding-left: 1.2rem; padding-right: 1.2rem; }
+    .aula-card { grid-template-columns: 40px 1fr; }
+    .aula-go { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <b>Economia Ambiental</b>
+  <span>UERJ &middot; Notas de aula</span>
+</div>
+
+<header class="hero">
+  <img src="assets/marca-ambiental.png" alt="Economia Ambiental">
+  <span class="rotulo">Curso em andamento</span>
+  <h1>Economia Ambiental</h1>
+  <p>Notas de aula elaboradas a partir do curso do <strong>Prof. Ronaldo Seroa da Motta</strong>
+  na UERJ — dos fundamentos históricos da disciplina até os instrumentos de política ambiental.
+  Novas aulas são adicionadas conforme o curso avança.</p>
+  <div class="creditos">Elaboração e edição digital: <strong>Lucas R. Andrade</strong></div>
+</header>
+
+<main class="wrap">
+  <span class="section-label">Aulas</span>
+  <h2>Notas de aula publicadas</h2>
+  <div class="aulas">
+    <a class="aula-card" href="ambiental-aula-01.html">
+      <span class="aula-num">01</span>
+      <span>
+        <h3>Contexto histórico e fundamentos</h3>
+        <p>De Ricardo e Jevons ao nascimento formal da economia ambiental — externalidades, a curva de Kuznets ambiental, e por que "crescer primeiro, limpar depois" nem sempre funciona.</p>
+      </span>
+      <span class="aula-go">ler →</span>
+    </a>
+    <div class="aula-card em-breve">
+      <span class="aula-num">02</span>
+      <span>
+        <h3>Em breve</h3>
+        <p>Publicada conforme as próximas aulas do curso acontecem.</p>
+      </span>
+      <span class="aula-go">em breve</span>
+    </div>
+  </div>
+</main>
+
+<footer>
+  Notas de aula &middot; Economia Ambiental &middot; UERJ &middot; elaboração <strong>Lucas R. Andrade</strong> &middot; 2026
+</footer>
+
+</body>
+</html>

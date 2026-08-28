@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fase 4 · Robustez e mensuração — A Macroeconomia Viaja?</title>
+  <meta name="description" content="Fase 4 do curso: as críticas de mensuração aos dados chineses, o bracketing bidirecional (Chen et al. vs Clark et al.), a taxa urbana pesquisada, subamostras, filtro de Hamilton e o placebo Coreia." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [["$","$"],["\\(","\\)"]],
+        displayMath: [["$$","$$"],["\\[","\\]"]]
+      },
+      options: { skipHtmlTags: ["script","noscript","style","textarea"] }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+  <style>
+    :root {
+      --bg:          #0f1117;
+      --bg-card:     #161b27;
+      --bg-card-2:   #1c2233;
+      --border:      #2a3349;
+      --border-light:#334060;
+      --accent:      #dd6b55;
+      --accent-dim:  #9a4632;
+      --accent-glow: rgba(221,107,85,0.12);
+      --gold:        #c9a96e;
+      --text:        #dde4f0;
+      --text-muted:  #7a8aa8;
+      --text-dim:    #4e5f7a;
+      --blue:        #74a7e8;
+      --radius:      10px;
+      --radius-sm:   6px;
+      --shadow:      0 4px 24px rgba(0,0,0,0.5);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      font-size: 16px;
+      min-height: 100vh;
+    }
+
+    .top-bar {
+      background: linear-gradient(135deg, #0a0e18 0%, #131929 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+    }
+    .top-bar-title { font-family: 'Lora', serif; font-size: 0.95rem; color: var(--accent); letter-spacing: 0.04em; }
+    .top-bar-meta  { font-size: 0.78rem; color: var(--text-muted); letter-spacing: 0.02em; }
+
+    .hero { position: relative; text-align: center; padding: 4rem 2rem 3rem; border-bottom: 1px solid var(--border); overflow: hidden;
+      background:
+        radial-gradient(ellipse 60% 55% at 50% -10%, rgba(221,107,85,0.16), transparent 70%),
+        radial-gradient(ellipse 55% 45% at 88% 115%, rgba(116,167,232,0.10), transparent 70%),
+        linear-gradient(180deg, #11141d 0%, #0f1117 100%);
+    }
+    .hero-inner { position: relative; z-index: 1; }
+    .hero-label {
+      display: inline-block; font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--accent); background: rgba(221,107,85,0.1); border: 1px solid rgba(221,107,85,0.25);
+      padding: 0.3rem 0.9rem; border-radius: 99px; margin-bottom: 1.4rem;
+    }
+    .hero h1 {
+      font-family: 'Lora', serif; font-size: clamp(1.7rem, 3.6vw, 2.5rem); font-weight: 600;
+      color: #f0e3d5; line-height: 1.25; margin-bottom: 1rem; text-shadow: 0 2px 20px rgba(0,0,0,0.8);
+    }
+    .hero-subtitle { font-size: 1rem; color: #b8c6dc; max-width: 680px; margin: 0 auto 1.6rem; }
+    .hero-divider  { width: 60px; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent); margin: 0 auto; }
+
+    .page-wrap { max-width: 860px; margin: 0 auto; padding: 3rem 1.5rem 4rem; }
+
+    .part { margin-bottom: 3.5rem; }
+    .part-header { display: flex; align-items: flex-start; gap: 1.2rem; margin-bottom: 2rem; padding-bottom: 1.2rem; border-bottom: 1px solid var(--border); }
+    .part-number {
+      flex-shrink: 0; width: 44px; height: 44px; border-radius: 50%;
+      background: var(--accent-glow); border: 1.5px solid var(--accent-dim);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Lora', serif; font-size: 1rem; color: var(--accent); margin-top: 0.15rem;
+    }
+    .part-info h2    { font-family: 'Lora', serif; font-size: 1.4rem; font-weight: 600; color: #eaccdd; margin-bottom: 0.3rem; }
+    .part-info .part-tagline { font-size: 0.88rem; color: var(--text-muted); font-style: italic; }
+
+    .narrative {
+      background: var(--bg-card); border: 1px solid var(--border); border-left: 3px solid var(--accent-dim);
+      border-radius: var(--radius); padding: 1.2rem 1.4rem; margin-bottom: 2rem;
+      font-family: 'Lora', serif; font-size: 0.97rem; color: #c8d4e8; line-height: 1.85;
+    }
+    .narrative p + p { margin-top: 0.75rem; }
+
+    .question { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 1.5rem; overflow: hidden; transition: border-color 0.2s ease, box-shadow 0.2s ease; }
+    .question:hover { border-color: var(--border-light); box-shadow: 0 0 0 1px var(--border-light), var(--shadow); }
+    .question-header { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.25rem; background: var(--bg-card-2); border-bottom: 1px solid var(--border); }
+    .q-badge {
+      flex-shrink: 0; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; font-weight: 500;
+      color: var(--accent); background: var(--accent-glow); border: 1px solid rgba(221,107,85,0.2);
+      border-radius: var(--radius-sm); padding: 0.2rem 0.55rem; letter-spacing: 0.05em;
+    }
+    .question-header h3 { font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.95rem; color: #dde4f0; flex: 1; }
+    .question-body { padding: 1.2rem 1.25rem 1.4rem; }
+    .question-body p { margin-bottom: 0.7rem; font-size: 0.95rem; color: var(--text); }
+
+    .sub-list { list-style: none; margin-top: 1rem; display: flex; flex-direction: column; gap: 0.85rem; }
+    .sub-list li {
+      display: flex; gap: 0.9rem; align-items: flex-start; padding: 0.75rem 1rem;
+      background: rgba(255,255,255,0.025); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); font-size: 0.93rem; line-height: 1.65; transition: background 0.18s ease;
+    }
+    .sub-list li:hover { background: rgba(221,107,85,0.04); }
+    .sub-label { flex-shrink: 0; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; font-weight: 500; color: var(--accent); margin-top: 0.1rem; min-width: 34px; }
+
+    .math-block { overflow-x: auto; padding: 0.6rem 0; margin: 0.4rem 0; }
+
+    .hint {
+      display: flex; gap: 0.75rem; margin-top: 0.9rem; padding: 0.75rem 1rem;
+      background: rgba(116,167,232,0.06); border: 1px solid rgba(116,167,232,0.2);
+      border-radius: var(--radius-sm); font-size: 0.87rem; color: #8ab4d8;
+      cursor: pointer; user-select: none;
+    }
+    .hint-icon { flex-shrink: 0; font-size: 0.85rem; margin-top: 0.05rem; opacity: 0.8; }
+    .hint-toggle   { margin-left: auto; flex-shrink: 0; font-size: 0.75rem;
+                     font-weight: 600; letter-spacing: 0.06em;
+                     color: var(--blue); white-space: nowrap; }
+    .hint-content  { transition: max-height 0.35s ease, opacity 0.3s ease;
+                     max-height: 420px; overflow: hidden; opacity: 1; }
+    .hint.collapsed .hint-content { max-height: 0; opacity: 0; pointer-events: none; }
+
+    .part-sep { border: none; border-top: 1px dashed var(--border); margin: 3rem 0; }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 3px; }
+
+    @media (max-width: 600px) {
+      .top-bar-meta { display: none; }
+      .hero { padding: 2.5rem 1rem 2rem; }
+      .page-wrap { padding: 2rem 1rem 4rem; }
+    }
+
+    .ic { background: linear-gradient(135deg,#0e1828 0%,#141f35 100%);
+          border: 1px solid #2a3f6a; border-radius: var(--radius);
+          margin-bottom: 1.8rem; overflow: hidden; }
+    .ic-header { display:flex; align-items:center; gap:.9rem;
+                 padding:.85rem 1.2rem; border-bottom:1px solid #2a3f6a;
+                 background:rgba(255,255,255,.025); }
+    .ic-badge  { font-family:'JetBrains Mono',monospace; font-size:.68rem;
+                 font-weight:600; letter-spacing:.08em; text-transform:uppercase;
+                 color:#74a7e8; background:rgba(116,167,232,.12);
+                 border:1px solid rgba(116,167,232,.28);
+                 border-radius:var(--radius-sm); padding:.18rem .55rem; }
+    .ic-header h4 { font-family:'Inter',sans-serif; font-size:.9rem;
+                    font-weight:600; color:#cdd8f0; }
+    .ic-body { padding:1.1rem 1.2rem 1.4rem; }
+    .ic-body p { font-size:.9rem; color:var(--text-muted); margin-bottom:.9rem; }
+
+    .sl-row   { display:flex; align-items:center; gap:.9rem;
+                margin-bottom:.75rem; flex-wrap:wrap; }
+    .sl-lbl   { font-family:'JetBrains Mono',monospace; font-size:.8rem;
+                color:var(--accent); min-width:200px; }
+    input[type=range].sl {
+        flex:1; min-width:120px; max-width:260px;
+        -webkit-appearance:none; height:4px; border-radius:2px;
+        background:#2a3349; outline:none; cursor:pointer; }
+    input[type=range].sl::-webkit-slider-thumb {
+        -webkit-appearance:none; width:14px; height:14px; border-radius:50%;
+        background:var(--accent); cursor:pointer;
+        box-shadow:0 0 0 3px rgba(221,107,85,.2); }
+    .sl-val { font-family:'JetBrains Mono',monospace; font-size:.8rem;
+              color:#dde4f0; min-width:48px; text-align:right; }
+
+    .btn-row  { display:flex; gap:.65rem; margin-top:.9rem; flex-wrap:wrap;
+                align-items:center; }
+    .btn { font-family:'Inter',sans-serif; font-size:.82rem; font-weight:600;
+           padding:.48rem 1.1rem; border-radius:99px; border:none; cursor:pointer;
+           transition:transform .15s,box-shadow .15s,opacity .15s; }
+    .btn:active { transform:scale(.96); }
+    .btn-p { background:linear-gradient(135deg,#dd6b55,#a94832); color:#0f1117; }
+    .btn-p:hover { box-shadow:0 0 14px rgba(221,107,85,.35); }
+    .btn-s { background:rgba(255,255,255,.07); color:var(--text-muted);
+             border:1px solid var(--border); }
+    .btn-s:hover { background:rgba(255,255,255,.11); color:var(--text); }
+    .btn-s.on { background:rgba(221,107,85,.16); color:var(--accent);
+                border-color:rgba(221,107,85,.45); }
+
+    .mcq-opt { display:flex; align-items:center; gap:.7rem; padding:.6rem .85rem;
+               border-radius:var(--radius-sm); border:1px solid var(--border);
+               margin-bottom:.4rem; cursor:pointer; font-size:.88rem;
+               color:var(--text); transition:border-color .18s,background .18s; }
+    .mcq-opt:hover { border-color:var(--border-light); background:rgba(255,255,255,.03); }
+    .mcq-opt.ok  { border-color:#52b788; background:rgba(82,183,136,.08); color:#86d9b0; }
+    .mcq-opt.bad { border-color:#e07070; background:rgba(224,112,112,.08); color:#e89090; }
+    .opt-lbl { font-family:'JetBrains Mono',monospace; font-size:.72rem;
+               font-weight:600; color:var(--accent); min-width:16px; }
+    .opt-arr { margin-left:auto; }
+    .mcq-fb  { font-size:.84rem; padding:.6rem .85rem; border-radius:var(--radius-sm);
+               margin-top:.5rem; display:none; line-height:1.6; }
+    .mcq-fb.ok  { display:block; background:rgba(82,183,136,.1); color:#86d9b0;
+                  border:1px solid rgba(82,183,136,.3); }
+    .mcq-fb.bad { display:block; background:rgba(224,112,112,.1); color:#e89090;
+                  border:1px solid rgba(224,112,112,.3); }
+
+    .out-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+                gap:.65rem; margin-top:.9rem; }
+    .out-cell { background:rgba(0,0,0,.2); border:1px solid #2a3349;
+                border-radius:var(--radius-sm); padding:.6rem .85rem; text-align:center; }
+    .out-lbl  { font-size:.7rem; color:var(--text-muted); margin-bottom:.22rem;
+                font-family:'JetBrains Mono',monospace; }
+    .out-val  { font-family:'JetBrains Mono',monospace; font-size:1rem;
+                font-weight:600; color:var(--accent); }
+
+    .cv-box { border:1px solid #2a3349; border-radius:var(--radius-sm);
+              background:#0b0e15; padding:.5rem; text-align:center; }
+    .cv-box canvas { display:block; margin:0 auto; max-width:100%; }
+    .cv-cap { font-family:'JetBrains Mono',monospace; font-size:.68rem;
+              color:var(--text-muted); margin-top:.4rem; }
+
+    .vb { display:inline-block; font-family:'JetBrains Mono',monospace; font-size:.7rem;
+          font-weight:600; letter-spacing:.04em; padding:.15rem .5rem;
+          border-radius:99px; white-space:nowrap; }
+    .vb-fail { color:#e89090; background:rgba(224,112,112,.1); border:1px solid rgba(224,112,112,.35); }
+    .vb-hold { color:#86d9b0; background:rgba(82,183,136,.1); border:1px solid rgba(82,183,136,.35); }
+    .vb-mod  { color:#d9b96f; background:rgba(201,169,110,.1); border:1px solid rgba(201,169,110,.35); }
+    .vb-na   { color:#9aa8c0; background:rgba(122,138,168,.1); border:1px solid rgba(122,138,168,.35); }
+
+    .tbl-wrap { overflow-x:auto; }
+    .tbl { width:100%; border-collapse:collapse; font-size:.85rem; }
+    .tbl th { font-family:'JetBrains Mono',monospace; font-size:.68rem; letter-spacing:.05em;
+              text-transform:uppercase; color:var(--accent); text-align:left;
+              padding:.5rem .6rem; border-bottom:1px solid var(--border-light); }
+    .tbl td { padding:.5rem .6rem; border-bottom:1px solid var(--border); color:var(--text); vertical-align:top; }
+    .tbl tr:hover td { background:rgba(221,107,85,.03); }
+
+    .nav-bottom{display:flex;justify-content:space-between;gap:1rem;margin-top:3rem;
+                padding-top:1.2rem;border-top:1px dashed var(--border);flex-wrap:wrap;}
+    .nav-bottom a{font-size:.85rem;font-weight:600;color:var(--text-muted);text-decoration:none;
+                  padding:.45rem 1rem;border:1px solid var(--border);border-radius:99px;
+                  transition:color .18s,border-color .18s,background .18s;}
+    .nav-bottom a:hover{color:var(--accent);border-color:var(--accent-dim);background:var(--accent-glow);}
+    .nav-bottom a.next{color:var(--accent);border-color:var(--accent-dim);background:var(--accent-glow);}
+  </style>
+</head>
+<body>
+
+<div class="top-bar">
+  <span class="top-bar-title">Does Macroeconomics Travel? &mdash; Curso</span>
+  <span class="top-bar-meta">Fase 4 de 5 &middot; Robustez e mensura&ccedil;&atilde;o</span>
+</div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <span class="hero-label">Fase 4 &middot; Robustez e mensura&ccedil;&atilde;o</span>
+    <h1>Os dados chineses s&atilde;o confi&aacute;veis?<br>Vamos testar nos dois sentidos</h1>
+    <p class="hero-subtitle">
+      As falhas da Fase 3 s&oacute; valem se sobreviverem &agrave; suspeita de dados ruins. A sorte do desenho:
+      as duas principais cr&iacute;ticas &agrave; estat&iacute;stica chinesa apontam em dire&ccedil;&otilde;es
+      <em>opostas</em> &mdash; PIB superestimado (contabilidade forense) ou subestimado (luzes de
+      sat&eacute;lite). Sobreviver &agrave;s duas &eacute; o m&aacute;ximo que robustez de mensura&ccedil;&atilde;o
+      pode oferecer.
+    </p>
+    <div class="hero-divider"></div>
+  </div>
+</header>
+
+<main class="page-wrap">
+
+  <!-- ===== PARTE I ===== -->
+  <section class="part" id="parte-1">
+    <div class="part-header">
+      <div class="part-number">I</div>
+      <div class="part-info">
+        <h2>Bracketing bidirecional</h2>
+        <span class="part-tagline">Duas cr&iacute;ticas, dois sinais &mdash; e uma lógica que nenhuma delas escapa</span>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p>A cr&iacute;tica mais afiada vem de Chen, Chen, Hsieh e Song (2019): por contabilidade forense das
+      prov&iacute;ncias, o crescimento oficial do PIB teria sido <strong>superestimado em ~1,7 ponto por ano</strong>
+      entre 2008 e 2016. A cr&iacute;tica oposta vem de Clark, Pinkovskiy e Sala-i-Martin (2020): comparando com
+      luzes noturnas de sat&eacute;lite, o crescimento chin&ecirc;s pode estar <strong>subestimado</strong>.</p>
+      <p>O desenho n&atilde;o escolhe lado: aplica as duas. E h&aacute; uma l&oacute;gica mais profunda,
+      a predi&ccedil;&atilde;o P5 da Fase 1: <strong>reescalar o PIB n&atilde;o cria covari&acirc;ncia com uma
+      vari&aacute;vel que n&atilde;o se move</strong>. Nenhuma transforma&ccedil;&atilde;o do eixo-x (crescimento)
+      ressuscita uma regress&atilde;o cujo eixo-y (desemprego) &eacute; plano por constru&ccedil;&atilde;o
+      institucional. Do lado oposto, um crescimento verdadeiro <em>maior</em> alargaria as oscila&ccedil;&otilde;es
+      que o desemprego j&aacute; n&atilde;o acompanha &mdash; tamb&eacute;m n&atilde;o restaura a lei. E a
+      anomalia de comovimento &eacute; sobre o <em>sinal de correla&ccedil;&otilde;es</em> entre componentes do
+      gasto, n&atilde;o sobre n&iacute;veis de PIB.</p>
+    </div>
+
+    <div class="ic" id="chen-lab">
+      <div class="ic-header">
+        <span class="ic-badge">Simula&ccedil;&atilde;o</span>
+        <h4>Aplicando a corre&ccedil;&atilde;o de Chen et al. &mdash; e a falha fica mais limpa</h4>
+      </div>
+      <div class="ic-body">
+        <p>A nuvem abaixo &eacute; a regress&atilde;o de Okun da China: crescimento (x, s&eacute;rie oficial
+        aproximada) contra varia&ccedil;&atilde;o do desemprego (y, plano). Arraste a corre&ccedil;&atilde;o
+        para cortar $c$ pontos por ano do crescimento p&oacute;s-2008 e veja duas coisas: os pontos vermelhos
+        (p&oacute;s-2008) deslizarem para a esquerda &mdash; e o $\beta$ do estudo <em>se aproximar de zero</em>,
+        n&atilde;o se afastar.</p>
+
+        <div class="sl-row">
+          <span class="sl-lbl">corre&ccedil;&atilde;o $c$ (p.p./ano p&oacute;s-2008)</span>
+          <input type="range" class="sl" id="ch-c" min="0" max="2" step="0.05" value="0" />
+          <span class="sl-val" id="chv-c">0.00</span>
+        </div>
+
+        <div class="cv-box" style="margin-top:1rem">
+          <canvas id="ch-canvas" width="480" height="300"></canvas>
+          <div class="cv-cap">China 1992&ndash;2024 &middot; cinza: pr&eacute;-2008 &middot; vermelho: p&oacute;s-2008 (corrigido)</div>
+        </div>
+
+        <div class="out-grid">
+          <div class="out-cell"><div class="out-lbl">&beta; Okun (estudo, corrigido)</div><div class="out-val" id="ch-beta">&mdash;</div></div>
+          <div class="out-cell"><div class="out-lbl">res&iacute;duo QTM (p.p.)</div><div class="out-val" id="ch-qtm">&mdash;</div></div>
+          <div class="out-cell"><div class="out-lbl">efeito sobre a falha</div><div class="out-val" id="ch-dir" style="font-size:.8rem">&mdash;</div></div>
+        </div>
+        <p style="margin-top:.9rem;margin-bottom:0">Valores do estudo: sem corre&ccedil;&atilde;o,
+        $\beta = -0{,}006$ e res&iacute;duo QTM $= -4{,}7$; com Chen et al. ($c = 1{,}7$), $\beta = -0{,}003$ e
+        res&iacute;duo $-7{,}2$; com a variante agressiva at&eacute; 2024 ($c = 2$), $\beta = -0{,}000$. A
+        corre&ccedil;&atilde;o <em>aprofunda</em> as anomalias &mdash; o oposto do que a hip&oacute;tese de
+        &ldquo;dados ruins&rdquo; exige.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="part-sep" />
+
+  <!-- ===== PARTE II ===== -->
+  <section class="part" id="parte-2">
+    <div class="part-header">
+      <div class="part-number">II</div>
+      <div class="part-info">
+        <h2>O desemprego pesquisado: a s&eacute;rie que a cr&iacute;tica recomenda</h2>
+        <span class="part-tagline">A resposta moderna &agrave; obje&ccedil;&atilde;o &mdash; e a obje&ccedil;&atilde;o continua sem resposta</span>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p>A obje&ccedil;&atilde;o padr&atilde;o: &ldquo;a taxa registrada &eacute; administrada; a OIT &eacute;
+      modelada; nada serve&rdquo;. A r&eacute;plica do estudo: usar a <strong>taxa urbana pesquisada</strong>
+      (a moderna, a que a pr&oacute;pria cr&iacute;tica recomenda), compilada dos boletins oficiais para
+      2018&ndash;2024. Resultado: desvio-padr&atilde;o de <strong>0,26 ponto</strong> contra oscila&ccedil;&otilde;es
+      de crescimento de <strong>2,1 pontos</strong>. A raz&atilde;o de volatilidade &eacute; 0,12 &mdash; contra
+      0,68 nos EUA no mesmo per&iacute;odo. Nenhuma s&eacute;rie de desemprego chin&ecirc;s dispon&iacute;vel
+      mostra movimento c&iacute;clico &mdash; e <em>esse &eacute; o pr&oacute;prio achado</em>, a
+      vers&atilde;o emp&iacute;rica da equa&ccedil;&atilde;o (1).</p>
+    </div>
+
+    <div class="ic" id="vol-lab">
+      <div class="ic-header">
+        <span class="ic-badge">Simula&ccedil;&atilde;o</span>
+        <h4>Mat&eacute;ria-prima de Okun: a raz&atilde;o de volatilidade</h4>
+      </div>
+      <div class="ic-body">
+        <p>Uma regress&atilde;o precisa de vari&aacute;veis que se movam. Controle as duas volatilidades e veja
+        se sobra mat&eacute;ria-prima para a lei de Okun.</p>
+
+        <div class="sl-row">
+          <span class="sl-lbl">volatilidade do crescimento sd(g)</span>
+          <input type="range" class="sl" id="vo-g" min="0.5" max="4" step="0.05" value="2.1" />
+          <span class="sl-val" id="vov-g">2.10</span>
+        </div>
+        <div class="sl-row">
+          <span class="sl-lbl">volatilidade do desemprego sd(u)</span>
+          <input type="range" class="sl" id="vo-u" min="0.05" max="2" step="0.05" value="0.26" />
+          <span class="sl-val" id="vov-u">0.26</span>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-p" id="vo-btn-chn" type="button">China 2018&ndash;24 (0,12)</button>
+          <button class="btn btn-s" id="vo-btn-usa" type="button">EUA 2018&ndash;24 (0,68)</button>
+        </div>
+
+        <div class="out-grid">
+          <div class="out-cell"><div class="out-lbl">raz&atilde;o sd(u)/sd(g)</div><div class="out-val" id="vo-r">&mdash;</div></div>
+          <div class="out-cell"><div class="out-lbl">mat&eacute;ria-prima p/ Okun</div><div class="out-val" id="vo-read" style="font-size:.8rem">&mdash;</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="part-sep" />
+
+  <!-- ===== PARTE III ===== -->
+  <section class="part" id="parte-3">
+    <div class="part-header">
+      <div class="part-number">III</div>
+      <div class="part-info">
+        <h2>Subamostras: as falhas encolhem na margem</h2>
+        <span class="part-tagline">A predi&ccedil;&atilde;o din&iacute;mica do framework passa no teste</span>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p>O framework previu (P4): com a marketiza&ccedil;&atilde;o, $s$ e $\phi$ caem, e as falhas minguam. Os
+      dados confirmam, com nuance. <strong>Okun:</strong> o coeficiente p&oacute;s-2008 &eacute;
+      $-0{,}058$ (p = 0,045) &mdash; significativo pela primeira vez, embora ainda um d&eacute;cimo do valor
+      dos EUA. <strong>Comovimento:</strong> a correla&ccedil;&atilde;o C&times;I sobe de $-0{,}37$
+      (1995&ndash;2007) para $+0{,}01$ (2008&ndash;2024) &mdash; ainda longe da norma de $+0{,}6$. As leis
+      n&atilde;o s&atilde;o inaplic&aacute;veis &agrave; China; est&atilde;o contidas na propor&ccedil;&atilde;o
+      das institui&ccedil;&otilde;es que as cont&ecirc;m.</p>
+    </div>
+
+    <div class="ic" id="sub-canvas-box">
+      <div class="ic-header">
+        <span class="ic-badge">Gr&aacute;fico</span>
+        <h4>Okun na China: a lei acorda devagar</h4>
+      </div>
+      <div class="ic-body">
+        <p>Coeficientes de Okun em tr&ecirc;s janelas (valores do estudo). A barra p&oacute;s-2008 &eacute;
+        a primeira significativamente negativa da China &mdash; e ainda uma fra&ccedil;&atilde;o da
+        americana.</p>
+        <div class="cv-box">
+          <canvas id="sub-canvas" width="480" height="200"></canvas>
+          <div class="cv-cap">&beta; de Okun por amostra (barras para baixo = lei operando)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="question">
+      <div class="question-header">
+        <span class="q-badge">Robustez</span>
+        <h3>O filtro de Hamilton e o resto da bateria</h3>
+      </div>
+      <div class="question-body">
+        <ul class="sub-list">
+          <li><span class="sub-label">R5</span><span><strong>Filtro de Hamilton (2018)</strong> em vez do HP:
+          correla&ccedil;&atilde;o C&times;I da China $+0{,}13$ contra mediana de $+0{,}63$ no grupo &mdash; a
+          falha de L4 n&atilde;o &eacute; artefato do comportamento de borda do HP em amostra curta.</span></li>
+          <li><span class="sub-label">R4</span><span><strong>L6 com tend&ecirc;ncias por pa&iacute;s</strong>:
+          $\beta$ geral $-0{,}009$ (p = 0,047), can&ocirc;nico; o caso chin&ecirc;s permanece INCONCLUSIVO por
+          desenho.</span></li>
+          <li><span class="sub-label">R1</span><span><strong>PIB corrigido</strong> (Parte I): falha de Okun
+          ROBUSTA (mais limpa); res&iacute;duo QTM APROFUNDA (&minus;4,7 &rarr; &minus;7,2).</span></li>
+          <li><span class="sub-label">R2</span><span><strong>Desemprego pesquisado</strong> (Parte II): raz&atilde;o
+          0,12 vs 0,68 &mdash; a falha n&atilde;o &eacute; artefato da s&eacute;rie OIT.</span></li>
+          <li><span class="sub-label">R3</span><span><strong>Subamostras</strong> (acima): atenua&ccedil;&atilde;o
+          nas margens, sem converg&ecirc;ncia plena.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <hr class="part-sep" />
+
+  <!-- ===== PARTE IV ===== -->
+  <section class="part" id="parte-4">
+    <div class="part-header">
+      <div class="part-number">IV</div>
+      <div class="part-info">
+        <h2>O placebo: e se o m&eacute;todo s&oacute; soubesse gritar &ldquo;China!&rdquo;?</h2>
+        <span class="part-tagline">A Coreia cresceu r&aacute;pido, teve Estado forte &mdash; e o m&eacute;todo a declara normal</span>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p>Teste de sanidade embutido no protocolo: rodar tudo de novo para a <strong>Coreia do Sul</strong>
+      &mdash; um estado desenvolvimentista que cresceu r&aacute;pido sob orienta&ccedil;&atilde;o estatal,
+      mas com mercado de trabalho e aloca&ccedil;&atilde;o de capital funcionando. O m&eacute;todo a
+      classifica como <em>normal</em>: percentil 44 em Okun, 69 em comovimento &mdash; nada extremo. O
+      &iacute;ndice composto da Coreia at&eacute; &eacute; alto, mas puxado pelas leis de longo prazo do
+      catch-up (moeda, parcela do trabalho), padr&atilde;o gen&eacute;rico da &Aacute;sia de crescimento
+      r&aacute;pido. Nos EUA, o &iacute;ndice direcional coloca o pa&iacute;s quase no fundo (38&ordm; de 39):
+      leis valem. O m&eacute;todo distingue um estado desenvolvimentista <em>com mercados</em> de um com
+      <em>pre&ccedil;os de ciclo administrados</em> &mdash; exatamente a distin&ccedil;&atilde;o que a tese
+      precisa.</p>
+    </div>
+
+    <div class="ic" id="mcq-placebo">
+      <div class="ic-header">
+        <span class="ic-badge">Teste r&aacute;pido</span>
+        <h4>Para que serve um placebo aqui?</h4>
+      </div>
+      <div class="ic-body">
+        <p>Qual &eacute; a fun&ccedil;&atilde;o do exerc&iacute;io da Coreia no desenho do estudo?</p>
+        <div class="mcq-opt" data-g="g1" data-c="0"><span class="opt-lbl">A</span>
+          <span>Mostrar que a Coreia &eacute; mais excepcional que a China</span>
+          <span class="opt-arr"></span></div>
+        <div class="mcq-opt" data-g="g1" data-c="1"><span class="opt-lbl">B</span>
+          <span>Verificar se o protocolo marca economias &ldquo;normais&rdquo; como normais &mdash; controle de falsos positivos</span>
+          <span class="opt-arr"></span></div>
+        <div class="mcq-opt" data-g="g1" data-c="0"><span class="opt-lbl">C</span>
+          <span>Substituir a China por um pa&iacute;s com dados melhores</span>
+          <span class="opt-arr"></span></div>
+        <div class="mcq-fb" id="g1-ok">Isso. Um detector de anomalias que apita para todo pa&iacute;s que
+          cresceu r&aacute;pido n&atilde;o detecta nada. A Coreia compartilha com a China o crescimento
+          r&aacute;pido e o Estado forte &mdash; e mesmo assim o perfil das leis de ciclo dela &eacute; comum.
+          Se o m&eacute;todo gritasse &ldquo;excepcional&rdquo; para os dois, seria crescimento (ou ru&iacute;do),
+          n&atilde;o institui&ccedil;&atilde;o.</div>
+        <div class="mcq-fb" id="g1-bad">N&atilde;o &mdash; o placebo existe para calibrar o detector. A Coreia
+          tem o mesmo &ldquo;fator de confus&atilde;o&rdquo; plaus&iacute;vel (crescimento r&aacute;pido,
+          Estado desenvolvimentista) sem ter as institui&ccedil;&otilde;es de ciclo administradas. Resultado
+          normal nela = o m&eacute;todo n&atilde;o confunde desenvolvimento com excepcionalismo.</div>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p><strong>O que levamos para a Fase 5:</strong> vereditos que sobreviveram a corre&ccedil;&otilde;es em
+      ambas as dire&ccedil;&otilde;es, &agrave; s&eacute;rie de desemprego recomendada pela pr&oacute;pria
+      cr&iacute;tica, a filtros alternativos e ao placebo. Falta a pergunta final: <em>qu&atilde;o improv&aacute;vel
+      &eacute; o padr&atilde;o chin&ecirc;s se a China fosse apenas um pa&iacute;s comum sorteado dessa
+      distribui&ccedil;&atilde;o?</em> A resposta &eacute; um teste exato de randomiza&ccedil;&atilde;o &mdash;
+      e a tese do paper inteiro.</p>
+    </div>
+  </section>
+
+  <nav class="nav-bottom">
+    <a href="china-fase3_leis.html">&larr; Fase 3 · Nove leis</a>
+    <a href="china-index.html">Mapa do curso</a>
+    <a class="next" href="china-fase5_sintese.html">Fase 5 · S&iacute;ntese &rarr;</a>
+  </nav>
+
+</main>
+
+<footer style="border-top: 1px solid var(--border); padding: 1.5rem 2rem; text-align: center; font-size: 0.8rem; color: var(--text-dim);">
+  Does Macroeconomics Travel? &mdash; curso interativo &middot; Fase 4 &middot; Lucas Rafael de Andrade &middot; 2026
+</footer>
+
+<script>
+(function(){
+"use strict";
+function g(id){return document.getElementById(id);}
+
+function fillSlider(el){
+  if(!el)return;
+  var mn=+el.min,mx=+el.max,v=+el.value;
+  var pct=((v-mn)/(mx-mn)*100).toFixed(1)+"%";
+  el.style.background="linear-gradient(to right,var(--accent-dim) 0%,var(--accent-dim) "+pct+",#2a3349 "+pct+")";
+}
+document.querySelectorAll(".sl").forEach(fillSlider);
+
+document.querySelectorAll(".hint").forEach(function(h){
+  var spans=h.querySelectorAll("span");
+  var ct=spans[spans.length-1];
+  if(!ct)return;
+  ct.classList.add("hint-content");
+  var tog=document.createElement("span");
+  tog.className="hint-toggle";
+  tog.textContent="Dica";
+  h.insertBefore(tog,ct);
+  h.classList.add("collapsed");
+  h.addEventListener("click",function(){h.classList.toggle("collapsed");});
+});
+
+document.querySelectorAll(".mcq-opt").forEach(function(opt){
+  opt.addEventListener("click",function(){
+    var grp=this.dataset.g;
+    var all=document.querySelectorAll("[data-g='"+grp+"']");
+    if([].some.call(all,function(o){return o.classList.contains("ok")||o.classList.contains("bad");}))return;
+    var ok=(this.dataset.c==="1");
+    this.classList.add(ok?"ok":"bad");
+    var arr=this.querySelector(".opt-arr");
+    if(arr)arr.textContent=ok?"\u2713":"\u2717";
+    if(!ok)all.forEach(function(o){
+      if(o.dataset.c==="1"){o.classList.add("ok");var a=o.querySelector(".opt-arr");if(a)a.textContent="\u2713";}
+    });
+    var fb=g(grp+(ok?"-ok":"-bad"));
+    if(fb)fb.classList.add(ok?"ok":"bad");
+  });
+});
+
+function RNG(seed){var s=seed>>>0;return function(){s=(1664525*s+1013904223)>>>0;return s/4294967296;};}
+function gauss(rnd){var u=0,v=0;while(u===0)u=rnd();while(v===0)v=rnd();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);}
+function mean(a){var s=0,i;for(i=0;i<a.length;i++)s+=a[i];return s/a.length;}
+function fmt(v,d){return (v===null||isNaN(v))?"\u2014":v.toFixed(d===undefined?2:d);}
+
+/* ---------- simulacao: correcao de Chen et al. ---------- */
+(function(){
+  var cv=g("ch-canvas"),sl=g("ch-c"),sv=g("chv-c");
+  if(!cv||!sl)return;
+  var ctx=cv.getContext("2d"),W=cv.width,H=cv.height;
+
+  var GR=[14.2,13.9,13.0,10.9,9.9,9.2,7.8,7.7,8.5,8.3,9.1,10.0,10.1,11.4,12.7,14.2,
+          9.7,9.4,10.6,9.6,7.9,7.8,7.4,7.0,6.8,6.9,6.7,6.1,2.3,8.6,3.1,5.2,5.0];
+  var N=GR.length,i;
+  var du=[],rnd=new RNG(2024);
+  for(i=0;i<N;i++)du.push(0.10*gauss(rnd));
+  du[du.length-1]=0;du[du.length-2]=0;
+
+  function studyBeta(c){
+    if(c<=1.7)return -0.006+(0.003/1.7)*c;
+    return Math.max(0,-0.003+(0.003/0.3)*(c-1.7));
+  }
+
+  function draw(){
+    var c=+sl.value;
+    sv.textContent=fmt(c,2);fillSlider(sl);
+    var xs=[];
+    for(i=0;i<N;i++)xs.push(i>=16?GR[i]-c:GR[i]);
+
+    var xmin=-1,xmax=15,ymin=-0.35,ymax=0.35;
+    var mL=46,mR=12,mT=12,mB=34;
+    function px(x){return mL+(x-xmin)/(xmax-xmin)*(W-mL-mR);}
+    function py(y){return H-mB-(y-ymin)/(ymax-ymin)*(H-mT-mB);}
+
+    ctx.fillStyle="#0b0e15";ctx.fillRect(0,0,W,H);
+    ctx.font="10px 'JetBrains Mono',monospace";ctx.fillStyle="#7a8aa8";
+    var k;
+    for(k=0;k<=5;k++){var xv=xmin+(xmax-xmin)*k/5,X=px(xv);
+      ctx.strokeStyle="rgba(42,51,73,0.55)";ctx.beginPath();ctx.moveTo(X,mT);ctx.lineTo(X,H-mB);ctx.stroke();
+      ctx.fillText(fmt(xv,0),X-10,H-16);}
+    for(k=0;k<=4;k++){var yv=ymin+(ymax-ymin)*k/4,Y=py(yv);
+      ctx.strokeStyle="rgba(42,51,73,0.55)";ctx.beginPath();ctx.moveTo(mL,Y);ctx.lineTo(W-mR,Y);ctx.stroke();
+      ctx.fillText(fmt(yv,2),8,Y+3);}
+    ctx.strokeStyle="#2a3349";ctx.strokeRect(mL,mT,W-mL-mR,H-mT-mB);
+    ctx.fillStyle="#7a8aa8";
+    ctx.fillText("crescimento do PIB (%)",W/2-70,H-4);
+    ctx.save();ctx.translate(11,H/2+40);ctx.rotate(-Math.PI/2);ctx.fillText("\u0394u (p.p.)",0,0);ctx.restore();
+
+    for(i=0;i<N;i++){
+      if(i>=16){ctx.fillStyle="#dd6b55";}
+      else{ctx.fillStyle="#5c6f92";}
+      ctx.fillRect(px(xs[i])-2.2,py(du[i])-2.2,4.4,4.4);
+    }
+
+    var mdu=mean(du);
+    ctx.strokeStyle="rgba(201,169,110,0.85)";ctx.setLineDash([6,4]);ctx.beginPath();
+    ctx.moveTo(mL,py(mdu));ctx.lineTo(W-mR,py(mdu));ctx.stroke();ctx.setLineDash([]);
+    ctx.fillStyle="#c9a96e";ctx.font="9px 'JetBrains Mono',monospace";
+    ctx.fillText("\u03b2 \u2248 0 (nuvem sem inclina\u00e7\u00e3o)",mL+10,py(mdu)-8);
+
+    var eB=g("ch-beta"),eQ=g("ch-qtm"),eD=g("ch-dir");
+    if(eB)eB.textContent=fmt(studyBeta(c),3);
+    if(eQ)eQ.textContent=fmt(-4.7-1.47*c,1)+" p.p.";
+    if(eD){
+      if(c<0.05){eD.textContent="falha como em F3";eD.style.color="#d9b96f";}
+      else{eD.textContent="falha mais limpa";eD.style.color="#86d9b0";}
+    }
+  }
+  sl.addEventListener("input",draw);
+  draw();
+})();
+
+/* ---------- simulacao: razao de volatilidade ---------- */
+(function(){
+  var slG=g("vo-g"),slU=g("vo-u"),vG=g("vov-g"),vU=g("vov-u");
+  if(!slG||!slU)return;
+  function draw(){
+    var sg=+slG.value,su=+slU.value,r=su/sg;
+    vG.textContent=fmt(sg,2);vU.textContent=fmt(su,2);fillSlider(slG);fillSlider(slU);
+    var eR=g("vo-r"),eV=g("vo-read");
+    if(eR)eR.textContent=fmt(r,2);
+    if(eV){
+      if(r>=0.45){eV.textContent="suficiente";eV.style.color="#86d9b0";}
+      else if(r>=0.25){eV.textContent="marginal";eV.style.color="#d9b96f";}
+      else{eV.textContent="quase nenhuma";eV.style.color="#e89090";}
+    }
+  }
+  function set(sg,su){slG.value=sg;slU.value=su;draw();}
+  var bC=g("vo-btn-chn"),bU=g("vo-btn-usa");
+  if(bC)bC.addEventListener("click",function(){set(2.1,0.26);});
+  if(bU)bU.addEventListener("click",function(){set(2.0,1.36);});
+  slG.addEventListener("input",draw);
+  slU.addEventListener("input",draw);
+  draw();
+})();
+
+/* ---------- grafico estatico: Okun por subamostra ---------- */
+(function(){
+  var cv=g("sub-canvas");
+  if(!cv)return;
+  var ctx=cv.getContext("2d"),W=cv.width,H=cv.height;
+  var bars=[
+    {lbl:"EUA 1992\u20132024",v:-0.60,note:"\u03b2=\u22120,60"},
+    {lbl:"China 1992\u20132024",v:-0.006,note:"\u03b2=\u22120,006"},
+    {lbl:"China p\u00f3s-2008",v:-0.058,note:"\u03b2=\u22120,058 (p=0,045)"}
+  ];
+  var mL=150,mR=90,mT=18,mB=30,vmin=-0.7,vmax=0.05;
+  function px(v){return mL+(v-vmin)/(vmax-vmin)*(W-mL-mR);}
+  function barY(i){return mT+i*((H-mT-mB)/bars.length);}
+
+  ctx.fillStyle="#0b0e15";ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle="rgba(42,51,73,0.8)";
+  ctx.beginPath();ctx.moveTo(px(0),mT-4);ctx.lineTo(px(0),H-mB+4);ctx.stroke();
+  ctx.font="10px 'JetBrains Mono',monospace";ctx.fillStyle="#7a8aa8";
+  ctx.fillText("0",px(0)-3,mT-8);
+  ctx.fillText("\u22120,3",px(-0.3)-12,mT-8);
+  ctx.fillText("\u22120,6",px(-0.6)-12,mT-8);
+
+  var i;
+  for(i=0;i<bars.length;i++){
+    var y=barY(i)+8,bh=Math.max(3,(H-mT-mB)/bars.length-16);
+    var x0=px(0),x1=px(bars[i].v);
+    ctx.fillStyle=bars[i].v<-0.05?(i===0?"#74a7e8":"#dd6b55"):"#9aa8c0";
+    ctx.fillRect(Math.min(x0,x1),y,Math.abs(x1-x0)||2,bh);
+    ctx.fillStyle="#dde4f0";
+    ctx.fillText(bars[i].lbl,10,y+bh/2+4);
+    ctx.fillStyle="#7a8aa8";
+    ctx.fillText(bars[i].note,Math.min(x0,x1)-2,y+bh/2+4);
+  }
+})();
+})();
+</script>
+</body>
+</html>
