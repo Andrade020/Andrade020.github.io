@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="How the offline credit-risk scoring work at Porto Real Asset is built: sklearn pipelines, gradient boosting, SHAP, and Optuna — by Lucas R. Andrade.">
+<meta name="description" content="How the offline credit-risk research at Porto Real Asset is built: walk-forward validation, survival analysis, SHAP, and public fiscal-data integration — by Lucas R. Andrade.">
 <title>Credit-Risk Scoring · Lucas R. Andrade</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.92em' font-size='95' font-family='Georgia,serif' font-style='italic' fill='%23d4a574'%3EZ%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -40,10 +40,10 @@
     <a href="production.html#sub-05" class="back-link"><span data-lang-en>← Production</span><span data-lang-pt>← Produção</span></a>
     <span class="section-label" data-lang-en>Subsystem 05 · How it works</span>
     <span class="section-label" data-lang-pt>Subsistema 05 · Como funciona</span>
-    <h1 data-lang-en>A score is an <em>opinion. Ship the reasons.</em></h1>
-    <h1 data-lang-pt>Um score é uma <em>opinião. Entregue as razões.</em></h1>
-    <p data-lang-en>This is the one subsystem here that is honestly offline: an exploratory scoring pipeline for originator and debtor risk, reviewed by a person, not an automated daily job. It's included because the modelling choices are real, and because knowing what to leave out of production is as much a decision as what to automate.</p>
-    <p data-lang-pt>Este é o único subsistema aqui que é honestamente offline: um pipeline exploratório de score de risco por originador e devedor, revisado por uma pessoa, não um job automático diário. Está incluído porque as escolhas de modelagem são reais, e porque saber o que deixar de fora da produção é uma decisão tão real quanto o que automatizar.</p>
+    <h1 data-lang-en>Three lenses on the <em>same risk.</em></h1>
+    <h1 data-lang-pt>Três lentes sobre o <em>mesmo risco.</em></h1>
+    <p data-lang-en>This is the one subsystem here that is honestly offline: a research pipeline for a portfolio of payroll-deductible ("consignado") receivables, reviewed by a person, not an automated daily job. It's included because the modelling choices are real — two classification approaches plus survival analysis, cross-checked against public fiscal data — and because knowing what to leave out of production is as much a decision as what to automate.</p>
+    <p data-lang-pt>Este é o único subsistema aqui que é honestamente offline: um pipeline de pesquisa para uma carteira de recebíveis consignados, revisado por uma pessoa, não um job automático diário. Está incluído porque as escolhas de modelagem são reais — duas abordagens de classificação mais análise de sobrevivência, cruzadas com dados fiscais públicos — e porque saber o que deixar de fora da produção é uma decisão tão real quanto o que automatizar.</p>
   </section>
 
   <section class="section wrap">
@@ -51,29 +51,29 @@
       <div class="case__intro">
         <span class="section-label" data-lang-en>The problem</span>
         <span class="section-label" data-lang-pt>O problema</span>
-        <h2 data-lang-en>An investment committee doesn't buy a probability.</h2>
-        <h2 data-lang-pt>Um comitê de investimentos não compra uma probabilidade.</h2>
-        <p data-lang-en>A default-probability score is only useful if someone can argue with it. That means every prediction needs to come with the features that drove it, ranked and signed, in language a credit analyst — not a data scientist — can read and challenge. It also means the model has to be judged on more than one number: a threshold-free ranking metric alongside a precision-at-the-top-of-the-list metric, because what matters operationally is whether the worst originators actually surface first.</p>
-        <p data-lang-pt>Um score de probabilidade de default só é útil se alguém conseguir discordar dele. Isso significa que toda predição precisa vir com as features que a produziram, ranqueadas e com sinal, numa linguagem que um analista de crédito — não um cientista de dados — consiga ler e questionar. Também significa que o modelo precisa ser julgado por mais de um número: uma métrica de ranking sem limiar junto de uma métrica de precisão no topo da lista, porque o que importa operacionalmente é se os piores originadores de fato aparecem primeiro.</p>
+        <h2 data-lang-en>A borrower's risk isn't only the borrower's.</h2>
+        <h2 data-lang-pt>O risco de um sacado não é só dele.</h2>
+        <p data-lang-en>These are payroll-deductible receivables authorized through agreements with public-sector entities — municipalities and states. A purely transaction-level model misses something structural: if the entity behind the payroll itself is under fiscal stress, that can ripple into payment reliability across every contract tied to it, regardless of any individual borrower's own history. So the question isn't just "will this contract default," it's "will it keep performing, and does the counterparty's own fiscal health say anything about that."</p>
+        <p data-lang-pt>São recebíveis consignados autorizados por convênios com entes públicos — municípios e estados. Um modelo puramente transacional deixa passar algo estrutural: se o ente por trás da folha está sob estresse fiscal, isso pode se refletir na confiabilidade de pagamento de todos os contratos ligados a ele, independentemente do histórico individual de cada sacado. A pergunta não é só "esse contrato vai entrar em default", é "ele vai continuar performando, e a saúde fiscal da contraparte diz algo sobre isso".</p>
       </div>
       <div class="case__detail">
         <div class="case-fact">
           <div class="case-fact__k" data-lang-en>Status</div><div class="case-fact__k" data-lang-pt>Status</div>
-          <div class="case-fact__v" data-lang-en>Offline / exploratory</div><div class="case-fact__v" data-lang-pt>Offline / exploratório</div>
+          <div class="case-fact__v" data-lang-en>Offline / research</div><div class="case-fact__v" data-lang-pt>Offline / pesquisa</div>
           <div class="case-fact__note" data-lang-en>Not wired into a daily DAG — reviewed manually, on purpose. See the decision below.</div>
           <div class="case-fact__note" data-lang-pt>Não conectado a uma DAG diária — revisado manualmente, de propósito. Ver a decisão abaixo.</div>
         </div>
         <div class="case-fact">
-          <div class="case-fact__k" data-lang-en>Models compared</div><div class="case-fact__k" data-lang-pt>Modelos comparados</div>
-          <div class="case-fact__v">6</div>
-          <div class="case-fact__note" data-lang-en>Logistic regression through gradient boosting — a deliberately simple baseline stays in the comparison.</div>
-          <div class="case-fact__note" data-lang-pt>Regressão logística até gradient boosting — um baseline deliberadamente simples permanece na comparação.</div>
+          <div class="case-fact__k" data-lang-en>Validation</div><div class="case-fact__k" data-lang-pt>Validação</div>
+          <div class="case-fact__v" data-lang-en>Walk-forward</div><div class="case-fact__v" data-lang-pt>Walk-forward</div>
+          <div class="case-fact__note" data-lang-en>Trained on one snapshot, tested on a later, held-out one — genuine out-of-time validation, not a random split.</div>
+          <div class="case-fact__note" data-lang-pt>Treinado num snapshot, testado num posterior, isolado — validação out-of-time de verdade, não um split aleatório.</div>
         </div>
         <div class="case-fact">
-          <div class="case-fact__k" data-lang-en>Explainability</div><div class="case-fact__k" data-lang-pt>Explicabilidade</div>
-          <div class="case-fact__v">SHAP</div>
-          <div class="case-fact__note" data-lang-en>Every prediction ships with signed, ranked feature attributions.</div>
-          <div class="case-fact__note" data-lang-pt>Toda predição sai com atribuições de feature ranqueadas e com sinal.</div>
+          <div class="case-fact__k" data-lang-en>Fiscal data</div><div class="case-fact__k" data-lang-pt>Dado fiscal</div>
+          <div class="case-fact__v">SICONFI</div>
+          <div class="case-fact__note" data-lang-en>Brazil's public fiscal-transparency filings, matched to counterparties and reviewed by a person before use.</div>
+          <div class="case-fact__note" data-lang-pt>As prestações de contas fiscais públicas do Brasil, casadas às contrapartes e revisadas por uma pessoa antes do uso.</div>
         </div>
       </div>
     </div>
@@ -81,16 +81,16 @@
 
   <section class="section wrap">
     <div class="section__head">
-      <h2 class="section__title" data-lang-en>From raw features to an explained score</h2>
-      <h2 class="section__title" data-lang-pt>De features brutas a um score explicado</h2>
+      <h2 class="section__title" data-lang-en>Three models, one panel of contracts</h2>
+      <h2 class="section__title" data-lang-pt>Três modelos, um painel de contratos</h2>
     </div>
     <div class="prod-diagram">
       <div class="diagram__head">
-        <span class="diagram__title" data-lang-en>risk scoring · offline</span>
-        <span class="diagram__title" data-lang-pt>score de risco · offline</span>
+        <span class="diagram__title" data-lang-en>risk research · offline</span>
+        <span class="diagram__title" data-lang-pt>pesquisa de risco · offline</span>
         <span class="diagram__legend">
-          <span><i class="swatch s-source"></i><span data-lang-en>features</span><span data-lang-pt>features</span></span>
-          <span><i class="swatch s-orch"></i><span data-lang-en>modelling</span><span data-lang-pt>modelagem</span></span>
+          <span><i class="swatch s-source"></i><span data-lang-en>inputs</span><span data-lang-pt>entradas</span></span>
+          <span><i class="swatch s-orch"></i><span data-lang-en>models</span><span data-lang-pt>modelos</span></span>
           <span><i class="swatch s-out"></i><span data-lang-en>output</span><span data-lang-pt>saída</span></span>
         </span>
       </div>
@@ -107,37 +107,46 @@
       <div class="flow__step">
         <div class="flow__num">01</div>
         <div>
-          <h4 data-lang-en>Preprocessing as a pipeline, not a notebook cell</h4>
-          <h4 data-lang-pt>Pré-processamento como pipeline, não célula de notebook</h4>
-          <p data-lang-en>A column transformer applies the right treatment per feature type — imputation for missing values, robust scaling for skewed payment amounts, power transforms where distributions are heavily tailed — wrapped in a single scikit-learn pipeline so the exact same transform applies at train and score time.</p>
-          <p data-lang-pt>Um column transformer aplica o tratamento certo por tipo de feature — imputação para valores faltantes, escala robusta para valores de pagamento enviesados, transformações de potência onde as distribuições têm cauda pesada — envolvido num único pipeline scikit-learn, para que a mesma transformação exata valha no treino e no score.</p>
+          <h4 data-lang-en>Labels at four lateness thresholds, official ratings as features</h4>
+          <h4 data-lang-pt>Rótulos em quatro limiares de atraso, ratings oficiais como features</h4>
+          <p data-lang-en>Default is labeled at 1, 30, 60, and 120 days past due, with 60 days as the primary target. Two official Brazilian scales feed the model as features rather than being invented by it: CAPAG, the National Treasury's A–D payment-capacity rating for public entities, and the BACEN Resolution 2.682 AA–H scale for the loan's own credit quality.</p>
+          <p data-lang-pt>O default é rotulado em 1, 30, 60 e 120 dias de atraso, com 60 dias como alvo principal. Duas escalas oficiais brasileiras entram como features, não são inventadas pelo modelo: a CAPAG, rating A–D de capacidade de pagamento de entes públicos do Tesouro Nacional, e a escala AA–H da Resolução BACEN 2.682 para a qualidade de crédito do próprio contrato.</p>
         </div>
       </div>
       <div class="flow__step">
         <div class="flow__num">02</div>
         <div>
-          <h4 data-lang-en>Macro context, joined in</h4>
-          <h4 data-lang-pt>Contexto macro, incorporado</h4>
-          <p data-lang-en>Regional economic indicators are joined onto originator-level features, on the premise that local economic conditions carry real signal about credit performance that transaction-level data alone doesn't capture.</p>
-          <p data-lang-pt>Indicadores econômicos regionais são incorporados às features em nível de originador, sob a premissa de que condições econômicas locais carregam sinal real sobre performance de crédito que o dado em nível de transação sozinho não captura.</p>
+          <h4 data-lang-en>Two classifiers, validated two different ways</h4>
+          <h4 data-lang-pt>Dois classificadores, validados de duas formas diferentes</h4>
+          <p data-lang-en>A cross-sectional model — LightGBM vs. XGBoost vs. a logistic-regression baseline, Optuna-tuned, selected by validation PR-AUC — is fit within a single snapshot on a stratified split, deliberately not time-based. A second, walk-forward model takes only contracts performing normally at one snapshot and predicts default roughly ninety days later, tested on the most recent snapshot held out entirely — genuine out-of-time validation, grouped by contract so no contract leaks across the split.</p>
+          <p data-lang-pt>Um modelo cross-sectional — LightGBM vs. XGBoost vs. um baseline de regressão logística, otimizado com Optuna, selecionado por PR-AUC de validação — é ajustado dentro de um único snapshot, com split estratificado, deliberadamente não temporal. Um segundo modelo, walk-forward, pega só contratos performando normalmente num snapshot e prediz default cerca de noventa dias depois, testado num snapshot mais recente inteiramente isolado — validação out-of-time de verdade, agrupada por contrato para nenhum contrato vazar entre os splits.</p>
         </div>
       </div>
       <div class="flow__step">
         <div class="flow__num">03</div>
         <div>
-          <h4 data-lang-en>A model comparison, not a single model</h4>
-          <h4 data-lang-pt>Uma comparação de modelos, não um modelo só</h4>
-          <p data-lang-en>Logistic regression, random forest, a support vector classifier, a small neural net, and gradient boosting (with early stopping to avoid overfitting the boosting rounds) are all fit and compared on the same split, tuned with an automated search rather than by hand.</p>
-          <p data-lang-pt>Regressão logística, random forest, um classificador SVM, uma rede neural pequena e gradient boosting (com early stopping para não sobreajustar as rodadas de boosting) são todos ajustados e comparados no mesmo split, otimizados por busca automatizada em vez de manualmente.</p>
+          <h4 data-lang-en>A third lens: how long until it stops paying</h4>
+          <h4 data-lang-pt>Uma terceira lente: até quando continua pagando</h4>
+          <p data-lang-en>Alongside both classifiers, a survival model — Kaplan-Meier curves by state, payment-capacity rating, and cost-of-credit quartile, plus a Cox proportional-hazards model — answers a different question: not "will it default" but "what's the probability it's still current at 30, 60, 90, 120 days." Its own documentation is explicit about the caveats — early payoffs can censor the data in a way that isn't entirely random, and the classification isn't a clean daily observation.</p>
+          <p data-lang-pt>Junto dos dois classificadores, um modelo de sobrevivência — curvas de Kaplan-Meier por UF, rating de capacidade de pagamento e quartil de custo de crédito, mais um modelo de riscos proporcionais de Cox — responde uma pergunta diferente: não "vai entrar em default", mas "qual a probabilidade de ainda estar em dia aos 30, 60, 90, 120 dias". A própria documentação é explícita sobre as ressalvas — liquidações antecipadas podem censurar os dados de um jeito que não é totalmente aleatório, e a classificação não é uma observação diária limpa.</p>
         </div>
       </div>
       <div class="flow__step">
         <div class="flow__num">04</div>
         <div>
+          <h4 data-lang-en>Public fiscal data, matched with a human checkpoint</h4>
+          <h4 data-lang-pt>Dado fiscal público, casado com um checkpoint humano</h4>
+          <p data-lang-en>Each counterparty's free-text name is fuzzy-matched to an official municipality code, exported for manual review before anything is fetched, then joined to two real public filings — the fiscal management report's personnel-expense ratio and the budget-execution report's primary result — to test whether local fiscal stress carries signal about payment reliability.</p>
+          <p data-lang-pt>O nome em texto livre de cada contraparte é casado por fuzzy matching a um código de município oficial, exportado para revisão manual antes de qualquer busca, depois cruzado com duas prestações de contas públicas reais — o índice de despesa com pessoal do relatório de gestão fiscal e o resultado primário do relatório de execução orçamentária — para testar se o estresse fiscal local carrega sinal sobre a confiabilidade de pagamento.</p>
+        </div>
+      </div>
+      <div class="flow__step">
+        <div class="flow__num">05</div>
+        <div>
           <h4 data-lang-en>Every prediction, explained</h4>
           <h4 data-lang-pt>Toda predição, explicada</h4>
-          <p data-lang-en>SHAP attributions are computed for the winning model so each score comes with a ranked list of which features pushed it up or down, and by how much — the artifact a credit committee actually reads.</p>
-          <p data-lang-pt>Atribuições SHAP são computadas para o modelo vencedor, de modo que cada score venha com uma lista ranqueada de quais features o empurraram para cima ou para baixo, e por quanto — o artefato que um comitê de crédito de fato lê.</p>
+          <p data-lang-en>SHAP attributions are computed for the winning classifier so each score comes with a ranked list of which features pushed it up or down, and by how much — the artifact a credit committee actually reads.</p>
+          <p data-lang-pt>Atribuições SHAP são computadas para o classificador vencedor, de modo que cada score venha com uma lista ranqueada de quais features o empurraram para cima ou para baixo, e por quanto — o artefato que um comitê de crédito de fato lê.</p>
         </div>
       </div>
     </div>
@@ -154,6 +163,18 @@
       <p data-lang-en>Everything else in this platform runs unattended every morning, with retries and alerting behind it. A scoring model that feeds directly into a daily automated report needs more than that: drift monitoring, a retraining policy, and a way to catch the model quietly degrading as the portfolio's composition shifts — none of which exists here yet. Shipping the model into automation before that infrastructure exists would trade a known, documented, human-reviewed estimate for an unmonitored one that looks identical from the outside. The model stays a versioned, reproducible analysis a person runs and reads, which is a smaller but honest claim than "in production."</p>
       <p data-lang-pt>Tudo mais nesta plataforma roda sem supervisão toda manhã, com retries e alertas por trás. Um modelo de score que alimenta diretamente um relatório automático diário precisa de mais do que isso: monitoramento de drift, uma política de retreino, e um jeito de pegar o modelo degradando silenciosamente conforme a composição da carteira muda — nada disso existe aqui ainda. Colocar o modelo na automação antes dessa infraestrutura existir trocaria uma estimativa conhecida, documentada e revisada por humano por uma sem monitoramento que parece idêntica de fora. O modelo permanece uma análise versionada e reprodutível que uma pessoa roda e lê, o que é uma afirmação menor, porém honesta, do que "em produção".</p>
     </div>
+    <div class="callout">
+      <span class="callout__label" data-lang-en>A human checkpoint before any fiscal data is fetched</span>
+      <span class="callout__label" data-lang-pt>Um checkpoint humano antes de qualquer busca de dado fiscal</span>
+      <p data-lang-en>Matching a free-text counterparty name to an official municipality is easy to get subtly wrong — Brazil has multiple towns sharing the same name across different states, so a fuzzy match can score a real similarity and still point at the wrong one. An automated pipeline would silently attach the wrong city's fiscal filings to a contract, which is worse than fetching nothing at all: it produces a confident, wrong feature. So the match step exports its candidates for manual review and stops there — nothing is fetched until a person approves the mapping.</p>
+      <p data-lang-pt>Casar um nome de contraparte em texto livre a um município oficial é fácil de errar de forma sutil — o Brasil tem várias cidades homônimas em estados diferentes, então um fuzzy match pode acertar uma similaridade real e ainda assim apontar para a cidade errada. Um pipeline automatizado anexaria silenciosamente a prestação de contas fiscal da cidade errada a um contrato, o que é pior do que não buscar nada: produz uma feature confiante e errada. Por isso a etapa de casamento exporta seus candidatos para revisão manual e para ali — nada é buscado até uma pessoa aprovar o mapeamento.</p>
+    </div>
+    <div class="callout">
+      <span class="callout__label" data-lang-en>Redaction that survives view-source, not just CSS</span>
+      <span class="callout__label" data-lang-pt>Redação que sobrevive ao view-source, não só CSS</span>
+      <p data-lang-en>Findings from this research get shared as a report, and the report generator for it takes anonymization further than blurring a heatmap: sensitive text is deleted and replaced in the actual HTML source, not styled invisible, and every chart image is decoded, blurred, and re-encoded so the original pixels don't survive in the file. A self-check scans the finished document for known sensitive terms and fails the build if any survive, rather than trusting the redaction rules to have been complete.</p>
+      <p data-lang-pt>Os achados dessa pesquisa são compartilhados como relatório, e o gerador desse relatório leva a anonimização além de borrar um heatmap: texto sensível é apagado e substituído na própria fonte HTML, não estilizado como invisível, e toda imagem de gráfico é decodificada, borrada e recodificada, de modo que os pixels originais não sobrevivem no arquivo. Uma auto-checagem varre o documento final por termos sensíveis conhecidos e falha o build se algum sobreviver, em vez de confiar que as regras de redação foram completas.</p>
+    </div>
   </section>
 
   <section class="section wrap">
@@ -162,10 +183,12 @@
       <h2 class="section__title" data-lang-pt>Stack</h2>
     </div>
     <div class="kv">
-      <div class="kv__item"><span class="kv__k">Modelling</span><span class="kv__v">scikit-learn · XGBoost · LightGBM</span></div>
+      <div class="kv__item"><span class="kv__k" data-lang-en>Classification</span><span class="kv__k" data-lang-pt>Classificação</span><span class="kv__v">LightGBM · XGBoost · scikit-learn</span></div>
+      <div class="kv__item"><span class="kv__k" data-lang-en>Survival analysis</span><span class="kv__k" data-lang-pt>Análise de sobrevivência</span><span class="kv__v">lifelines (Kaplan-Meier · Cox PH)</span></div>
       <div class="kv__item"><span class="kv__k" data-lang-en>Explainability</span><span class="kv__k" data-lang-pt>Explicabilidade</span><span class="kv__v">SHAP</span></div>
       <div class="kv__item"><span class="kv__k" data-lang-en>Tuning</span><span class="kv__k" data-lang-pt>Otimização</span><span class="kv__v">Optuna</span></div>
-      <div class="kv__item"><span class="kv__k" data-lang-en>Macro features</span><span class="kv__k" data-lang-pt>Features macro</span><span class="kv__v">IBGE regional data</span></div>
+      <div class="kv__item"><span class="kv__k" data-lang-en>Entity matching</span><span class="kv__k" data-lang-pt>Casamento de entidades</span><span class="kv__v">rapidfuzz</span></div>
+      <div class="kv__item"><span class="kv__k" data-lang-en>Fiscal data</span><span class="kv__k" data-lang-pt>Dado fiscal</span><span class="kv__v">SICONFI (RGF · RREO)</span></div>
     </div>
   </section>
 </main>
@@ -206,20 +229,24 @@
 <script>
 renderFlowDiagram({
   mount: 'risk-diagram',
-  W: 600, H: 300,
+  W: 600, H: 340,
   nodes: [
-    { id: 's1', col: 'a', x: 16,  y: 20,  w: 158, h: 64, title: 'Payment history', sub: 'per originator' },
-    { id: 's2', col: 'a', x: 16,  y: 104, w: 158, h: 64, title: 'IBGE regional data', sub: 'macro context' },
-    { id: 'o1', col: 'b', x: 226, y: 20,  w: 148, h: 64, title: 'sklearn pipeline', sub: 'impute · scale' },
-    { id: 'o2', col: 'b', x: 226, y: 104, w: 148, h: 64, title: '6-model comparison', sub: 'Optuna-tuned' },
-    { id: 'o3', col: 'b', x: 226, y: 188, w: 148, h: 64, title: 'SHAP', sub: 'attributions' },
-    { id: 'r1', col: 'c', x: 426, y: 62,  w: 158, h: 64, title: 'Ranked score', sub: 'reviewed by a person' },
-    { id: 'r2', col: 'c', x: 426, y: 146, w: 158, h: 64, title: 'Reasons', sub: 'not just a number' },
+    { id: 's1', col: 'a', x: 16,  y: 20,  w: 158, h: 64, title: 'Contract panel', sub: 'labeled at 1/30/60/120d' },
+    { id: 's2', col: 'a', x: 16,  y: 104, w: 158, h: 64, title: 'CAPAG · NOTA_PDD', sub: 'official ratings' },
+    { id: 's3', col: 'a', x: 16,  y: 188, w: 158, h: 64, title: 'SICONFI (RGF·RREO)', sub: 'matched, human-reviewed' },
+    { id: 'o1', col: 'b', x: 226, y: 20,  w: 148, h: 64, title: 'Cross-sectional model', sub: 'LightGBM, Optuna' },
+    { id: 'o2', col: 'b', x: 226, y: 104, w: 148, h: 64, title: 'Walk-forward model', sub: 'out-of-time test' },
+    { id: 'o3', col: 'b', x: 226, y: 188, w: 148, h: 64, title: 'Survival model', sub: 'Kaplan-Meier · Cox PH' },
+    { id: 'o4', col: 'b', x: 226, y: 272, w: 148, h: 64, title: 'SHAP', sub: 'attributions' },
+    { id: 'r1', col: 'c', x: 426, y: 62,  w: 158, h: 64, title: 'Ranked, explained score', sub: 'reviewed by a person' },
+    { id: 'r2', col: 'c', x: 426, y: 188, w: 158, h: 64, title: 'Survival curve', sub: '30/60/90/120d' },
   ],
   edges: [
-    { from: 's1', to: 'o1' }, { from: 's2', to: 'o1' },
-    { from: 'o1', to: 'o2' }, { from: 'o2', to: 'o3' },
-    { from: 'o2', to: 'r1' }, { from: 'o3', to: 'r2' },
+    { from: 's1', to: 'o1' }, { from: 's1', to: 'o2' }, { from: 's1', to: 'o3' },
+    { from: 's2', to: 'o1' }, { from: 's2', to: 'o2' },
+    { from: 's3', to: 'o1' }, { from: 's3', to: 'o2' },
+    { from: 'o1', to: 'o4' }, { from: 'o2', to: 'o4' },
+    { from: 'o4', to: 'r1' }, { from: 'o3', to: 'r2' },
   ],
 });
 </script>
