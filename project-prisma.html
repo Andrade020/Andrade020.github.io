@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Prisma — a lottery-portfolio optimizer using coverage-maximizing combinatorics (Lotofácil, Mega-Sena, Quina, Lotomania, Dupla Sena, Dia de Sorte). React · TypeScript · Web Worker. By Lucas R. Andrade.">
+<title>Prisma · Lucas R. Andrade</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.92em' font-size='95' font-family='Georgia,serif' font-style='italic' fill='%23d4a574'%3EZ%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="dark-mode">
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a href="index.html" class="brand">
+      <span class="brand__mark"><span class="brand__logo" aria-label="LRA"></span></span>
+      <span>Lucas R. Andrade</span>
+      <span class="brand__pos">· Economist &amp; Data Scientist</span>
+    </a>
+    <nav class="nav">
+      <a href="index.html">About</a>
+      <a href="production.html">Production</a>
+      <a href="projects.html" class="is-active">Open source</a>
+      <a href="publications.html">Research</a>
+      <a href="lab.html">Lab</a>
+    </nav>
+    <div class="header-tools">
+      <button class="icon-btn lang-btn" data-lang-btn onclick="toggleLang()" title="Toggle language">en · pt</button>
+      <button class="icon-btn" data-action="theme" onclick="toggleTheme()" title="Toggle theme">☀</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="page-head wrap">
+    <span class="section-label">Open source · Latest release · 2026</span>
+    <h1>Prisma · <em>optimize</em> your lottery portfolio.</h1>
+    <p>For a budget of N tickets, Prisma computes the portfolio that maximizes the chance of a prize — across Lotofácil, Mega-Sena, Quina, Lotomania, Dupla Sena, and Dia de Sorte. It's a product built on top of a real result: independently, uncorrelated random tickets are a worse use of the same budget than a portfolio chosen to minimize overlap.</p>
+    <div class="launch-row">
+      <a href="https://prisma-loterias.vercel.app/" target="_blank" rel="noopener" class="btn-launch">Open Prisma <span class="arrow">↗</span></a>
+      <a href="https://github.com/Andrade020/Loto-Facil" target="_blank" rel="noopener" class="hint__cta">GitHub ↗</a>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="case__layout">
+      <div class="case__intro">
+        <span class="section-label">What it is</span>
+        <h2>Coverage maximization, made into a tool.</h2>
+        <p>The method comes from a companion paper, <em>"Coverage Maximization and Overlap Minimization for Multi-Ticket Lottery Selection,"</em> co-authored with Victor Hugo Nascimento (FGV School of Applied Mathematics). For a lottery of the form "pick k numbers out of a universe of v; win by matching at least t of the d drawn," a random independent-ticket baseline gives a win probability of 1 − (1 − p)ⁿ for n tickets. Prisma's portfolio beats that baseline by construction: it selects tickets that are deliberately anti-correlated, so the same budget covers more of the number space.</p>
+        <p>The pipeline runs in three stages, entirely inside a Web Worker: a greedy max-coverage selection (with the classical 1 − 1/e approximation guarantee, Nemhauser et al. 1978) builds an initial ticket pool; simulated annealing refines it by minimizing total pairwise overlap Σ|Aᵢ∩Aⱼ|; a Monte Carlo simulation then estimates the resulting P(≥t) directly, rather than trusting a closed-form approximation.</p>
+        <p>No backend, no account, no data collection — the optimizer, the simulation, and the number crunching all happen client-side.</p>
+      </div>
+      <div class="case__detail">
+        <div class="case-fact">
+          <div class="case-fact__k">Type</div>
+          <div class="case-fact__v">Web app · client-side</div>
+          <div class="case-fact__note">100% in the browser — pool generation, annealing, and Monte Carlo all run in a Web Worker.</div>
+        </div>
+        <div class="case-fact">
+          <div class="case-fact__k">Method</div>
+          <div class="case-fact__v">Greedy + SA + Monte Carlo</div>
+          <div class="case-fact__note">Max-coverage selection, overlap-minimizing annealing, and simulated win-probability estimation.</div>
+        </div>
+        <div class="case-fact">
+          <div class="case-fact__k">Paper</div>
+          <div class="case-fact__v">Co-authored</div>
+          <div class="case-fact__note">With Victor Hugo Nascimento (FGV School of Applied Mathematics) — theory, algorithms, and empirical validation.</div>
+        </div>
+        <div class="case-fact">
+          <div class="case-fact__k">License</div>
+          <div class="case-fact__v">Open source</div>
+          <div class="case-fact__note">Source and the paper's replication package on GitHub.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="section__head">
+      <h2 class="section__title">What Prisma does</h2>
+    </div>
+    <ul class="prod-list">
+      <li>Supports six Brazilian lotteries: Lotofácil, Mega-Sena, Quina, Lotomania, Dupla Sena, and Dia de Sorte — one generic optimizer, per-lottery rules (universe size, pick range, prize thresholds) defined in a config table.</li>
+      <li>Lets you fix numbers that must appear in every ticket, and exclude numbers that must never appear — the optimizer works the remaining free space.</li>
+      <li>Can fold your own already-chosen tickets into the portfolio: the generated tickets are selected to minimize overlap with those too, not just with each other.</li>
+      <li>Reports the resulting win probability via real Monte Carlo simulation, alongside the theoretical optimum Ω*, not just a generated list of numbers.</li>
+      <li>A "How it works" page computes its example numbers by actually calling the optimizer — not illustrative, reproducible figures.</li>
+      <li>Light theme by default, follows the browser's color-scheme preference, with a persisted manual toggle.</li>
+    </ul>
+  </section>
+
+  <section class="section wrap">
+    <div class="section__head">
+      <h2 class="section__title">Stack</h2>
+    </div>
+    <div class="skills">
+      <div class="skill">
+        <h4>Frontend</h4>
+        <p>React · TypeScript · Vite</p>
+      </div>
+      <div class="skill">
+        <h4>Computation</h4>
+        <p>Web Worker · greedy + simulated annealing · Monte Carlo</p>
+      </div>
+      <div class="skill">
+        <h4>Identity &amp; deploy</h4>
+        <p>oklch color tokens · Newsreader + IBM Plex Sans · Vercel</p>
+      </div>
+    </div>
+    <div style="margin-top:32px;border-top:1px solid var(--rule-soft);padding-top:22px;">
+      <a href="https://github.com/Andrade020/Loto-Facil" target="_blank" rel="noopener" class="hint__cta">View on GitHub ↗</a>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="hint">
+      <span class="section-label">Please read</span>
+      <p>Prisma is an independent tool, with no affiliation to Caixa. A lottery has negative expected value by construction: the optimizer distributes the risk of a fixed budget better across tickets — it does not predict draws or change the underlying odds. For adults only.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot__grid">
+      <div>
+        <div class="foot__sig" data-lang-en>Want to talk?</div>
+        <div class="foot__sig" data-lang-pt>Quer conversar?</div>
+        <p data-lang-en>I read every message. If something here resonates, drop a line.</p>
+        <p data-lang-pt>Leio todas as mensagens. Se algo aqui ressoa, é só escrever.</p>
+      </div>
+      <div>
+        <h5 data-lang-en>Direct</h5><h5 data-lang-pt>Direto</h5>
+        <div class="foot__links">
+          <a href="mailto:lucas_r_andrade@hotmail.com">lucas_r_andrade@hotmail.com</a>
+          <a href="https://wa.me/5521975056123" target="_blank" rel="noopener">WhatsApp · +55 21 97505 6123</a>
+        </div>
+      </div>
+      <div>
+        <h5 data-lang-en>Elsewhere</h5><h5 data-lang-pt>Em outros lugares</h5>
+        <div class="foot__links">
+          <a href="https://github.com/Andrade020" target="_blank" rel="noopener">github.com/Andrade020</a>
+          <a href="https://www.linkedin.com/in/lucas-rafael-de-andrade/" target="_blank" rel="noopener">linkedin.com/in/lucas-rafael-de-andrade</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot__base">
+      <span>© 2026 Lucas R. Andrade · Rio de Janeiro</span>
+      <span><a href="mailto:lucas_r_andrade@hotmail.com">lucas_r_andrade@hotmail.com</a> · <a href="https://wa.me/5521975056123" target="_blank" rel="noopener">+55 21 97505 6123</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

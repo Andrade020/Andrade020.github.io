@@ -854,6 +854,7 @@ main { position: relative; z-index: 1; }
 .proj-art--llm    { color: var(--steel); }
 .proj-art--eyezen { color: var(--oxblood); }
 .proj-art--niver  { color: var(--ink-mute); }
+.proj-art--prisma { color: var(--accent); }
 .proj-item__body { min-width: 0; }
 .proj-item__body .proj-item__title { margin-bottom: 4px; }
 .proj-item__body .proj-item__meta { margin-bottom: 14px; }
@@ -910,6 +911,26 @@ main { position: relative; z-index: 1; }
 .btn-app { border: 1px solid var(--accent); color: var(--accent); background: var(--accent-soft); }
 .btn-app:hover { background: var(--accent); color: var(--bg); }
 .proj-item.is-hidden { display: none; }
+
+/* Big primary CTA on project detail pages ("open the app" / "download") */
+.launch-row { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin: 22px 0 4px; }
+.btn-launch {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 15px 30px;
+  border-radius: 10px;
+  font-family: var(--type-mono);
+  font-size: 0.94rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  background: var(--accent);
+  color: var(--bg);
+  border: 1px solid var(--accent);
+  transition: transform var(--t-fast), box-shadow var(--t-fast);
+}
+.btn-launch .arrow { transition: transform var(--t-fast); }
+.btn-launch:hover { transform: translateY(-1px); box-shadow: 0 6px 20px var(--accent-soft); color: var(--bg); }
+.btn-launch:hover .arrow { transform: translateX(3px); }
+.btn-launch-note { font-family: var(--type-mono); font-size: 0.76rem; color: var(--ink-mute); }
 
 /* ============ LAB PAGE ============ */
 .lab-section { padding: 56px 0; border-bottom: 1px solid var(--rule-soft); }
