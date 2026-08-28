@@ -307,6 +307,11 @@ main { position: relative; z-index: 1; }
   box-shadow: 0 0 0 3px var(--sage-soft);
 }
 
+/* Porto Real Asset mark — redrawn from their shield+flag logo in this site's line-art idiom */
+.porto-mark { flex-shrink: 0; vertical-align: middle; }
+.porto-mark .pm-shield { fill: none; stroke: var(--steel); stroke-width: 7; stroke-linejoin: round; }
+.porto-mark .pm-glyph  { fill: none; stroke: var(--accent); stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; }
+
 /* hero diagram card */
 .hero__diagram {
   background: var(--bg-elev);
