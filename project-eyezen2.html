@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="EyeZen v2 — a ground-up Rust rewrite of the Windows screen-color-filter tray app: 24 composable filters, per-app switching, scheduling, 3.5 MB. By Lucas R. Andrade.">
+<title>EyeZen v2 · Lucas R. Andrade</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.92em' font-size='95' font-family='Georgia,serif' font-style='italic' fill='%23d4a574'%3EZ%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="dark-mode">
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a href="index.html" class="brand">
+      <span class="brand__mark"><span class="brand__logo" aria-label="LRA"></span></span>
+      <span>Lucas R. Andrade</span>
+      <span class="brand__pos">· Economist &amp; Data Scientist</span>
+    </a>
+    <nav class="nav">
+      <a href="index.html">About</a>
+      <a href="production.html">Production</a>
+      <a href="projects.html" class="is-active">Open source</a>
+      <a href="publications.html">Research</a>
+      <a href="lab.html">Lab</a>
+    </nav>
+    <div class="header-tools">
+      <button class="icon-btn lang-btn" data-lang-btn onclick="toggleLang()" title="Toggle language">en · pt</button>
+      <button class="icon-btn" data-action="theme" onclick="toggleTheme()" title="Toggle theme">☀</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="page-head wrap">
+    <span class="section-label">Open source · 2026 · Windows · Rust</span>
+    <h1>EyeZen v2 · <em>rewritten</em> from the ground up.</h1>
+    <p>A Windows screen-color-filter tray app — the same idea as v1, rebuilt in Rust after the Python original hit a wall: a 67 MB executable, one blocking window instead of a tray icon, and a hardcoded file path that crashed on every machine but mine. v2 is 3.5 MB, portable, and lives in the tray from the first launch.</p>
+    <div class="launch-row">
+      <a href="https://github.com/Andrade020/EyeZen2/releases/latest/download/EyeZen.exe" target="_blank" rel="noopener" class="btn-launch">Download EyeZen.exe <span class="arrow">↗</span></a>
+      <a href="https://github.com/Andrade020/EyeZen2" target="_blank" rel="noopener" class="hint__cta">GitHub ↗</a>
+    </div>
+    <p style="margin-top:14px;font-size:0.9rem;color:var(--ink-dim);">The original, in Python, is at <a href="project-eyezen.html" class="hint__cta">EyeZen v1 →</a></p>
+  </section>
+
+  <section class="section wrap">
+    <div class="case__layout">
+      <div class="case__intro">
+        <span class="section-label">Why a rewrite</span>
+        <h2>Comfort isn't one slider.</h2>
+        <p>Windows Night Light and f.lux both treat visual comfort as a single problem: color temperature, warmer at night. That's one variable in a system with several — contrast, saturation, relative brightness between interface elements, flicker fatigue, screen-to-room luminance ratio. A programmer reading dark-mode code at 3pm on a cloudy day needs something different from someone watching video in the dark at midnight.</p>
+        <p>v1 tried to answer that with full color matrices per filter, running in a Python/tkinter window. It worked, but the interaction model was wrong: a tool that's supposed to live in the background was a window you had to remember to minimize, with no tray integration and no global hotkeys — and PyInstaller's bundled runtime made the executable 67 MB for what amounts to a color filter.</p>
+        <p>v2 keeps the composable-filter idea but fixes the architecture: Rust compiles to a single small binary, starts hidden in the tray with no window at all, and adds what the interaction model was missing — global hotkeys that work from any window, a filter assigned per foreground app, and a schedule by time of day.</p>
+      </div>
+      <div class="case__detail">
+        <div class="case-fact">
+          <div class="case-fact__k">Size</div>
+          <div class="case-fact__v">3.5 MB</div>
+          <div class="case-fact__note">Down from a 67 MB PyInstaller build in v1 — a single portable .exe, no installer.</div>
+        </div>
+        <div class="case-fact">
+          <div class="case-fact__k">Filters</div>
+          <div class="case-fact__v">24 presets</div>
+          <div class="case-fact__note">16 visual-comfort filters plus 8 experimental/creative ones added in v2.1.0.</div>
+        </div>
+        <div class="case-fact">
+          <div class="case-fact__k">Context switching</div>
+          <div class="case-fact__v">Per-app · scheduled</div>
+          <div class="case-fact__note">A different filter per foreground application, and by time-of-day windows.</div>
+        </div>
+        <div class="case-fact">
+          <div class="case-fact__k">License</div>
+          <div class="case-fact__v">MIT</div>
+          <div class="case-fact__note">Source on GitHub, free to fork and adapt.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="section__head">
+      <h2 class="section__title">What v2 adds over v1</h2>
+    </div>
+    <ul class="prod-list">
+      <li>24 composable filters — color-matrix and linear-gain visual-comfort presets, plus 8 creative/experimental ones added in v2.1.0 (hue-cycling, noise overlay, strobe, spotlight, paper-grain, among others)</li>
+      <li>A filter assigned automatically per foreground app — one profile for the browser, another for a code editor, another for video calls</li>
+      <li>Scheduling by time-of-day window, independent of the per-app rules</li>
+      <li>Global hotkeys (Ctrl+Alt+1–6 for the first six filters, Ctrl+Alt+0 to disable, Ctrl+Alt+9 for inverted grayscale) that work from any window, panel open or closed</li>
+      <li>Starts hidden in the system tray — no window ever appears unless you open the panel yourself</li>
+      <li>Smooth 1.4s ease-out transition between filters, intensity slider from 0–150%</li>
+    </ul>
+  </section>
+
+  <section class="section wrap">
+    <div class="section__head">
+      <h2 class="section__title">First run</h2>
+    </div>
+    <ul class="prod-list">
+      <li>Download and run <code>EyeZen.exe</code> — no installer. It opens straight to the system tray; no window appears.</li>
+      <li>Click the tray icon to open the filter panel, or right-click for the quick menu (pick a filter, toggle inverted grayscale, open the panel, or quit).</li>
+      <li>In the panel, the <strong>Schedule</strong> tab turns filters on/off by time of day, and the <strong>Apps</strong> tab assigns a filter to each foreground program.</li>
+    </ul>
+  </section>
+
+  <section class="section wrap">
+    <div class="section__head">
+      <h2 class="section__title">Stack</h2>
+    </div>
+    <div class="skills">
+      <div class="skill">
+        <h4>Core</h4>
+        <p>Rust · egui</p>
+      </div>
+      <div class="skill">
+        <h4>System integration</h4>
+        <p>Windows gamma-ramp API · global-hotkey · system tray</p>
+      </div>
+      <div class="skill">
+        <h4>Distribution</h4>
+        <p>Single portable .exe · MIT license</p>
+      </div>
+    </div>
+    <div style="margin-top:32px;border-top:1px solid var(--rule-soft);padding-top:22px;">
+      <a href="https://github.com/Andrade020/EyeZen2" target="_blank" rel="noopener" class="hint__cta">View on GitHub ↗</a>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot__grid">
+      <div>
+        <div class="foot__sig" data-lang-en>Want to talk?</div>
+        <div class="foot__sig" data-lang-pt>Quer conversar?</div>
+        <p data-lang-en>I read every message. If something here resonates, drop a line.</p>
+        <p data-lang-pt>Leio todas as mensagens. Se algo aqui ressoa, é só escrever.</p>
+      </div>
+      <div>
+        <h5 data-lang-en>Direct</h5><h5 data-lang-pt>Direto</h5>
+        <div class="foot__links">
+          <a href="mailto:lucas_r_andrade@hotmail.com">lucas_r_andrade@hotmail.com</a>
+          <a href="https://wa.me/5521975056123" target="_blank" rel="noopener">WhatsApp · +55 21 97505 6123</a>
+        </div>
+      </div>
+      <div>
+        <h5 data-lang-en>Elsewhere</h5><h5 data-lang-pt>Em outros lugares</h5>
+        <div class="foot__links">
+          <a href="https://github.com/Andrade020" target="_blank" rel="noopener">github.com/Andrade020</a>
+          <a href="https://www.linkedin.com/in/lucas-rafael-de-andrade/" target="_blank" rel="noopener">linkedin.com/in/lucas-rafael-de-andrade</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot__base">
+      <span>© 2026 Lucas R. Andrade · Rio de Janeiro</span>
+      <span><a href="mailto:lucas_r_andrade@hotmail.com">lucas_r_andrade@hotmail.com</a> · <a href="https://wa.me/5521975056123" target="_blank" rel="noopener">+55 21 97505 6123</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

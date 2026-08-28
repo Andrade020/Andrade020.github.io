@@ -83,11 +83,11 @@
       {
         tag: 'open',
         tagLabel: 'Open source',
-        title: 'EyeZen',
-        desc: 'A Windows screen filter that reduces visual fatigue during long reading sessions. System tray, global shortcuts, distributed as a standalone .exe.',
-        descPt: 'Filtro de tela para Windows que reduz fadiga visual em sessões longas de leitura. Tray, atalhos globais, distribuído como .exe.',
-        stack: 'Python · Windows API · PyInstaller',
-        href: 'https://github.com/Andrade020/EyeZen',
+        title: 'EyeZen v2',
+        desc: 'A Windows screen filter with 24 composable filters, per-app switching, and scheduling. Rust rewrite of the original Python tool — 3.5 MB, tray-first.',
+        descPt: 'Filtro de tela para Windows com 24 filtros combináveis, troca por app e agendamento. Reescrita em Rust da ferramenta original em Python — 3,5 MB, direto na bandeja.',
+        stack: 'Rust · egui · Windows API',
+        href: 'project-eyezen2.html',
       },
     ];
     const pick = pool[Math.floor(Math.random() * pool.length)];
