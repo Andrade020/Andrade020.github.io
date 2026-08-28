@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Production work at Porto Real Asset: data infrastructure, document parsing, fixed-income pricing, and credit-risk modelling.">
+<meta name="description" content="Production work at Porto Real Asset: pipeline orchestration, a file-based data lake, a cash-flow and liquidity engine, quality gates, and offline credit-risk scoring.">
 <title>Production · Lucas R. Andrade</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.92em' font-size='95' font-family='Georgia,serif' font-style='italic' fill='%23d4a574'%3EZ%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -41,8 +41,8 @@
     <span class="section-label" data-lang-pt>Estudo de caso · trabalho em produção</span>
     <h1 data-lang-en>Data infrastructure for a <em>Brazilian credit fund.</em></h1>
     <h1 data-lang-pt>Infraestrutura de dados para um <em>fundo de crédito brasileiro.</em></h1>
-    <p data-lang-en>What I currently work on at <strong>Porto Real Asset</strong>: the pipelines, warehouse, document extraction, pricing library, and credit-risk modelling that move raw data into operational decisions before market open every morning.</p>
-    <p data-lang-pt>O que faço hoje na <strong>Porto Real Asset</strong>: os pipelines, warehouse, extração documental, biblioteca de precificação e modelagem de risco de crédito que transformam dados brutos em decisão operacional toda manhã, antes da abertura do mercado.</p>
+    <p data-lang-en>What I currently work on at <strong>Porto Real Asset</strong>: the pipeline orchestration, file-based data lake, cash-flow engine, quality gates, and offline risk scoring that move raw data into operational decisions before market open every morning.</p>
+    <p data-lang-pt>O que faço hoje na <strong>Porto Real Asset</strong>: a orquestração de pipelines, o data lake baseado em arquivos, o motor de fluxo de caixa, os gates de qualidade e o score de risco offline que transformam dados brutos em decisão operacional toda manhã, antes da abertura do mercado.</p>
   </section>
 
   <section class="section wrap">
@@ -52,8 +52,8 @@
         <span class="section-label" data-lang-pt>Contexto</span>
         <h2 data-lang-en>The fund and what its data layer has to do.</h2>
         <h2 data-lang-pt>O fundo e o que sua camada de dados precisa fazer.</h2>
-        <p data-lang-en>Porto Real Asset is a credit-focused asset manager based in Rio de Janeiro. Its operation rests on receivables and structured credit (FIDCs), which means the data layer has to handle three very different shapes of input on the same daily clock: machine-readable feeds, scanned documents, and human spreadsheets.</p>
-        <p data-lang-pt>A Porto Real Asset é uma gestora focada em crédito sediada no Rio de Janeiro. A operação repousa sobre recebíveis e crédito estruturado (FIDCs), o que significa que a camada de dados precisa lidar com três tipos muito diferentes de entrada no mesmo relógio diário: feeds machine-readable, documentos escaneados e planilhas humanas.</p>
+        <p data-lang-en>Porto Real Asset is a credit-focused asset manager based in Rio de Janeiro. Its operation rests on receivables and structured credit (FIDCs), which means the data layer has to handle three very different shapes of input on the same daily clock: machine-readable feeds, a portal with no public API, and human spreadsheets.</p>
+        <p data-lang-pt>A Porto Real Asset é uma gestora focada em crédito sediada no Rio de Janeiro. A operação repousa sobre recebíveis e crédito estruturado (FIDCs), o que significa que a camada de dados precisa lidar com três tipos muito diferentes de entrada no mesmo relógio diário: feeds machine-readable, um portal sem API pública e planilhas humanas.</p>
         <p data-lang-en>Outputs serve three audiences. Investment analysts need positions, exposures, and macro context. Risk needs default probabilities with explanations. Operations needs reconciliation and audit trails.</p>
         <p data-lang-pt>As saídas atendem três públicos. Os analistas de investimento precisam de posições, exposições e contexto macro. Risco precisa de probabilidades de default com explicações. Operações precisa de conciliação e rastreabilidade.</p>
       </div>
@@ -74,14 +74,14 @@
           <div class="case-fact__k" data-lang-en>Audience</div><div class="case-fact__k" data-lang-pt>Público</div>
           <div class="case-fact__v" data-lang-en>Investment, Risk, Ops</div>
           <div class="case-fact__v" data-lang-pt>Investimentos, Risco, Ops</div>
-          <div class="case-fact__note" data-lang-en>Different views for different teams, same warehouse.</div>
-          <div class="case-fact__note" data-lang-pt>Visões diferentes para times diferentes, mesmo warehouse.</div>
+          <div class="case-fact__note" data-lang-en>Different views for different teams, same data lake.</div>
+          <div class="case-fact__note" data-lang-pt>Visões diferentes para times diferentes, mesmo data lake.</div>
         </div>
         <div class="case-fact">
           <div class="case-fact__k" data-lang-en>Approach</div><div class="case-fact__k" data-lang-pt>Abordagem</div>
           <div class="case-fact__v" data-lang-en>Open stack</div><div class="case-fact__v" data-lang-pt>Stack aberta</div>
-          <div class="case-fact__note" data-lang-en>Python, Postgres, Airflow. No vendor lock-in.</div>
-          <div class="case-fact__note" data-lang-pt>Python, Postgres, Airflow. Sem vendor lock-in.</div>
+          <div class="case-fact__note" data-lang-en>Python, Airflow, file-based lake. No vendor lock-in.</div>
+          <div class="case-fact__note" data-lang-pt>Python, Airflow, lake baseado em arquivos. Sem vendor lock-in.</div>
         </div>
       </div>
     </div>
@@ -118,78 +118,99 @@
         <div class="prod-sub__title">
           <h3 data-lang-en>Pipeline orchestration &amp; ingestion</h3>
           <h3 data-lang-pt>Orquestração &amp; ingestão</h3>
-          <div class="prod-sub__stack">Apache Airflow · Python · PostgreSQL · Docker · Linux</div>
+          <div class="prod-sub__stack">Apache Airflow · Selenium · REST/GraphQL · Python</div>
         </div>
         <div class="prod-sub__body">
-          <p data-lang-en>Scheduled Airflow DAGs run every business day. Each task is idempotent, with incremental loads and dependency-aware retries. Inputs land in raw landing tables; transformations build clean, analytics-ready tables downstream.</p>
-          <p data-lang-pt>DAGs do Airflow rodam todo dia útil. Cada task é idempotente, com cargas incrementais e retries com dependência. Entradas pousam em tabelas raw; transformações constroem tabelas limpas, prontas para análise, downstream.</p>
+          <p data-lang-en>~35 Airflow DAGs, tagged by role — download, consolidation, report, audit — with a sensor-style DAG polling state every five minutes and triggering what's ready. Three kinds of source: an RPA bot with a proper Page Object Model for the administrator's portal, REST/GraphQL clients for custodian APIs, and a standalone loader package for public macro data.</p>
+          <p data-lang-pt>~35 DAGs do Airflow, tagueadas por papel — download, consolidação, relatório, auditoria — com uma DAG estilo sensor consultando o estado a cada cinco minutos e disparando o que estiver pronto. Três tipos de fonte: um bot de RPA com Page Object Model de verdade para o portal da administradora, clientes REST/GraphQL para APIs custodiais, e um pacote de loaders standalone para dados macro públicos.</p>
           <ul class="prod-list">
-            <li data-lang-en>Custodian endpoints for positions, cash flows, and reconciliation.</li>
-            <li data-lang-pt>Endpoints custodiais de posições, fluxos de caixa e conciliação.</li>
-            <li data-lang-en>Public macro feeds (BCB, IBGE, Tesouro, ANBIMA) for context.</li>
-            <li data-lang-pt>Feeds macro públicos (BCB, IBGE, Tesouro, ANBIMA) para contexto.</li>
-            <li data-lang-en>Internal spreadsheets via Selenium-driven extraction where APIs don't exist.</li>
-            <li data-lang-pt>Planilhas internas via extração com Selenium onde APIs não existem.</li>
-            <li data-lang-en>Structured logging, alerting, and a small ops dashboard for DAG health.</li>
-            <li data-lang-pt>Logging estruturado, alertas e um pequeno dashboard de ops para a saúde dos DAGs.</li>
+            <li data-lang-en>Custodian REST/GraphQL endpoints for positions and cash statements.</li>
+            <li data-lang-pt>Endpoints REST/GraphQL custodiais de posições e demonstrativos de caixa.</li>
+            <li data-lang-en>Public macro feeds (BCB, IBGE, CVM, CAGED, Tesouro) for context.</li>
+            <li data-lang-pt>Feeds macro públicos (BCB, IBGE, CVM, CAGED, Tesouro) para contexto.</li>
+            <li data-lang-en>Selenium RPA with a Page Object Model where no API exists.</li>
+            <li data-lang-pt>RPA com Selenium e Page Object Model onde não existe API.</li>
           </ul>
+          <a href="prod-orchestration.html" class="prod-sub__link"><span data-lang-en>How it works</span><span data-lang-pt>Como funciona</span> <span class="arrow">→</span></a>
         </div>
+        <a href="prod-orchestration.html" class="cover" aria-label="Pipeline orchestration & ingestion"></a>
       </article>
 
       <article class="prod-sub__item" id="sub-02">
         <div class="prod-sub__num">02.</div>
         <div class="prod-sub__title">
-          <h3 data-lang-en>Document parsing</h3>
-          <h3 data-lang-pt>Extração documental</h3>
-          <div class="prod-sub__stack">pdfplumber · PyMuPDF · Tesseract · Python</div>
+          <h3 data-lang-en>Data layer &amp; idempotency</h3>
+          <h3 data-lang-pt>Camada de dados &amp; idempotência</h3>
+          <div class="prod-sub__stack">pandas · JSON manifests · parquet</div>
         </div>
         <div class="prod-sub__body">
-          <p data-lang-en>Credit notes (CCBs) and supporting documents arrive in dozens of different layouts. The parser is layout-tolerant: it first attempts structured extraction with pdfplumber, falls back to PyMuPDF text positioning, and ultimately to Tesseract OCR on low-quality scans.</p>
-          <p data-lang-pt>Cédulas de crédito bancário (CCBs) e documentos auxiliares chegam em dezenas de layouts diferentes. O parser é tolerante a layout: tenta primeiro extração estruturada com pdfplumber, recorre ao posicionamento de texto do PyMuPDF e, em último caso, ao Tesseract OCR para digitalizações ruins.</p>
-          <p data-lang-en>Extracted fields are validated against business rules (CPF/CNPJ formats, date ranges, interest-rate bounds) before they reach the warehouse. Confidence scores are written alongside each field so downstream consumers can defer or escalate uncertain extractions.</p>
-          <p data-lang-pt>Campos extraídos são validados contra regras de negócio (formatos de CPF/CNPJ, intervalos de datas, limites de taxas) antes de chegar ao warehouse. Scores de confiança são gravados ao lado de cada campo, para que consumidores downstream possam adiar ou escalar extrações incertas.</p>
+          <p data-lang-en>No database behind this pipeline — a three-tier file lake instead (raw → reference/manual → consolidated), with idempotency and backfill driven by a JSON manifest per pipeline rather than database transactions. Every intermediate state is a file a human can open and diff.</p>
+          <p data-lang-pt>Sem banco de dados por trás deste pipeline — um lake de arquivos em três camadas (raw → referência/manual → consolidado), com idempotência e backfill conduzidos por um manifest JSON por pipeline, não por transações de banco. Todo estado intermediário é um arquivo que um humano pode abrir e comparar.</p>
+          <p data-lang-en>Caught, via a sanity check born from a real incident: an administrator migration where BR/US number-format ambiguity inflated figures roughly 100×.</p>
+          <p data-lang-pt>Pego por uma checagem de sanidade nascida de um incidente real: uma migração de administradora em que a ambiguidade de formato de número BR/US inflou valores em cerca de 100×.</p>
+          <a href="prod-data-layer.html" class="prod-sub__link"><span data-lang-en>How it works</span><span data-lang-pt>Como funciona</span> <span class="arrow">→</span></a>
         </div>
+        <a href="prod-data-layer.html" class="cover" aria-label="Data layer & idempotency"></a>
       </article>
 
       <article class="prod-sub__item" id="sub-03">
         <div class="prod-sub__num">03.</div>
         <div class="prod-sub__title">
-          <h3 data-lang-en>Fixed-income pricing library</h3>
-          <h3 data-lang-pt>Biblioteca de precificação de renda fixa</h3>
-          <div class="prod-sub__stack">NumPy · pandas · scipy · bizdays</div>
+          <h3 data-lang-en>Cash flow &amp; liquidity engine</h3>
+          <h3 data-lang-pt>Motor de fluxo de caixa &amp; liquidez</h3>
+          <div class="prod-sub__stack">scipy · numpy-financial · pandas</div>
         </div>
         <div class="prod-sub__body">
-          <p data-lang-en>An internal Python library for Brazilian fixed income. Covers DI+, IPCA+, prefixado, and CDI-linked instruments with the correct day-count conventions, B3 business calendar, and accrual logic. Used both online (the dashboard) and offline (the daily report builder).</p>
-          <p data-lang-pt>Biblioteca interna em Python para renda fixa brasileira. Cobre DI+, IPCA+, prefixados e ativos CDI com as convenções de contagem de dias corretas, calendário de dias úteis da B3 e lógica de accrual. Usada tanto online (dashboard) quanto offline (gerador de relatório diário).</p>
+          <p data-lang-en>Table-driven amortization: each receivable's settlement rule lives in a spreadsheet, not in code, so a new asset type is an edit an analyst can make. IRR by numerical root-finding over the projected schedule, a senior/subordinated waterfall, and an audit DAG that flags assets with no matching rule before the 10am liquidity report.</p>
+          <p data-lang-pt>Amortização orientada a dados: a regra de liquidação de cada recebível vive numa planilha, não no código, então um tipo de ativo novo é uma edição que um analista consegue fazer. TIR por busca numérica de raiz sobre o cronograma projetado, uma cascata sênior/subordinada, e uma DAG de auditoria que sinaliza ativos sem regra correspondente antes do relatório de liquidez das 10h.</p>
+          <a href="prod-cashflow.html" class="prod-sub__link"><span data-lang-en>How it works</span><span data-lang-pt>Como funciona</span> <span class="arrow">→</span></a>
         </div>
+        <a href="prod-cashflow.html" class="cover" aria-label="Cash flow & liquidity engine"></a>
       </article>
 
       <article class="prod-sub__item" id="sub-04">
         <div class="prod-sub__num">04.</div>
         <div class="prod-sub__title">
-          <h3 data-lang-en>Credit-risk modelling</h3>
-          <h3 data-lang-pt>Modelagem de risco de crédito</h3>
-          <div class="prod-sub__stack">scikit-learn · SHAP · pandas · Airflow</div>
+          <h3 data-lang-en>Quality gates &amp; compliance</h3>
+          <h3 data-lang-pt>Gates de qualidade &amp; enquadramento</h3>
+          <div class="prod-sub__stack">pandas · hand-written parser · Airflow</div>
         </div>
         <div class="prod-sub__body">
-          <p data-lang-en>The output of the risk engine is not just a score: it is a ranked list of reasons. SHAP feature attributions are computed for every prediction so the investment committee can read why a debtor sits where it sits and challenge the model.</p>
-          <p data-lang-pt>A saída do motor de risco não é só um score: é uma lista ordenada de razões. Atribuições SHAP são computadas para cada predição, para que o comitê de investimentos possa ler por que um devedor está onde está e questionar o modelo.</p>
-          <p data-lang-en>Models are retrained periodically against payment-history data and monitored for drift. Outputs are persisted alongside the inputs that produced them, so any past score can be reproduced.</p>
-          <p data-lang-pt>Os modelos são retreinados periodicamente contra histórico de pagamentos e monitorados para drift. As saídas são persistidas junto com as entradas que as produziram, de modo que qualquer score passado pode ser reproduzido.</p>
+          <p data-lang-en>No unit test suite — correctness is enforced at runtime instead: six named consistency checks on every load, a version-diff audit that catches silent restatements, and a compliance engine with a hand-written recursive-descent rule parser (no <code style="font-family:var(--type-mono);background:var(--bg-inset);padding:1px 5px;border-radius:3px;">eval()</code>) whose history is append-only by design.</p>
+          <p data-lang-pt>Sem suíte de testes unitários — a correção é garantida em tempo de execução: seis checagens de consistência nomeadas em toda carga, uma auditoria de version-diff que pega reapresentações silenciosas, e um motor de enquadramento com um parser de regras recursivo-descendente escrito à mão (sem <code style="font-family:var(--type-mono);background:var(--bg-inset);padding:1px 5px;border-radius:3px;">eval()</code>) cujo histórico é append-only por desenho.</p>
+          <a href="prod-quality.html" class="prod-sub__link"><span data-lang-en>How it works</span><span data-lang-pt>Como funciona</span> <span class="arrow">→</span></a>
         </div>
+        <a href="prod-quality.html" class="cover" aria-label="Quality gates & compliance"></a>
       </article>
 
       <article class="prod-sub__item" id="sub-05">
         <div class="prod-sub__num">05.</div>
         <div class="prod-sub__title">
-          <h3 data-lang-en>Decision surface</h3>
-          <h3 data-lang-pt>Camada de decisão</h3>
-          <div class="prod-sub__stack">Flask · Jinja2 · Microsoft Graph · Python</div>
+          <h3 data-lang-en>Credit-risk scoring</h3>
+          <h3 data-lang-pt>Score de risco de crédito</h3>
+          <div class="prod-sub__stack">scikit-learn · XGBoost · SHAP · Optuna</div>
         </div>
         <div class="prod-sub__body">
-          <p data-lang-en>An internal Flask + Jinja2 dashboard surfaces portfolio positions, fund quotas, and operational controls. Daily reports are rendered as HTML, converted to PDF, and dispatched by email through Microsoft Graph before the market opens, all triggered by the same Airflow DAG that produced the data.</p>
-          <p data-lang-pt>Um dashboard interno em Flask + Jinja2 expõe posições do portfólio, cotas de fundos e controles operacionais. Relatórios diários são renderizados em HTML, convertidos em PDF e despachados por e-mail via Microsoft Graph antes da abertura do mercado, tudo disparado pelo mesmo DAG do Airflow que produziu os dados.</p>
+          <p data-lang-en>The output is not just a score: SHAP feature attributions ship with every prediction, ranked and signed, so a credit committee can read why and challenge it. Honestly offline and exploratory — reviewed by a person, not wired into a daily DAG, because that would need drift monitoring this platform doesn't have yet.</p>
+          <p data-lang-pt>A saída não é só um score: atribuições SHAP saem com cada predição, ranqueadas e com sinal, para que um comitê de crédito leia o porquê e questione. Honestamente offline e exploratório — revisado por uma pessoa, não conectado a uma DAG diária, porque isso exigiria monitoramento de drift que esta plataforma ainda não tem.</p>
+          <a href="prod-risk.html" class="prod-sub__link"><span data-lang-en>How it works</span><span data-lang-pt>Como funciona</span> <span class="arrow">→</span></a>
         </div>
+        <a href="prod-risk.html" class="cover" aria-label="Credit-risk scoring"></a>
+      </article>
+
+      <article class="prod-sub__item" id="sub-06">
+        <div class="prod-sub__num">06.</div>
+        <div class="prod-sub__title">
+          <h3 data-lang-en>Reports &amp; delivery</h3>
+          <h3 data-lang-pt>Relatórios &amp; entrega</h3>
+          <div class="prod-sub__stack">Flask · Jinja2 · Microsoft Graph · matplotlib</div>
+        </div>
+        <div class="prod-sub__body">
+          <p data-lang-en>Six report generators (aging, concentration, liquidity, receivables flow, payment performance, compliance) render as self-contained HTML — pandas tables, matplotlib charts inlined as base64. A four-dependency Flask dashboard serves them on demand; a mailbox-driven watcher pushes the daily ones out automatically, before market open.</p>
+          <p data-lang-pt>Seis geradores de relatório (aging, concentração, liquidez, fluxo de recebíveis, performance de pagamento, enquadramento) renderizam como HTML autocontido — tabelas pandas, gráficos matplotlib embutidos como base64. Um dashboard Flask de quatro dependências serve sob demanda; um watcher de caixa de e-mail dispara os diários automaticamente, antes da abertura do mercado.</p>
+          <a href="prod-reports.html" class="prod-sub__link"><span data-lang-en>How it works</span><span data-lang-pt>Como funciona</span> <span class="arrow">→</span></a>
+        </div>
+        <a href="prod-reports.html" class="cover" aria-label="Reports & delivery"></a>
       </article>
     </div>
   </section>
@@ -212,13 +233,13 @@
       </div>
       <div class="skill">
         <h4 data-lang-en>Open stack, no vendor lock-in</h4><h4 data-lang-pt>Stack aberta, sem vendor lock-in</h4>
-        <p data-lang-en>Python, Postgres, Airflow. The infrastructure should belong to the firm, not to a SaaS contract.</p>
-        <p data-lang-pt>Python, Postgres, Airflow. A infraestrutura deve pertencer à firma, não a um contrato SaaS.</p>
+        <p data-lang-en>Python, Airflow, a file-based lake. The infrastructure should belong to the firm, not to a SaaS contract.</p>
+        <p data-lang-pt>Python, Airflow, um lake baseado em arquivos. A infraestrutura deve pertencer à firma, não a um contrato SaaS.</p>
       </div>
       <div class="skill">
-        <h4 data-lang-en>Boring where it matters</h4><h4 data-lang-pt>Tedioso onde importa</h4>
-        <p data-lang-en>Margin and risk numbers move money. They deserve boring, well-tested code, not novelty.</p>
-        <p data-lang-pt>Números de margem e risco movem dinheiro. Eles merecem código tedioso e bem testado, não novidade.</p>
+        <h4 data-lang-en>Gates over test suites</h4><h4 data-lang-pt>Gates em vez de suíte de testes</h4>
+        <p data-lang-en>No pytest suite here. What catches bad data is runtime checks against the live pipeline — consistency checks, version-diff audits, sanity checks against known totals.</p>
+        <p data-lang-pt>Sem suíte pytest aqui. O que pega dado ruim são checagens em tempo de execução contra o pipeline ao vivo — checagens de consistência, auditorias de version-diff, checagens de sanidade contra totais conhecidos.</p>
       </div>
       <div class="skill">
         <h4 data-lang-en>Quiet operations</h4><h4 data-lang-pt>Operações silenciosas</h4>

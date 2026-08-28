@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="How the data layer works at Porto Real Asset: a three-tier file lake with JSON manifests instead of a database — by Lucas R. Andrade.">
+<title>Data Layer &amp; Idempotency · Lucas R. Andrade</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.92em' font-size='95' font-family='Georgia,serif' font-style='italic' fill='%23d4a574'%3EZ%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="dark-mode">
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a href="index.html" class="brand">
+      <span class="brand__mark"><span class="brand__logo" aria-label="LRA"></span></span>
+      <span>Lucas R. Andrade</span>
+      <span class="brand__pos" data-lang-en>· Economist &amp; Data Scientist</span>
+      <span class="brand__pos" data-lang-pt>· Economista &amp; Cientista de Dados</span>
+    </a>
+    <nav class="nav">
+      <a href="index.html" data-lang-en>About</a><a href="index.html" data-lang-pt>Sobre</a>
+      <a href="production.html" class="is-active" data-lang-en>Production</a><a href="production.html" class="is-active" data-lang-pt>Produção</a>
+      <a href="projects.html" data-lang-en>Open source</a><a href="projects.html" data-lang-pt>Open source</a>
+      <a href="publications.html" data-lang-en>Research</a><a href="publications.html" data-lang-pt>Pesquisa</a>
+      <a href="lab.html" data-lang-en>Lab</a><a href="lab.html" data-lang-pt>Lab</a>
+    </nav>
+    <div class="header-tools">
+      <button class="icon-btn lang-btn" data-lang-btn onclick="toggleLang()" title="Toggle language">en · pt</button>
+      <button class="icon-btn" data-action="theme" onclick="toggleTheme()" title="Toggle theme">☀</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="page-head wrap">
+    <a href="production.html#sub-02" class="back-link"><span data-lang-en>← Production</span><span data-lang-pt>← Produção</span></a>
+    <span class="section-label" data-lang-en>Subsystem 02 · How it works</span>
+    <span class="section-label" data-lang-pt>Subsistema 02 · Como funciona</span>
+    <h1 data-lang-en>No database. A <em>lake and a ledger.</em></h1>
+    <h1 data-lang-pt>Sem banco de dados. Um <em>lake e um livro-razão.</em></h1>
+    <p data-lang-en>There is no Postgres behind this pipeline. What replaces it is a three-tier folder structure and a JSON manifest per run — every intermediate state is a file you can open, diff, and re-run from.</p>
+    <p data-lang-pt>Não existe um Postgres por trás deste pipeline. O que substitui isso é uma estrutura de pastas em três camadas e um manifest JSON por rodada — todo estado intermediário é um arquivo que dá pra abrir, comparar e reprocessar a partir dele.</p>
+  </section>
+
+  <section class="section wrap">
+    <div class="case__layout">
+      <div class="case__intro">
+        <span class="section-label" data-lang-en>The problem</span>
+        <span class="section-label" data-lang-pt>O problema</span>
+        <h2 data-lang-en>Re-runs must not duplicate, and gaps must not hide.</h2>
+        <h2 data-lang-pt>Reprocessamentos não podem duplicar, e lacunas não podem se esconder.</h2>
+        <p data-lang-en>A daily pipeline fails sometimes — a source is down, a file arrives malformed. When it does, the next run has to pick up exactly where it left off: not re-process a day that already succeeded, not silently skip a day that didn't. Doing that reliably usually means a database with transactions and constraints. This platform does it with a plain file lake instead, because every layer of it needs to be inspectable by a human at 8am, not just queryable.</p>
+        <p data-lang-pt>Um pipeline diário falha de vez em quando — uma fonte cai, um arquivo chega malformado. Quando isso acontece, a próxima rodada precisa retomar exatamente de onde parou: não reprocessar um dia que já deu certo, não pular silenciosamente um dia que não deu. Fazer isso de forma confiável normalmente significa um banco de dados com transações e constraints. Esta plataforma faz isso com um lake de arquivos simples, porque toda camada dela precisa ser inspecionável por um humano às 8h, não só consultável.</p>
+      </div>
+      <div class="case__detail">
+        <div class="case-fact">
+          <div class="case-fact__k" data-lang-en>Layers</div><div class="case-fact__k" data-lang-pt>Camadas</div>
+          <div class="case-fact__v">3</div>
+          <div class="case-fact__note" data-lang-en>Raw → reference/manual → consolidated.</div>
+          <div class="case-fact__note" data-lang-pt>Raw → referência/manual → consolidado.</div>
+        </div>
+        <div class="case-fact">
+          <div class="case-fact__k" data-lang-en>Idempotency</div><div class="case-fact__k" data-lang-pt>Idempotência</div>
+          <div class="case-fact__v" data-lang-en>JSON manifests</div><div class="case-fact__v" data-lang-pt>Manifests JSON</div>
+          <div class="case-fact__note" data-lang-en>One per pipeline, tracking what ran for which reference date.</div>
+          <div class="case-fact__note" data-lang-pt>Um por pipeline, rastreando o que rodou para cada data de referência.</div>
+        </div>
+        <div class="case-fact">
+          <div class="case-fact__k" data-lang-en>Format bug caught</div><div class="case-fact__k" data-lang-pt>Bug de formato pego</div>
+          <div class="case-fact__v">~100×</div>
+          <div class="case-fact__note" data-lang-en>Inflation from a BR/US number-parsing mismatch during a migration — see below.</div>
+          <div class="case-fact__note" data-lang-pt>Inflação por incompatibilidade de parsing de número BR/US numa migração — ver abaixo.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="section__head">
+      <h2 class="section__title" data-lang-en>The three layers</h2>
+      <h2 class="section__title" data-lang-pt>As três camadas</h2>
+    </div>
+    <div class="prod-diagram">
+      <div class="diagram__head">
+        <span class="diagram__title" data-lang-en>data lake · file-based, manifest-tracked</span>
+        <span class="diagram__title" data-lang-pt>data lake · baseado em arquivo, rastreado por manifest</span>
+        <span class="diagram__legend">
+          <span><i class="swatch s-source"></i><span data-lang-en>raw</span><span data-lang-pt>raw</span></span>
+          <span><i class="swatch s-orch"></i><span data-lang-en>reference</span><span data-lang-pt>referência</span></span>
+          <span><i class="swatch s-out"></i><span data-lang-en>consolidated</span><span data-lang-pt>consolidado</span></span>
+        </span>
+      </div>
+      <div id="data-diagram" style="flex:1;display:flex;min-height:300px"></div>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="section__head">
+      <h2 class="section__title" data-lang-en>What a manifest actually does</h2>
+      <h2 class="section__title" data-lang-pt>O que um manifest realmente faz</h2>
+    </div>
+    <div class="flow">
+      <div class="flow__step">
+        <div class="flow__num">01</div>
+        <div>
+          <h4 data-lang-en>Records what ran, for which date</h4>
+          <h4 data-lang-pt>Registra o que rodou, para qual data</h4>
+          <p data-lang-en>Each consolidation pipeline keeps a manifest — a JSON file mapping reference dates to run status. Before processing a date, the task checks the manifest instead of guessing from what files exist on disk.</p>
+          <p data-lang-pt>Cada pipeline de consolidação mantém um manifest — um JSON mapeando datas de referência ao status da rodada. Antes de processar uma data, a task consulta o manifest em vez de adivinhar pelos arquivos que existem em disco.</p>
+        </div>
+      </div>
+      <div class="flow__step">
+        <div class="flow__num">02</div>
+        <div>
+          <h4 data-lang-en>Drives backfill without duplicating</h4>
+          <h4 data-lang-pt>Conduz o backfill sem duplicar</h4>
+          <p data-lang-en>A backfill run walks business days between two dates, skips anything already marked complete in the manifest, and retries anything marked failed — a plain loop over JSON, not a database migration.</p>
+          <p data-lang-pt>Uma rodada de backfill percorre os dias úteis entre duas datas, pula tudo que já está marcado como completo no manifest e tenta de novo tudo que está marcado como falho — um loop simples sobre JSON, não uma migração de banco.</p>
+        </div>
+      </div>
+      <div class="flow__step">
+        <div class="flow__num">03</div>
+        <div>
+          <h4 data-lang-en>Leaves a paper trail for skips</h4>
+          <h4 data-lang-pt>Deixa um rastro para o que foi pulado</h4>
+          <p data-lang-en>A day that gets skipped — a source outage, a holiday miscalculated — is written to a skip log next to the manifest, so a human reviewing the pipeline sees "skipped, and here's why" instead of a silent hole in the data.</p>
+          <p data-lang-pt>Um dia pulado — uma fonte fora do ar, um feriado calculado errado — é gravado num log de skip ao lado do manifest, para que um humano revisando o pipeline veja "pulado, e aqui está o motivo" em vez de um buraco silencioso no dado.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="section__head">
+      <h2 class="section__title" data-lang-en>Engineering decision</h2>
+      <h2 class="section__title" data-lang-pt>Decisão de engenharia</h2>
+    </div>
+    <div class="callout">
+      <span class="callout__label" data-lang-en>A migration between two administrators, and a ~100× bug</span>
+      <span class="callout__label" data-lang-pt>Uma migração entre duas administradoras, e um bug de ~100×</span>
+      <p data-lang-en>Midway through this platform's life, the fund's records moved from one administrator to another. The two exposed the same information in incompatible shapes — different casing conventions for column names, different date formats, and critically, different number formats: <code>1.234,56</code> (thousands-dot, decimal-comma) versus <code>1,234.56</code> (the reverse). A migration script that assumed the wrong convention parsed <code>1.234,56</code> as <code>1234.56</code> — inflating every affected figure by roughly two orders of magnitude. It was caught by comparing the aggregate against the fund's known net asset value, which is now a standing sanity check on every consolidation run, not a one-off fix.</p>
+      <p data-lang-pt>No meio da vida desta plataforma, os registros do fundo migraram de uma administradora para outra. As duas expunham a mesma informação em formatos incompatíveis — convenções diferentes de caixa para nomes de coluna, formatos de data diferentes e, criticamente, formatos de número diferentes: <code>1.234,56</code> (ponto de milhar, vírgula decimal) versus <code>1,234.56</code> (o inverso). Um script de migração que assumiu a convenção errada leu <code>1.234,56</code> como <code>1234.56</code> — inflando cada valor afetado em cerca de duas ordens de grandeza. Foi pego comparando o agregado com o patrimônio líquido conhecido do fundo, o que hoje é uma checagem de sanidade permanente em toda rodada de consolidação, não um conserto isolado.</p>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="section__head">
+      <h2 class="section__title" data-lang-en>Stack</h2>
+      <h2 class="section__title" data-lang-pt>Stack</h2>
+    </div>
+    <div class="kv">
+      <div class="kv__item"><span class="kv__k" data-lang-en>Storage</span><span class="kv__k" data-lang-pt>Armazenamento</span><span class="kv__v">CSV · parquet, on disk</span></div>
+      <div class="kv__item"><span class="kv__k" data-lang-en>State tracking</span><span class="kv__k" data-lang-pt>Rastreio de estado</span><span class="kv__v">JSON manifests</span></div>
+      <div class="kv__item"><span class="kv__k">ETL</span><span class="kv__v">pandas</span></div>
+      <div class="kv__item"><span class="kv__k" data-lang-en>Calendar</span><span class="kv__k" data-lang-pt>Calendário</span><span class="kv__v" data-lang-en>hand-rolled business days</span><span class="kv__v" data-lang-pt>dias úteis próprios</span></div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot__grid">
+      <div>
+        <div class="foot__sig" data-lang-en>Want to talk?</div>
+        <div class="foot__sig" data-lang-pt>Quer conversar?</div>
+        <p data-lang-en>I read every message. If something here resonates, drop a line.</p>
+        <p data-lang-pt>Leio todas as mensagens. Se algo aqui ressoa, é só escrever.</p>
+      </div>
+      <div>
+        <h5 data-lang-en>Direct</h5><h5 data-lang-pt>Direto</h5>
+        <div class="foot__links">
+          <a href="mailto:lucas_r_andrade@hotmail.com">lucas_r_andrade@hotmail.com</a>
+          <a href="https://wa.me/5521975056123" target="_blank" rel="noopener">WhatsApp · +55 21 97505 6123</a>
+        </div>
+      </div>
+      <div>
+        <h5 data-lang-en>Elsewhere</h5><h5 data-lang-pt>Em outros lugares</h5>
+        <div class="foot__links">
+          <a href="https://github.com/Andrade020" target="_blank" rel="noopener">github.com/Andrade020</a>
+          <a href="https://www.linkedin.com/in/lucas-rafael-de-andrade/" target="_blank" rel="noopener">linkedin.com/in/lucas-rafael-de-andrade</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot__base">
+      <span>© 2026 Lucas R. Andrade · Rio de Janeiro</span>
+      <span><a href="mailto:lucas_r_andrade@hotmail.com">lucas_r_andrade@hotmail.com</a> · <a href="https://wa.me/5521975056123" target="_blank" rel="noopener">+55 21 97505 6123</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+<script src="prod-flow-diagram.js"></script>
+<script>
+renderFlowDiagram({
+  mount: 'data-diagram',
+  W: 600, H: 300,
+  nodes: [
+    { id: 's1', col: 'a', x: 16,  y: 62,  w: 158, h: 64, title: 'data_raw/', sub: 'timestamped per source' },
+    { id: 'o1', col: 'b', x: 226, y: 20,  w: 148, h: 64, title: 'data_add/', sub: 'reference · manual' },
+    { id: 'o2', col: 'b', x: 226, y: 104, w: 148, h: 64, title: 'Manifest', sub: 'ran? skipped? why?' },
+    { id: 'o3', col: 'b', x: 226, y: 188, w: 148, h: 64, title: 'Sanity checks', sub: 'vs. known NAV' },
+    { id: 'r1', col: 'c', x: 426, y: 62,  w: 158, h: 64, title: 'data_consolidated/', sub: 'report layer reads this' },
+    { id: 'r2', col: 'c', x: 426, y: 146, w: 158, h: 64, title: 'Skip log', sub: 'human-readable gaps' },
+  ],
+  edges: [
+    { from: 's1', to: 'o1' }, { from: 's1', to: 'o2' }, { from: 's1', to: 'o3' },
+    { from: 'o2', to: 'r1' }, { from: 'o3', to: 'r1' }, { from: 'o1', to: 'r1' },
+    { from: 'o2', to: 'r2' },
+  ],
+});
+</script>
+</body>
+</html>

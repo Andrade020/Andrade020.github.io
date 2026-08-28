@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="How the daily ingestion pipeline works at Porto Real Asset: ~35 Airflow DAGs, an RPA bot, and public-data loaders — by Lucas R. Andrade.">
+<title>Orchestration &amp; Ingestion · Lucas R. Andrade</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.92em' font-size='95' font-family='Georgia,serif' font-style='italic' fill='%23d4a574'%3EZ%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="dark-mode">
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a href="index.html" class="brand">
+      <span class="brand__mark"><span class="brand__logo" aria-label="LRA"></span></span>
+      <span>Lucas R. Andrade</span>
+      <span class="brand__pos" data-lang-en>· Economist &amp; Data Scientist</span>
+      <span class="brand__pos" data-lang-pt>· Economista &amp; Cientista de Dados</span>
+    </a>
+    <nav class="nav">
+      <a href="index.html" data-lang-en>About</a><a href="index.html" data-lang-pt>Sobre</a>
+      <a href="production.html" class="is-active" data-lang-en>Production</a><a href="production.html" class="is-active" data-lang-pt>Produção</a>
+      <a href="projects.html" data-lang-en>Open source</a><a href="projects.html" data-lang-pt>Open source</a>
+      <a href="publications.html" data-lang-en>Research</a><a href="publications.html" data-lang-pt>Pesquisa</a>
+      <a href="lab.html" data-lang-en>Lab</a><a href="lab.html" data-lang-pt>Lab</a>
+    </nav>
+    <div class="header-tools">
+      <button class="icon-btn lang-btn" data-lang-btn onclick="toggleLang()" title="Toggle language">en · pt</button>
+      <button class="icon-btn" data-action="theme" onclick="toggleTheme()" title="Toggle theme">☀</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="page-head wrap">
+    <a href="production.html#sub-01" class="back-link"><span data-lang-en>← Production</span><span data-lang-pt>← Produção</span></a>
+    <span class="section-label" data-lang-en>Subsystem 01 · How it works</span>
+    <span class="section-label" data-lang-pt>Subsistema 01 · Como funciona</span>
+    <h1 data-lang-en>Thirty-five DAGs, three <em>kinds of source.</em></h1>
+    <h1 data-lang-pt>Trinta e cinco DAGs, três <em>tipos de fonte.</em></h1>
+    <p data-lang-en>Every morning, before anyone reads a number, something has to go get it — from a portal with no API, from a REST or GraphQL endpoint, or from a public government dataset. This is the layer that fetches, on schedule, without a human clicking anything.</p>
+    <p data-lang-pt>Toda manhã, antes de alguém ler um número, algo precisa ir buscá-lo — de um portal sem API, de um endpoint REST ou GraphQL, ou de um dataset público governamental. Esta é a camada que busca, no horário certo, sem ninguém clicar em nada.</p>
+  </section>
+
+  <section class="section wrap">
+    <div class="case__layout">
+      <div class="case__intro">
+        <span class="section-label" data-lang-en>The problem</span>
+        <span class="section-label" data-lang-pt>O problema</span>
+        <h2 data-lang-en>Three shapes of input, one daily deadline.</h2>
+        <h2 data-lang-pt>Três formatos de entrada, um prazo diário.</h2>
+        <p data-lang-en>The fund administrator's portal has no public API for some of what's needed, so a browser has to log in and click through it. Other data comes from proper REST and GraphQL endpoints. And macro context — interest rates, inflation, employment — comes from public sources that each have their own format and cadence. All of it has to land before the reports that depend on it can run, every business day, including around holidays it has to know about.</p>
+        <p data-lang-pt>O portal da administradora não tem API pública para parte do que é preciso, então um navegador precisa logar e clicar. Outros dados vêm de endpoints REST e GraphQL de verdade. E o contexto macro — juros, inflação, emprego — vem de fontes públicas, cada uma com seu formato e cadência. Tudo isso precisa chegar antes dos relatórios que dependem dele poderem rodar, todo dia útil, inclusive ao redor de feriados que o sistema precisa conhecer.</p>
+      </div>
+      <div class="case__detail">
+        <div class="case-fact">
+          <div class="case-fact__k">DAGs</div>
+          <div class="case-fact__v">~35</div>
+          <div class="case-fact__note" data-lang-en>Tagged by role: download, consolidation, report, audit.</div>
+          <div class="case-fact__note" data-lang-pt>Tagueadas por papel: download, consolidação, relatório, auditoria.</div>
+        </div>
+        <div class="case-fact">
+          <div class="case-fact__k" data-lang-en>Public sources</div><div class="case-fact__k" data-lang-pt>Fontes públicas</div>
+          <div class="case-fact__v">7</div>
+          <div class="case-fact__note" data-lang-en>BCB, IBGE, CVM, CAGED, Tesouro, INMET, TSE — via a standalone loader package.</div>
+          <div class="case-fact__note" data-lang-pt>BCB, IBGE, CVM, CAGED, Tesouro, INMET, TSE — via um pacote de loaders standalone.</div>
+        </div>
+        <div class="case-fact">
+          <div class="case-fact__k" data-lang-en>RPA</div><div class="case-fact__k" data-lang-pt>RPA</div>
+          <div class="case-fact__v" data-lang-en>Page Object Model</div><div class="case-fact__v" data-lang-pt>Page Object Model</div>
+          <div class="case-fact__note" data-lang-en>Selenium bot structured like a proper test suite, not a script.</div>
+          <div class="case-fact__note" data-lang-pt>Bot Selenium estruturado como uma suíte de testes de verdade, não um script solto.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="section__head">
+      <h2 class="section__title" data-lang-en>How a morning run goes</h2>
+      <h2 class="section__title" data-lang-pt>Como uma rodada de manhã acontece</h2>
+    </div>
+    <div class="prod-diagram">
+      <div class="diagram__head">
+        <span class="diagram__title" data-lang-en>ingestion · orchestrated by Airflow</span>
+        <span class="diagram__title" data-lang-pt>ingestão · orquestrada pelo Airflow</span>
+        <span class="diagram__legend">
+          <span><i class="swatch s-source"></i><span data-lang-en>sources</span><span data-lang-pt>fontes</span></span>
+          <span><i class="swatch s-orch"></i><span data-lang-en>DAG type</span><span data-lang-pt>tipo de DAG</span></span>
+          <span><i class="swatch s-out"></i><span data-lang-en>lands in</span><span data-lang-pt>pousa em</span></span>
+        </span>
+      </div>
+      <div id="orch-diagram" style="flex:1;display:flex;min-height:300px"></div>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="section__head">
+      <h2 class="section__title" data-lang-en>The DAG taxonomy</h2>
+      <h2 class="section__title" data-lang-pt>A taxonomia de DAGs</h2>
+    </div>
+    <div class="flow">
+      <div class="flow__step">
+        <div class="flow__num">01</div>
+        <div>
+          <h4 data-lang-en>Download — get the raw file</h4>
+          <h4 data-lang-pt>Download — buscar o arquivo bruto</h4>
+          <p data-lang-en>Portal scraping, REST/GraphQL calls, and public-data pulls, one DAG per source, each landing a timestamped raw file. A sensor-style "maestro" DAG polls state every five minutes and triggers what's ready, rather than everything running on a rigid fixed clock.</p>
+          <p data-lang-pt>Scraping de portal, chamadas REST/GraphQL e coletas de dados públicos, uma DAG por fonte, cada uma pousando um arquivo bruto com timestamp. Uma DAG "maestro" no estilo sensor consulta o estado a cada cinco minutos e dispara o que estiver pronto, em vez de tudo rodar num relógio fixo rígido.</p>
+        </div>
+      </div>
+      <div class="flow__step">
+        <div class="flow__num">02</div>
+        <div>
+          <h4 data-lang-en>Consolidation — normalize into one shape</h4>
+          <h4 data-lang-pt>Consolidação — normalizar num formato só</h4>
+          <p data-lang-en>Turns the raw files into the clean, dated tables the rest of the platform reads — see subsystem 02 for how idempotency and backfill work here.</p>
+          <p data-lang-pt>Transforma os arquivos brutos nas tabelas limpas e datadas que o resto da plataforma lê — ver subsistema 02 para como idempotência e backfill funcionam aqui.</p>
+        </div>
+      </div>
+      <div class="flow__step">
+        <div class="flow__num">03</div>
+        <div>
+          <h4 data-lang-en>Report — turn data into a decision</h4>
+          <h4 data-lang-pt>Relatório — transformar dado em decisão</h4>
+          <p data-lang-en>Aging, liquidity, compliance, and the rest — see subsystem 06.</p>
+          <p data-lang-pt>Aging, liquidez, enquadramento e o resto — ver subsistema 06.</p>
+        </div>
+      </div>
+      <div class="flow__step">
+        <div class="flow__num">04</div>
+        <div>
+          <h4 data-lang-en>Audit — check the checkers</h4>
+          <h4 data-lang-pt>Auditoria — checar os checadores</h4>
+          <p data-lang-en>Version-diffs and coverage checks that run before the reports depending on them — see subsystem 04.</p>
+          <p data-lang-pt>Version-diffs e checagens de cobertura que rodam antes dos relatórios que dependem deles — ver subsistema 04.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="section__head">
+      <h2 class="section__title" data-lang-en>Engineering decision</h2>
+      <h2 class="section__title" data-lang-pt>Decisão de engenharia</h2>
+    </div>
+    <div class="callout">
+      <span class="callout__label" data-lang-en>Two generations of the same platform, in the same codebase</span>
+      <span class="callout__label" data-lang-pt>Duas gerações da mesma plataforma, no mesmo código</span>
+      <p data-lang-en>The earlier version of this platform ran ingestion as shell commands wrapping standalone scripts, coordinated by file-watching sensors — simple, but every script owned its own state and error handling. The current version moved to Python-native tasks calling importable modules, with idempotency handled centrally through JSON manifests rather than inside each script. Nothing was rewritten wholesale: DAGs migrate one at a time as they need to change anyway, so both patterns coexist on purpose, not by accident.</p>
+      <p data-lang-pt>A versão anterior desta plataforma rodava a ingestão como comandos de shell envolvendo scripts standalone, coordenados por sensores que vigiavam arquivos — simples, mas cada script era dono do próprio estado e tratamento de erro. A versão atual passou para tasks nativas em Python chamando módulos importáveis, com idempotência tratada centralmente por manifests JSON em vez de dentro de cada script. Nada foi reescrito de uma vez: as DAGs migram uma a uma, conforme precisam mudar de qualquer forma, então os dois padrões convivem de propósito, não por acidente.</p>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="section__head">
+      <h2 class="section__title" data-lang-en>Stack</h2>
+      <h2 class="section__title" data-lang-pt>Stack</h2>
+    </div>
+    <div class="kv">
+      <div class="kv__item"><span class="kv__k" data-lang-en>Orchestration</span><span class="kv__k" data-lang-pt>Orquestração</span><span class="kv__v">Apache Airflow</span></div>
+      <div class="kv__item"><span class="kv__k" data-lang-en>RPA</span><span class="kv__k" data-lang-pt>RPA</span><span class="kv__v">Selenium 4</span></div>
+      <div class="kv__item"><span class="kv__k">APIs</span><span class="kv__v">REST · GraphQL</span></div>
+      <div class="kv__item"><span class="kv__k" data-lang-en>Public data</span><span class="kv__k" data-lang-pt>Dados públicos</span><span class="kv__v">requests · BeautifulSoup</span></div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot__grid">
+      <div>
+        <div class="foot__sig" data-lang-en>Want to talk?</div>
+        <div class="foot__sig" data-lang-pt>Quer conversar?</div>
+        <p data-lang-en>I read every message. If something here resonates, drop a line.</p>
+        <p data-lang-pt>Leio todas as mensagens. Se algo aqui ressoa, é só escrever.</p>
+      </div>
+      <div>
+        <h5 data-lang-en>Direct</h5><h5 data-lang-pt>Direto</h5>
+        <div class="foot__links">
+          <a href="mailto:lucas_r_andrade@hotmail.com">lucas_r_andrade@hotmail.com</a>
+          <a href="https://wa.me/5521975056123" target="_blank" rel="noopener">WhatsApp · +55 21 97505 6123</a>
+        </div>
+      </div>
+      <div>
+        <h5 data-lang-en>Elsewhere</h5><h5 data-lang-pt>Em outros lugares</h5>
+        <div class="foot__links">
+          <a href="https://github.com/Andrade020" target="_blank" rel="noopener">github.com/Andrade020</a>
+          <a href="https://www.linkedin.com/in/lucas-rafael-de-andrade/" target="_blank" rel="noopener">linkedin.com/in/lucas-rafael-de-andrade</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot__base">
+      <span>© 2026 Lucas R. Andrade · Rio de Janeiro</span>
+      <span><a href="mailto:lucas_r_andrade@hotmail.com">lucas_r_andrade@hotmail.com</a> · <a href="https://wa.me/5521975056123" target="_blank" rel="noopener">+55 21 97505 6123</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+<script src="prod-flow-diagram.js"></script>
+<script>
+renderFlowDiagram({
+  mount: 'orch-diagram',
+  W: 600, H: 300,
+  nodes: [
+    { id: 's1', col: 'a', x: 16,  y: 20,  w: 158, h: 64, title: 'Admin portal', sub: 'Selenium · POM' },
+    { id: 's2', col: 'a', x: 16,  y: 104, w: 158, h: 64, title: 'REST / GraphQL', sub: 'custodian APIs' },
+    { id: 's3', col: 'a', x: 16,  y: 188, w: 158, h: 64, title: 'Public data', sub: 'BCB · IBGE · CVM…' },
+    { id: 'o1', col: 'b', x: 226, y: 20,  w: 148, h: 64, title: 'Download DAGs', sub: 'one per source' },
+    { id: 'o2', col: 'b', x: 226, y: 104, w: 148, h: 64, title: 'Maestro', sub: 'sensor, every 5min' },
+    { id: 'o3', col: 'b', x: 226, y: 188, w: 148, h: 64, title: 'Consolidation DAGs', sub: 'raw → clean' },
+    { id: 'r1', col: 'c', x: 426, y: 20,  w: 158, h: 64, title: 'data_raw/', sub: 'timestamped' },
+    { id: 'r2', col: 'c', x: 426, y: 104, w: 158, h: 64, title: 'JSON manifests', sub: 'idempotency' },
+    { id: 'r3', col: 'c', x: 426, y: 188, w: 158, h: 64, title: 'data_consolidated/', sub: 'report layer' },
+  ],
+  edges: [
+    { from: 's1', to: 'o1' }, { from: 's2', to: 'o1' }, { from: 's3', to: 'o1' },
+    { from: 'o1', to: 'o2' }, { from: 'o2', to: 'o3' },
+    { from: 'o1', to: 'r1' }, { from: 'o1', to: 'r2' },
+    { from: 'o3', to: 'r3' },
+  ],
+});
+</script>
+</body>
+</html>

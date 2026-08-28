@@ -65,19 +65,18 @@
             <li><strong>CAGED</strong> — formal employment data for macroeconomic context</li>
             <li><strong>TSE</strong> — public electoral and political data</li>
             <li><strong>INMET</strong> — historical climate and weather data</li>
-            <li><strong>B3</strong> — DI futures curve data, reference rates, and benchmark prices for fixed income pricing</li>
-            <li><strong>CCB PDF Documents</strong> — 5,000+ Bank Credit Notes extracted automatically by the PDF pipeline</li>
+            <li><strong>B3</strong> — DI futures curve data and reference rates, scraped daily</li>
         </ul>
     </div>
 
     <div class="detail-section">
         <h2>Pipeline architecture</h2>
         <p>All pipelines are orchestrated by Apache Airflow running in Docker. DAGs are versioned in Git alongside the rest of the codebase. Each pipeline runs on a daily schedule and is idempotent — safe to re-run on failure. An intelligent backfill system detects missing business days and automatically recovers data gaps without duplicating records, handling weekends, Brazilian holidays, and API outages gracefully.</p>
-        <div class="code-block">Data Sources → Airflow DAGs → Structured Storage → Risk Dashboard
+        <div class="code-block">Data Sources → Airflow DAGs → File-Based Data Lake → Risk Dashboard
                                     ↓
-                          PDF Extraction Pipeline
+                          Report Generators (aging, liquidity, compliance...)
                                     ↓
-                          ML Credit Risk Models
+                          Offline Credit Risk Scoring
                                     ↓
                           Automated Email Reports (Krvo)</div>
     </div>
@@ -85,11 +84,11 @@
     <div class="detail-section">
         <h2>What the system delivers daily</h2>
         <ul class="feature-list">
-            <li>Consolidated FIDC portfolio position with pricing and risk metrics</li>
+            <li>Consolidated FIDC portfolio position with risk metrics</li>
             <li>Aging report: time-bucketed delinquency analysis per debtor and asset class</li>
             <li>Cash flow projection for the fund's receivables portfolio</li>
-            <li>Credit risk scoring with SHAP-based explanations for each debtor</li>
-            <li>B3 benchmark rates and curve interpolation for fixed income pricing</li>
+            <li>Offline credit risk scoring with SHAP-based explanations, reviewed by a person</li>
+            <li>B3 benchmark rates, scraped daily for reference</li>
             <li>Automated report emails to investment team via Krvo</li>
         </ul>
     </div>
@@ -105,11 +104,10 @@
             <span class="tag">Python</span>
             <span class="tag">Apache Airflow</span>
             <span class="tag">Docker</span>
-            <span class="tag">PostgreSQL / SQLite</span>
+            <span class="tag">File-based lake</span>
             <span class="tag">Flask</span>
             <span class="tag">Jinja2</span>
             <span class="tag">pandas</span>
-            <span class="tag">pdfplumber</span>
             <span class="tag">scikit-learn</span>
             <span class="tag">SHAP</span>
             <span class="tag">Linux</span>

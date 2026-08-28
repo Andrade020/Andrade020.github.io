@@ -151,10 +151,10 @@
         <h2 data-lang-en>An end-to-end view of <em>data infrastructure</em> for credit funds.</h2>
         <h2 data-lang-pt>Uma visão end-to-end da <em>infraestrutura de dados</em> em fundos de crédito.</h2>
 
-        <p data-lang-en>A reference stack for a credit-fund data operation: raw data pulled via Selenium and public APIs, orchestrated by Apache Airflow, landed in a Postgres warehouse, and surfaced through internal dashboards and automated reports.</p>
-        <p data-lang-pt>Uma stack de referência para a operação de dados de um fundo de crédito: dados brutos baixados via Selenium e APIs públicas, orquestrados pelo Apache Airflow, persistidos num warehouse Postgres e expostos via dashboards internos e relatórios automáticos.</p>
-        <p data-lang-en>On top of that sit the domain layers: a Python pricing library for Brazilian fixed income (ANBIMA conventions, B3 business calendar), and a credit-risk engine with SHAP explanations the investment committee can actually read.</p>
-        <p data-lang-pt>Sobre essa base, as camadas de domínio: uma biblioteca Python de precificação de renda fixa brasileira (convenções ANBIMA, calendário de dias úteis B3) e um motor de risco de crédito com explicações SHAP que o comitê de investimentos efetivamente lê.</p>
+        <p data-lang-en>A reference stack for a credit-fund data operation: raw data pulled via Selenium and public APIs, orchestrated by Apache Airflow, landed in a file-based data lake tracked by JSON manifests, and surfaced through internal dashboards and automated reports.</p>
+        <p data-lang-pt>Uma stack de referência para a operação de dados de um fundo de crédito: dados brutos baixados via Selenium e APIs públicas, orquestrados pelo Apache Airflow, persistidos num data lake baseado em arquivos e rastreado por manifests JSON, e expostos via dashboards internos e relatórios automáticos.</p>
+        <p data-lang-en>On top of that sit the domain layers: a table-driven cash-flow and liquidity engine for the fund's receivables, and an offline credit-risk scoring pipeline with SHAP explanations the investment committee can actually read.</p>
+        <p data-lang-pt>Sobre essa base, as camadas de domínio: um motor de fluxo de caixa e liquidez orientado a dados para os recebíveis do fundo, e um pipeline offline de score de risco de crédito com explicações SHAP que o comitê de investimentos efetivamente lê.</p>
       </div>
 
       <div class="case__right">
@@ -164,36 +164,36 @@
           <div class="case-fact__k" data-lang-pt>Ingestão</div>
           <div class="case-fact__v" data-lang-en>Selenium &amp; APIs</div>
           <div class="case-fact__v" data-lang-pt>Selenium &amp; APIs</div>
-          <div class="case-fact__note" data-lang-en>Raw data pulled from custodian endpoints, public macro feeds and scraped sources, then normalised in the warehouse.</div>
-          <div class="case-fact__note" data-lang-pt>Dados brutos puxados de endpoints custodiais, feeds macro públicos e fontes raspadas, normalizados no warehouse.</div>
+          <div class="case-fact__note" data-lang-en>Raw data pulled from custodian endpoints, public macro feeds and an RPA bot, then normalised in the data lake.</div>
+          <div class="case-fact__note" data-lang-pt>Dados brutos puxados de endpoints custodiais, feeds macro públicos e um bot de RPA, normalizados no data lake.</div>
         </div>
         <div class="case-fact">
           <div class="case-fact__k" data-lang-en>Orchestration</div>
           <div class="case-fact__k" data-lang-pt>Orquestração</div>
           <div class="case-fact__v">Apache Airflow</div>
-          <div class="case-fact__note" data-lang-en>Scheduled DAGs run every morning, with incremental loads, dependency-aware retries and structured logging.</div>
-          <div class="case-fact__note" data-lang-pt>DAGs agendados rodam toda manhã, com cargas incrementais, retries com dependência e logging estruturado.</div>
+          <div class="case-fact__note" data-lang-en>~35 DAGs run every morning, with incremental loads, dependency-aware retries and structured logging.</div>
+          <div class="case-fact__note" data-lang-pt>~35 DAGs rodam toda manhã, com cargas incrementais, retries com dependência e logging estruturado.</div>
         </div>
         <div class="case-fact">
-          <div class="case-fact__k" data-lang-en>Document layer</div>
-          <div class="case-fact__k" data-lang-pt>Camada documental</div>
-          <div class="case-fact__v" data-lang-en>PDF &amp; OCR</div>
-          <div class="case-fact__v" data-lang-pt>PDF &amp; OCR</div>
-          <div class="case-fact__note" data-lang-en>Layout-tolerant extractors lift structured fields from credit notes, with Tesseract OCR as fallback for low-quality scans.</div>
-          <div class="case-fact__note" data-lang-pt>Extratores tolerantes a layout retiram campos estruturados de títulos de crédito, com Tesseract OCR como fallback para digitalizações ruins.</div>
+          <div class="case-fact__k" data-lang-en>Data layer</div>
+          <div class="case-fact__k" data-lang-pt>Camada de dados</div>
+          <div class="case-fact__v" data-lang-en>File lake, no DB</div>
+          <div class="case-fact__v" data-lang-pt>File lake, sem banco</div>
+          <div class="case-fact__note" data-lang-en>Idempotency and backfill driven by JSON manifests, not database transactions.</div>
+          <div class="case-fact__note" data-lang-pt>Idempotência e backfill conduzidos por manifests JSON, não transações de banco.</div>
         </div>
         <div class="case-fact">
           <div class="case-fact__k" data-lang-en>Decision surface</div>
           <div class="case-fact__k" data-lang-pt>Camada de decisão</div>
-          <div class="case-fact__v" data-lang-en>Dashboards &amp; ML</div>
-          <div class="case-fact__v" data-lang-pt>Dashboards &amp; ML</div>
-          <div class="case-fact__note" data-lang-en>Internal Flask dashboard for positions and fund quotas; ML risk engine ranking debtors with SHAP feature attributions.</div>
-          <div class="case-fact__note" data-lang-pt>Dashboard interno em Flask para posições e cotas; motor de risco em ML que ranqueia devedores com atribuições SHAP.</div>
+          <div class="case-fact__v" data-lang-en>Dashboard &amp; reports</div>
+          <div class="case-fact__v" data-lang-pt>Dashboard &amp; relatórios</div>
+          <div class="case-fact__note" data-lang-en>Internal Flask dashboard for positions and fund quotas; six report generators delivered daily by email.</div>
+          <div class="case-fact__note" data-lang-pt>Dashboard interno em Flask para posições e cotas; seis geradores de relatório entregues diariamente por e-mail.</div>
         </div>
       </div>
         <div class="stack">
           <b data-lang-en>Stack</b><b data-lang-pt>Stack</b>
-          <br>Python · PostgreSQL · Apache Airflow · Docker · Flask · scikit-learn · SHAP · pdfplumber · Tesseract · Linux
+          <br>Python · Apache Airflow · Docker · Flask · scikit-learn · SHAP · Selenium · Linux
         </div>
       </div>
     </div>
@@ -215,37 +215,37 @@
           <span class="selected__num">01.</span>
           <span class="tag production" data-lang-en>Production</span><span class="tag production" data-lang-pt>Produção</span>
         </div>
-        <h3 class="selected__title" data-lang-en>Data Infrastructure</h3>
-        <h3 class="selected__title" data-lang-pt>Infraestrutura de Dados</h3>
-        <p class="selected__desc" data-lang-en>Airflow DAGs, multiple sources, a Postgres warehouse, a Flask dashboard, and an automated daily report delivered before market open.</p>
-        <p class="selected__desc" data-lang-pt>DAGs do Airflow, várias fontes, um warehouse Postgres, um dashboard em Flask e um relatório diário automático antes da abertura do mercado.</p>
-        <div class="selected__stack">Python · Airflow · PostgreSQL · Docker · Flask · Jinja2 · Linux</div>
+        <h3 class="selected__title" data-lang-en>Pipeline Orchestration</h3>
+        <h3 class="selected__title" data-lang-pt>Orquestração de Pipelines</h3>
+        <p class="selected__desc" data-lang-en>~35 Airflow DAGs, an RPA bot with a proper Page Object Model, a file-based data lake, and an automated daily report delivered before market open.</p>
+        <p class="selected__desc" data-lang-pt>~35 DAGs do Airflow, um bot de RPA com Page Object Model de verdade, um data lake baseado em arquivos e um relatório diário automático antes da abertura do mercado.</p>
+        <div class="selected__stack">Python · Airflow · Selenium · Docker · Flask · Jinja2 · Linux</div>
       </article>
 
       <article class="selected__item">
-        <a href="production.html#sub-02" class="cover" aria-label="PDF extraction"></a>
+        <a href="production.html#sub-02" class="cover" aria-label="Data layer and idempotency"></a>
         <div class="selected__head">
           <span class="selected__num">02.</span>
           <span class="tag production" data-lang-en>Production</span><span class="tag production" data-lang-pt>Produção</span>
         </div>
-        <h3 class="selected__title" data-lang-en>Large-Scale PDF Extraction</h3>
-        <h3 class="selected__title" data-lang-pt>Extração de PDFs em Larga Escala</h3>
-        <p class="selected__desc" data-lang-en>Layout-tolerant pipeline that lifts structured fields per document from thousands of credit notes, with OCR fallback and incremental Airflow runs.</p>
-        <p class="selected__desc" data-lang-pt>Pipeline tolerante a layout que extrai campos estruturados de milhares de cédulas de crédito, com OCR e execução incremental via Airflow.</p>
-        <div class="selected__stack">Python · pdfplumber · Tesseract · Airflow · PostgreSQL</div>
+        <h3 class="selected__title" data-lang-en>Data Layer &amp; Idempotency</h3>
+        <h3 class="selected__title" data-lang-pt>Camada de Dados &amp; Idempotência</h3>
+        <p class="selected__desc" data-lang-en>No database — a three-tier file lake with JSON manifests instead, born from a real ~100× bug caught by a sanity check it now enforces on every run.</p>
+        <p class="selected__desc" data-lang-pt>Sem banco de dados — um lake de arquivos em três camadas com manifests JSON, nascido de um bug real de ~100× pego por uma checagem de sanidade que hoje é aplicada em toda rodada.</p>
+        <div class="selected__stack">Python · pandas · JSON manifests · Airflow</div>
       </article>
 
       <article class="selected__item">
-        <a href="production.html#sub-04" class="cover" aria-label="Credit Risk ML"></a>
+        <a href="production.html#sub-05" class="cover" aria-label="Credit Risk ML"></a>
         <div class="selected__head">
           <span class="selected__num">03.</span>
           <span class="tag production" data-lang-en>Production</span><span class="tag production" data-lang-pt>Produção</span>
         </div>
         <h3 class="selected__title" data-lang-en>Credit Risk · ML with SHAP</h3>
         <h3 class="selected__title" data-lang-pt>Risco de Crédito · ML com SHAP</h3>
-        <p class="selected__desc" data-lang-en>A risk engine whose output is not just a score but a ranked list of reasons, the kind of explanation an investment committee can read and challenge.</p>
-        <p class="selected__desc" data-lang-pt>Um motor de risco cuja saída não é só um score, mas uma lista ordenada de razões: o tipo de explicação que um comitê de investimentos consegue ler e contestar.</p>
-        <div class="selected__stack">Python · scikit-learn · SHAP · pandas · Airflow</div>
+        <p class="selected__desc" data-lang-en>An offline scoring pipeline whose output is not just a score but a ranked list of reasons, the kind of explanation an investment committee can read and challenge.</p>
+        <p class="selected__desc" data-lang-pt>Um pipeline offline de score cuja saída não é só um número, mas uma lista ordenada de razões: o tipo de explicação que um comitê de investimentos consegue ler e contestar.</p>
+        <div class="selected__stack">Python · scikit-learn · XGBoost · SHAP · Optuna</div>
       </article>
 
       <article class="selected__item" id="wildcard-slot">

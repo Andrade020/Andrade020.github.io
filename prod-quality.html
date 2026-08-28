@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="How data quality is enforced at Porto Real Asset without a unit test suite: consistency checks, version-diff audits, and a hand-written rule parser — by Lucas R. Andrade.">
+<title>Quality Gates &amp; Compliance · Lucas R. Andrade</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.92em' font-size='95' font-family='Georgia,serif' font-style='italic' fill='%23d4a574'%3EZ%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="dark-mode">
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a href="index.html" class="brand">
+      <span class="brand__mark"><span class="brand__logo" aria-label="LRA"></span></span>
+      <span>Lucas R. Andrade</span>
+      <span class="brand__pos" data-lang-en>· Economist &amp; Data Scientist</span>
+      <span class="brand__pos" data-lang-pt>· Economista &amp; Cientista de Dados</span>
+    </a>
+    <nav class="nav">
+      <a href="index.html" data-lang-en>About</a><a href="index.html" data-lang-pt>Sobre</a>
+      <a href="production.html" class="is-active" data-lang-en>Production</a><a href="production.html" class="is-active" data-lang-pt>Produção</a>
+      <a href="projects.html" data-lang-en>Open source</a><a href="projects.html" data-lang-pt>Open source</a>
+      <a href="publications.html" data-lang-en>Research</a><a href="publications.html" data-lang-pt>Pesquisa</a>
+      <a href="lab.html" data-lang-en>Lab</a><a href="lab.html" data-lang-pt>Lab</a>
+    </nav>
+    <div class="header-tools">
+      <button class="icon-btn lang-btn" data-lang-btn onclick="toggleLang()" title="Toggle language">en · pt</button>
+      <button class="icon-btn" data-action="theme" onclick="toggleTheme()" title="Toggle theme">☀</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="page-head wrap">
+    <a href="production.html#sub-04" class="back-link"><span data-lang-en>← Production</span><span data-lang-pt>← Produção</span></a>
+    <span class="section-label" data-lang-en>Subsystem 04 · How it works</span>
+    <span class="section-label" data-lang-pt>Subsistema 04 · Como funciona</span>
+    <h1 data-lang-en>No test suite. <em>Gates in the pipeline instead.</em></h1>
+    <h1 data-lang-pt>Sem suíte de testes. <em>Gates no próprio pipeline.</em></h1>
+    <p data-lang-en>There's no pytest suite behind this platform. What checks correctness is runtime: consistency checks on every load, a version-diff audit that catches silent restatements, and a compliance engine that re-evaluates every regulatory limit every day and keeps a permanent record of the answer.</p>
+    <p data-lang-pt>Não existe uma suíte pytest por trás desta plataforma. O que checa correção é em tempo de execução: checagens de consistência em toda carga, uma auditoria de version-diff que pega reapresentações silenciosas, e um motor de enquadramento que reavalia todo limite regulatório todo dia e guarda um registro permanente da resposta.</p>
+  </section>
+
+  <section class="section wrap">
+    <div class="case__layout">
+      <div class="case__intro">
+        <span class="section-label" data-lang-en>The problem</span>
+        <span class="section-label" data-lang-pt>O problema</span>
+        <h2 data-lang-en>Bad data doesn't crash — it just looks plausible.</h2>
+        <h2 data-lang-pt>Dado ruim não trava — só parece plausível.</h2>
+        <p data-lang-en>A malformed input rarely throws an exception; it produces a number that's merely wrong, and wrong numbers in a credit fund's daily report move real decisions. Unit tests catch code that behaves incorrectly against known cases — they don't catch a correct pipeline being fed unexpected data. The checks here are aimed at that second failure mode: they run against the live data every day, not against fixtures once in CI.</p>
+        <p data-lang-pt>Uma entrada malformada raramente lança uma exceção; ela produz um número simplesmente errado, e números errados no relatório diário de um fundo de crédito movem decisões reais. Testes unitários pegam código que se comporta de forma incorreta contra casos conhecidos — eles não pegam um pipeline correto sendo alimentado com dado inesperado. As checagens aqui miram nesse segundo modo de falha: rodam contra o dado ao vivo todo dia, não contra fixtures uma vez no CI.</p>
+      </div>
+      <div class="case__detail">
+        <div class="case-fact">
+          <div class="case-fact__k" data-lang-en>Inventory checks</div><div class="case-fact__k" data-lang-pt>Checagens de estoque</div>
+          <div class="case-fact__v">6</div>
+          <div class="case-fact__note" data-lang-en>Named, one Excel sheet each, run on every load.</div>
+          <div class="case-fact__note" data-lang-pt>Nomeadas, uma planilha Excel cada, rodam em toda carga.</div>
+        </div>
+        <div class="case-fact">
+          <div class="case-fact__k" data-lang-en>Restatement audit</div><div class="case-fact__k" data-lang-pt>Auditoria de reapresentação</div>
+          <div class="case-fact__v" data-lang-en>Version-diff</div><div class="case-fact__v" data-lang-pt>Version-diff</div>
+          <div class="case-fact__note" data-lang-en>Compares two runs of the same reference date to catch silent changes.</div>
+          <div class="case-fact__note" data-lang-pt>Compara duas rodadas da mesma data de referência para pegar mudanças silenciosas.</div>
+        </div>
+        <div class="case-fact">
+          <div class="case-fact__k" data-lang-en>Rule engine</div><div class="case-fact__k" data-lang-pt>Motor de regras</div>
+          <div class="case-fact__v" data-lang-en>No eval()</div><div class="case-fact__v" data-lang-pt>Sem eval()</div>
+          <div class="case-fact__note" data-lang-en>A hand-written recursive-descent parser for the compliance rule language.</div>
+          <div class="case-fact__note" data-lang-pt>Um parser recursivo-descendente escrito à mão para a linguagem de regras de enquadramento.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="section__head">
+      <h2 class="section__title" data-lang-en>Where the checks sit in the pipeline</h2>
+      <h2 class="section__title" data-lang-pt>Onde as checagens ficam no pipeline</h2>
+    </div>
+    <div class="prod-diagram">
+      <div class="diagram__head">
+        <span class="diagram__title" data-lang-en>quality gates</span>
+        <span class="diagram__title" data-lang-pt>gates de qualidade</span>
+        <span class="diagram__legend">
+          <span><i class="swatch s-source"></i><span data-lang-en>data</span><span data-lang-pt>dado</span></span>
+          <span><i class="swatch s-orch"></i><span data-lang-en>gate</span><span data-lang-pt>gate</span></span>
+          <span><i class="swatch s-out"></i><span data-lang-en>outcome</span><span data-lang-pt>resultado</span></span>
+        </span>
+      </div>
+      <div id="quality-diagram" style="flex:1;display:flex;min-height:300px"></div>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="section__head">
+      <h2 class="section__title" data-lang-en>The six inventory checks</h2>
+      <h2 class="section__title" data-lang-pt>As seis checagens de estoque</h2>
+    </div>
+    <p style="max-width:720px;font-size:0.95rem;color:var(--ink-dim);line-height:1.7;margin-bottom:8px;" data-lang-en>Run against the receivables inventory on every load, each writing its own findings to a dedicated sheet so a reviewer sees exactly which rows failed which check, not just a pass/fail flag.</p>
+    <p style="max-width:720px;font-size:0.95rem;color:var(--ink-dim);line-height:1.7;margin-bottom:8px;" data-lang-pt>Rodam contra o estoque de recebíveis em toda carga, cada uma escrevendo seus próprios achados numa aba dedicada, para que um revisor veja exatamente quais linhas falharam em qual checagem, não só uma flag de passou/falhou.</p>
+    <ul class="prod-list" style="max-width:720px;margin-top:20px;">
+      <li data-lang-en>A payer (debtor) linked to more than one consignor entity.</li>
+      <li data-lang-pt>Um sacado vinculado a mais de um ente consignante.</li>
+      <li data-lang-en>The final installment number doesn't match the declared installment count.</li>
+      <li data-lang-pt>O número da última parcela não bate com a quantidade de parcelas declarada.</li>
+      <li data-lang-en>A single contract with multiple payers or multiple assignors.</li>
+      <li data-lang-pt>Um mesmo contrato com múltiplos sacados ou múltiplos cedentes.</li>
+      <li data-lang-en>Non-sequential installment numbers within a contract.</li>
+      <li data-lang-pt>Números de parcela não sequenciais dentro de um contrato.</li>
+      <li data-lang-en>Installment amounts that differ within the same contract.</li>
+      <li data-lang-pt>Valores de parcela que diferem dentro do mesmo contrato.</li>
+      <li data-lang-en>CPF/CNPJ document length validation — 11 digits or 14, nothing else.</li>
+      <li data-lang-pt>Validação de tamanho de CPF/CNPJ — 11 dígitos ou 14, nada além disso.</li>
+    </ul>
+  </section>
+
+  <section class="section wrap">
+    <div class="section__head">
+      <h2 class="section__title" data-lang-en>Engineering decision</h2>
+      <h2 class="section__title" data-lang-pt>Decisão de engenharia</h2>
+    </div>
+    <div class="callout">
+      <span class="callout__label" data-lang-en>Not duplicating the rules engine, on purpose</span>
+      <span class="callout__label" data-lang-pt>Não duplicar o motor de regras, de propósito</span>
+      <p data-lang-en>The compliance history job runs daily and needs to evaluate every regulatory rule against that day's position — the same evaluation the internal dashboard already does on demand. The obvious shortcut is to re-implement that evaluation inside the DAG so it doesn't depend on another app being up. The code does the opposite: it calls the dashboard's own HTTP endpoint and records the answer. The reasoning is written directly into the code — a second implementation of the same rule language would drift from the first the first time either one changed, and the two disagreeing quietly is a worse failure than a network call costing a few dozen milliseconds. Correctness was judged more valuable than decoupling.</p>
+      <p data-lang-pt>O job de histórico de enquadramento roda diariamente e precisa avaliar toda regra regulatória contra a posição daquele dia — a mesma avaliação que o dashboard interno já faz sob demanda. O atalho óbvio seria reimplementar essa avaliação dentro da DAG para não depender de outro app estar de pé. O código faz o oposto: chama o próprio endpoint HTTP do dashboard e registra a resposta. O raciocínio está escrito direto no código — uma segunda implementação da mesma linguagem de regras divergiria da primeira na primeira vez que qualquer uma das duas mudasse, e as duas discordando silenciosamente é uma falha pior do que uma chamada de rede custando algumas dezenas de milissegundos. Correção foi julgada mais valiosa que desacoplamento.</p>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="section__head">
+      <h2 class="section__title" data-lang-en>Stack</h2>
+      <h2 class="section__title" data-lang-pt>Stack</h2>
+    </div>
+    <div class="kv">
+      <div class="kv__item"><span class="kv__k" data-lang-en>Rule language</span><span class="kv__k" data-lang-pt>Linguagem de regras</span><span class="kv__v" data-lang-en>hand-written parser</span><span class="kv__v" data-lang-pt>parser próprio</span></div>
+      <div class="kv__item"><span class="kv__k" data-lang-en>Checks</span><span class="kv__k" data-lang-pt>Checagens</span><span class="kv__v">pandas</span></div>
+      <div class="kv__item"><span class="kv__k" data-lang-en>History</span><span class="kv__k" data-lang-pt>Histórico</span><span class="kv__v" data-lang-en>append-only log</span><span class="kv__v" data-lang-pt>log append-only</span></div>
+      <div class="kv__item"><span class="kv__k" data-lang-en>Orchestration</span><span class="kv__k" data-lang-pt>Orquestração</span><span class="kv__v">Apache Airflow</span></div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot__grid">
+      <div>
+        <div class="foot__sig" data-lang-en>Want to talk?</div>
+        <div class="foot__sig" data-lang-pt>Quer conversar?</div>
+        <p data-lang-en>I read every message. If something here resonates, drop a line.</p>
+        <p data-lang-pt>Leio todas as mensagens. Se algo aqui ressoa, é só escrever.</p>
+      </div>
+      <div>
+        <h5 data-lang-en>Direct</h5><h5 data-lang-pt>Direto</h5>
+        <div class="foot__links">
+          <a href="mailto:lucas_r_andrade@hotmail.com">lucas_r_andrade@hotmail.com</a>
+          <a href="https://wa.me/5521975056123" target="_blank" rel="noopener">WhatsApp · +55 21 97505 6123</a>
+        </div>
+      </div>
+      <div>
+        <h5 data-lang-en>Elsewhere</h5><h5 data-lang-pt>Em outros lugares</h5>
+        <div class="foot__links">
+          <a href="https://github.com/Andrade020" target="_blank" rel="noopener">github.com/Andrade020</a>
+          <a href="https://www.linkedin.com/in/lucas-rafael-de-andrade/" target="_blank" rel="noopener">linkedin.com/in/lucas-rafael-de-andrade</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot__base">
+      <span>© 2026 Lucas R. Andrade · Rio de Janeiro</span>
+      <span><a href="mailto:lucas_r_andrade@hotmail.com">lucas_r_andrade@hotmail.com</a> · <a href="https://wa.me/5521975056123" target="_blank" rel="noopener">+55 21 97505 6123</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+<script src="prod-flow-diagram.js"></script>
+<script>
+renderFlowDiagram({
+  mount: 'quality-diagram',
+  W: 600, H: 300,
+  nodes: [
+    { id: 's1', col: 'a', x: 16,  y: 20,  w: 158, h: 64, title: 'Receivables load', sub: 'daily' },
+    { id: 's2', col: 'a', x: 16,  y: 104, w: 158, h: 64, title: 'Two runs, same date', sub: 're-generation' },
+    { id: 's3', col: 'a', x: 16,  y: 188, w: 158, h: 64, title: 'Fund position', sub: 'today' },
+    { id: 'o1', col: 'b', x: 226, y: 20,  w: 148, h: 64, title: '6 consistency checks', sub: 'per-row findings' },
+    { id: 'o2', col: 'b', x: 226, y: 104, w: 148, h: 64, title: 'Version-diff audit', sub: 'silent restatements' },
+    { id: 'o3', col: 'b', x: 226, y: 188, w: 148, h: 64, title: 'Compliance rules', sub: 'no eval() parser' },
+    { id: 'r1', col: 'c', x: 426, y: 20,  w: 158, h: 64, title: 'Findings sheet', sub: 'per check' },
+    { id: 'r2', col: 'c', x: 426, y: 104, w: 158, h: 64, title: 'Flagged diff', sub: 'human review' },
+    { id: 'r3', col: 'c', x: 426, y: 188, w: 158, h: 64, title: 'Append-only history', sub: 'OK · alert · breach' },
+  ],
+  edges: [
+    { from: 's1', to: 'o1' }, { from: 'o1', to: 'r1' },
+    { from: 's2', to: 'o2' }, { from: 'o2', to: 'r2' },
+    { from: 's3', to: 'o3' }, { from: 'o3', to: 'r3' },
+  ],
+});
+</script>
+</body>
+</html>

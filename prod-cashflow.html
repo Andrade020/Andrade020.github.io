@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="How the cash-flow and liquidity engine works at Porto Real Asset: table-driven amortization rules and IRR by root-finding — by Lucas R. Andrade.">
+<title>Cash Flow &amp; Liquidity · Lucas R. Andrade</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.92em' font-size='95' font-family='Georgia,serif' font-style='italic' fill='%23d4a574'%3EZ%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="dark-mode">
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a href="index.html" class="brand">
+      <span class="brand__mark"><span class="brand__logo" aria-label="LRA"></span></span>
+      <span>Lucas R. Andrade</span>
+      <span class="brand__pos" data-lang-en>· Economist &amp; Data Scientist</span>
+      <span class="brand__pos" data-lang-pt>· Economista &amp; Cientista de Dados</span>
+    </a>
+    <nav class="nav">
+      <a href="index.html" data-lang-en>About</a><a href="index.html" data-lang-pt>Sobre</a>
+      <a href="production.html" class="is-active" data-lang-en>Production</a><a href="production.html" class="is-active" data-lang-pt>Produção</a>
+      <a href="projects.html" data-lang-en>Open source</a><a href="projects.html" data-lang-pt>Open source</a>
+      <a href="publications.html" data-lang-en>Research</a><a href="publications.html" data-lang-pt>Pesquisa</a>
+      <a href="lab.html" data-lang-en>Lab</a><a href="lab.html" data-lang-pt>Lab</a>
+    </nav>
+    <div class="header-tools">
+      <button class="icon-btn lang-btn" data-lang-btn onclick="toggleLang()" title="Toggle language">en · pt</button>
+      <button class="icon-btn" data-action="theme" onclick="toggleTheme()" title="Toggle theme">☀</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="page-head wrap">
+    <a href="production.html#sub-03" class="back-link"><span data-lang-en>← Production</span><span data-lang-pt>← Produção</span></a>
+    <span class="section-label" data-lang-en>Subsystem 03 · How it works</span>
+    <span class="section-label" data-lang-pt>Subsistema 03 · Como funciona</span>
+    <h1 data-lang-en>Amortization rules are <em>data, not code.</em></h1>
+    <h1 data-lang-pt>Regras de amortização são <em>dado, não código.</em></h1>
+    <p data-lang-en>Projecting when a fund will have cash for redemptions means projecting when every receivable in it will pay — and that depends on settlement terms that vary by asset and change over time. This engine keeps those terms in a spreadsheet, not in an if/else chain.</p>
+    <p data-lang-pt>Projetar quando um fundo terá caixa para resgates significa projetar quando cada recebível dentro dele vai pagar — e isso depende de termos de liquidação que variam por ativo e mudam ao longo do tempo. Este motor mantém esses termos numa planilha, não numa cadeia de if/else.</p>
+  </section>
+
+  <section class="section wrap">
+    <div class="case__layout">
+      <div class="case__intro">
+        <span class="section-label" data-lang-en>The problem</span>
+        <span class="section-label" data-lang-pt>O problema</span>
+        <h2 data-lang-en>Every receivable settles on its own terms.</h2>
+        <h2 data-lang-pt>Cada recebível se liquida nos seus próprios termos.</h2>
+        <p data-lang-en>A payroll-deductible receivable, a trade receivable, and a structured note don't amortize the same way — some pay monthly on a fixed schedule, some get bought back early, some sit in a senior/subordinated waterfall where one class only gets paid after another is whole. Hardcoding that logic means every new asset type is a code change reviewed and deployed under time pressure. This engine instead reads the settlement rule for each asset from a table, so adding a new rule is an edit to a spreadsheet an analyst can make.</p>
+        <p data-lang-pt>Um recebível consignado, um recebível comercial e uma nota estruturada não amortizam do mesmo jeito — alguns pagam mensalmente num cronograma fixo, alguns são recomprados antecipadamente, alguns ficam numa cascata sênior/subordinada em que uma classe só recebe depois que a outra está integralizada. Codificar essa lógica no código significa que todo tipo de ativo novo é uma mudança de código revisada e implantada sob pressão de tempo. Este motor, em vez disso, lê a regra de liquidação de cada ativo numa tabela, então adicionar uma regra nova é uma edição de planilha que um analista pode fazer.</p>
+      </div>
+      <div class="case__detail">
+        <div class="case-fact">
+          <div class="case-fact__k" data-lang-en>Rule storage</div><div class="case-fact__k" data-lang-pt>Onde vivem as regras</div>
+          <div class="case-fact__v" data-lang-en>Spreadsheet</div><div class="case-fact__v" data-lang-pt>Planilha</div>
+          <div class="case-fact__note" data-lang-en>Settlement rule per asset — editable without a deploy.</div>
+          <div class="case-fact__note" data-lang-pt>Regra de liquidação por ativo — editável sem deploy.</div>
+        </div>
+        <div class="case-fact">
+          <div class="case-fact__k">IRR</div>
+          <div class="case-fact__v" data-lang-en>Root-finding</div><div class="case-fact__v" data-lang-pt>Busca de raiz</div>
+          <div class="case-fact__note" data-lang-en>scipy.optimize (Brent, Newton) over the discounted cash-flow schedule.</div>
+          <div class="case-fact__note" data-lang-pt>scipy.optimize (Brent, Newton) sobre o cronograma de fluxo de caixa descontado.</div>
+        </div>
+        <div class="case-fact">
+          <div class="case-fact__k" data-lang-en>Pre-flight gate</div><div class="case-fact__k" data-lang-pt>Checagem prévia</div>
+          <div class="case-fact__v" data-lang-en>Before 10am</div><div class="case-fact__v" data-lang-pt>Antes das 10h</div>
+          <div class="case-fact__note" data-lang-en>An audit DAG flags assets with no matching rule before the liquidity report runs.</div>
+          <div class="case-fact__note" data-lang-pt>Uma DAG de auditoria sinaliza ativos sem regra correspondente antes do relatório de liquidez rodar.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="section__head">
+      <h2 class="section__title" data-lang-en>From a rules table to a cash-flow projection</h2>
+      <h2 class="section__title" data-lang-pt>De uma tabela de regras a uma projeção de fluxo de caixa</h2>
+    </div>
+    <div class="prod-diagram">
+      <div class="diagram__head">
+        <span class="diagram__title" data-lang-en>liquidity engine</span>
+        <span class="diagram__title" data-lang-pt>motor de liquidez</span>
+        <span class="diagram__legend">
+          <span><i class="swatch s-source"></i><span data-lang-en>inputs</span><span data-lang-pt>entradas</span></span>
+          <span><i class="swatch s-orch"></i><span data-lang-en>engine</span><span data-lang-pt>motor</span></span>
+          <span><i class="swatch s-out"></i><span data-lang-en>output</span><span data-lang-pt>saída</span></span>
+        </span>
+      </div>
+      <div id="cashflow-diagram" style="flex:1;display:flex;min-height:300px"></div>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="section__head">
+      <h2 class="section__title" data-lang-en>What the engine actually computes</h2>
+      <h2 class="section__title" data-lang-pt>O que o motor de fato calcula</h2>
+    </div>
+    <div class="flow">
+      <div class="flow__step">
+        <div class="flow__num">01</div>
+        <div>
+          <h4 data-lang-en>A projected schedule, per asset</h4>
+          <h4 data-lang-pt>Um cronograma projetado, por ativo</h4>
+          <p data-lang-en>Each receivable's settlement rule (fixed schedule, early buyback, other) is looked up, applied against a business-day calendar built in-house, and turned into a stream of expected future cash dates and amounts.</p>
+          <p data-lang-pt>A regra de liquidação de cada recebível (cronograma fixo, recompra antecipada, outra) é consultada, aplicada contra um calendário de dias úteis construído internamente, e transformada num fluxo de datas e valores de caixa futuros esperados.</p>
+        </div>
+      </div>
+      <div class="flow__step">
+        <div class="flow__num">02</div>
+        <div>
+          <h4 data-lang-en>A senior/subordinated waterfall</h4>
+          <h4 data-lang-pt>Uma cascata sênior/subordinada</h4>
+          <p data-lang-en>Projected inflows are allocated across share classes in priority order, so the liability side of the balance sheet reflects the fund's actual capital structure, not just a single blended number.</p>
+          <p data-lang-pt>As entradas projetadas são alocadas entre as classes de cota em ordem de prioridade, de modo que o lado do passivo reflita a estrutura de capital real do fundo, não só um número único combinado.</p>
+        </div>
+      </div>
+      <div class="flow__step">
+        <div class="flow__num">03</div>
+        <div>
+          <h4 data-lang-en>An internal rate of return</h4>
+          <h4 data-lang-pt>Uma taxa interna de retorno</h4>
+          <p data-lang-en>For flows that need a yield, not just a total, the schedule is fed to a numerical root-finder rather than an analytical formula — the schedules are irregular enough (early buybacks, partial payments) that a closed form isn't reliable.</p>
+          <p data-lang-pt>Para fluxos que precisam de uma taxa, não só um total, o cronograma é passado a um solver numérico de raiz em vez de uma fórmula analítica — os cronogramas são irregulares o bastante (recompras antecipadas, pagamentos parciais) para que uma forma fechada não seja confiável.</p>
+        </div>
+      </div>
+      <div class="flow__step">
+        <div class="flow__num">04</div>
+        <div>
+          <h4 data-lang-en>A sensitivity matrix</h4>
+          <h4 data-lang-pt>Uma matriz de sensibilidade</h4>
+          <p data-lang-en>The same projection re-run under stress assumptions, so "will there be cash" comes with a margin, not just a point estimate.</p>
+          <p data-lang-pt>A mesma projeção rerrodada sob premissas de estresse, para que "vai ter caixa" venha com uma margem, não só uma estimativa pontual.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="section__head">
+      <h2 class="section__title" data-lang-en>Engineering decision</h2>
+      <h2 class="section__title" data-lang-pt>Decisão de engenharia</h2>
+    </div>
+    <div class="callout">
+      <span class="callout__label" data-lang-en>Turn a silent gap into a 9:50am alert</span>
+      <span class="callout__label" data-lang-pt>Transformar uma lacuna silenciosa num alerta às 9h50</span>
+      <p data-lang-en>An asset with no matching settlement rule doesn't fail loudly — it just gets excluded, or falls back to a default that may not fit. Rather than let that surface only when a number looks wrong days later, a dedicated audit task runs right before the liquidity report, ten minutes before its 10am deadline, and checks every asset in the current position against the rules table. Anything uncovered is flagged then, while there's still time to add a rule or make a documented judgment call — not after the report has already gone out.</p>
+      <p data-lang-pt>Um ativo sem regra de liquidação correspondente não falha de forma barulhenta — ele simplesmente fica de fora, ou cai num padrão que pode não se encaixar. Em vez de deixar isso aparecer só quando um número parece errado dias depois, uma task de auditoria dedicada roda logo antes do relatório de liquidez, dez minutos antes do prazo das 10h, e checa todo ativo na posição atual contra a tabela de regras. O que não está coberto é sinalizado ali, enquanto ainda dá tempo de adicionar uma regra ou tomar uma decisão documentada — não depois que o relatório já saiu.</p>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="section__head">
+      <h2 class="section__title" data-lang-en>Stack</h2>
+      <h2 class="section__title" data-lang-pt>Stack</h2>
+    </div>
+    <div class="kv">
+      <div class="kv__item"><span class="kv__k">IRR</span><span class="kv__v">scipy.optimize · numpy-financial</span></div>
+      <div class="kv__item"><span class="kv__k" data-lang-en>Rules</span><span class="kv__k" data-lang-pt>Regras</span><span class="kv__v">openpyxl (table-driven)</span></div>
+      <div class="kv__item"><span class="kv__k" data-lang-en>Calendar</span><span class="kv__k" data-lang-pt>Calendário</span><span class="kv__v" data-lang-en>in-house business days</span><span class="kv__v" data-lang-pt>dias úteis próprios</span></div>
+      <div class="kv__item"><span class="kv__k">ETL</span><span class="kv__v">pandas</span></div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot__grid">
+      <div>
+        <div class="foot__sig" data-lang-en>Want to talk?</div>
+        <div class="foot__sig" data-lang-pt>Quer conversar?</div>
+        <p data-lang-en>I read every message. If something here resonates, drop a line.</p>
+        <p data-lang-pt>Leio todas as mensagens. Se algo aqui ressoa, é só escrever.</p>
+      </div>
+      <div>
+        <h5 data-lang-en>Direct</h5><h5 data-lang-pt>Direto</h5>
+        <div class="foot__links">
+          <a href="mailto:lucas_r_andrade@hotmail.com">lucas_r_andrade@hotmail.com</a>
+          <a href="https://wa.me/5521975056123" target="_blank" rel="noopener">WhatsApp · +55 21 97505 6123</a>
+        </div>
+      </div>
+      <div>
+        <h5 data-lang-en>Elsewhere</h5><h5 data-lang-pt>Em outros lugares</h5>
+        <div class="foot__links">
+          <a href="https://github.com/Andrade020" target="_blank" rel="noopener">github.com/Andrade020</a>
+          <a href="https://www.linkedin.com/in/lucas-rafael-de-andrade/" target="_blank" rel="noopener">linkedin.com/in/lucas-rafael-de-andrade</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot__base">
+      <span>© 2026 Lucas R. Andrade · Rio de Janeiro</span>
+      <span><a href="mailto:lucas_r_andrade@hotmail.com">lucas_r_andrade@hotmail.com</a> · <a href="https://wa.me/5521975056123" target="_blank" rel="noopener">+55 21 97505 6123</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+<script src="prod-flow-diagram.js"></script>
+<script>
+renderFlowDiagram({
+  mount: 'cashflow-diagram',
+  W: 600, H: 300,
+  nodes: [
+    { id: 's1', col: 'a', x: 16,  y: 20,  w: 158, h: 64, title: 'Positions', sub: 'consolidated' },
+    { id: 's2', col: 'a', x: 16,  y: 104, w: 158, h: 64, title: 'Settlement rules', sub: 'spreadsheet' },
+    { id: 's3', col: 'a', x: 16,  y: 188, w: 158, h: 64, title: 'Business-day calendar', sub: 'in-house' },
+    { id: 'o1', col: 'b', x: 226, y: 62,  w: 148, h: 64, title: 'Amortization engine', sub: 'per-asset schedule' },
+    { id: 'o2', col: 'b', x: 226, y: 146, w: 148, h: 64, title: 'IRR solver', sub: 'scipy root-finding' },
+    { id: 'r1', col: 'c', x: 426, y: 20,  w: 158, h: 64, title: 'Waterfall', sub: 'senior / subordinated' },
+    { id: 'r2', col: 'c', x: 426, y: 104, w: 158, h: 64, title: 'Sensitivity matrix', sub: 'stress cases' },
+    { id: 'r3', col: 'c', x: 426, y: 188, w: 158, h: 64, title: 'Liquidity report', sub: 'by 10am' },
+  ],
+  edges: [
+    { from: 's1', to: 'o1' }, { from: 's2', to: 'o1' }, { from: 's3', to: 'o1' },
+    { from: 'o1', to: 'o2' },
+    { from: 'o1', to: 'r1' }, { from: 'o1', to: 'r2' },
+    { from: 'r1', to: 'r3' }, { from: 'r2', to: 'r3' }, { from: 'o2', to: 'r3' },
+  ],
+});
+</script>
+</body>
+</html>

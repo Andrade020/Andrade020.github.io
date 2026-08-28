@@ -14,12 +14,12 @@
     { id: 's2', col:'src', x: 16,  y: 124, w: 158, h: 64,
       title: 'Public APIs',  sub: 'REST · OAuth' },
     { id: 's3', col:'src', x: 16,  y: 208, w: 158, h: 64,
-      title: 'Documents',    sub: 'PDF · OCR' },
+      title: 'Public data',  sub: 'BCB · IBGE · CVM' },
     // orchestration (mid)
     { id: 'o1', col:'orch', x: 226, y: 82,  w: 148, h: 64,
       title: 'Apache Airflow', sub: 'scheduled DAGs' },
     { id: 'o2', col:'orch', x: 226, y: 166, w: 148, h: 64,
-      title: 'PostgreSQL',     sub: 'data warehouse' },
+      title: 'File lake',      sub: 'CSV/parquet + manifests' },
     { id: 'o3', col:'orch', x: 226, y: 250, w: 148, h: 64,
       title: 'Python libs',    sub: 'pricing · risk' },
     // outputs (right)
@@ -28,7 +28,7 @@
     { id: 'r2', col:'out', x: 426, y: 124, w: 158, h: 64,
       title: 'Automated reports',  sub: 'daily delivery' },
     { id: 'r3', col:'out', x: 426, y: 208, w: 158, h: 64,
-      title: 'ML risk engine',     sub: 'scikit-learn · SHAP' },
+      title: 'Risk scoring',       sub: 'offline · scikit-learn' },
   ];
 
   // edges: from -> to (we draw an orthogonal-ish path)

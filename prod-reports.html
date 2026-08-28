@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="How the daily report layer works at Porto Real Asset: six report generators, a Flask dashboard, and automated dispatch — by Lucas R. Andrade.">
+<title>Reports &amp; Delivery · Lucas R. Andrade</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.92em' font-size='95' font-family='Georgia,serif' font-style='italic' fill='%23d4a574'%3EZ%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="dark-mode">
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a href="index.html" class="brand">
+      <span class="brand__mark"><span class="brand__logo" aria-label="LRA"></span></span>
+      <span>Lucas R. Andrade</span>
+      <span class="brand__pos" data-lang-en>· Economist &amp; Data Scientist</span>
+      <span class="brand__pos" data-lang-pt>· Economista &amp; Cientista de Dados</span>
+    </a>
+    <nav class="nav">
+      <a href="index.html" data-lang-en>About</a><a href="index.html" data-lang-pt>Sobre</a>
+      <a href="production.html" class="is-active" data-lang-en>Production</a><a href="production.html" class="is-active" data-lang-pt>Produção</a>
+      <a href="projects.html" data-lang-en>Open source</a><a href="projects.html" data-lang-pt>Open source</a>
+      <a href="publications.html" data-lang-en>Research</a><a href="publications.html" data-lang-pt>Pesquisa</a>
+      <a href="lab.html" data-lang-en>Lab</a><a href="lab.html" data-lang-pt>Lab</a>
+    </nav>
+    <div class="header-tools">
+      <button class="icon-btn lang-btn" data-lang-btn onclick="toggleLang()" title="Toggle language">en · pt</button>
+      <button class="icon-btn" data-action="theme" onclick="toggleTheme()" title="Toggle theme">☀</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="page-head wrap">
+    <a href="production.html#sub-06" class="back-link"><span data-lang-en>← Production</span><span data-lang-pt>← Produção</span></a>
+    <span class="section-label" data-lang-en>Subsystem 06 · How it works</span>
+    <span class="section-label" data-lang-pt>Subsistema 06 · Como funciona</span>
+    <h1 data-lang-en>Six questions, six <em>reports.</em></h1>
+    <h1 data-lang-pt>Seis perguntas, seis <em>relatórios.</em></h1>
+    <p data-lang-en>The last stretch of the pipeline: turning a consolidated CSV into something an investment committee reads at 9am. Every screenshot below is from a real report, with every name and number deleted before the image was rendered — not blurred, deleted from the page itself.</p>
+    <p data-lang-pt>O último trecho do pipeline: transformar um CSV consolidado em algo que o comitê de investimentos lê às 9h. Cada print abaixo é de um relatório real, com todo nome e número apagado antes da imagem ser renderizada — não borrado, apagado da própria página.</p>
+  </section>
+
+  <section class="section wrap">
+    <div class="case__layout">
+      <div class="case__intro">
+        <span class="section-label" data-lang-en>The problem</span>
+        <span class="section-label" data-lang-pt>O problema</span>
+        <h2 data-lang-en>One consolidated table, three audiences.</h2>
+        <h2 data-lang-pt>Uma tabela consolidada, três públicos.</h2>
+        <p data-lang-en>By the time the ETL layer has produced a clean, consolidated position, three different questions still need answers: is anything overdue (aging), is the portfolio too concentrated in one debtor or region (concentration), and will there be enough cash to cover redemptions (liquidity)? A fourth question sits underneath all three — is the fund still inside its own regulatory limits (compliance)?</p>
+        <p data-lang-pt>Quando a camada de ETL já produziu uma posição consolidada e limpa, três perguntas diferentes ainda precisam de resposta: há algo vencido (aging), a carteira está concentrada demais num devedor ou região (concentração), e vai sobrar caixa para cobrir resgates (liquidez)? Uma quarta pergunta sustenta as três — o fundo continua dentro dos próprios limites regulatórios (enquadramento)?</p>
+        <p data-lang-en>Each question gets its own generator rather than one mega-report: different audiences read at different frequencies, and a single failing report shouldn't block the other five.</p>
+        <p data-lang-pt>Cada pergunta ganha seu próprio gerador em vez de um mega-relatório: públicos diferentes leem em frequências diferentes, e um relatório que falha não pode travar os outros cinco.</p>
+      </div>
+      <div class="case__detail">
+        <div class="case-fact">
+          <div class="case-fact__k" data-lang-en>Report types</div><div class="case-fact__k" data-lang-pt>Tipos de relatório</div>
+          <div class="case-fact__v">6</div>
+          <div class="case-fact__note" data-lang-en>Aging, concentration, liquidity, receivables flow, payment performance, compliance.</div>
+          <div class="case-fact__note" data-lang-pt>Aging, concentração, liquidez, fluxo de recebíveis, performance de pagamento, enquadramento.</div>
+        </div>
+        <div class="case-fact">
+          <div class="case-fact__k" data-lang-en>Rendering</div><div class="case-fact__k" data-lang-pt>Renderização</div>
+          <div class="case-fact__v" data-lang-en>Self-contained HTML</div><div class="case-fact__v" data-lang-pt>HTML autocontido</div>
+          <div class="case-fact__note" data-lang-en>pandas Styler tables + matplotlib charts inlined as base64 — one file, no server needed to view it.</div>
+          <div class="case-fact__note" data-lang-pt>Tabelas pandas Styler + gráficos matplotlib embutidos como base64 — um arquivo só, dispensa servidor pra abrir.</div>
+        </div>
+        <div class="case-fact">
+          <div class="case-fact__k" data-lang-en>Delivery</div><div class="case-fact__k" data-lang-pt>Entrega</div>
+          <div class="case-fact__v" data-lang-en>Dashboard + email</div><div class="case-fact__v" data-lang-pt>Dashboard + e-mail</div>
+          <div class="case-fact__note" data-lang-en>An internal Flask dashboard serves them on demand; a mailbox-driven watcher pushes the daily ones out automatically.</div>
+          <div class="case-fact__note" data-lang-pt>Um dashboard Flask interno serve sob demanda; um watcher de caixa de e-mail dispara os diários automaticamente.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="section__head">
+      <h2 class="section__title" data-lang-en>How a report gets from data to inbox</h2>
+      <h2 class="section__title" data-lang-pt>Do dado ao e-mail</h2>
+    </div>
+    <div class="prod-diagram">
+      <div class="diagram__head">
+        <span class="diagram__title" data-lang-en>report layer</span>
+        <span class="diagram__title" data-lang-pt>camada de relatórios</span>
+        <span class="diagram__legend">
+          <span><i class="swatch s-source"></i><span data-lang-en>consolidated data</span><span data-lang-pt>dado consolidado</span></span>
+          <span><i class="swatch s-orch"></i><span data-lang-en>generator</span><span data-lang-pt>gerador</span></span>
+          <span><i class="swatch s-out"></i><span data-lang-en>delivery</span><span data-lang-pt>entrega</span></span>
+        </span>
+      </div>
+      <div id="reports-diagram" style="flex:1;display:flex;min-height:300px"></div>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="section__head">
+      <h2 class="section__title" data-lang-en>The six generators</h2>
+      <h2 class="section__title" data-lang-pt>Os seis geradores</h2>
+    </div>
+    <div class="flow">
+      <div class="flow__step">
+        <div class="flow__num">01</div>
+        <div>
+          <h4 data-lang-en>Aging — delinquency by every cut that matters</h4>
+          <h4 data-lang-pt>Aging — inadimplência por todo corte relevante</h4>
+          <p data-lang-en>A heatmap of receivables by days-overdue bucket, sliced by portfolio, assignor, originator, state, and payment-capacity rating, plus a weighted score ranking the segments from healthiest to riskiest.</p>
+          <p data-lang-pt>Um heatmap de recebíveis por faixa de dias em atraso, cortado por carteira, cedente, originador, UF e rating de capacidade de pagamento, mais um score ponderado ranqueando os segmentos do mais saudável ao mais arriscado.</p>
+        </div>
+      </div>
+      <div class="flow__step">
+        <div class="flow__num">02</div>
+        <div>
+          <h4 data-lang-en>Concentration — how spread out is the portfolio, really</h4>
+          <h4 data-lang-pt>Concentração — o quão pulverizada a carteira está, de fato</h4>
+          <p data-lang-en>Nine cumulative-share curves (by debtor, product, PDD band, agreement, originator, referral partner, state, payment-capacity rating, age bracket) answering the same question nine ways: what share of the book do the N largest exposures represent?</p>
+          <p data-lang-pt>Nove curvas de participação acumulada (por sacado, produto, faixa de PDD, convênio, originador, promotora, UF, rating de capacidade e faixa etária) respondendo a mesma pergunta de nove formas: que fatia da carteira as N maiores exposições representam?</p>
+        </div>
+      </div>
+      <div class="flow__step">
+        <div class="flow__num">03</div>
+        <div>
+          <h4 data-lang-en>Liquidity — will there be cash when redemptions land</h4>
+          <h4 data-lang-pt>Liquidez — vai ter caixa quando os resgates chegarem</h4>
+          <p data-lang-en>Projects the fund's asset and liability cash flows forward using table-driven amortization rules, a senior/subordinated waterfall, and a sensitivity matrix for stress scenarios.</p>
+          <p data-lang-pt>Projeta os fluxos de caixa de ativo e passivo do fundo usando regras de amortização orientadas a dados, uma cascata sênior/subordinada e uma matriz de sensibilidade para cenários de estresse.</p>
+        </div>
+      </div>
+      <div class="flow__step">
+        <div class="flow__num">04</div>
+        <div>
+          <h4 data-lang-en>Receivables flow — the next ten business days, day by day</h4>
+          <h4 data-lang-pt>Fluxo de recebimentos — os próximos dez dias úteis, dia a dia</h4>
+          <p data-lang-en>A short, non-cumulative window (five business days back, today, five forward) computed straight from the installment-level raw file rather than the consolidated position — a deliberately independent second read of the same cash reality.</p>
+          <p data-lang-pt>Uma janela curta e não cumulativa (cinco dias úteis para trás, hoje, cinco para frente) calculada direto do bruto em nível de parcela, não da posição consolidada — uma segunda leitura deliberadamente independente da mesma realidade de caixa.</p>
+        </div>
+      </div>
+      <div class="flow__step">
+        <div class="flow__num">05</div>
+        <div>
+          <h4 data-lang-en>PMT — did payments come in as scheduled</h4>
+          <h4 data-lang-pt>PMT — os pagamentos entraram como programado</h4>
+          <p data-lang-en>Compares consecutive snapshots to separate what was expected to be paid from what actually reduced the stock, broken down by agreement, and estimates the loss from early settlements at a different rate than projected.</p>
+          <p data-lang-pt>Compara snapshots consecutivos para separar o que era esperado ser pago do que de fato reduziu o estoque, detalhado por convênio, e estima a perda das liquidações antecipadas a uma taxa diferente da projetada.</p>
+        </div>
+      </div>
+      <div class="flow__step">
+        <div class="flow__num">06</div>
+        <div>
+          <h4 data-lang-en>Compliance — still inside the fund's own rulebook</h4>
+          <h4 data-lang-pt>Enquadramento — ainda dentro das próprias regras do fundo</h4>
+          <p data-lang-en>Evaluates every regulatory and contractual limit (minimum equity, issuer concentration, allocation bounds) through a small boolean-expression engine and marks each one OK, alert, or breached — see subsystem 04.</p>
+          <p data-lang-pt>Avalia todo limite regulatório e contratual (patrimônio mínimo, concentração de emissor, faixas de alocação) por um pequeno motor de expressões booleanas e marca cada um como OK, alerta ou violado — ver subsistema 04.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="section__head">
+      <h2 class="section__title" data-lang-en>Engineering decision</h2>
+      <h2 class="section__title" data-lang-pt>Decisão de engenharia</h2>
+    </div>
+    <div class="callout">
+      <span class="callout__label" data-lang-en>Why scrape a mailbox instead of watching a synced folder</span>
+      <span class="callout__label" data-lang-pt>Por que raspar uma caixa de e-mail em vez de vigiar uma pasta sincronizada</span>
+      <p data-lang-en>One of the report inputs arrives as a file attachment from a counterparty, and the obvious design is to watch the local OneDrive-synced folder for new files. The dispatch pipeline scrapes the mailbox instead, for three reasons stated explicitly in the codebase: timing control (a folder watcher fires on sync completion, which the sender doesn't control; a mailbox poll fires on a schedule this system controls), reusing one auth method for both reading and sending, and a small trigger file kept under a kilobyte instead of syncing the full attachment twice.</p>
+      <p data-lang-pt>Uma das entradas do relatório chega como anexo de e-mail de uma contraparte, e o desenho óbvio seria vigiar a pasta local sincronizada do OneDrive por arquivos novos. O pipeline de despacho raspa a caixa de e-mail em vez disso, por três razões documentadas explicitamente no código: controle de timing (um watcher de pasta dispara na conclusão do sync, que o remetente não controla; um poll de e-mail dispara num horário que este sistema controla), reaproveitar um único método de autenticação para ler e enviar, e um arquivo de gatilho de menos de 1&nbsp;KB em vez de sincronizar o anexo inteiro duas vezes.</p>
+    </div>
+    <div class="callout">
+      <span class="callout__label" data-lang-en>Why the dashboard has four dependencies and no build step</span>
+      <span class="callout__label" data-lang-pt>Por que o dashboard tem quatro dependências e nenhum build step</span>
+      <p data-lang-en>The internal dashboard that lists and serves these reports is a single-file Flask app: <code>flask</code>, <code>pandas</code>, <code>openpyxl</code>, <code>requests</code>. No ORM, no database — every CRUD form reads and writes the same CSV/XLSX files the pipelines already produce, driven by a declarative schema so a new field means editing one schema module, not five templates. Bootstrap loads from a CDN; six plain JavaScript files handle sorting, cascading dropdowns, and a live rule-expression validator. A cache-bust endpoint clears the in-memory read caches after a file edit — the closest thing to a "deploy" this app has.</p>
+      <p data-lang-pt>O dashboard interno que lista e serve esses relatórios é um app Flask de um arquivo só: <code>flask</code>, <code>pandas</code>, <code>openpyxl</code>, <code>requests</code>. Sem ORM, sem banco — todo formulário CRUD lê e escreve os mesmos CSV/XLSX que os pipelines já produzem, orientado por um schema declarativo, de modo que um campo novo significa editar um módulo de schema, não cinco templates. O Bootstrap carrega de um CDN; seis arquivos de JavaScript puro cuidam de ordenação, dropdowns em cascata e um validador de expressões ao vivo. Um endpoint de cache-bust limpa os caches de leitura em memória depois de uma edição — o mais próximo que esse app tem de um "deploy".</p>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="section__head">
+      <h2 class="section__title" data-lang-en>What comes out</h2>
+      <h2 class="section__title" data-lang-pt>O que sai disso</h2>
+    </div>
+    <p style="max-width:720px;font-size:0.95rem;color:var(--ink-dim);line-height:1.7;margin-bottom:24px;" data-lang-en>Real reports, sanitized for this page: every table cell and header value was deleted from the HTML before the screenshot was taken (not styled invisible — removed), and every chart image was blurred and desaturated at the pixel level. Fund names, counterparty names, and every figure are gone; the layout and the kind of analysis are real.</p>
+    <p style="max-width:720px;font-size:0.95rem;color:var(--ink-dim);line-height:1.7;margin-bottom:24px;" data-lang-pt>Relatórios reais, sanitizados para esta página: todo valor de célula e cabeçalho de tabela foi apagado do HTML antes do print (não estilizado como invisível — removido), e todo gráfico levou blur e dessaturação em nível de pixel. Nomes de fundo, de contraparte e todo número desapareceram; o layout e o tipo de análise são reais.</p>
+
+    <div class="shot">
+      <img class="shot__img" src="assets/prod/aging-01-overview.png" alt="Aging report header and first table" loading="lazy">
+      <div class="shot__cap" data-lang-en>Aging report — header and the consolidated-portfolio table. Values and the fund name were removed before rendering; only the table structure and column layout remain.</div>
+      <div class="shot__cap" data-lang-pt>Relatório de Aging — cabeçalho e a tabela da carteira consolidada. Valores e o nome do fundo foram removidos antes da renderização; só a estrutura da tabela e o layout das colunas permanecem.</div>
+    </div>
+    <div class="shot">
+      <img class="shot__img" src="assets/prod/aging-02-uf-capag.png" alt="Aging report broken down by state and payment-capacity rating" loading="lazy">
+      <div class="shot__cap" data-lang-en>The same heatmap re-sliced by state and by payment-capacity rating — two of the six segmentations this generator produces from one run.</div>
+      <div class="shot__cap" data-lang-pt>O mesmo heatmap recortado por UF e por rating de capacidade de pagamento — duas das seis segmentações que este gerador produz numa única rodada.</div>
+    </div>
+
+    <div class="shot">
+      <img class="shot__img" src="assets/prod/concentracao-01-overview.png" alt="Concentration report header and debtor-concentration chart" loading="lazy">
+      <div class="shot__cap" data-lang-en>Concentration report — the summary box (portfolio totals, all redacted) and the cumulative-share chart for the largest debtors. Chart labels carry real figures baked into the pixels, so the whole image is blurred, not just the table.</div>
+      <div class="shot__cap" data-lang-pt>Relatório de Concentração — o quadro-resumo (totais da carteira, todos redigidos) e o gráfico de participação acumulada pelos maiores sacados. Os rótulos do gráfico carregam números reais gravados nos pixels, então a imagem inteira leva blur, não só a tabela.</div>
+    </div>
+    <div class="shot">
+      <img class="shot__img" src="assets/prod/concentracao-02-uf-capag.png" alt="Concentration report by state" loading="lazy">
+      <div class="shot__cap" data-lang-en>Distribution by state — one of nine cuts. The report itself already numbers the axis instead of naming debtors, for exactly this reason.</div>
+      <div class="shot__cap" data-lang-pt>Distribuição por UF — um dos nove cortes. O próprio relatório já numera o eixo em vez de nomear sacados, exatamente por este motivo.</div>
+    </div>
+
+    <div class="shot-grid">
+      <div class="shot">
+        <img class="shot__img" src="assets/prod/liquidez-01-overview.png" alt="Liquidity report header and status badge" loading="lazy">
+        <div class="shot__cap" data-lang-en>Liquidity report header, with the pass/fail status badge that opens the document.</div>
+        <div class="shot__cap" data-lang-pt>Cabeçalho do relatório de Liquidez, com o badge de situação que abre o documento.</div>
+      </div>
+      <div class="shot">
+        <img class="shot__img" src="assets/prod/liquidez-02-curva.png" alt="Liquidity report asset vs liability curve" loading="lazy">
+        <div class="shot__cap" data-lang-en>Projected asset vs. liability curve over the horizon — the chart the status badge is derived from.</div>
+        <div class="shot__cap" data-lang-pt>Curva projetada de ativo x passivo ao longo do horizonte — o gráfico do qual o badge de situação deriva.</div>
+      </div>
+    </div>
+
+    <div class="shot-grid">
+      <div class="shot">
+        <img class="shot__img" src="assets/prod/fluxo-01-overview.png" alt="Receivables flow report header and daily stock table" loading="lazy">
+        <div class="shot__cap" data-lang-en>Receivables flow report — the day-by-day stock table for the ten-business-day window.</div>
+        <div class="shot__cap" data-lang-pt>Relatório de Fluxo de Recebimentos — a tabela diária de estoque para a janela de dez dias úteis.</div>
+      </div>
+      <div class="shot">
+        <img class="shot__img" src="assets/prod/pmt-01-overview.png" alt="PMT report methodology and portfolio summary" loading="lazy">
+        <div class="shot__cap" data-lang-en>PMT report — the methodology block (kept legible; it's a definition, not data) above the redacted portfolio summary.</div>
+        <div class="shot__cap" data-lang-pt>Relatório PMT — o bloco de metodologia (mantido legível; é definição, não dado) acima do resumo redigido da carteira.</div>
+      </div>
+    </div>
+
+    <div class="shot-grid">
+      <div class="shot">
+        <img class="shot__img" src="assets/prod/enquadramento-01-overview.png" alt="Compliance report header with OK status badge" loading="lazy">
+        <div class="shot__cap" data-lang-en>Compliance report — fund header (redacted) and the first rule, minimum equity, showing a passing status.</div>
+        <div class="shot__cap" data-lang-pt>Relatório de Enquadramento — cabeçalho do fundo (redigido) e a primeira regra, patrimônio mínimo, com situação OK.</div>
+      </div>
+      <div class="shot">
+        <img class="shot__img" src="assets/prod/enquadramento-02-emissor.png" alt="Compliance report issuer concentration rule with no applicable limit" loading="lazy">
+        <div class="shot__cap" data-lang-en>Issuer-concentration rule for a fund whose investors are professional — the rule engine correctly reports "no limit applies" rather than a false pass.</div>
+        <div class="shot__cap" data-lang-pt>Regra de concentração de emissor para um fundo de investidores profissionais — o motor de regras corretamente reporta "sem limite aplicável", não um OK falso.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="section__head">
+      <h2 class="section__title" data-lang-en>Stack</h2>
+      <h2 class="section__title" data-lang-pt>Stack</h2>
+    </div>
+    <div class="kv">
+      <div class="kv__item"><span class="kv__k">Reports</span><span class="kv__v">pandas · matplotlib · Styler</span></div>
+      <div class="kv__item"><span class="kv__k">Dashboard</span><span class="kv__v">Flask · Jinja2</span></div>
+      <div class="kv__item"><span class="kv__k" data-lang-en>Dispatch</span><span class="kv__k" data-lang-pt>Despacho</span><span class="kv__v">Microsoft Graph</span></div>
+      <div class="kv__item"><span class="kv__k" data-lang-en>Factsheet</span><span class="kv__k" data-lang-pt>Lâmina</span><span class="kv__v">python-docx · LibreOffice</span></div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot__grid">
+      <div>
+        <div class="foot__sig" data-lang-en>Want to talk?</div>
+        <div class="foot__sig" data-lang-pt>Quer conversar?</div>
+        <p data-lang-en>I read every message. If something here resonates, drop a line.</p>
+        <p data-lang-pt>Leio todas as mensagens. Se algo aqui ressoa, é só escrever.</p>
+      </div>
+      <div>
+        <h5 data-lang-en>Direct</h5><h5 data-lang-pt>Direto</h5>
+        <div class="foot__links">
+          <a href="mailto:lucas_r_andrade@hotmail.com">lucas_r_andrade@hotmail.com</a>
+          <a href="https://wa.me/5521975056123" target="_blank" rel="noopener">WhatsApp · +55 21 97505 6123</a>
+        </div>
+      </div>
+      <div>
+        <h5 data-lang-en>Elsewhere</h5><h5 data-lang-pt>Em outros lugares</h5>
+        <div class="foot__links">
+          <a href="https://github.com/Andrade020" target="_blank" rel="noopener">github.com/Andrade020</a>
+          <a href="https://www.linkedin.com/in/lucas-rafael-de-andrade/" target="_blank" rel="noopener">linkedin.com/in/lucas-rafael-de-andrade</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot__base">
+      <span>© 2026 Lucas R. Andrade · Rio de Janeiro</span>
+      <span><a href="mailto:lucas_r_andrade@hotmail.com">lucas_r_andrade@hotmail.com</a> · <a href="https://wa.me/5521975056123" target="_blank" rel="noopener">+55 21 97505 6123</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+<script src="prod-flow-diagram.js"></script>
+<script>
+renderFlowDiagram({
+  mount: 'reports-diagram',
+  W: 600, H: 300,
+  nodes: [
+    { id: 'd1', col: 'a', x: 16,  y: 20,  w: 158, h: 64, title: 'Consolidated CSV', sub: 'data lake' },
+    { id: 'd2', col: 'a', x: 16,  y: 104, w: 158, h: 64, title: 'Amortization rules', sub: 'table-driven' },
+    { id: 'g1', col: 'b', x: 226, y: 20,  w: 148, h: 64, title: 'Report generator', sub: 'pandas · matplotlib' },
+    { id: 'g2', col: 'b', x: 226, y: 104, w: 148, h: 64, title: 'Self-contained HTML', sub: 'base64 charts' },
+    { id: 'g3', col: 'b', x: 226, y: 188, w: 148, h: 64, title: 'DOCX → PDF', sub: 'factsheet' },
+    { id: 'r1', col: 'c', x: 426, y: 20,  w: 158, h: 64, title: 'Flask dashboard', sub: 'on demand' },
+    { id: 'r2', col: 'c', x: 426, y: 104, w: 158, h: 64, title: 'Mailbox watcher', sub: 'Microsoft Graph' },
+    { id: 'r3', col: 'c', x: 426, y: 188, w: 158, h: 64, title: 'Inbox', sub: 'before 9am' },
+  ],
+  edges: [
+    { from: 'd1', to: 'g1' }, { from: 'd1', to: 'g2' }, { from: 'd2', to: 'g2' },
+    { from: 'd1', to: 'g3' },
+    { from: 'g1', to: 'r1' }, { from: 'g2', to: 'r1' },
+    { from: 'g2', to: 'r2' }, { from: 'g3', to: 'r2' },
+    { from: 'r2', to: 'r3' },
+  ],
+});
+</script>
+</body>
+</html>

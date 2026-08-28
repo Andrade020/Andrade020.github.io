@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="How the offline credit-risk scoring work at Porto Real Asset is built: sklearn pipelines, gradient boosting, SHAP, and Optuna — by Lucas R. Andrade.">
+<title>Credit-Risk Scoring · Lucas R. Andrade</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.92em' font-size='95' font-family='Georgia,serif' font-style='italic' fill='%23d4a574'%3EZ%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="dark-mode">
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a href="index.html" class="brand">
+      <span class="brand__mark"><span class="brand__logo" aria-label="LRA"></span></span>
+      <span>Lucas R. Andrade</span>
+      <span class="brand__pos" data-lang-en>· Economist &amp; Data Scientist</span>
+      <span class="brand__pos" data-lang-pt>· Economista &amp; Cientista de Dados</span>
+    </a>
+    <nav class="nav">
+      <a href="index.html" data-lang-en>About</a><a href="index.html" data-lang-pt>Sobre</a>
+      <a href="production.html" class="is-active" data-lang-en>Production</a><a href="production.html" class="is-active" data-lang-pt>Produção</a>
+      <a href="projects.html" data-lang-en>Open source</a><a href="projects.html" data-lang-pt>Open source</a>
+      <a href="publications.html" data-lang-en>Research</a><a href="publications.html" data-lang-pt>Pesquisa</a>
+      <a href="lab.html" data-lang-en>Lab</a><a href="lab.html" data-lang-pt>Lab</a>
+    </nav>
+    <div class="header-tools">
+      <button class="icon-btn lang-btn" data-lang-btn onclick="toggleLang()" title="Toggle language">en · pt</button>
+      <button class="icon-btn" data-action="theme" onclick="toggleTheme()" title="Toggle theme">☀</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="page-head wrap">
+    <a href="production.html#sub-05" class="back-link"><span data-lang-en>← Production</span><span data-lang-pt>← Produção</span></a>
+    <span class="section-label" data-lang-en>Subsystem 05 · How it works</span>
+    <span class="section-label" data-lang-pt>Subsistema 05 · Como funciona</span>
+    <h1 data-lang-en>A score is an <em>opinion. Ship the reasons.</em></h1>
+    <h1 data-lang-pt>Um score é uma <em>opinião. Entregue as razões.</em></h1>
+    <p data-lang-en>This is the one subsystem here that is honestly offline: an exploratory scoring pipeline for originator and debtor risk, reviewed by a person, not an automated daily job. It's included because the modelling choices are real, and because knowing what to leave out of production is as much a decision as what to automate.</p>
+    <p data-lang-pt>Este é o único subsistema aqui que é honestamente offline: um pipeline exploratório de score de risco por originador e devedor, revisado por uma pessoa, não um job automático diário. Está incluído porque as escolhas de modelagem são reais, e porque saber o que deixar de fora da produção é uma decisão tão real quanto o que automatizar.</p>
+  </section>
+
+  <section class="section wrap">
+    <div class="case__layout">
+      <div class="case__intro">
+        <span class="section-label" data-lang-en>The problem</span>
+        <span class="section-label" data-lang-pt>O problema</span>
+        <h2 data-lang-en>An investment committee doesn't buy a probability.</h2>
+        <h2 data-lang-pt>Um comitê de investimentos não compra uma probabilidade.</h2>
+        <p data-lang-en>A default-probability score is only useful if someone can argue with it. That means every prediction needs to come with the features that drove it, ranked and signed, in language a credit analyst — not a data scientist — can read and challenge. It also means the model has to be judged on more than one number: a threshold-free ranking metric alongside a precision-at-the-top-of-the-list metric, because what matters operationally is whether the worst originators actually surface first.</p>
+        <p data-lang-pt>Um score de probabilidade de default só é útil se alguém conseguir discordar dele. Isso significa que toda predição precisa vir com as features que a produziram, ranqueadas e com sinal, numa linguagem que um analista de crédito — não um cientista de dados — consiga ler e questionar. Também significa que o modelo precisa ser julgado por mais de um número: uma métrica de ranking sem limiar junto de uma métrica de precisão no topo da lista, porque o que importa operacionalmente é se os piores originadores de fato aparecem primeiro.</p>
+      </div>
+      <div class="case__detail">
+        <div class="case-fact">
+          <div class="case-fact__k" data-lang-en>Status</div><div class="case-fact__k" data-lang-pt>Status</div>
+          <div class="case-fact__v" data-lang-en>Offline / exploratory</div><div class="case-fact__v" data-lang-pt>Offline / exploratório</div>
+          <div class="case-fact__note" data-lang-en>Not wired into a daily DAG — reviewed manually, on purpose. See the decision below.</div>
+          <div class="case-fact__note" data-lang-pt>Não conectado a uma DAG diária — revisado manualmente, de propósito. Ver a decisão abaixo.</div>
+        </div>
+        <div class="case-fact">
+          <div class="case-fact__k" data-lang-en>Models compared</div><div class="case-fact__k" data-lang-pt>Modelos comparados</div>
+          <div class="case-fact__v">6</div>
+          <div class="case-fact__note" data-lang-en>Logistic regression through gradient boosting — a deliberately simple baseline stays in the comparison.</div>
+          <div class="case-fact__note" data-lang-pt>Regressão logística até gradient boosting — um baseline deliberadamente simples permanece na comparação.</div>
+        </div>
+        <div class="case-fact">
+          <div class="case-fact__k" data-lang-en>Explainability</div><div class="case-fact__k" data-lang-pt>Explicabilidade</div>
+          <div class="case-fact__v">SHAP</div>
+          <div class="case-fact__note" data-lang-en>Every prediction ships with signed, ranked feature attributions.</div>
+          <div class="case-fact__note" data-lang-pt>Toda predição sai com atribuições de feature ranqueadas e com sinal.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="section__head">
+      <h2 class="section__title" data-lang-en>From raw features to an explained score</h2>
+      <h2 class="section__title" data-lang-pt>De features brutas a um score explicado</h2>
+    </div>
+    <div class="prod-diagram">
+      <div class="diagram__head">
+        <span class="diagram__title" data-lang-en>risk scoring · offline</span>
+        <span class="diagram__title" data-lang-pt>score de risco · offline</span>
+        <span class="diagram__legend">
+          <span><i class="swatch s-source"></i><span data-lang-en>features</span><span data-lang-pt>features</span></span>
+          <span><i class="swatch s-orch"></i><span data-lang-en>modelling</span><span data-lang-pt>modelagem</span></span>
+          <span><i class="swatch s-out"></i><span data-lang-en>output</span><span data-lang-pt>saída</span></span>
+        </span>
+      </div>
+      <div id="risk-diagram" style="flex:1;display:flex;min-height:300px"></div>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="section__head">
+      <h2 class="section__title" data-lang-en>The pipeline</h2>
+      <h2 class="section__title" data-lang-pt>O pipeline</h2>
+    </div>
+    <div class="flow">
+      <div class="flow__step">
+        <div class="flow__num">01</div>
+        <div>
+          <h4 data-lang-en>Preprocessing as a pipeline, not a notebook cell</h4>
+          <h4 data-lang-pt>Pré-processamento como pipeline, não célula de notebook</h4>
+          <p data-lang-en>A column transformer applies the right treatment per feature type — imputation for missing values, robust scaling for skewed payment amounts, power transforms where distributions are heavily tailed — wrapped in a single scikit-learn pipeline so the exact same transform applies at train and score time.</p>
+          <p data-lang-pt>Um column transformer aplica o tratamento certo por tipo de feature — imputação para valores faltantes, escala robusta para valores de pagamento enviesados, transformações de potência onde as distribuições têm cauda pesada — envolvido num único pipeline scikit-learn, para que a mesma transformação exata valha no treino e no score.</p>
+        </div>
+      </div>
+      <div class="flow__step">
+        <div class="flow__num">02</div>
+        <div>
+          <h4 data-lang-en>Macro context, joined in</h4>
+          <h4 data-lang-pt>Contexto macro, incorporado</h4>
+          <p data-lang-en>Regional economic indicators are joined onto originator-level features, on the premise that local economic conditions carry real signal about credit performance that transaction-level data alone doesn't capture.</p>
+          <p data-lang-pt>Indicadores econômicos regionais são incorporados às features em nível de originador, sob a premissa de que condições econômicas locais carregam sinal real sobre performance de crédito que o dado em nível de transação sozinho não captura.</p>
+        </div>
+      </div>
+      <div class="flow__step">
+        <div class="flow__num">03</div>
+        <div>
+          <h4 data-lang-en>A model comparison, not a single model</h4>
+          <h4 data-lang-pt>Uma comparação de modelos, não um modelo só</h4>
+          <p data-lang-en>Logistic regression, random forest, a support vector classifier, a small neural net, and gradient boosting (with early stopping to avoid overfitting the boosting rounds) are all fit and compared on the same split, tuned with an automated search rather than by hand.</p>
+          <p data-lang-pt>Regressão logística, random forest, um classificador SVM, uma rede neural pequena e gradient boosting (com early stopping para não sobreajustar as rodadas de boosting) são todos ajustados e comparados no mesmo split, otimizados por busca automatizada em vez de manualmente.</p>
+        </div>
+      </div>
+      <div class="flow__step">
+        <div class="flow__num">04</div>
+        <div>
+          <h4 data-lang-en>Every prediction, explained</h4>
+          <h4 data-lang-pt>Toda predição, explicada</h4>
+          <p data-lang-en>SHAP attributions are computed for the winning model so each score comes with a ranked list of which features pushed it up or down, and by how much — the artifact a credit committee actually reads.</p>
+          <p data-lang-pt>Atribuições SHAP são computadas para o modelo vencedor, de modo que cada score venha com uma lista ranqueada de quais features o empurraram para cima ou para baixo, e por quanto — o artefato que um comitê de crédito de fato lê.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="section__head">
+      <h2 class="section__title" data-lang-en>Engineering decision</h2>
+      <h2 class="section__title" data-lang-pt>Decisão de engenharia</h2>
+    </div>
+    <div class="callout">
+      <span class="callout__label" data-lang-en>Why this stays offline instead of joining the daily DAGs</span>
+      <span class="callout__label" data-lang-pt>Por que isso continua offline, sem entrar nas DAGs diárias</span>
+      <p data-lang-en>Everything else in this platform runs unattended every morning, with retries and alerting behind it. A scoring model that feeds directly into a daily automated report needs more than that: drift monitoring, a retraining policy, and a way to catch the model quietly degrading as the portfolio's composition shifts — none of which exists here yet. Shipping the model into automation before that infrastructure exists would trade a known, documented, human-reviewed estimate for an unmonitored one that looks identical from the outside. The model stays a versioned, reproducible analysis a person runs and reads, which is a smaller but honest claim than "in production."</p>
+      <p data-lang-pt>Tudo mais nesta plataforma roda sem supervisão toda manhã, com retries e alertas por trás. Um modelo de score que alimenta diretamente um relatório automático diário precisa de mais do que isso: monitoramento de drift, uma política de retreino, e um jeito de pegar o modelo degradando silenciosamente conforme a composição da carteira muda — nada disso existe aqui ainda. Colocar o modelo na automação antes dessa infraestrutura existir trocaria uma estimativa conhecida, documentada e revisada por humano por uma sem monitoramento que parece idêntica de fora. O modelo permanece uma análise versionada e reprodutível que uma pessoa roda e lê, o que é uma afirmação menor, porém honesta, do que "em produção".</p>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="section__head">
+      <h2 class="section__title" data-lang-en>Stack</h2>
+      <h2 class="section__title" data-lang-pt>Stack</h2>
+    </div>
+    <div class="kv">
+      <div class="kv__item"><span class="kv__k">Modelling</span><span class="kv__v">scikit-learn · XGBoost · LightGBM</span></div>
+      <div class="kv__item"><span class="kv__k" data-lang-en>Explainability</span><span class="kv__k" data-lang-pt>Explicabilidade</span><span class="kv__v">SHAP</span></div>
+      <div class="kv__item"><span class="kv__k" data-lang-en>Tuning</span><span class="kv__k" data-lang-pt>Otimização</span><span class="kv__v">Optuna</span></div>
+      <div class="kv__item"><span class="kv__k" data-lang-en>Macro features</span><span class="kv__k" data-lang-pt>Features macro</span><span class="kv__v">IBGE regional data</span></div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot__grid">
+      <div>
+        <div class="foot__sig" data-lang-en>Want to talk?</div>
+        <div class="foot__sig" data-lang-pt>Quer conversar?</div>
+        <p data-lang-en>I read every message. If something here resonates, drop a line.</p>
+        <p data-lang-pt>Leio todas as mensagens. Se algo aqui ressoa, é só escrever.</p>
+      </div>
+      <div>
+        <h5 data-lang-en>Direct</h5><h5 data-lang-pt>Direto</h5>
+        <div class="foot__links">
+          <a href="mailto:lucas_r_andrade@hotmail.com">lucas_r_andrade@hotmail.com</a>
+          <a href="https://wa.me/5521975056123" target="_blank" rel="noopener">WhatsApp · +55 21 97505 6123</a>
+        </div>
+      </div>
+      <div>
+        <h5 data-lang-en>Elsewhere</h5><h5 data-lang-pt>Em outros lugares</h5>
+        <div class="foot__links">
+          <a href="https://github.com/Andrade020" target="_blank" rel="noopener">github.com/Andrade020</a>
+          <a href="https://www.linkedin.com/in/lucas-rafael-de-andrade/" target="_blank" rel="noopener">linkedin.com/in/lucas-rafael-de-andrade</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot__base">
+      <span>© 2026 Lucas R. Andrade · Rio de Janeiro</span>
+      <span><a href="mailto:lucas_r_andrade@hotmail.com">lucas_r_andrade@hotmail.com</a> · <a href="https://wa.me/5521975056123" target="_blank" rel="noopener">+55 21 97505 6123</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+<script src="prod-flow-diagram.js"></script>
+<script>
+renderFlowDiagram({
+  mount: 'risk-diagram',
+  W: 600, H: 300,
+  nodes: [
+    { id: 's1', col: 'a', x: 16,  y: 20,  w: 158, h: 64, title: 'Payment history', sub: 'per originator' },
+    { id: 's2', col: 'a', x: 16,  y: 104, w: 158, h: 64, title: 'IBGE regional data', sub: 'macro context' },
+    { id: 'o1', col: 'b', x: 226, y: 20,  w: 148, h: 64, title: 'sklearn pipeline', sub: 'impute · scale' },
+    { id: 'o2', col: 'b', x: 226, y: 104, w: 148, h: 64, title: '6-model comparison', sub: 'Optuna-tuned' },
+    { id: 'o3', col: 'b', x: 226, y: 188, w: 148, h: 64, title: 'SHAP', sub: 'attributions' },
+    { id: 'r1', col: 'c', x: 426, y: 62,  w: 158, h: 64, title: 'Ranked score', sub: 'reviewed by a person' },
+    { id: 'r2', col: 'c', x: 426, y: 146, w: 158, h: 64, title: 'Reasons', sub: 'not just a number' },
+  ],
+  edges: [
+    { from: 's1', to: 'o1' }, { from: 's2', to: 'o1' },
+    { from: 'o1', to: 'o2' }, { from: 'o2', to: 'o3' },
+    { from: 'o2', to: 'r1' }, { from: 'o3', to: 'r2' },
+  ],
+});
+</script>
+</body>
+</html>
