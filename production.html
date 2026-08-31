@@ -4,8 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Production work at Porto Real Asset: pipeline orchestration, a file-based data lake, a cash-flow and liquidity engine, quality gates, and offline credit-risk scoring.">
+<meta property="og:title" content="Production">
+<meta property="og:description" content="Production work at Porto Real Asset: pipeline orchestration, a file-based data lake, a cash-flow and liquidity engine, quality gates, and offline credit-risk scoring.">
+<meta property="og:image" content="https://andrade020.github.io/assets/foto_LIN.png">
+<meta property="og:url" content="https://andrade020.github.io/production.html">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
 <title>Production · Lucas R. Andrade</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.92em' font-size='95' font-family='Georgia,serif' font-style='italic' fill='%23d4a574'%3EZ%3C/text%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect x='6' y='6' width='88' height='88' rx='20' fill='none' stroke='%23d4a574' stroke-width='5'/%3E%3Cpath d='M32 30 V72 H56' fill='none' stroke='%23d4a574' stroke-width='8' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M50 72 L68 28 L86 72 M58 55 H78' fill='none' stroke='%23d4a574' stroke-width='7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -132,14 +138,14 @@
           <div class="prod-sub__stack">Apache Airflow · Selenium · REST/GraphQL · Python</div>
         </div>
         <div class="prod-sub__body">
-          <p data-lang-en>~35 Airflow DAGs, tagged by role — download, consolidation, report, audit — with a sensor-style DAG polling state every five minutes and triggering what's ready. Three kinds of source: an RPA bot with a proper Page Object Model for the administrator's portal, REST/GraphQL clients for custodian APIs, and a standalone loader package for public macro data.</p>
-          <p data-lang-pt>~35 DAGs do Airflow, tagueadas por papel — download, consolidação, relatório, auditoria — com uma DAG estilo sensor consultando o estado a cada cinco minutos e disparando o que estiver pronto. Três tipos de fonte: um bot de RPA com Page Object Model de verdade para o portal da administradora, clientes REST/GraphQL para APIs custodiais, e um pacote de loaders standalone para dados macro públicos.</p>
+          <p data-lang-en>~35 Airflow DAGs, tagged by role — download, consolidation, report, audit — with a sensor-style DAG polling state every five minutes and triggering what's ready. Three kinds of source: an RPA pipeline built on Page Object Model patterns for the administrator's portal, REST/GraphQL clients for custodian APIs, and a standalone loader package for public macro data.</p>
+          <p data-lang-pt>~35 DAGs do Airflow, tagueadas por papel — download, consolidação, relatório, auditoria — com uma DAG estilo sensor consultando o estado a cada cinco minutos e disparando o que estiver pronto. Três tipos de fonte: um pipeline de RPA construído sobre o padrão Page Object Model para o portal da administradora, clientes REST/GraphQL para APIs custodiais, e um pacote de loaders standalone para dados macro públicos.</p>
           <ul class="prod-list">
             <li data-lang-en>Custodian REST/GraphQL endpoints for positions and cash statements.</li>
             <li data-lang-pt>Endpoints REST/GraphQL custodiais de posições e demonstrativos de caixa.</li>
             <li data-lang-en>Public macro feeds (BCB, IBGE, CVM, CAGED, Tesouro) for context.</li>
             <li data-lang-pt>Feeds macro públicos (BCB, IBGE, CVM, CAGED, Tesouro) para contexto.</li>
-            <li data-lang-en>Selenium RPA with a Page Object Model where no API exists.</li>
+            <li data-lang-en>Selenium RPA built on Page Object Model patterns where no API exists.</li>
             <li data-lang-pt>RPA com Selenium e Page Object Model onde não existe API.</li>
           </ul>
           <a href="prod-orchestration.html" class="prod-sub__link"><span data-lang-en>How it works</span><span data-lang-pt>Como funciona</span> <span class="arrow">→</span></a>
@@ -155,8 +161,8 @@
           <div class="prod-sub__stack">pandas · JSON manifests · parquet</div>
         </div>
         <div class="prod-sub__body">
-          <p data-lang-en>No database behind this pipeline — a three-tier file lake instead (raw → reference/manual → consolidated), with idempotency and backfill driven by a JSON manifest per pipeline rather than database transactions. Every intermediate state is a file a human can open and diff.</p>
-          <p data-lang-pt>Sem banco de dados por trás deste pipeline — um lake de arquivos em três camadas (raw → referência/manual → consolidado), com idempotência e backfill conduzidos por um manifest JSON por pipeline, não por transações de banco. Todo estado intermediário é um arquivo que um humano pode abrir e comparar.</p>
+          <p data-lang-en>A three-tier, immutable file lake (raw → reference/manual → consolidated), with idempotency and backfill driven by a JSON manifest per pipeline — a deliberate choice over database transactions: every intermediate state is a file a human can open and diff.</p>
+          <p data-lang-pt>Um lake de arquivos imutável em três camadas (raw → referência/manual → consolidado), com idempotência e backfill conduzidos por um manifest JSON por pipeline — uma escolha deliberada em vez de transações de banco: todo estado intermediário é um arquivo que um humano pode abrir e comparar.</p>
           <p data-lang-en>Caught, via a sanity check born from a real incident: an administrator migration where BR/US number-format ambiguity inflated figures roughly 100×.</p>
           <p data-lang-pt>Pego por uma checagem de sanidade nascida de um incidente real: uma migração de administradora em que a ambiguidade de formato de número BR/US inflou valores em cerca de 100×.</p>
           <a href="prod-data-layer.html" class="prod-sub__link"><span data-lang-en>How it works</span><span data-lang-pt>Como funciona</span> <span class="arrow">→</span></a>
@@ -202,8 +208,8 @@
           <div class="prod-sub__stack">LightGBM · lifelines · SHAP · Optuna</div>
         </div>
         <div class="prod-sub__body">
-          <p data-lang-en>Two classifiers (cross-sectional and genuine walk-forward, out-of-time), plus a survival model answering "how long until it stops paying," cross-checked against public fiscal filings for the counterparties behind the payroll deductions. Honestly offline and exploratory — reviewed by a person, not wired into a daily DAG.</p>
-          <p data-lang-pt>Dois classificadores (cross-sectional e walk-forward de verdade, out-of-time), mais um modelo de sobrevivência respondendo "até quando continua pagando", cruzado com prestações de contas fiscais públicas das contrapartes por trás dos descontos em folha. Honestamente offline e exploratório — revisado por uma pessoa, não conectado a uma DAG diária.</p>
+          <p data-lang-en>Two classifiers (cross-sectional and walk-forward, out-of-time), plus a survival model answering "how long until it stops paying," cross-checked against public fiscal filings for the counterparties behind the payroll deductions. Honestly offline and exploratory — reviewed by a person, not wired into a daily DAG.</p>
+          <p data-lang-pt>Dois classificadores (cross-sectional e walk-forward, out-of-time), mais um modelo de sobrevivência respondendo "até quando continua pagando", cruzado com prestações de contas fiscais públicas das contrapartes por trás dos descontos em folha. Honestamente offline e exploratório — revisado por uma pessoa, não conectado a uma DAG diária.</p>
           <a href="prod-risk.html" class="prod-sub__link"><span data-lang-en>How it works</span><span data-lang-pt>Como funciona</span> <span class="arrow">→</span></a>
         </div>
         <a href="prod-risk.html" class="cover" aria-label="Credit-risk scoring"></a>
@@ -270,16 +276,17 @@
   <div class="wrap">
     <div class="foot__grid">
       <div>
-        <div class="foot__sig" data-lang-en>Want to talk?</div>
-        <div class="foot__sig" data-lang-pt>Quer conversar?</div>
-        <p data-lang-en>I read every message. If something here resonates, drop a line.</p>
-        <p data-lang-pt>Leio todas as mensagens. Se algo aqui ressoa, é só escrever.</p>
+        <div class="foot__sig" data-lang-en>Get in touch</div>
+        <div class="foot__sig" data-lang-pt>Fale comigo</div>
+        <p data-lang-en>Feel free to reach out to discuss data systems, quantitative research, or risk infrastructure.</p>
+        <p data-lang-pt>Fique à vontade para entrar em contato sobre sistemas de dados, pesquisa quantitativa ou infraestrutura de risco.</p>
       </div>
       <div>
         <h5 data-lang-en>Direct</h5><h5 data-lang-pt>Direto</h5>
         <div class="foot__links">
           <a href="mailto:lucas_r_andrade@hotmail.com">lucas_r_andrade@hotmail.com</a>
-          <a href="https://wa.me/5521975056123" target="_blank" rel="noopener">WhatsApp · +55 21 97505 6123</a>
+          <a href="assets/CV_Lucas_Andrade.pdf" target="_blank" rel="noopener" data-lang-en>Download CV (PDF)</a>
+          <a href="assets/CV_Lucas_Andrade.pdf" target="_blank" rel="noopener" data-lang-pt>Baixar CV (PDF)</a>
         </div>
       </div>
       <div>
@@ -292,7 +299,7 @@
     </div>
     <div class="foot__base">
       <span>© 2026 Lucas R. Andrade · Rio de Janeiro</span>
-      <span><a href="mailto:lucas_r_andrade@hotmail.com">lucas_r_andrade@hotmail.com</a> · <a href="https://wa.me/5521975056123" target="_blank" rel="noopener">+55 21 97505 6123</a></span>
+      <span><a href="mailto:lucas_r_andrade@hotmail.com">lucas_r_andrade@hotmail.com</a></span>
     </div>
   </div>
 </footer>

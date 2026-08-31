@@ -4,8 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Open-source projects by Lucas R. Andrade.">
+<meta property="og:title" content="Open source · Lucas R. Andrade">
+<meta property="og:description" content="Personal projects, mostly small and opinionated, all open on GitHub.">
+<meta property="og:image" content="https://andrade020.github.io/assets/foto_LIN.png">
+<meta property="og:url" content="https://andrade020.github.io/projects.html">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
 <title>Open source · Lucas R. Andrade</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.92em' font-size='95' font-family='Georgia,serif' font-style='italic' fill='%23d4a574'%3EZ%3C/text%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect x='6' y='6' width='88' height='88' rx='20' fill='none' stroke='%23d4a574' stroke-width='5'/%3E%3Cpath d='M32 30 V72 H56' fill='none' stroke='%23d4a574' stroke-width='8' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M50 72 L68 28 L86 72 M58 55 H78' fill='none' stroke='%23d4a574' stroke-width='7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -50,29 +56,24 @@
       <h2 class="section__title" data-lang-en>Latest release</h2>
       <h2 class="section__title" data-lang-pt>Último lançamento</h2>
     </div>
-    <article class="proj-item proj-item--prisma proj-item--featured" onclick="if(!event.target.closest('a'))location.href='project-prisma.html'">
-      <div class="proj-art proj-art--prisma">
+    <article class="proj-item proj-item--eyezen proj-item--featured" onclick="if(!event.target.closest('a'))location.href='project-eyezen2.html'">
+      <div class="proj-art proj-art--eyezen">
           <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <path d="M 50 16 L 78 74 L 22 74 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
-            <line x1="8" y1="56" x2="36" y2="60" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
-            <line x1="58" y1="52" x2="90" y2="30" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" opacity="0.9"/>
-            <line x1="60" y1="56" x2="92" y2="56" stroke="var(--sage)" stroke-width="2" stroke-linecap="round" opacity="0.9"/>
-            <line x1="58" y1="60" x2="88" y2="80" stroke="var(--oxblood)" stroke-width="2" stroke-linecap="round" opacity="0.9"/>
-            <circle cx="90" cy="30" r="2.2" fill="var(--accent)"/>
-            <circle cx="92" cy="56" r="2.2" fill="var(--sage)"/>
-            <circle cx="88" cy="80" r="2.2" fill="var(--oxblood)"/>
+            <path d="M 14 50 Q 50 18 86 50 Q 50 82 14 50 Z" fill="none" stroke="currentColor" stroke-width="2.5"/>
+            <circle cx="50" cy="50" r="12" fill="none" stroke="currentColor" stroke-width="2.5"/>
+            <circle cx="50" cy="50" r="5" fill="currentColor"/>
           </svg>
-        </div><div class="proj-item__body"><h2 class="proj-item__title">Prisma</h2><div class="proj-item__meta" data-lang-en>2026 · Lottery portfolio optimizer · Web app</div>
-        <div class="proj-item__meta" data-lang-pt>2026 · Otimizador de carteiras de loteria · Web app</div>
-        <p data-lang-en>For a budget of N tickets, computes the lottery portfolio that maximizes win probability — Lotofácil, Mega-Sena, Quina, Lotomania, Dupla Sena, Dia de Sorte. Greedy max-coverage, simulated annealing, and Monte Carlo, all client-side, based on a companion paper co-authored with Victor Hugo Nascimento (FGV).</p>
-        <p data-lang-pt>Para um orçamento de N bilhetes, calcula a carteira de loteria que maximiza a chance de prêmio — Lotofácil, Mega-Sena, Quina, Lotomania, Dupla Sena, Dia de Sorte. Greedy max-coverage, simulated annealing e Monte Carlo, tudo client-side, com base num artigo escrito com Victor Hugo Nascimento (FGV).</p>
-        <div class="selected__stack">React · TypeScript · Vite · Web Worker · Vercel</div>
+        </div><div class="proj-item__body"><h2 class="proj-item__title">EyeZen v2</h2><div class="proj-item__meta" data-lang-en>2026 · v2.1.0 · Visual fatigue filter · Rust rewrite</div>
+        <div class="proj-item__meta" data-lang-pt>2026 · v2.1.0 · Filtro de fadiga visual · reescrita em Rust</div>
+        <p data-lang-en>A Windows screen filter with 24 composable filters, a profile per foreground app, and scheduling by time of day. Ground-up Rust rewrite of the original Python tool: 3.5&nbsp;MB, tray-first, no window on launch. v2.1.0 adds 8 new creative filters.</p>
+        <p data-lang-pt>Filtro de tela para Windows com 24 filtros combináveis, um perfil por app em foco e agendamento por horário. Reescrita completa em Rust da ferramenta original em Python: 3,5&nbsp;MB, direto na bandeja, sem janela ao abrir. A v2.1.0 traz 8 novos filtros criativos.</p>
+        <div class="selected__stack">Rust · egui · Windows API</div>
         <div class="proj-item__row">
-          <a href="project-prisma.html" data-lang-en>Details →</a><a href="project-prisma.html" data-lang-pt>Detalhes →</a>
+          <a href="project-eyezen2.html" data-lang-en>Details →</a><a href="project-eyezen2.html" data-lang-pt>Detalhes →</a>
           <span class="sep">·</span>
-          <a href="https://prisma-loterias.vercel.app/" class="btn-app" data-lang-en target="_blank" rel="noopener">Open app ↗</a><a href="https://prisma-loterias.vercel.app/" class="btn-app" data-lang-pt target="_blank" rel="noopener">Abrir app ↗</a>
+          <a href="https://github.com/Andrade020/EyeZen2/releases/latest/download/EyeZen.exe" class="btn-app" data-lang-en target="_blank" rel="noopener">Download .exe ↗</a><a href="https://github.com/Andrade020/EyeZen2/releases/latest/download/EyeZen.exe" class="btn-app" data-lang-pt target="_blank" rel="noopener">Baixar .exe ↗</a>
           <span class="sep">·</span>
-          <a href="https://github.com/Andrade020/Loto-Facil" class="btn-gh" target="_blank" rel="noopener">GitHub ↗</a>
+          <a href="https://github.com/Andrade020/EyeZen2" class="btn-gh" target="_blank" rel="noopener">GitHub ↗</a>
           <span class="tag open" data-lang-en>Open source</span><span class="tag open" data-lang-pt>Open source</span>
         </div>
       </div>
@@ -152,24 +153,29 @@
       </div>
     </article>
 
-    <article class="proj-item proj-item--eyezen" onclick="if(!event.target.closest('a'))location.href='project-eyezen2.html'">
-      <div class="proj-art proj-art--eyezen">
+    <article class="proj-item proj-item--prisma" onclick="if(!event.target.closest('a'))location.href='project-prisma.html'">
+      <div class="proj-art proj-art--prisma">
           <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <path d="M 14 50 Q 50 18 86 50 Q 50 82 14 50 Z" fill="none" stroke="currentColor" stroke-width="2.5"/>
-            <circle cx="50" cy="50" r="12" fill="none" stroke="currentColor" stroke-width="2.5"/>
-            <circle cx="50" cy="50" r="5" fill="currentColor"/>
+            <path d="M 50 16 L 78 74 L 22 74 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+            <line x1="8" y1="56" x2="36" y2="60" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+            <line x1="58" y1="52" x2="90" y2="30" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" opacity="0.9"/>
+            <line x1="60" y1="56" x2="92" y2="56" stroke="var(--sage)" stroke-width="2" stroke-linecap="round" opacity="0.9"/>
+            <line x1="58" y1="60" x2="88" y2="80" stroke="var(--oxblood)" stroke-width="2" stroke-linecap="round" opacity="0.9"/>
+            <circle cx="90" cy="30" r="2.2" fill="var(--accent)"/>
+            <circle cx="92" cy="56" r="2.2" fill="var(--sage)"/>
+            <circle cx="88" cy="80" r="2.2" fill="var(--oxblood)"/>
           </svg>
-        </div><div class="proj-item__body"><h2 class="proj-item__title">EyeZen v2</h2><div class="proj-item__meta" data-lang-en>2026 · Visual fatigue filter · Rust rewrite</div>
-        <div class="proj-item__meta" data-lang-pt>2026 · Filtro de fadiga visual · reescrita em Rust</div>
-        <p data-lang-en>A Windows screen filter with 24 composable filters, a profile per foreground app, and scheduling by time of day. Ground-up Rust rewrite of the original Python tool: 3.5&nbsp;MB, tray-first, no window on launch.</p>
-        <p data-lang-pt>Filtro de tela para Windows com 24 filtros combináveis, um perfil por app em foco e agendamento por horário. Reescrita completa em Rust da ferramenta original em Python: 3,5&nbsp;MB, direto na bandeja, sem janela ao abrir.</p>
-        <div class="selected__stack">Rust · egui · Windows API</div>
+        </div><div class="proj-item__body"><h2 class="proj-item__title">Prisma</h2><div class="proj-item__meta" data-lang-en>2026 · Combinatorial optimization · Web app</div>
+        <div class="proj-item__meta" data-lang-pt>2026 · Otimização combinatória · Web app</div>
+        <p data-lang-en>A combinatorial-optimization playground built on a companion paper co-authored with Victor Hugo Nascimento (FGV): given a budget of N tickets, it searches for the set maximizing coverage under a chosen prize structure — greedy max-coverage, simulated annealing, and Monte Carlo, all client-side. Applied here to Brazilian lotteries (Lotofácil, Mega-Sena, Quina, Lotomania, Dupla Sena, Dia de Sorte).</p>
+        <p data-lang-pt>Um playground de otimização combinatória com base num artigo escrito com Victor Hugo Nascimento (FGV): para um orçamento de N bilhetes, busca o conjunto que maximiza a cobertura sob uma dada estrutura de prêmios — greedy max-coverage, simulated annealing e Monte Carlo, tudo client-side. Aplicado aqui a loterias brasileiras (Lotofácil, Mega-Sena, Quina, Lotomania, Dupla Sena, Dia de Sorte).</p>
+        <div class="selected__stack">React · TypeScript · Vite · Web Worker · Vercel</div>
         <div class="proj-item__row">
-          <a href="project-eyezen2.html" data-lang-en>Details →</a><a href="project-eyezen2.html" data-lang-pt>Detalhes →</a>
+          <a href="project-prisma.html" data-lang-en>Details →</a><a href="project-prisma.html" data-lang-pt>Detalhes →</a>
           <span class="sep">·</span>
-          <a href="https://github.com/Andrade020/EyeZen2/releases/latest/download/EyeZen.exe" class="btn-gh" target="_blank" rel="noopener" data-lang-en>Download .exe ↗</a><a href="https://github.com/Andrade020/EyeZen2/releases/latest/download/EyeZen.exe" class="btn-gh" target="_blank" rel="noopener" data-lang-pt>Baixar .exe ↗</a>
+          <a href="https://prisma-loterias.vercel.app/" class="btn-app" data-lang-en target="_blank" rel="noopener">Open app ↗</a><a href="https://prisma-loterias.vercel.app/" class="btn-app" data-lang-pt target="_blank" rel="noopener">Abrir app ↗</a>
           <span class="sep">·</span>
-          <a href="https://github.com/Andrade020/EyeZen2" class="btn-gh" target="_blank" rel="noopener">GitHub ↗</a>
+          <a href="https://github.com/Andrade020/Loto-Facil" class="btn-gh" target="_blank" rel="noopener">GitHub ↗</a>
           <span class="tag open" data-lang-en>Open source</span><span class="tag open" data-lang-pt>Open source</span>
         </div>
       </div>
@@ -209,8 +215,8 @@
     <div class="hint">
       <span class="section-label" data-lang-en>Looking for production work?</span>
       <span class="section-label" data-lang-pt>Procurando trabalho de produção?</span>
-      <p data-lang-en>Detailed write-ups of the systems I build at <strong>Porto Real Asset</strong> (data pipelines, document parsing, fixed-income pricing, credit risk) live on the Production page.</p>
-      <p data-lang-pt>Os detalhes dos sistemas que construo na <strong>Porto Real Asset</strong> (pipelines de dados, extração documental, precificação de renda fixa, risco de crédito) ficam na página de Produção.</p>
+      <p data-lang-en>Detailed write-ups of the systems I build at <strong>Porto Real Asset</strong> (pipeline orchestration, the file-based data lake, the cash-flow engine, credit-risk scoring) live on the Production page.</p>
+      <p data-lang-pt>Os detalhes dos sistemas que construo na <strong>Porto Real Asset</strong> (orquestração de pipelines, o data lake baseado em arquivos, o motor de fluxo de caixa, score de risco de crédito) ficam na página de Produção.</p>
       <a href="production.html" class="hint__cta" data-lang-en>Go to Production →</a>
       <a href="production.html" class="hint__cta" data-lang-pt>Ir para Produção →</a>
     </div>
@@ -221,16 +227,17 @@
   <div class="wrap">
     <div class="foot__grid">
       <div>
-        <div class="foot__sig" data-lang-en>Want to talk?</div>
-        <div class="foot__sig" data-lang-pt>Quer conversar?</div>
-        <p data-lang-en>I read every message. If something here resonates, drop a line.</p>
-        <p data-lang-pt>Leio todas as mensagens. Se algo aqui ressoa, é só escrever.</p>
+        <div class="foot__sig" data-lang-en>Get in touch</div>
+        <div class="foot__sig" data-lang-pt>Fale comigo</div>
+        <p data-lang-en>Feel free to reach out to discuss data systems, quantitative research, or risk infrastructure.</p>
+        <p data-lang-pt>Fique à vontade para entrar em contato sobre sistemas de dados, pesquisa quantitativa ou infraestrutura de risco.</p>
       </div>
       <div>
         <h5 data-lang-en>Direct</h5><h5 data-lang-pt>Direto</h5>
         <div class="foot__links">
           <a href="mailto:lucas_r_andrade@hotmail.com">lucas_r_andrade@hotmail.com</a>
-          <a href="https://wa.me/5521975056123" target="_blank" rel="noopener">WhatsApp · +55 21 97505 6123</a>
+          <a href="assets/CV_Lucas_Andrade.pdf" target="_blank" rel="noopener" data-lang-en>Download CV (PDF)</a>
+          <a href="assets/CV_Lucas_Andrade.pdf" target="_blank" rel="noopener" data-lang-pt>Baixar CV (PDF)</a>
         </div>
       </div>
       <div>
@@ -243,7 +250,7 @@
     </div>
     <div class="foot__base">
       <span>© 2026 Lucas R. Andrade · Rio de Janeiro</span>
-      <span><a href="mailto:lucas_r_andrade@hotmail.com">lucas_r_andrade@hotmail.com</a> · <a href="https://wa.me/5521975056123" target="_blank" rel="noopener">+55 21 97505 6123</a></span>
+      <span><a href="mailto:lucas_r_andrade@hotmail.com">lucas_r_andrade@hotmail.com</a></span>
     </div>
   </div>
 </footer>

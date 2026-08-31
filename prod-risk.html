@@ -4,8 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="How the offline credit-risk research at Porto Real Asset is built: walk-forward validation, survival analysis, SHAP, and public fiscal-data integration — by Lucas R. Andrade.">
+<meta property="og:title" content="Credit-Risk Scoring">
+<meta property="og:description" content="How the offline credit-risk research at Porto Real Asset is built: walk-forward validation, survival analysis, SHAP, and public fiscal-data integration — by Lucas R. Andrade.">
+<meta property="og:image" content="https://andrade020.github.io/assets/foto_LIN.png">
+<meta property="og:url" content="https://andrade020.github.io/prod-risk.html">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
 <title>Credit-Risk Scoring · Lucas R. Andrade</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.92em' font-size='95' font-family='Georgia,serif' font-style='italic' fill='%23d4a574'%3EZ%3C/text%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect x='6' y='6' width='88' height='88' rx='20' fill='none' stroke='%23d4a574' stroke-width='5'/%3E%3Cpath d='M32 30 V72 H56' fill='none' stroke='%23d4a574' stroke-width='8' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M50 72 L68 28 L86 72 M58 55 H78' fill='none' stroke='%23d4a574' stroke-width='7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -66,8 +72,8 @@
         <div class="case-fact">
           <div class="case-fact__k" data-lang-en>Validation</div><div class="case-fact__k" data-lang-pt>Validação</div>
           <div class="case-fact__v" data-lang-en>Walk-forward</div><div class="case-fact__v" data-lang-pt>Walk-forward</div>
-          <div class="case-fact__note" data-lang-en>Trained on one snapshot, tested on a later, held-out one — genuine out-of-time validation, not a random split.</div>
-          <div class="case-fact__note" data-lang-pt>Treinado num snapshot, testado num posterior, isolado — validação out-of-time de verdade, não um split aleatório.</div>
+          <div class="case-fact__note" data-lang-en>Trained on one snapshot, tested on a later, held-out one — out-of-time validation, not a random split.</div>
+          <div class="case-fact__note" data-lang-pt>Treinado num snapshot, testado num posterior, isolado — validação out-of-time, não um split aleatório.</div>
         </div>
         <div class="case-fact">
           <div class="case-fact__k" data-lang-en>Fiscal data</div><div class="case-fact__k" data-lang-pt>Dado fiscal</div>
@@ -118,8 +124,8 @@
         <div>
           <h4 data-lang-en>Two classifiers, validated two different ways</h4>
           <h4 data-lang-pt>Dois classificadores, validados de duas formas diferentes</h4>
-          <p data-lang-en>A cross-sectional model — LightGBM vs. XGBoost vs. a logistic-regression baseline, Optuna-tuned, selected by validation PR-AUC — is fit within a single snapshot on a stratified split, deliberately not time-based. A second, walk-forward model takes only contracts performing normally at one snapshot and predicts default roughly ninety days later, tested on the most recent snapshot held out entirely — genuine out-of-time validation, grouped by contract so no contract leaks across the split.</p>
-          <p data-lang-pt>Um modelo cross-sectional — LightGBM vs. XGBoost vs. um baseline de regressão logística, otimizado com Optuna, selecionado por PR-AUC de validação — é ajustado dentro de um único snapshot, com split estratificado, deliberadamente não temporal. Um segundo modelo, walk-forward, pega só contratos performando normalmente num snapshot e prediz default cerca de noventa dias depois, testado num snapshot mais recente inteiramente isolado — validação out-of-time de verdade, agrupada por contrato para nenhum contrato vazar entre os splits.</p>
+          <p data-lang-en>A cross-sectional model — LightGBM vs. XGBoost vs. a logistic-regression baseline, Optuna-tuned, selected by validation PR-AUC — is fit within a single snapshot on a stratified split, deliberately not time-based. A second, walk-forward model takes only contracts performing normally at one snapshot and predicts default roughly ninety days later, tested on the most recent snapshot held out entirely — out-of-time validation, grouped by contract so no contract leaks across the split.</p>
+          <p data-lang-pt>Um modelo cross-sectional — LightGBM vs. XGBoost vs. um baseline de regressão logística, otimizado com Optuna, selecionado por PR-AUC de validação — é ajustado dentro de um único snapshot, com split estratificado, deliberadamente não temporal. Um segundo modelo, walk-forward, pega só contratos performando normalmente num snapshot e prediz default cerca de noventa dias depois, testado num snapshot mais recente inteiramente isolado — validação out-of-time, agrupada por contrato para nenhum contrato vazar entre os splits.</p>
         </div>
       </div>
       <div class="flow__step">
@@ -197,16 +203,17 @@
   <div class="wrap">
     <div class="foot__grid">
       <div>
-        <div class="foot__sig" data-lang-en>Want to talk?</div>
-        <div class="foot__sig" data-lang-pt>Quer conversar?</div>
-        <p data-lang-en>I read every message. If something here resonates, drop a line.</p>
-        <p data-lang-pt>Leio todas as mensagens. Se algo aqui ressoa, é só escrever.</p>
+        <div class="foot__sig" data-lang-en>Get in touch</div>
+        <div class="foot__sig" data-lang-pt>Fale comigo</div>
+        <p data-lang-en>Feel free to reach out to discuss data systems, quantitative research, or risk infrastructure.</p>
+        <p data-lang-pt>Fique à vontade para entrar em contato sobre sistemas de dados, pesquisa quantitativa ou infraestrutura de risco.</p>
       </div>
       <div>
         <h5 data-lang-en>Direct</h5><h5 data-lang-pt>Direto</h5>
         <div class="foot__links">
           <a href="mailto:lucas_r_andrade@hotmail.com">lucas_r_andrade@hotmail.com</a>
-          <a href="https://wa.me/5521975056123" target="_blank" rel="noopener">WhatsApp · +55 21 97505 6123</a>
+          <a href="assets/CV_Lucas_Andrade.pdf" target="_blank" rel="noopener" data-lang-en>Download CV (PDF)</a>
+          <a href="assets/CV_Lucas_Andrade.pdf" target="_blank" rel="noopener" data-lang-pt>Baixar CV (PDF)</a>
         </div>
       </div>
       <div>
@@ -219,7 +226,7 @@
     </div>
     <div class="foot__base">
       <span>© 2026 Lucas R. Andrade · Rio de Janeiro</span>
-      <span><a href="mailto:lucas_r_andrade@hotmail.com">lucas_r_andrade@hotmail.com</a> · <a href="https://wa.me/5521975056123" target="_blank" rel="noopener">+55 21 97505 6123</a></span>
+      <span><a href="mailto:lucas_r_andrade@hotmail.com">lucas_r_andrade@hotmail.com</a></span>
     </div>
   </div>
 </footer>
