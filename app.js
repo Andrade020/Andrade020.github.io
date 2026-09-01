@@ -56,38 +56,11 @@
       {
         tag: 'open',
         tagLabel: 'Open source',
-        title: 'ludami',
-        desc: 'A link curation platform for shared spaces — save YouTube videos and URLs into thematic collections, annotate them, share with collaborators. Installable as a PWA.',
-        descPt: 'Plataforma de curadoria de links para espaços compartilhados — salve vídeos do YouTube e URLs em coleções temáticas, anote-os, compartilhe com colaboradores. Instalável como PWA.',
-        stack: 'React · TypeScript · Vite · Tailwind · Supabase',
-        href: 'project-ludami.html',
-      },
-      {
-        tag: 'open',
-        tagLabel: 'Open source',
         title: 'Prisma',
         desc: 'Combinatorial-optimization playground built on a paper co-authored with Victor Hugo Nascimento (FGV): greedy max-coverage, simulated annealing, and Monte Carlo, all client-side. Applied here to Brazilian lotteries.',
         descPt: 'Playground de otimização combinatória com base num artigo escrito com Victor Hugo Nascimento (FGV): greedy max-coverage, simulated annealing e Monte Carlo, tudo client-side. Aplicado aqui a loterias brasileiras.',
         stack: 'React · TypeScript · Vite · Web Worker',
         href: 'project-prisma.html',
-      },
-      {
-        tag: 'open',
-        tagLabel: 'Open source',
-        title: 'Local_LLM',
-        desc: 'A desktop interface for installing and running LLMs locally — no internet required after setup. Useful when prompts must stay off the cloud.',
-        descPt: 'Interface desktop para instalar e rodar LLMs localmente — sem internet depois do setup. Útil quando os prompts precisam ficar fora da nuvem.',
-        stack: 'Python · tkinter · llama.cpp',
-        href: 'https://github.com/Andrade020/Local_LLM',
-      },
-      {
-        tag: 'open',
-        tagLabel: 'Open source',
-        title: 'EyeZen v2',
-        desc: 'A Windows screen filter with 24 composable filters, per-app switching, and scheduling. Rust rewrite of the original Python tool — 3.5 MB, tray-first.',
-        descPt: 'Filtro de tela para Windows com 24 filtros combináveis, troca por app e agendamento. Reescrita em Rust da ferramenta original em Python — 3,5 MB, direto na bandeja.',
-        stack: 'Rust · egui · Windows API',
-        href: 'project-eyezen2.html',
       },
     ];
     const pick = pool[Math.floor(Math.random() * pool.length)];
