@@ -37,16 +37,18 @@
       {
         tag: 'research',
         tagLabel: 'Research',
+        tagLabelPt: 'Pesquisa',
         title: 'Spatiotemporal Poisson Processes',
         titlePt: 'Processos de Poisson Espaço-Temporais',
-        desc: 'MSc research on parameter estimation when location data is incomplete: a likelihood that respects what you actually observe. Published in <em>Nature Scientific Reports.</em>',
-        descPt: 'Pesquisa de mestrado sobre estimação quando dados de localização estão incompletos: uma verossimilhança que respeita o que de fato se observa. Publicada na <em>Nature Scientific Reports.</em>',
+        desc: 'MSc research on parameter estimation when location data is incomplete: a likelihood that respects what you actually observe. Published in <em>Scientific Reports.</em>',
+        descPt: 'Pesquisa de mestrado sobre estimação quando dados de localização estão incompletos: uma verossimilhança que respeita o que de fato se observa. Publicada na <em>Scientific Reports.</em>',
         stack: 'R · Maximum Likelihood · Stochastic Processes',
         href: 'publications.html',
       },
       {
         tag: 'open',
         tagLabel: 'Open source',
+        tagLabelPt: 'Open source',
         title: 'Krvo',
         desc: 'Email automation via Microsoft Graph. GUI + CLI, used in production to dispatch daily risk reports from my Airflow pipelines.',
         descPt: 'Automação de e-mail via Microsoft Graph. GUI + CLI, usado em produção para disparar relatórios diários dos meus pipelines do Airflow.',
@@ -56,6 +58,7 @@
       {
         tag: 'open',
         tagLabel: 'Open source',
+        tagLabelPt: 'Open source',
         title: 'Prisma',
         desc: 'Combinatorial-optimization playground built on a paper co-authored with Victor Hugo Nascimento (FGV): greedy max-coverage, simulated annealing, and Monte Carlo, all client-side. Applied here to Brazilian lotteries.',
         descPt: 'Playground de otimização combinatória com base num artigo escrito com Victor Hugo Nascimento (FGV): greedy max-coverage, simulated annealing e Monte Carlo, tudo client-side. Aplicado aqui a loterias brasileiras.',
@@ -65,10 +68,12 @@
     ];
     const pick = pool[Math.floor(Math.random() * pool.length)];
     const titlePt = pick.titlePt || pick.title;
+    const tagLabelPt = pick.tagLabelPt || pick.tagLabel;
     slot.innerHTML = `
       <div class="selected__head">
         <span class="selected__num">04.</span>
-        <span class="tag ${pick.tag}">${pick.tagLabel}</span>
+        <span class="tag ${pick.tag}" data-lang-en>${pick.tagLabel}</span>
+        <span class="tag ${pick.tag}" data-lang-pt>${tagLabelPt}</span>
       </div>
       <h3 class="selected__title" data-lang-en>${pick.title}</h3>
       <h3 class="selected__title" data-lang-pt>${titlePt}</h3>
