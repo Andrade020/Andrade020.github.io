@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aula 02 — Externalidades, resíduos e o nível ótimo de poluição · Economia Ambiental · UERJ</title>
+<link rel="icon" type="image/png" href="assets/marca-ambiental.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ============ TOKENS ============ */
+  :root {
+    --verde:        #14532D;
+    --verde-claro:  #4ADE80;
+    --dourado:      #C9A227;
+    --papel:        #FAF9F6;
+    --tinta:        #1C1917;
+    --cinza:        #6B7280;
+    --terracota:    #B45309;
+    --petroleo:     #155E75;
+    --f-titulo: 'Archivo', sans-serif;
+    --f-texto:  'Source Serif 4', Georgia, serif;
+    --f-mono:   'IBM Plex Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--f-texto);
+    font-size: 11pt;
+    line-height: 1.7;
+    color: var(--tinta);
+    background: #e8e6e1;
+  }
+
+  .pagina {
+    background: var(--papel);
+    max-width: 21cm;
+    margin: 24px auto;
+    padding: 2.5cm;
+    box-shadow: 0 2px 12px rgba(0,0,0,.12);
+  }
+
+  /* ============ CAPA ============ */
+  .capa {
+    display: flex;
+    flex-direction: column;
+  }
+  .capa .marca { width: 96px; height: auto; }
+  .capa .filete {
+    width: 72px; height: 5px;
+    background: var(--dourado);
+    margin: 20px 0;
+  }
+  .capa h1 {
+    font-family: var(--f-titulo);
+    font-size: 42pt;
+    font-weight: 800;
+    line-height: 1.08;
+    color: var(--verde);
+    letter-spacing: -0.5px;
+  }
+  .capa .subtitulo {
+    font-family: var(--f-titulo);
+    font-size: 15pt;
+    font-weight: 500;
+    color: var(--cinza);
+    margin-top: 14px;
+  }
+  .capa .rodape-capa {
+    margin-top: 1.6cm;
+    border-top: 2px solid var(--verde);
+    padding-top: 16px;
+    font-family: var(--f-titulo);
+    font-size: 10.5pt;
+    color: var(--tinta);
+  }
+  .capa .rodape-capa strong { color: var(--verde); }
+  .capa .rodape-capa .inst {
+    letter-spacing: 1.5px;
+    font-size: 9pt;
+    color: var(--cinza);
+    margin-top: 4px;
+  }
+
+  /* ============ TIPOGRAFIA ============ */
+  h1.capitulo {
+    font-family: var(--f-titulo);
+    font-size: 26pt;
+    font-weight: 800;
+    color: var(--verde);
+    line-height: 1.15;
+    margin: 0 0 6pt;
+  }
+  .num-capitulo {
+    font-family: var(--f-titulo);
+    font-size: 10pt;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: var(--dourado);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 8pt;
+  }
+  .regua-capitulo {
+    border: none;
+    border-top: 3px solid var(--verde);
+    width: 100%;
+    margin: 10pt 0 22pt;
+  }
+  h2 {
+    font-family: var(--f-titulo);
+    font-size: 17pt;
+    font-weight: 700;
+    color: var(--verde);
+    margin: 26pt 0 10pt;
+  }
+  h2 .num { color: var(--dourado); margin-right: 6pt; }
+  h3 {
+    font-family: var(--f-titulo);
+    font-size: 13pt;
+    font-weight: 600;
+    color: var(--tinta);
+    margin: 18pt 0 8pt;
+  }
+  p { margin-bottom: 10pt; text-align: justify; hyphens: auto; }
+  strong { font-weight: 600; }
+  .versalete {
+    font-family: var(--f-titulo);
+    font-size: 9pt;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--cinza);
+  }
+
+  ul, ol { margin: 0 0 10pt 22pt; }
+  li { margin-bottom: 4pt; }
+  li::marker { color: var(--verde); font-weight: 700; }
+
+  /* ============ CAIXAS SEMÂNTICAS ============ */
+  .caixa {
+    border-radius: 6px;
+    padding: 12pt 14pt 6pt;
+    margin: 14pt 0;
+    page-break-inside: avoid;
+  }
+  .caixa .rotulo {
+    font-family: var(--f-titulo);
+    font-size: 9pt;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 6pt;
+  }
+  .definicao { background: #EBF5EE; border-left: 4px solid var(--verde); }
+  .definicao .rotulo { color: var(--verde); }
+  .exemplo   { background: #EBF3F5; border-left: 4px solid var(--petroleo); }
+  .exemplo .rotulo { color: var(--petroleo); }
+  .atencao   { background: #FAF1E6; border-left: 4px solid var(--terracota); }
+  .atencao .rotulo { color: var(--terracota); }
+  .destaque  { background: #FAF6E8; border-left: 4px solid var(--dourado); }
+  .destaque .rotulo { color: #8a7014; }
+
+  /* ============ FÓRMULAS E TABELAS ============ */
+  .formula {
+    font-family: var(--f-mono);
+    font-size: 11pt;
+    text-align: center;
+    background: #fff;
+    border: 1px solid #ddd8cd;
+    border-radius: 6px;
+    padding: 10pt;
+    margin: 12pt 0;
+  }
+  .math { font-family: var(--f-mono); font-size: 0.92em; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14pt 0;
+    font-size: 10pt;
+  }
+  thead th {
+    font-family: var(--f-titulo);
+    font-weight: 700;
+    font-size: 9.5pt;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    background: var(--verde);
+    color: var(--papel);
+    padding: 7pt 10pt;
+    text-align: left;
+  }
+  tbody td {
+    padding: 6pt 10pt;
+    border-bottom: 1px solid #ddd8cd;
+  }
+  tbody tr:nth-child(even) { background: #fff; }
+  td.num, th.num { font-family: var(--f-mono); text-align: right; }
+
+  figure { margin: 16pt 0; text-align: center; page-break-inside: avoid; }
+  figure img, figure svg { max-width: 100%; }
+  figcaption {
+    font-family: var(--f-titulo);
+    font-size: 9pt;
+    font-weight: 500;
+    color: var(--cinza);
+    margin-top: 6pt;
+  }
+  figcaption strong { color: var(--verde); }
+
+  blockquote {
+    border-left: 3px solid var(--dourado);
+    padding: 4pt 0 4pt 14pt;
+    margin: 14pt 0;
+    font-style: italic;
+    color: #44403c;
+  }
+  blockquote .fonte {
+    display: block;
+    font-style: normal;
+    font-family: var(--f-titulo);
+    font-size: 9pt;
+    color: var(--cinza);
+    margin-top: 4pt;
+  }
+
+  /* ============ WIDGETS INTERATIVOS ============ */
+  .widget {
+    background: #fff;
+    border: 1px solid #ddd8cd;
+    border-radius: 6px;
+    padding: 12pt 14pt 10pt;
+    margin: 14pt 0;
+    page-break-inside: avoid;
+  }
+  .widget .rotulo {
+    font-family: var(--f-titulo);
+    font-size: 9pt;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--verde);
+    display: block;
+    margin-bottom: 8pt;
+  }
+  .widget svg { display: block; width: 100%; height: auto; }
+  .widget .controles {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 8pt 16pt;
+    margin-top: 8pt;
+    font-family: var(--f-titulo);
+    font-size: 9pt;
+    color: var(--cinza);
+  }
+  .widget .controles label {
+    display: flex;
+    flex-direction: column;
+    gap: 3pt;
+    font-weight: 500;
+    letter-spacing: .5px;
+  }
+  .widget .controles label.check { flex-direction: row; align-items: center; gap: 6pt; }
+  .widget .controles .valor { font-family: var(--f-mono); color: var(--tinta); }
+  .widget input[type="range"] { accent-color: var(--verde); width: 150px; }
+  .widget input[type="checkbox"] { accent-color: var(--verde); }
+  .widget button {
+    font-family: var(--f-titulo);
+    font-size: 9pt;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background: var(--verde);
+    color: var(--papel);
+    border: 1px solid var(--verde);
+    border-radius: 4px;
+    padding: 6pt 10pt;
+    cursor: pointer;
+  }
+  .widget button.sec { background: #fff; color: var(--verde); }
+  .widget .nota {
+    font-family: var(--f-titulo);
+    font-size: 9pt;
+    color: var(--cinza);
+    margin: 8pt 0 0;
+    text-align: left;
+    hyphens: none;
+  }
+  .widget canvas {
+    width: 100%;
+    height: auto;
+    display: block;
+    background: var(--papel);
+    border: 1px solid #ddd8cd;
+    border-radius: 6px;
+  }
+  @media screen and (max-width: 720px) {
+    .pagina { margin: 0; padding: 24px 18px; }
+    .capa h1 { font-size: 30pt; }
+  }
+
+  /* ============ IMPRESSÃO ============ */
+  @page {
+    size: A4;
+    margin: 2.5cm;
+    @bottom-center {
+      content: counter(page);
+      font-family: 'Archivo', sans-serif;
+      font-size: 9pt;
+      color: #6B7280;
+    }
+  }
+  @media print {
+    body { background: none; }
+    .pagina { box-shadow: none; margin: 0; max-width: none; padding: 0; }
+    .capa { page-break-after: always; }
+    h1.capitulo { page-break-before: always; }
+    h2, h3 { page-break-after: avoid; }
+    a { color: var(--tinta); text-decoration: none; }
+    .widget .controles, .widget button { display: none; }
+    .no-print { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="no-print" style="max-width:21cm;margin:16px auto 0;padding:0 2.5cm;font-family:'Archivo',sans-serif;">
+  <a href="ambiental-index.html" style="font-size:0.8rem;color:#6B7280;text-decoration:none;">&larr; Economia Ambiental &middot; todas as aulas</a>
+</nav>
+
+<div class="pagina">
+
+  <!-- ================= CAPA ================= -->
+  <section class="capa">
+    <div>
+      <img class="marca" src="assets/marca-ambiental.png" alt="" style="height:96px;width:auto;" aria-hidden="true">
+      <div class="filete"></div>
+      <h1>Economia<br>Ambiental</h1>
+      <p class="subtitulo">Aula 02 · Externalidades, resíduos e o nível ótimo de poluição</p>
+    </div>
+    <footer class="rodape-capa">
+      <strong>Prof. Ronaldo Seroa da Motta</strong>
+      <div class="inst">UNIVERSIDADE DO ESTADO DO RIO DE JANEIRO · UERJ</div>
+      <div class="inst" style="margin-top:8px;">Notas de aula elaboradas por <strong style="color:var(--verde);letter-spacing:normal;text-transform:none;font-size:10.5pt;">Lucas R. Andrade</strong></div>
+    </footer>
+  </section>
+
+  <!-- ================= CAPÍTULO ================= -->
+  <span class="num-capitulo">Aula 02 · Nota de revisão</span>
+  <h1 class="capitulo">Externalidades, resíduos e o nível ótimo de poluição</h1>
+  <hr class="regua-capitulo">
+
+  <blockquote>
+    Nota de revisão gerada a partir das anotações de aula. A nota original está
+    em "Notas Humanas/Aula 02" (Obsidian). Esta aula cumpre a promessa da
+    <a href="ambiental-aula-01.html">Aula 01</a>: <strong>como precificar e encontrar o
+    nível de degradação eficiente</strong>.
+    <span class="fonte">— Ronaldo Seroa, UERJ</span>
+  </blockquote>
+
+  <h2><span class="num">2.1</span>Preliminares: quem decide e quem paga</h2>
+
+  <ul>
+    <li><strong>Noção de voto do Becker</strong>: distingue o <strong>voto do
+    eleitor</strong> (na urna) do <strong>voto de quem apoia</strong> (grupos de
+    pressão, financiamento, lobby). Política ambiental não é decidida só nas
+    urnas — ver a nota "Becker e o voto político".</li>
+    <li><strong>Desigualdade da degradação</strong>: gasto de diesel por
+    família — famílias mais ricas consomem (e poluem) mais. A degradação também
+    é distribuída desigualmente: quem mais contribui nem sempre é quem mais
+    sofre.</li>
+  </ul>
+
+  <div class="caixa atencao">
+    <span class="rotulo">⚠️ Verificar</span>
+    <p><strong>"Cultura é um bem de luxo"</strong> — a demanda por cultura (e,
+    por analogia, por meio ambiente) cresce mais que proporcionalmente à renda.
+    Isso conecta com a <a href="ambiental-aula-01.html">Curva de Kuznets</a>: países ricos
+    "compram" mais ambiente. A aula ficou com a pergunta em aberto: <strong>quem
+    diz isso?</strong> Vale checar a referência.</p>
+  </div>
+
+  <h2><span class="num">2.2</span>Medindo externalidades negativas</h2>
+
+  <p>A identidade fundamental da aula:</p>
+
+  <div class="formula">CS = CP + CE</div>
+
+  <div class="caixa definicao">
+    <span class="rotulo">Definição</span>
+    <p><strong>Custo social</strong> = custo privado + custo externo. O
+    <strong>custo privado</strong> é uma <strong>subdimensão</strong> do custo
+    social — é a parte que o produtor/consumidor enxerga e paga. Na margem:
+    <span class="math">CSMg ≥ CPMg</span> — o custo social marginal é sempre
+    pelo menos tão grande quanto o privado.</p>
+  </div>
+
+  <div class="formula">CSMg ≥ CPMg</div>
+
+  <p><strong>O problema central</strong>: o mercado sozinho equilibra no ponto
+  <span class="math">X₁</span> (olhando só o custo privado). O equilíbrio
+  eficiente é <span class="math">X₂</span> (olhando o custo social), com
+  quantidade <strong>menor</strong>. A política ambiental é a resposta à
+  pergunta: <strong>como levar a economia de <span class="math">X₁</span> para
+  <span class="math">X₂</span>?</strong></p>
+
+  <ul>
+    <li><strong>Externalidades pecuniárias vs. não pecuniárias</strong> (⚠️
+    marcado como "ver diferenças"): pecuniárias operam <strong>via
+    preços</strong> (a ação de um afeta o preço que outro paga — não há
+    ineficiência a corrigir); <strong>não pecuniárias</strong> operam
+    <strong>fora do mercado</strong> (a fumaça que entra na sua janela sem
+    passar por nenhum preço) — são estas as verdadeiras externalidades que geram
+    falha de mercado.</li>
+  </ul>
+
+  <div class="caixa destaque">
+    <span class="rotulo">Intuição</span>
+    <p>Se meu consumo de café encarece o café para você, o mercado já cobrou
+    essa conta. Se minha fábrica polui seu ar, ninguém te pagou nada — a conta
+    ficou de fora.</p>
+  </div>
+
+  <div class="widget" id="w-pigou">
+    <span class="rotulo">Simulação · O imposto pigouviano leva de X₁ a X₂</span>
+    <svg id="pg-svg" viewBox="0 0 460 250" role="img" aria-label="Demanda, custo privado marginal e custo social marginal, com equilíbrios X1 e X2"></svg>
+    <div class="controles">
+      <label>Imposto sobre a externalidade <span class="valor" id="pg-t-v">0</span>
+        <input type="range" id="pg-t" min="0" max="30" value="0" step="1">
+      </label>
+      <button type="button" class="sec" id="pg-btn">Aplicar imposto pigouviano</button>
+    </div>
+    <p class="nota">O mercado sozinho equilibra onde a demanda encontra o CPMg —
+    em X₁. O eficiente é onde a demanda encontra o CSMg — em X₂, com quantidade
+    menor. Suba o imposto: ele desloca o CPMg para cima e arrasta o equilíbrio
+    privado. Quando o imposto é igual ao custo externo marginal (30), CPMg
+    coincide com CSMg e a economia para exatamente em X₂ — é o imposto
+    pigouviano.</p>
+  </div>
+
+  <h2><span class="num">2.3</span>Poluição é resíduo</h2>
+
+  <ul>
+    <li><strong>Gap ecológico</strong>: os resíduos vão subindo com a produção —
+    poluição <strong>é</strong> resíduo, o que sobra do processo produtivo e não
+    tem destino no mercado.</li>
+  </ul>
+
+  <div class="caixa exemplo">
+    <span class="rotulo">Exemplo</span>
+    <p>A <strong>nafta</strong> (derivada de petróleo) ficou muito barata →
+    produzir plástico ficou muito barato → a montanha de resíduo plástico.
+    Preço baixo do insumo = externalidade barata de gerar.</p>
+  </div>
+
+  <h3>A curva central da aula: Produção × Resíduos, Custos e Benefícios</h3>
+
+  <p>No gráfico com <strong>nível de produção</strong> no eixo horizontal:</p>
+
+  <ul>
+    <li><strong>Benefícios</strong> (do consumo/produção) sobem, mas a taxa
+    decrescente;</li>
+    <li><strong>Custos</strong> (incluindo os danos dos resíduos) sobem de forma
+    crescente;</li>
+    <li><strong>Capacidade de absorção</strong>: corpos humanos, organismos e
+    ecossistemas absorvem uma certa quantidade de resíduo sem dano — até certo
+    ponto.</li>
+  </ul>
+
+  <p>Disso saem dois "ótimos" diferentes, e a tensão entre eles é o coração da
+  aula:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Ótimo</th>
+        <th>O que é</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Ótimo ecológico</strong></td><td>A quantidade de resíduo que a natureza <strong>consegue absorver</strong> — produzir além disso estressa o sistema</td></tr>
+      <tr><td><strong>Ótimo de Pareto (econômico)</strong></td><td>O que as <strong>preferências reveladas</strong> no mercado determinam — onde benefício marginal = custo marginal</td></tr>
+    </tbody>
+  </table>
+
+  <ul>
+    <li><strong>Não-pareto relevante</strong>: situações em que custo &gt;
+    benefício mas ninguém tem incentivo a mudar — fora do radar do mercado.</li>
+    <li><strong>Estressar a curva além do ótimo</strong>: os custos externos
+    ficam maiores que os benefícios e a <strong>resiliência</strong> do sistema
+    é reduzida — o ecossistema perde a capacidade de se recuperar.</li>
+  </ul>
+
+  <div class="widget" id="w-otimo">
+    <span class="rotulo">Simulação · Dois ótimos e a taxa de desconto</span>
+    <svg id="ot-svg" viewBox="0 0 460 250" role="img" aria-label="Curvas de benefício e custo da produção, com ótimo ecológico e ótimo econômico"></svg>
+    <div class="controles">
+      <label>Taxa de desconto da sociedade <span class="valor" id="ot-r-v">10%</span>
+        <input type="range" id="ot-r" min="0" max="20" value="10" step="1">
+      </label>
+    </div>
+    <p class="nota" id="ot-nota">A linha vertical é a capacidade de absorção da
+    natureza (ótimo ecológico). O ponto dourado é o ótimo econômico (BMg = CMg).
+    O ponto verde é o nível que a sociedade escolhe ao ponderar os custos
+    futuros pela taxa de desconto: desconto alto → o futuro vale pouco → o
+    escolhido encosta no ótimo econômico; desconto baixo → o futuro importa → o
+    escolhido recua para dentro da capacidade de absorção.</p>
+  </div>
+
+  <h2><span class="num">2.4</span>A taxa de desconto decide qual ótimo vence</h2>
+
+  <ul>
+    <li><strong>Conclusão da aula</strong>: a escolha entre ficar mais perto do
+    <strong>ótimo ecológico</strong> ou do <strong>ótimo econômico</strong>
+    depende da <strong>taxa de desconto</strong> da sociedade. Compara-se o
+    <strong>somatório</strong> de custos e benefícios ao longo do tempo nos dois
+    casos.</li>
+    <li>Colocar a <strong>curva de custos futuros</strong> no gráfico
+    <strong>inclina</strong> a análise: os custos que parecem aceitáveis hoje
+    crescem no tempo, empurrando o ótimo para níveis menores de degradação.</li>
+  </ul>
+
+  <div class="caixa destaque">
+    <span class="rotulo">Intuição</span>
+    <p>Taxa de desconto alta = "o futuro vale pouco" → vale extrair e poluir
+    agora (ótimo econômico de curto prazo). Taxa baixa = "o futuro importa" →
+    vale preservar (puxa para o ótimo ecológico).</p>
+  </div>
+
+  <div class="caixa exemplo">
+    <span class="rotulo">Exemplo</span>
+    <p><strong>A pergunta das civilizações</strong>: por que egípcios e maias
+    adotaram estratégias que eles <strong>sabiam</strong> que colapsariam em 100
+    anos? Resposta candidata: taxa de desconto alta + quem decide não é quem
+    paga (Becker de novo).</p>
+  </div>
+
+  <h2><span class="num">2.5</span>Recursos renováveis: por que pescadores são pobres?</h2>
+
+  <p>Pergunta dos economistas dos anos 80: <strong>por que pescadores são
+  pobres?</strong> Resposta da <strong>teoria dos recursos renováveis</strong>:</p>
+
+  <ul>
+    <li>Com <strong>acesso livre</strong> (mar aberto, sem dono), cada pescador
+    pesca o máximo — se ele poupar o peixe, outro pesca no lugar.</li>
+    <li>Se a atividade fica pouco atraente, as pessoas <strong>desistem antes
+    que o recurso acabe</strong> — o que salva o estoque não é a cooperação, é a
+    fuga.</li>
+    <li><strong>Não há colaboração voluntária</strong> espontânea entre
+    competidores.</li>
+    <li>O recurso <strong>geraria renda apenas se fosse privatizado ou
+    regulado</strong> (tirando o acesso livre) — mas fazer isso no mar é
+    <strong>muito complicado</strong>.</li>
+  </ul>
+
+  <div class="caixa destaque">
+    <span class="rotulo">Intuição</span>
+    <p>É o mesmo problema da externalidade, mas no tempo e no estoque — cada
+    pescador impõe aos outros um custo (menos peixe amanhã) que não paga. Sem
+    preço, sem dono, sem freio.</p>
+  </div>
+
+  <div class="widget" id="w-pesca">
+    <span class="rotulo">Simulação · Estoque pesqueiro: acesso livre × regulado</span>
+    <svg id="pe-svg" viewBox="0 0 460 250" role="img" aria-label="Evolução do estoque pesqueiro ao longo dos anos com acesso livre e com regulação"></svg>
+    <div class="controles">
+      <label>Esforço de pesca (acesso livre) <span class="valor" id="pe-e-v">0,90</span>
+        <input type="range" id="pe-e" min="30" max="120" value="90" step="5">
+      </label>
+    </div>
+    <p class="nota">Duas trajetórias do estoque ao longo de 30 anos. Na curva
+    terracota (<strong>acesso livre</strong>), cada pescador pesca o máximo: o
+    estoque desaba até a atividade ficar pouco atraente e as pessoas
+    <strong>desistirem</strong> — o que salva o recurso é a fuga, não a
+    cooperação. Na curva verde (<strong>regulado</strong>, cota no rendimento
+    máximo sustentável), o estoque se mantém e gera renda ano após ano. Aumente
+    o esforço e veja a fuga chegar mais cedo e o estoque final ficar menor.</p>
+  </div>
+
+  <h2><span class="num">2.6</span>O caminho da política: precificar para chegar ao ótimo</h2>
+
+  <ul>
+    <li>Economistas olham para <strong>produção ou consumo</strong> — é ali que
+    se pode agir.</li>
+    <li><strong>Primeiro desafio prático</strong>: calcular a <strong>função de
+    dano</strong> (ou função de impacto) — quanto custa, em dinheiro, cada
+    unidade a mais de poluição. Sem ela, não há preço correto.</li>
+    <li><strong>Empresas só reduzem danos se houver ganho</strong> para elas —
+    daí a necessidade de fazer a externalidade "entrar na conta" (imposto,
+    mercado de licenças, regulação).</li>
+    <li><strong>Escola Austríaca</strong>: com inspirações em Darwin, Freud e
+    Newton, lembra que <strong>preferências são diferentes</strong> — há
+    altruístas e egoístas. A política não pode depender de boa vontade; tem que
+    funcionar para o egoísta também.</li>
+    <li>Objetivo final: <strong>precificar as externalidades de forma a levar ao
+    ótimo</strong>.</li>
+  </ul>
+
+  <h2><span class="num">2.7</span>⚠️ IMPORTANTE — o papel do progresso técnico</h2>
+
+  <div class="caixa atencao">
+    <span class="rotulo">⚠️ Importante</span>
+    <p>Na curva de resíduos da aula, o <strong>progresso técnico está
+    dado</strong> (fixo). Ou seja: a curva mostra o trade-off com a tecnologia
+    de hoje.</p>
+  </div>
+
+  <p>A <a href="ambiental-aula-01.html">Curva de Kuznets ambiental</a> acontece quando a
+  economia consegue <strong>derrubar a própria curva de resíduos</strong> —
+  tornar-se mais eficiente, emitindo menos resíduo por unidade produzida. O
+  turning point não é "ficar rico e se importar"; é <strong>mudar a
+  tecnologia</strong> que gera o resíduo.</p>
+
+  <div class="caixa destaque">
+    <span class="rotulo">Intuição</span>
+    <p>A curva da seção 2.3 é estática (foto com a tecnologia de hoje). Kuznets
+    é dinâmico (filme em que a tecnologia melhora). As duas aulas se encaixam
+    assim.</p>
+  </div>
+
+  <div class="widget" id="w-tech">
+    <span class="rotulo">Simulação · Progresso técnico derruba a curva de resíduos</span>
+    <svg id="tc-svg" viewBox="0 0 460 250" role="img" aria-label="Curva de resíduos com e sem progresso técnico"></svg>
+    <div class="controles">
+      <label class="check"><input type="checkbox" id="tc-chk"> Com progresso técnico (a tecnologia melhora ao longo do tempo)</label>
+    </div>
+    <p class="nota" id="tc-nota">Com a tecnologia de hoje (curva dada), os
+    resíduos só sobem com a produção — é a foto estática da seção 2.3. Ligue o
+    progresso técnico e a própria curva é derrubada: cada unidade produzida gera
+    menos resíduo, e a trajetória vira um U invertido. É assim que a Curva de
+    Kuznets ambiental acontece — não por "ficar rico e se importar", mas por
+    mudança de tecnologia.</p>
+  </div>
+
+  <h3>Mapa rápido de revisão</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Conceito</th>
+        <th>Ideia-chave</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Custo Social</strong></td><td><span class="math">CS = CP + CE</span>; <span class="math">CSMg ≥ CPMg</span></td></tr>
+      <tr><td><strong>X₁ → X₂</strong></td><td>Do equilíbrio privado ao social: produzir menos</td></tr>
+      <tr><td><strong>Externalidade não pecuniária</strong></td><td>A que passa fora do mercado — é a falha de mercado de verdade</td></tr>
+      <tr><td><strong>Ótimo ecológico × Pareto</strong></td><td>Absorção da natureza × preferências reveladas</td></tr>
+      <tr><td><strong>Taxa de desconto</strong></td><td>Decide qual ótimo vence; explica civilizações suicidas</td></tr>
+      <tr><td><strong>Pescadores pobres</strong></td><td>Acesso livre → sem colaboração → esgotamento até desistência</td></tr>
+      <tr><td><strong>Função de dano</strong></td><td>Primeiro desafio prático para precificar</td></tr>
+      <tr><td><strong>Kuznets (conexão)</strong></td><td>É a curva de resíduos caindo por progresso técnico</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Perguntas para fixar</h3>
+
+  <ol>
+    <li>Por que uma externalidade pecuniária <strong>não</strong> gera
+    ineficiência?</li>
+    <li>Se a taxa de desconto da sociedade cair, o que acontece com o nível
+    ótimo de poluição escolhido?</li>
+    <li>O que diferencia o ótimo ecológico do ótimo de Pareto — e quando eles
+    coincidem?</li>
+  </ol>
+
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var NS = 'http://www.w3.org/2000/svg';
+
+  function el(name, attrs, parent) {
+    var e = document.createElementNS(NS, name);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function txt(parent, x, y, str, attrs) {
+    var t = el('text', attrs || {}, parent);
+    t.setAttribute('x', x);
+    t.setAttribute('y', y);
+    t.setAttribute('font-family', 'Archivo, sans-serif');
+    t.textContent = str;
+    return t;
+  }
+  function axes(svg, x0, y0, x1, y1, xlab, ylab) {
+    el('line', {x1: x0, y1: y1, x2: x0, y2: y0, stroke: '#1C1917', 'stroke-width': 1.5}, svg);
+    el('line', {x1: x0, y1: y0, x2: x1, y2: y0, stroke: '#1C1917', 'stroke-width': 1.5}, svg);
+    txt(svg, x1, y0 + 16, xlab, {'font-size': 10, fill: '#6B7280', 'text-anchor': 'end'});
+    txt(svg, x0 + 2, y1 - 4, ylab, {'font-size': 10, fill: '#6B7280', 'text-anchor': 'start'});
+  }
+
+  /* ---------- Imposto pigouviano: CPMg desloca até CSMg (X1 -> X2) ---------- */
+  (function () {
+    var svg = document.getElementById('pg-svg');
+    var slider = document.getElementById('pg-t');
+    var btn = document.getElementById('pg-btn');
+    if (!svg || !slider || !btn) return;
+    var tV = document.getElementById('pg-t-v');
+    var X0 = 46, X1 = 440, Y0 = 218, Y1 = 18, QMAX = 200, PMAX = 110;
+    var CEMg = 30;
+    function px(q) { return X0 + (q / QMAX) * (X1 - X0); }
+    function py(p) { return Y0 - (p / PMAX) * (Y0 - Y1); }
+    function dem(q) { return 100 - 0.45 * q; }
+    function cpmg(q, t) { return 10 + 0.35 * q + t; }
+    var qX1 = (100 - 10) / (0.45 + 0.35);        // equilíbrio privado
+    var qX2 = (100 - 10 - CEMg) / (0.45 + 0.35); // equilíbrio social
+    function draw() {
+      var t = +slider.value;
+      tV.textContent = t;
+      while (svg.firstChild) svg.removeChild(svg.firstChild);
+      axes(svg, X0, Y0, X1, Y1, 'quantidade →', 'preço / custo');
+      // demanda
+      el('line', {x1: px(0), y1: py(dem(0)), x2: px(QMAX), y2: py(dem(QMAX)),
+        stroke: '#155E75', 'stroke-width': 2.5}, svg);
+      txt(svg, px(QMAX), py(dem(QMAX)) - 6, 'demanda', {'font-size': 10, 'font-weight': 700, fill: '#155E75', 'text-anchor': 'end'});
+      // CSMg (fixo)
+      el('line', {x1: px(0), y1: py(cpmg(0, CEMg)), x2: px(QMAX), y2: py(cpmg(QMAX, CEMg)),
+        stroke: '#B45309', 'stroke-width': 2.5}, svg);
+      txt(svg, px(QMAX), py(cpmg(QMAX, CEMg)) - 6, 'CSMg', {'font-size': 10, 'font-weight': 700, fill: '#B45309', 'text-anchor': 'end'});
+      // CPMg + imposto
+      el('line', {x1: px(0), y1: py(cpmg(0, t)), x2: px(QMAX), y2: py(cpmg(QMAX, t)),
+        stroke: '#14532D', 'stroke-width': 2.5}, svg);
+      txt(svg, px(QMAX), py(cpmg(QMAX, t)) + 14, t > 0 ? 'CPMg + imposto' : 'CPMg',
+        {'font-size': 10, 'font-weight': 700, fill: '#14532D', 'text-anchor': 'end'});
+      // marcadores fixos X1 e X2
+      el('line', {x1: px(qX1), y1: Y0, x2: px(qX1), y2: py(dem(qX1)), stroke: '#6B7280', 'stroke-width': 1.2, 'stroke-dasharray': '4 4'}, svg);
+      el('line', {x1: px(qX2), y1: Y0, x2: px(qX2), y2: py(dem(qX2)), stroke: '#6B7280', 'stroke-width': 1.2, 'stroke-dasharray': '4 4'}, svg);
+      txt(svg, px(qX1), Y0 - 4, 'X₁ (privado)', {'font-size': 10, 'font-weight': 700, fill: '#6B7280', 'text-anchor': 'middle'});
+      txt(svg, px(qX2), Y0 + 26, 'X₂ (social)', {'font-size': 10, 'font-weight': 700, fill: '#6B7280', 'text-anchor': 'middle'});
+      // equilíbrio corrente
+      var qE = (100 - 10 - t) / (0.45 + 0.35);
+      el('circle', {cx: px(qE), cy: py(dem(qE)), r: 6, fill: t >= CEMg ? '#C9A227' : '#14532D'}, svg);
+      txt(svg, px(qE), py(dem(qE)) - 12,
+        t >= CEMg ? 'imposto = custo externo marginal → equilíbrio em X₂ ✓'
+                  : 'equilíbrio privado (imposto = ' + t + ')',
+        {'font-size': 10, 'font-weight': 700, fill: t >= CEMg ? '#8a7014' : '#14532D', 'text-anchor': qE > 120 ? 'end' : 'middle'});
+    }
+    slider.addEventListener('input', draw);
+    btn.addEventListener('click', function () { slider.value = CEMg; draw(); });
+    draw();
+  })();
+
+  /* ---------- Dois ótimos: benefício x custo, taxa de desconto ---------- */
+  (function () {
+    var svg = document.getElementById('ot-svg');
+    var slider = document.getElementById('ot-r');
+    var nota = document.getElementById('ot-nota');
+    if (!svg || !slider || !nota) return;
+    var rV = document.getElementById('ot-r-v');
+    var X0 = 46, X1 = 440, Y0 = 218, Y1 = 18, XMAX = 100, YMAX = 110;
+    var XECO = 55; // capacidade de absorção (ótimo ecológico)
+    function px(x) { return X0 + (x / XMAX) * (X1 - X0); }
+    function py(y) { return Y0 - (y / YMAX) * (Y0 - Y1); }
+    function ben(x) { var u = x / 100; return 100 * Math.pow(u, 0.6); }
+    function cus(x, w) { var u = x / 100; return 60 * u * u + w * 50 * Math.pow(u, 2.5); }
+    function otimo(w) { // maximiza ben - cus numericamente
+      var best = 0, bestV = -1e9;
+      for (var x = 1; x <= XMAX; x += 0.5) {
+        var v = ben(x) - cus(x, w);
+        if (v > bestV) { bestV = v; best = x; }
+      }
+      return best;
+    }
+    function draw() {
+      var r = +slider.value;
+      var w = (20 - r) / 20; // peso dos custos futuros
+      rV.textContent = r + '%';
+      while (svg.firstChild) svg.removeChild(svg.firstChild);
+      axes(svg, X0, Y0, X1, Y1, 'produção →', 'benefício / custo');
+      // curva de benefícios
+      var d = '';
+      for (var x = 0; x <= XMAX; x += 2) {
+        d += (x === 0 ? 'M' : 'L') + px(x).toFixed(1) + ' ' + py(ben(x)).toFixed(1) + ' ';
+      }
+      el('path', {d: d, fill: 'none', stroke: '#14532D', 'stroke-width': 3, 'stroke-linecap': 'round'}, svg);
+      txt(svg, px(XMAX), py(ben(XMAX)) - 8, 'benefícios', {'font-size': 10, 'font-weight': 700, fill: '#14532D', 'text-anchor': 'end'});
+      // curva de custos (com peso dos custos futuros)
+      d = '';
+      for (x = 0; x <= XMAX; x += 2) {
+        d += (x === 0 ? 'M' : 'L') + px(x).toFixed(1) + ' ' + py(cus(x, w)).toFixed(1) + ' ';
+      }
+      el('path', {d: d, fill: 'none', stroke: '#B45309', 'stroke-width': 3, 'stroke-linecap': 'round'}, svg);
+      txt(svg, px(XMAX), py(cus(XMAX, w)) + 16, 'custos (ponderados)',
+        {'font-size': 10, 'font-weight': 700, fill: '#B45309', 'text-anchor': 'end'});
+      // ótimo ecológico (capacidade de absorção)
+      el('line', {x1: px(XECO), y1: Y0, x2: px(XECO), y2: Y1, stroke: '#155E75', 'stroke-width': 2, 'stroke-dasharray': '6 4'}, svg);
+      txt(svg, px(XECO), Y1 + 12, 'capacidade de absorção (ótimo ecológico)',
+        {'font-size': 10, 'font-weight': 700, fill: '#155E75', 'text-anchor': 'middle'});
+      // ótimo econômico (BMg = CMg com w = 0, só custos privados de hoje)
+      var xEcon = otimo(0);
+      el('circle', {cx: px(xEcon), cy: py(ben(xEcon)), r: 5, fill: '#C9A227'}, svg);
+      txt(svg, px(xEcon) + 10, py(ben(xEcon)) + 20, 'ótimo econômico (BMg = CMg)',
+        {'font-size': 10, 'font-weight': 700, fill: '#8a7014', 'text-anchor': 'start'});
+      // ótimo escolhido (ponderando futuros pela taxa de desconto)
+      var xEsc = otimo(w);
+      el('line', {x1: px(xEsc), y1: Y0, x2: px(xEsc), y2: py(ben(xEsc)), stroke: '#14532D', 'stroke-width': 1.2, 'stroke-dasharray': '4 4'}, svg);
+      el('circle', {cx: px(xEsc), cy: py(ben(xEsc)), r: 7, fill: 'none', stroke: '#14532D', 'stroke-width': 3}, svg);
+      txt(svg, px(xEsc), Y0 + 26, 'nível escolhido: ' + Math.round(xEsc),
+        {'font-size': 10, 'font-weight': 700, fill: '#14532D', 'text-anchor': 'middle'});
+      if (r >= 15) {
+        nota.textContent = 'Taxa de desconto alta: o futuro vale pouco, os custos futuros quase não entram na conta — o nível escolhido encosta no ótimo econômico, além da capacidade de absorção. Vale extrair e poluir agora.';
+      } else if (r <= 5) {
+        nota.textContent = 'Taxa de desconto baixa: o futuro importa, os custos futuros pesam — o nível escolhido recua para dentro da capacidade de absorção, em direção ao ótimo ecológico. Vale preservar.';
+      } else {
+        nota.textContent = 'A linha vertical é a capacidade de absorção da natureza (ótimo ecológico). O ponto dourado é o ótimo econômico (BMg = CMg). O ponto verde é o nível que a sociedade escolhe ao ponderar os custos futuros pela taxa de desconto: desconto alto → o futuro vale pouco → o escolhido encosta no ótimo econômico; desconto baixo → o futuro importa → o escolhido recua para dentro da capacidade de absorção.';
+      }
+    }
+    slider.addEventListener('input', draw);
+    draw();
+  })();
+
+  /* ---------- Pescadores: acesso livre x regulado ---------- */
+  (function () {
+    var svg = document.getElementById('pe-svg');
+    var slider = document.getElementById('pe-e');
+    if (!svg || !slider) return;
+    var eV = document.getElementById('pe-e-v');
+    var X0 = 46, X1 = 440, Y0 = 218, Y1 = 18, TMAX = 30, SMAX = 100;
+    var G = 0.5, K = 100, MSY = G * K / 4;
+    function px(t) { return X0 + (t / TMAX) * (X1 - X0); }
+    function py(s) { return Y0 - (s / SMAX) * (Y0 - Y1); }
+    function draw() {
+      var e0 = +slider.value / 100;
+      eV.textContent = e0.toFixed(2).replace('.', ',');
+      while (svg.firstChild) svg.removeChild(svg.firstChild);
+      axes(svg, X0, Y0, X1, Y1, 'anos →', 'estoque');
+      // acesso livre: esforço cai (desistência) quando o estoque fica baixo
+      var s = 90, e = e0, d = '';
+      for (var t = 0; t <= TMAX; t++) {
+        d += (t === 0 ? 'M' : 'L') + px(t).toFixed(1) + ' ' + py(Math.max(s, 0)).toFixed(1) + ' ';
+        var h = Math.min(e * s, s);
+        s = s + G * s * (1 - s / K) - h;
+        if (s < 30) e = e * 0.88; // pescadores desistem quando já não compensa
+        if (s < 0) s = 0;
+      }
+      el('path', {d: d, fill: 'none', stroke: '#B45309', 'stroke-width': 3, 'stroke-linecap': 'round'}, svg);
+      // regulado: cota no rendimento máximo sustentável
+      s = 90; d = '';
+      for (t = 0; t <= TMAX; t++) {
+        d += (t === 0 ? 'M' : 'L') + px(t).toFixed(1) + ' ' + py(Math.max(s, 0)).toFixed(1) + ' ';
+        var cota = Math.min(MSY, Math.max(G * s * (1 - s / K), 0));
+        s = s + G * s * (1 - s / K) - cota;
+      }
+      el('path', {d: d, fill: 'none', stroke: '#14532D', 'stroke-width': 3, 'stroke-linecap': 'round'}, svg);
+      // legenda
+      el('line', {x1: X1 - 150, y1: Y1 + 8, x2: X1 - 128, y2: Y1 + 8, stroke: '#B45309', 'stroke-width': 3}, svg);
+      txt(svg, X1 - 122, Y1 + 12, 'acesso livre', {'font-size': 10, 'font-weight': 700, fill: '#B45309'});
+      el('line', {x1: X1 - 150, y1: Y1 + 24, x2: X1 - 128, y2: Y1 + 24, stroke: '#14532D', 'stroke-width': 3}, svg);
+      txt(svg, X1 - 122, Y1 + 28, 'regulado (cota)', {'font-size': 10, 'font-weight': 700, fill: '#14532D'});
+    }
+    slider.addEventListener('input', draw);
+    draw();
+  })();
+
+  /* ---------- Progresso técnico: derruba a curva de resíduos (Kuznets) ---------- */
+  (function () {
+    var svg = document.getElementById('tc-svg');
+    var chk = document.getElementById('tc-chk');
+    if (!svg || !chk) return;
+    var X0 = 46, X1 = 440, Y0 = 218, Y1 = 18, XMAX = 100, YMAX = 110;
+    function px(x) { return X0 + (x / XMAX) * (X1 - X0); }
+    function py(y) { return Y0 - (y / YMAX) * (Y0 - Y1); }
+    function draw() {
+      var comTech = chk.checked;
+      while (svg.firstChild) svg.removeChild(svg.firstChild);
+      axes(svg, X0, Y0, X1, Y1, 'produção acumulada / tempo →', 'resíduos');
+      // curva estática (tecnologia dada)
+      var d = '';
+      for (var x = 0; x <= XMAX; x += 2) {
+        var u = x / 100;
+        var y = 90 * Math.pow(u, 1.6);
+        d += (x === 0 ? 'M' : 'L') + px(x).toFixed(1) + ' ' + py(y).toFixed(1) + ' ';
+      }
+      el('path', {d: d, fill: 'none', stroke: comTech ? '#9CA3AF' : '#B45309', 'stroke-width': 3,
+        'stroke-linecap': 'round', 'stroke-dasharray': comTech ? '6 4' : 'none'}, svg);
+      txt(svg, px(XMAX), py(90) - 8, comTech ? 'tecnologia de hoje (dada)' : 'resíduos (tecnologia dada)',
+        {'font-size': 10, 'font-weight': 700, fill: comTech ? '#9CA3AF' : '#B45309', 'text-anchor': 'end'});
+      if (comTech) {
+        // com progresso técnico: menos resíduo por unidade — a curva é derrubada
+        d = '';
+        for (x = 0; x <= XMAX; x += 2) {
+          var u2 = x / 100;
+          var tech = Math.pow(1 - 0.75 * u2, 1.2); // eficiência cresce no tempo
+          var y2 = 90 * Math.pow(u2, 1.6) * tech;
+          d += (x === 0 ? 'M' : 'L') + px(x).toFixed(1) + ' ' + py(y2).toFixed(1) + ' ';
+        }
+        el('path', {d: d, fill: 'none', stroke: '#14532D', 'stroke-width': 3, 'stroke-linecap': 'round'}, svg);
+        // turning point
+        var tp = 0, tpV = -1;
+        for (x = 0; x <= XMAX; x += 0.5) {
+          var uu = x / 100;
+          var yy = 90 * Math.pow(uu, 1.6) * Math.pow(1 - 0.75 * uu, 1.2);
+          if (yy > tpV) { tpV = yy; tp = x; }
+        }
+        el('circle', {cx: px(tp), cy: py(tpV), r: 5, fill: '#C9A227'}, svg);
+        txt(svg, px(tp), py(tpV) - 10, 'turning point (Kuznets)',
+          {'font-size': 10, 'font-weight': 700, fill: '#8a7014', 'text-anchor': 'middle'});
+        txt(svg, px(XMAX), py(90 * 1 * Math.pow(0.25, 1.2)) + 18, 'com progresso técnico',
+          {'font-size': 10, 'font-weight': 700, fill: '#14532D', 'text-anchor': 'end'});
+      }
+    }
+    chk.addEventListener('change', draw);
+    draw();
+  })();
+})();
+</script>
+
+</body>
+</html>
