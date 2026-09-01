@@ -511,6 +511,18 @@
     escolhido recua para dentro da capacidade de absorção.</p>
   </div>
 
+  <div class="widget" id="w-gap">
+    <span class="rotulo">Simulação · Gap ecológico — e se a capacidade de absorção cair?</span>
+    <svg id="gp-svg" viewBox="0 0 460 250" role="img" aria-label="Resíduos, benefícios, custos e capacidade de absorção em função da produção, com o gap ecológico sombreado"></svg>
+    <div class="controles">
+      <label>Nível de produção <span class="valor" id="gp-x-v">69</span>
+        <input type="range" id="gp-x" min="10" max="100" value="69" step="1">
+      </label>
+      <label class="check"><input type="checkbox" id="gp-chk"> Absorção reduzida (ecossistema degradado)</label>
+    </div>
+    <p class="nota" id="gp-nota"></p>
+  </div>
+
   <h2><span class="num">2.4</span>A taxa de desconto decide qual ótimo vence</h2>
 
   <ul>
@@ -813,6 +825,106 @@
       }
     }
     slider.addEventListener('input', draw);
+    draw();
+  })();
+
+  /* ---------- Gap ecológico: absorção normal x reduzida ---------- */
+  (function () {
+    var svg = document.getElementById('gp-svg');
+    var slider = document.getElementById('gp-x');
+    var chk = document.getElementById('gp-chk');
+    var nota = document.getElementById('gp-nota');
+    if (!svg || !slider || !chk || !nota) return;
+    var xV = document.getElementById('gp-x-v');
+    var X0 = 46, X1 = 440, Y0 = 218, Y1 = 18, XMAX = 100, YMAX = 110;
+    var A_NORM = 48, A_RED = 30; // capacidade de absorção: normal / reduzida
+    function px(x) { return X0 + (x / XMAX) * (X1 - X0); }
+    function py(y) { return Y0 - (y / YMAX) * (Y0 - Y1); }
+    function ben(x) { var u = x / 100; return 100 * Math.pow(u, 0.6); }
+    function res(x) { var u = x / 100; return 90 * Math.pow(u, 1.15); }
+    function cus(x) { var u = x / 100; return 50 * u * u; }
+    function xEco(A) { // produção onde resíduo = absorção (ótimo ecológico)
+      for (var x = 0; x <= XMAX; x += 0.1) { if (res(x) >= A) return x; }
+      return XMAX;
+    }
+    function gapArea(A, xP) { // integral de (resíduo - absorção) além do ótimo ecológico
+      var xe = xEco(A);
+      if (xP <= xe) return 0;
+      var s = 0;
+      for (var x = xe; x < xP; x += 1) s += Math.max(res(x) - A, 0);
+      return s;
+    }
+    function curva(fn) {
+      var d = '';
+      for (var x = 0; x <= XMAX; x += 2) {
+        d += (x === 0 ? 'M' : 'L') + px(x).toFixed(1) + ' ' + py(fn(x)).toFixed(1) + ' ';
+      }
+      return d;
+    }
+    var xeNorm = xEco(A_NORM), xeRed = xEco(A_RED);
+    function draw() {
+      var A = chk.checked ? A_RED : A_NORM;
+      var xP = +slider.value;
+      var xe = xEco(A);
+      xV.textContent = xP;
+      while (svg.firstChild) svg.removeChild(svg.firstChild);
+      axes(svg, X0, Y0, X1, Y1, 'nível de produção →', 'resíduos / custos');
+      // gap ecológico sombreado: resíduos acima da absorção, até a produção corrente
+      if (xP > xe) {
+        var d = 'M' + px(xe).toFixed(1) + ' ' + py(A).toFixed(1) + ' ';
+        for (var x = xe; x <= xP; x += 1) {
+          d += 'L' + px(x).toFixed(1) + ' ' + py(res(x)).toFixed(1) + ' ';
+        }
+        d += 'L' + px(xP).toFixed(1) + ' ' + py(A).toFixed(1) + ' Z';
+        el('path', {d: d, fill: '#B45309', 'fill-opacity': 0.22, stroke: 'none'}, svg);
+        txt(svg, (px(xe) + px(xP)) / 2, py(A) + 14, 'gap ecológico',
+          {'font-size': 10, 'font-weight': 700, fill: '#B45309', 'text-anchor': 'middle'});
+      }
+      // capacidade de absorção
+      el('line', {x1: X0, y1: py(A), x2: X1, y2: py(A), stroke: '#155E75', 'stroke-width': 2.5}, svg);
+      txt(svg, X0 + 4, py(A) - 6, chk.checked ? 'capacidade de absorção (reduzida)' : 'capacidade de absorção',
+        {'font-size': 10, 'font-weight': 700, fill: '#155E75', 'text-anchor': 'start'});
+      // benefícios
+      el('path', {d: curva(ben), fill: 'none', stroke: '#14532D', 'stroke-width': 3, 'stroke-linecap': 'round'}, svg);
+      txt(svg, px(XMAX), py(ben(XMAX)) - 8, 'benefícios', {'font-size': 10, 'font-weight': 700, fill: '#14532D', 'text-anchor': 'end'});
+      // resíduos gerados
+      el('path', {d: curva(res), fill: 'none', stroke: '#1C1917', 'stroke-width': 3, 'stroke-linecap': 'round'}, svg);
+      txt(svg, px(XMAX), py(res(XMAX)) + 16, 'resíduos gerados', {'font-size': 10, 'font-weight': 700, fill: '#1C1917', 'text-anchor': 'end'});
+      // custo total (privado + externo)
+      el('path', {d: curva(cus), fill: 'none', stroke: '#B45309', 'stroke-width': 3, 'stroke-linecap': 'round'}, svg);
+      txt(svg, px(XMAX), py(cus(XMAX)) - 8, 'custos (privado + externo)', {'font-size': 10, 'font-weight': 700, fill: '#B45309', 'text-anchor': 'end'});
+      // ótimo ecológico (resíduo = absorção)
+      el('line', {x1: px(xe), y1: Y0, x2: px(xe), y2: Y1, stroke: '#C9A227', 'stroke-width': 2, 'stroke-dasharray': '6 4'}, svg);
+      txt(svg, px(xe) + 5, Y1 + 12, 'ótimo ecológico ≈ ' + Math.round(xe),
+        {'font-size': 10, 'font-weight': 700, fill: '#8a7014', 'text-anchor': 'start'});
+      // produção corrente
+      el('line', {x1: px(xP), y1: Y0, x2: px(xP), y2: py(res(xP)), stroke: '#6B7280', 'stroke-width': 1.2, 'stroke-dasharray': '4 4'}, svg);
+      el('circle', {cx: px(xP), cy: py(res(xP)), r: 6, fill: '#C9A227'}, svg);
+      txt(svg, px(xP), Y0 + 26, 'produção: ' + xP,
+        {'font-size': 10, 'font-weight': 700, fill: '#1C1917', 'text-anchor': 'middle'});
+      // nota dinâmica
+      if (chk.checked && xP > xe) {
+        nota.textContent = 'Com a absorção reduzida, o ótimo ecológico cai de ' + Math.round(xeNorm) +
+          ' para ' + Math.round(xeRed) + ' e a área do gap cresce na mesma produção: degradar hoje ' +
+          'encolhe o espaço seguro de amanhã. Um ecossistema já estressado absorve menos resíduo — ' +
+          'é a perda de resiliência da seção 2.3.';
+      } else if (chk.checked) {
+        nota.textContent = 'Com a absorção reduzida, o ótimo ecológico cai de ' + Math.round(xeNorm) +
+          ' para ' + Math.round(xeRed) + ' — a produção corrente ainda está dentro do limite, mas a ' +
+          'margem de segurança encolheu. Suba a produção e o gap aparece bem antes do que apareceria ' +
+          'com o ecossistema saudável.';
+      } else if (xP <= xe) {
+        nota.textContent = 'Produção dentro da capacidade de absorção: a natureza ainda dá conta do ' +
+          'resíduo e não há gap ecológico. Suba o nível de produção — ou marque "absorção reduzida" — ' +
+          'e veja a área terracota aparecer.';
+      } else {
+        nota.textContent = 'A área terracota é o gap ecológico: resíduos além do que a natureza absorve, ' +
+          'do ótimo ecológico (' + Math.round(xe) + ') até a produção corrente (' + xP + '). ' +
+          'Marque "absorção reduzida" para ver o que acontece quando o ecossistema já está degradado.';
+      }
+    }
+    slider.addEventListener('input', draw);
+    chk.addEventListener('change', draw);
     draw();
   })();
 
