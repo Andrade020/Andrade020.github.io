@@ -1,93 +1,57 @@
 /* shared site logic */
 (function () {
-  // theme
   const root = document.body;
-  const savedTheme = localStorage.getItem('lra-theme');
-  if (savedTheme === 'light') root.classList.add('light-mode');
-  window.toggleTheme = function () {
-    root.classList.toggle('light-mode');
-    const isLight = root.classList.contains('light-mode');
-    localStorage.setItem('lra-theme', isLight ? 'light' : 'dark');
-    const btn = document.querySelector('[data-action="theme"]');
-    if (btn) btn.textContent = isLight ? '☾' : '☀';
-  };
+  const html = document.documentElement;
+  const isPT = () => root.classList.contains('lang-pt');
+  const isLight = () => root.classList.contains('light-mode');
+
+  // theme
+  if (localStorage.getItem('lra-theme') === 'light') root.classList.add('light-mode');
 
   // language
-  const savedLang = localStorage.getItem('lra-lang');
-  if (savedLang === 'pt') root.classList.add('lang-pt');
-  function syncLangBtn() {
-    const isPT = root.classList.contains('lang-pt');
+  if (localStorage.getItem('lra-lang') === 'pt') root.classList.add('lang-pt');
+
+  // keep <html lang>, control labels and button glyphs in step with the active language/theme
+  function syncControls() {
+    const pt = isPT();
+    html.lang = pt ? 'pt-BR' : 'en';
+
     document.querySelectorAll('[data-lang-btn]').forEach(btn => {
-      btn.innerHTML = isPT
+      btn.innerHTML = pt
         ? '<span>en</span> · <span class="is-current">pt</span>'
         : '<span class="is-current">en</span> · <span>pt</span>';
+      const label = pt ? 'Mudar idioma para inglês' : 'Switch language to Portuguese';
+      btn.setAttribute('aria-label', label);
+      btn.title = label;
+    });
+
+    document.querySelectorAll('[data-action="theme"]').forEach(btn => {
+      const light = isLight();
+      btn.textContent = light ? '☾' : '☀';
+      const label = light
+        ? (pt ? 'Mudar para o tema escuro' : 'Switch to dark theme')
+        : (pt ? 'Mudar para o tema claro' : 'Switch to light theme');
+      btn.setAttribute('aria-label', label);
+      btn.title = label;
+    });
+
+    document.querySelectorAll('.nav').forEach(nav => {
+      nav.setAttribute('aria-label', pt ? 'Principal' : 'Main');
     });
   }
-  window.toggleLang = function () {
-    root.classList.toggle('lang-pt');
-    localStorage.setItem('lra-lang', root.classList.contains('lang-pt') ? 'pt' : 'en');
-    syncLangBtn();
+
+  window.toggleTheme = function () {
+    root.classList.toggle('light-mode');
+    localStorage.setItem('lra-theme', isLight() ? 'light' : 'dark');
+    syncControls();
   };
 
-  // wildcard slot — randomize on each load
-  function rollWildcard() {
-    const slot = document.getElementById('wildcard-slot');
-    if (!slot) return;
-    const pool = [
-      {
-        tag: 'research',
-        tagLabel: 'Research',
-        tagLabelPt: 'Pesquisa',
-        title: 'Spatiotemporal Poisson Processes',
-        titlePt: 'Processos de Poisson Espaço-Temporais',
-        desc: 'MSc research on parameter estimation when location data is incomplete: a likelihood that respects what you actually observe. Published in <em>Scientific Reports.</em>',
-        descPt: 'Pesquisa de mestrado sobre estimação quando dados de localização estão incompletos: uma verossimilhança que respeita o que de fato se observa. Publicada na <em>Scientific Reports.</em>',
-        stack: 'R · Maximum Likelihood · Stochastic Processes',
-        href: 'publications.html',
-      },
-      {
-        tag: 'open',
-        tagLabel: 'Open source',
-        tagLabelPt: 'Open source',
-        title: 'Krvo',
-        desc: 'Email automation via Microsoft Graph. GUI + CLI, used in production to dispatch daily risk reports from my Airflow pipelines.',
-        descPt: 'Automação de e-mail via Microsoft Graph. GUI + CLI, usado em produção para disparar relatórios diários dos meus pipelines do Airflow.',
-        stack: 'Python · Microsoft Graph · Azure AD',
-        href: 'https://github.com/Andrade020/krvo',
-      },
-      {
-        tag: 'open',
-        tagLabel: 'Open source',
-        tagLabelPt: 'Open source',
-        title: 'Prisma',
-        desc: 'Combinatorial-optimization playground built on a paper co-authored with Victor Hugo Nascimento (FGV): greedy max-coverage, simulated annealing, and Monte Carlo, all client-side. Applied here to Brazilian lotteries.',
-        descPt: 'Playground de otimização combinatória com base num artigo escrito com Victor Hugo Nascimento (FGV): greedy max-coverage, simulated annealing e Monte Carlo, tudo client-side. Aplicado aqui a loterias brasileiras.',
-        stack: 'React · TypeScript · Vite · Web Worker',
-        href: 'project-prisma.html',
-      },
-    ];
-    const pick = pool[Math.floor(Math.random() * pool.length)];
-    const titlePt = pick.titlePt || pick.title;
-    const tagLabelPt = pick.tagLabelPt || pick.tagLabel;
-    slot.innerHTML = `
-      <div class="selected__head">
-        <span class="selected__num">04.</span>
-        <span class="tag ${pick.tag}" data-lang-en>${pick.tagLabel}</span>
-        <span class="tag ${pick.tag}" data-lang-pt>${tagLabelPt}</span>
-      </div>
-      <h3 class="selected__title" data-lang-en>${pick.title}</h3>
-      <h3 class="selected__title" data-lang-pt>${titlePt}</h3>
-      <p class="selected__desc" data-lang-en>${pick.desc}</p>
-      <p class="selected__desc" data-lang-pt>${pick.descPt}</p>
-      <div class="selected__stack">${pick.stack}</div>
-      <a href="${pick.href}" class="cover" ${pick.href.startsWith('http') ? 'target="_blank" rel="noopener"' : ''}></a>
-    `;
-  }
+  window.toggleLang = function () {
+    root.classList.toggle('lang-pt');
+    localStorage.setItem('lra-lang', isPT() ? 'pt' : 'en');
+    syncControls();
+    document.dispatchEvent(new CustomEvent('lra:langchange'));
+  };
 
-  document.addEventListener('DOMContentLoaded', () => {
-    syncLangBtn();
-    const themeBtn = document.querySelector('[data-action="theme"]');
-    if (themeBtn) themeBtn.textContent = root.classList.contains('light-mode') ? '☾' : '☀';
-    rollWildcard();
-  });
+  document.addEventListener('DOMContentLoaded', syncControls);
 })();

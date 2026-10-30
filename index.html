@@ -18,7 +18,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
-<body class="dark-mode">
+<body class="dark-mode home">
+<a class="skip" href="#main"><span data-lang-en>Skip to content</span><span data-lang-pt>Ir para o conteúdo</span></a>
 
 <header class="site-header">
   <div class="site-header__inner">
@@ -29,7 +30,7 @@
       <span class="brand__pos" data-lang-pt>· Economista &amp; Cientista de Dados</span>
     </a>
     <nav class="nav">
-      <a href="index.html" class="is-active" data-lang-en>About</a><a href="index.html" class="is-active" data-lang-pt>Sobre</a>
+      <a href="index.html" class="is-active" aria-current="page" data-lang-en>About</a><a href="index.html" class="is-active" aria-current="page" data-lang-pt>Sobre</a>
       <a href="production.html" data-lang-en>Production</a><a href="production.html" data-lang-pt>Produção</a>
       <a href="projects.html" data-lang-en>Open source</a><a href="projects.html" data-lang-pt>Open source</a>
       <a href="publications.html" data-lang-en>Research</a><a href="publications.html" data-lang-pt>Pesquisa</a>
@@ -42,9 +43,9 @@
   </div>
 </header>
 
-<main>
+<main id="main">
   <!-- HERO -->
-  <section class="hero wrap" data-screen-label="01 Hero">
+  <section class="hero hero--compact wrap" data-screen-label="01 Hero">
     <div class="hero__grid">
       <div class="hero__intro">
         <div class="eyebrow">
@@ -56,160 +57,84 @@
         <h1 data-lang-pt>Economia, estatística e os sistemas que transformam <em>dados em&nbsp;decisão.</em></h1>
 
         <p class="hero__lede" data-lang-en>
-          Economist by training (FGV EPGE) and Master in Applied Mathematics &amp; Data Science (FGV EMAp).
-          I work at the intersection of financial markets, data infrastructure and statistical research,
-          currently at <strong>Porto Real Asset</strong>.
+          Economist and data scientist working in credit funds: data infrastructure, risk models and quantitative research.
         </p>
         <p class="hero__lede" data-lang-pt>
-          Economista de formação (FGV EPGE) e Mestre em Matemática Aplicada &amp; Ciência de Dados (FGV EMAp).
-          Atuo na interseção entre mercado financeiro, infraestrutura de dados e pesquisa estatística,
-          hoje na <strong>Porto Real Asset</strong>.
+          Economista e cientista de dados em fundos de crédito: infraestrutura de dados, modelos de risco e pesquisa quantitativa.
         </p>
 
-        <div class="hero__meta">
-          <span style="display:inline-flex;align-items:center;gap:7px;">
-            <span class="dot"></span>
-            <svg class="porto-mark" width="14" height="16" viewBox="0 0 140 164" aria-hidden="true">
-              <path class="pm-shield" d="M22 18 H118 V90 C118 128 96 152 70 156 C44 152 22 128 22 90 Z"/>
-              <g class="pm-glyph">
-                <path d="M50 42 V126"/>
-                <path d="M50 48 L84 40 V70 L64 78 L50 70 Z"/>
-                <path d="M58 82 L80 112"/>
-              </g>
-            </svg>
-            <span data-lang-en>Currently at Porto Real Asset</span><span data-lang-pt>Atualmente na Porto Real Asset</span>
-          </span>
-          <span>MSc · FGV EMAp</span>
-          <span>BSc · FGV EPGE</span>
-          <a href="mailto:lucas_r_andrade@hotmail.com">lucas_r_andrade@hotmail.com</a>
+        <div class="hero__status">
+          <span class="dot"></span>
+          <svg class="porto-mark" width="14" height="16" viewBox="0 0 140 164" aria-hidden="true">
+            <path class="pm-shield" d="M22 18 H118 V90 C118 128 96 152 70 156 C44 152 22 128 22 90 Z"/>
+            <g class="pm-glyph">
+              <path d="M50 42 V126"/>
+              <path d="M50 48 L84 40 V70 L64 78 L50 70 Z"/>
+              <path d="M58 82 L80 112"/>
+            </g>
+          </svg>
+          <span data-lang-en>Currently at <strong>Porto Real Asset</strong></span>
+          <span data-lang-pt>Atualmente na <strong>Porto Real Asset</strong></span>
+        </div>
+
+        <div class="hero__cta">
+          <a href="assets/CV_Lucas_Andrade.pdf" target="_blank" rel="noopener" class="btn btn--primary" data-lang-en>Download CV</a>
+          <a href="assets/CV_Lucas_Andrade.pdf" target="_blank" rel="noopener" class="btn btn--primary" data-lang-pt>Baixar CV</a>
+          <a href="https://github.com/Andrade020" target="_blank" rel="noopener" class="btn">GitHub</a>
+          <a href="https://www.linkedin.com/in/lucas-rafael-de-andrade/" target="_blank" rel="noopener" class="btn">LinkedIn</a>
+          <a href="mailto:lucas_r_andrade@hotmail.com" class="btn" data-lang-en>Email</a>
+          <a href="mailto:lucas_r_andrade@hotmail.com" class="btn" data-lang-pt>E-mail</a>
         </div>
       </div>
 
-      <div class="hero__right">
-        <figure class="hero__portrait-wrap">
-          <img class="hero__portrait" src="assets/foto_LIN.png" alt="Lucas R. Andrade" loading="eager" decoding="async">
-        </figure>
-      </div>
+      <figure class="hero__portrait-sm">
+        <img src="assets/foto_perfil_redonda.jpg" alt="Lucas R. Andrade" width="400" height="400" loading="eager" decoding="async">
+      </figure>
     </div>
   </section>
 
-  <!-- DISPATCH BOARD -->
-  <section class="dispatch wrap" data-screen-label="02 Dispatch">
-    <div class="dispatch__head">
-      <span class="section-label" data-lang-en>Explore</span>
-      <span class="section-label" data-lang-pt>Explorar</span>
+  <!-- AT A GLANCE -->
+  <section class="section wrap glance-sec" data-screen-label="02 At a glance">
+    <div class="section__head">
+      <h2 class="section__title" data-lang-en>At a glance</h2>
+      <h2 class="section__title" data-lang-pt>Em resumo</h2>
     </div>
-
-    <div class="dispatch__grid dispatch__grid--4">
-      <a href="production.html" class="dispatch-card">
-        <span class="dispatch-card__num">01.</span>
-        <span class="dispatch-card__title" data-lang-en>Production</span>
-        <span class="dispatch-card__title" data-lang-pt>Produção</span>
-        <span class="dispatch-card__desc" data-lang-en>The pipeline orchestration, file-based data lake, cash-flow engine, and credit-risk models I build at Porto Real Asset.</span>
-        <span class="dispatch-card__desc" data-lang-pt>A orquestração de pipelines, o data lake baseado em arquivos, o motor de fluxo de caixa e os modelos de risco de crédito que construo na Porto Real Asset.</span>
-        <span class="dispatch-card__foot">
-          <span data-lang-en>Production systems</span><span data-lang-pt>Sistemas em produção</span>
-          <span class="dispatch-card__arrow">→</span>
-        </span>
-      </a>
-
-      <a href="projects.html" class="dispatch-card">
-        <span class="dispatch-card__num">02.</span>
-        <span class="dispatch-card__title" data-lang-en>Open source</span>
-        <span class="dispatch-card__title" data-lang-pt>Open source</span>
-        <span class="dispatch-card__desc" data-lang-en>Personal projects released on GitHub, including a combinatorial-optimization engine and a production email-automation tool.</span>
-        <span class="dispatch-card__desc" data-lang-pt>Projetos pessoais publicados no GitHub, incluindo um motor de otimização combinatória e uma ferramenta de automação de e-mail usada em produção.</span>
-        <span class="dispatch-card__foot">
-          <span data-lang-en>Open-source projects</span><span data-lang-pt>Projetos open source</span>
-          <span class="dispatch-card__arrow">→</span>
-        </span>
-      </a>
-
-      <a href="publications.html" class="dispatch-card">
-        <span class="dispatch-card__num">03.</span>
-        <span class="dispatch-card__title" data-lang-en>Research</span>
-        <span class="dispatch-card__title" data-lang-pt>Pesquisa</span>
-        <span class="dispatch-card__desc" data-lang-en>MSc work on spatiotemporal Poisson processes with missing data, published in <em>Scientific Reports.</em> Plus notes written while shipping in production.</span>
-        <span class="dispatch-card__desc" data-lang-pt>Trabalho de mestrado sobre processos de Poisson espaço-temporais com dados faltantes, publicado no <em>Scientific Reports.</em> Mais notas escritas durante o trabalho em produção.</span>
-        <span class="dispatch-card__foot">
-          <span data-lang-en>Research &amp; papers</span><span data-lang-pt>Pesquisa &amp; artigos</span>
-          <span class="dispatch-card__arrow">→</span>
-        </span>
-      </a>
-
-      <a href="lab.html" class="dispatch-card">
-        <span class="dispatch-card__num">04.</span>
-        <span class="dispatch-card__title" data-lang-en>Lab</span>
-        <span class="dispatch-card__title" data-lang-pt>Laboratório</span>
-        <span class="dispatch-card__desc" data-lang-en>A continuous chessboard. A lung absorbing smoke. A thermodynamic fan. Graduate macro lecture notes: mathematical explorations and study notes.</span>
-        <span class="dispatch-card__desc" data-lang-pt>Um tabuleiro de xadrez contínuo. Um pulmão absorvendo fumaça. Um ventilador termodinâmico. Notas de macro de pós-graduação: explorações matemáticas e notas de estudo.</span>
-        <span class="dispatch-card__foot">
-          <span data-lang-en>Lab</span><span data-lang-pt>Laboratório</span>
-          <span class="dispatch-card__arrow">→</span>
-        </span>
-      </a>
-    </div>
-  </section>
-
-  <!-- CASE STUDY (abstract) -->
-  <section class="case wrap" data-screen-label="03 Case study">
-    <div class="case__layout">
-      <div class="case__intro">
-        <span class="section-label" data-lang-en>Case study</span>
-        <span class="section-label" data-lang-pt>Estudo de caso</span>
-        <h2 data-lang-en>An end-to-end view of <em>data infrastructure</em> for credit funds.</h2>
-        <h2 data-lang-pt>Uma visão end-to-end da <em>infraestrutura de dados</em> em fundos de crédito.</h2>
-
-        <p data-lang-en>A reference stack for a credit-fund data operation: raw data pulled via Selenium and public APIs, orchestrated by Apache Airflow, landed in a file-based data lake tracked by JSON manifests, and surfaced through internal dashboards and automated reports.</p>
-        <p data-lang-pt>Uma stack de referência para a operação de dados de um fundo de crédito: dados brutos baixados via Selenium e APIs públicas, orquestrados pelo Apache Airflow, persistidos num data lake baseado em arquivos e rastreado por manifests JSON, e expostos via dashboards internos e relatórios automáticos.</p>
-        <p data-lang-en>On top of that sit the domain layers: a table-driven cash-flow and liquidity engine for the fund's receivables, and an offline credit-risk scoring pipeline with SHAP-based explanations designed for credit-committee review.</p>
-        <p data-lang-pt>Sobre essa base, as camadas de domínio: um motor de fluxo de caixa e liquidez orientado a dados para os recebíveis do fundo, e um pipeline offline de score de risco de crédito com explicações baseadas em SHAP, desenhadas para revisão do comitê de crédito.</p>
+    <div class="glance">
+      <div class="glance__row glance__row--latest">
+        <span class="glance__k" data-lang-en>Latest</span><span class="glance__k" data-lang-pt>Novidade</span>
+        <span class="glance__v" id="latest-work"><a href="#recent" data-lang-en>See recent work ↓</a><a href="#recent" data-lang-pt>Ver trabalhos recentes ↓</a></span>
       </div>
-
-      <div class="case__right">
-        <div class="case__detail">
-        <div class="case-fact">
-          <div class="case-fact__k" data-lang-en>Ingestion</div>
-          <div class="case-fact__k" data-lang-pt>Ingestão</div>
-          <div class="case-fact__v" data-lang-en>Selenium &amp; APIs</div>
-          <div class="case-fact__v" data-lang-pt>Selenium &amp; APIs</div>
-          <div class="case-fact__note" data-lang-en>Raw data pulled from custodian endpoints, public macro feeds and an RPA bot, then normalised in the data lake.</div>
-          <div class="case-fact__note" data-lang-pt>Dados brutos puxados de endpoints custodiais, feeds macro públicos e um bot de RPA, normalizados no data lake.</div>
-        </div>
-        <div class="case-fact">
-          <div class="case-fact__k" data-lang-en>Orchestration</div>
-          <div class="case-fact__k" data-lang-pt>Orquestração</div>
-          <div class="case-fact__v">Apache Airflow</div>
-          <div class="case-fact__note" data-lang-en>~35 DAGs run every morning, with incremental loads, dependency-aware retries and structured logging.</div>
-          <div class="case-fact__note" data-lang-pt>~35 DAGs rodam toda manhã, com cargas incrementais, retries com dependência e logging estruturado.</div>
-        </div>
-        <div class="case-fact">
-          <div class="case-fact__k" data-lang-en>Data layer</div>
-          <div class="case-fact__k" data-lang-pt>Camada de dados</div>
-          <div class="case-fact__v" data-lang-en>File-based lake</div>
-          <div class="case-fact__v" data-lang-pt>Lake baseado em arquivos</div>
-          <div class="case-fact__note" data-lang-en>Idempotency and backfill driven by JSON manifests.</div>
-          <div class="case-fact__note" data-lang-pt>Idempotência e backfill conduzidos por manifests JSON.</div>
-        </div>
-        <div class="case-fact">
-          <div class="case-fact__k" data-lang-en>Decision surface</div>
-          <div class="case-fact__k" data-lang-pt>Camada de decisão</div>
-          <div class="case-fact__v" data-lang-en>Dashboard &amp; reports</div>
-          <div class="case-fact__v" data-lang-pt>Dashboard &amp; relatórios</div>
-          <div class="case-fact__note" data-lang-en>Internal Flask dashboard for positions and fund quotas; six report generators served on demand, with the daily ones pushed out automatically before market open.</div>
-          <div class="case-fact__note" data-lang-pt>Dashboard interno em Flask para posições e cotas; seis geradores de relatório servidos sob demanda, com os diários disparados automaticamente antes da abertura do mercado.</div>
-        </div>
+      <div class="glance__row">
+        <span class="glance__k" data-lang-en>Focus</span><span class="glance__k" data-lang-pt>Foco</span>
+        <span class="glance__v" data-lang-en>Data pipelines · credit-risk models · fixed-income pricing · quantitative research</span>
+        <span class="glance__v" data-lang-pt>Pipelines de dados · modelos de risco de crédito · precificação de renda fixa · pesquisa quantitativa</span>
       </div>
-        <div class="stack">
-          <b data-lang-en>Stack</b><b data-lang-pt>Stack</b>
-          <br>Python · Apache Airflow · Docker · Flask · scikit-learn · SHAP · Selenium · Linux
-        </div>
+      <div class="glance__row glance__row--minor">
+        <span class="glance__k" data-lang-en>Research</span><span class="glance__k" data-lang-pt>Pesquisa</span>
+        <span class="glance__v" data-lang-en>Paper in <strong><em>Scientific Reports</em></strong> on spatiotemporal Poisson processes with missing data.</span>
+        <span class="glance__v" data-lang-pt>Paper na <strong><em>Scientific Reports</em></strong> sobre processos de Poisson espaço-temporais com dados faltantes.</span>
+      </div>
+      <div class="glance__row">
+        <span class="glance__k" data-lang-en>Education</span><span class="glance__k" data-lang-pt>Formação</span>
+        <span class="glance__v" data-lang-en><strong>MSc</strong> Applied Mathematics &amp; Data Science (FGV EMAp) · <strong>BSc</strong> Economics (FGV EPGE).</span>
+        <span class="glance__v" data-lang-pt><strong>Mestrado</strong> em Matemática Aplicada &amp; Ciência de Dados (FGV EMAp) · <strong>Bacharelado</strong> em Economia (FGV EPGE).</span>
+      </div>
+      <div class="glance__row glance__row--minor">
+        <span class="glance__k">Stack</span>
+        <span class="glance__v glance__v--chips">
+          <span class="chip">Python</span><span class="chip">SQL</span><span class="chip">R</span><span class="chip">Airflow</span><span class="chip">Docker</span><span class="chip">Flask</span><span class="chip">scikit-learn</span><span class="chip">pandas</span><span class="chip">Linux</span>
+        </span>
+      </div>
+      <div class="glance__row glance__row--minor">
+        <span class="glance__k" data-lang-en>Languages</span><span class="glance__k" data-lang-pt>Idiomas</span>
+        <span class="glance__v" data-lang-en>Portuguese · English (fluent) · Japanese (advanced) · Spanish (intermediate)</span>
+        <span class="glance__v" data-lang-pt>Português · Inglês (fluente) · Japonês (avançado) · Espanhol (intermediário)</span>
       </div>
     </div>
   </section>
 
   <!-- SELECTED WORK -->
-  <section class="section wrap" data-screen-label="04 Selected">
+  <section class="section wrap" id="selected" data-screen-label="03 Selected">
     <div class="section__head">
       <h2 class="section__title" data-lang-en>Selected work</h2>
       <h2 class="section__title" data-lang-pt>Trabalhos selecionados</h2>
@@ -219,7 +144,7 @@
 
     <div class="selected">
       <article class="selected__item">
-        <a href="production.html#sub-01" class="cover" aria-label="Data Infrastructure"></a>
+        <a href="production.html#sub-01" class="cover"><span class="sr-only" data-lang-en>Pipeline Orchestration</span><span class="sr-only" data-lang-pt>Orquestração de Pipelines</span></a>
         <div class="selected__head">
           <span class="selected__num">01.</span>
           <span class="tag production" data-lang-en>Production</span><span class="tag production" data-lang-pt>Produção</span>
@@ -232,22 +157,9 @@
       </article>
 
       <article class="selected__item">
-        <a href="production.html#sub-02" class="cover" aria-label="Data layer and idempotency"></a>
+        <a href="production.html#sub-05" class="cover"><span class="sr-only" data-lang-en>Credit Risk · ML &amp; Survival Analysis</span><span class="sr-only" data-lang-pt>Risco de Crédito · ML &amp; Análise de Sobrevivência</span></a>
         <div class="selected__head">
           <span class="selected__num">02.</span>
-          <span class="tag production" data-lang-en>Production</span><span class="tag production" data-lang-pt>Produção</span>
-        </div>
-        <h3 class="selected__title" data-lang-en>Data Layer &amp; Idempotency</h3>
-        <h3 class="selected__title" data-lang-pt>Camada de Dados &amp; Idempotência</h3>
-        <p class="selected__desc" data-lang-en>A lightweight, immutable file-based data lake tracked via JSON manifests, designed for full backfill idempotency and strict sanity checks against known totals.</p>
-        <p class="selected__desc" data-lang-pt>Um data lake baseado em arquivos, leve e imutável, rastreado por manifests JSON, projetado para idempotência total de backfill e checagens de sanidade estritas contra totais conhecidos.</p>
-        <div class="selected__stack">Python · pandas · JSON manifests · Airflow</div>
-      </article>
-
-      <article class="selected__item">
-        <a href="production.html#sub-05" class="cover" aria-label="Credit Risk ML"></a>
-        <div class="selected__head">
-          <span class="selected__num">03.</span>
           <span class="tag production" data-lang-en>Production</span><span class="tag production" data-lang-pt>Produção</span>
         </div>
         <h3 class="selected__title" data-lang-en>Credit Risk · ML &amp; Survival Analysis</h3>
@@ -257,19 +169,45 @@
         <div class="selected__stack">Python · LightGBM · lifelines · SHAP · Optuna</div>
       </article>
 
-      <article class="selected__item" id="wildcard-slot">
+      <article class="selected__item">
+        <a href="publications.html" class="cover"><span class="sr-only" data-lang-en>Spatiotemporal Poisson Processes</span><span class="sr-only" data-lang-pt>Processos de Poisson Espaço-Temporais</span></a>
         <div class="selected__head">
-          <span class="selected__num">04.</span>
-          <span class="tag research">Research</span>
+          <span class="selected__num">03.</span>
+          <span class="tag research" data-lang-en>Research</span><span class="tag research" data-lang-pt>Pesquisa</span>
         </div>
         <h3 class="selected__title" data-lang-en>Spatiotemporal Poisson Processes</h3>
         <h3 class="selected__title" data-lang-pt>Processos de Poisson Espaço-Temporais</h3>
         <p class="selected__desc" data-lang-en>MSc research on parameter estimation when location data is incomplete: a likelihood that respects what you actually observe. Published in <em>Scientific Reports.</em></p>
         <p class="selected__desc" data-lang-pt>Pesquisa de mestrado sobre estimação quando dados de localização estão incompletos: uma verossimilhança que respeita o que de fato se observa. Publicada na <em>Scientific Reports.</em></p>
         <div class="selected__stack">R · Maximum Likelihood · Stochastic Processes</div>
-        <a href="publications.html" class="cover" aria-label="Nature paper"></a>
+      </article>
+
+      <article class="selected__item">
+        <a href="project-prisma.html" class="cover"><span class="sr-only">Prisma</span></a>
+        <div class="selected__head">
+          <span class="selected__num">04.</span>
+          <span class="tag open" data-lang-en>Open source</span><span class="tag open" data-lang-pt>Open source</span>
+        </div>
+        <h3 class="selected__title">Prisma</h3>
+        <p class="selected__desc" data-lang-en>Combinatorial-optimization playground built on a paper co-authored with Victor Hugo Nascimento (FGV): greedy max-coverage, simulated annealing, and Monte Carlo, all client-side. Applied here to Brazilian lotteries.</p>
+        <p class="selected__desc" data-lang-pt>Playground de otimização combinatória com base num artigo escrito com Victor Hugo Nascimento (FGV): greedy max-coverage, simulated annealing e Monte Carlo, tudo client-side. Aplicado aqui a loterias brasileiras.</p>
+        <div class="selected__stack">React · TypeScript · Vite · Web Worker</div>
       </article>
     </div>
+  </section>
+
+  <!-- RECENT WORK (data lives in recent-work.js) -->
+  <section class="section wrap" id="recent" data-screen-label="04 Recent work">
+    <div class="section__head">
+      <h2 class="section__title" data-lang-en>Recent work</h2>
+      <h2 class="section__title" data-lang-pt>Trabalhos recentes</h2>
+      <a href="https://github.com/Andrade020?tab=repositories" target="_blank" rel="noopener" class="section-aside" data-lang-en>more on GitHub ↗</a>
+      <a href="https://github.com/Andrade020?tab=repositories" target="_blank" rel="noopener" class="section-aside" data-lang-pt>mais no GitHub ↗</a>
+    </div>
+    <ol class="recent-work" id="recent-work"></ol>
+    <noscript>
+      <p class="rw__noscript"><a href="https://github.com/Andrade020?tab=repositories" data-lang-en>See my latest work on GitHub →</a><a href="https://github.com/Andrade020?tab=repositories" data-lang-pt>Veja meus trabalhos mais recentes no GitHub →</a></p>
+    </noscript>
   </section>
 
   <!-- BACKGROUND -->
@@ -327,82 +265,6 @@
     </div>
   </section>
 
-  <!-- SKILLS -->
-  <section class="section wrap" data-screen-label="06 Skills">
-    <div class="section__head">
-      <h2 class="section__title" data-lang-en>Toolbox</h2>
-      <h2 class="section__title" data-lang-pt>Ferramental</h2>
-    </div>
-    <div class="skills">
-      <div class="skill">
-        <h4 data-lang-en>Programming</h4><h4 data-lang-pt>Programação</h4>
-        <p>Python · SQL · R · Bash</p>
-      </div>
-      <div class="skill">
-        <h4 data-lang-en>Data engineering</h4><h4 data-lang-pt>Engenharia de dados</h4>
-        <p>Apache Airflow · ETL/ELT · Selenium · web scraping · REST/GraphQL clients</p>
-      </div>
-      <div class="skill">
-        <h4 data-lang-en>ML &amp; analytics</h4><h4 data-lang-pt>ML &amp; análise</h4>
-        <p>scikit-learn · pandas · NumPy · SHAP · statsmodels</p>
-      </div>
-      <div class="skill">
-        <h4 data-lang-en>Infrastructure</h4><h4 data-lang-pt>Infraestrutura</h4>
-        <p>Linux · Docker · Git · GitHub · Flask · PostgreSQL</p>
-      </div>
-      <div class="skill">
-        <h4 data-lang-en>Finance domain</h4><h4 data-lang-pt>Domínio financeiro</h4>
-        <p>FIDCs · Credit risk · Fixed income · Stress testing · B3 conventions · ANBIMA</p>
-      </div>
-      <div class="skill">
-        <h4 data-lang-en>Languages</h4><h4 data-lang-pt>Idiomas</h4>
-        <p data-lang-en>Portuguese · English (fluent) · Japanese (advanced) · Spanish (intermediate)</p>
-        <p data-lang-pt>Português · Inglês (fluente) · Japonês (avançado) · Espanhol (intermediário)</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- RECENT -->
-  <section class="section wrap" data-screen-label="07 Recent">
-    <div class="section__head">
-      <h2 class="section__title" data-lang-en>Recent</h2>
-      <h2 class="section__title" data-lang-pt>Recente</h2>
-    </div>
-    <div class="recent">
-      <div class="recent-row">
-        <span class="when">May 2026</span>
-        <span class="what">
-          <span data-lang-en>Paper published in <em>Scientific Reports.</em></span>
-          <span data-lang-pt>Paper publicado na <em>Scientific Reports.</em></span>
-        </span>
-        <a href="publications.html" class="go">→</a>
-      </div>
-      <div class="recent-row">
-        <span class="when">Jan 2026</span>
-        <span class="what">
-          <span data-lang-en>Open source: <em>ludami, Krvo, EyeZen, Local_LLM.</em></span>
-          <span data-lang-pt>Open source: <em>ludami, Krvo, EyeZen, Local_LLM.</em></span>
-        </span>
-        <a href="projects.html" class="go">→</a>
-      </div>
-      <div class="recent-row">
-        <span class="when">Aug 2025</span>
-        <span class="what">
-          <span data-lang-en><em>AnotaNiverWeb</em> PWA shipped.</span>
-          <span data-lang-pt><em>AnotaNiverWeb</em> PWA lançado.</span>
-        </span>
-        <a href="project-anotaniverweb.html" class="go">→</a>
-      </div>
-      <div class="recent-row">
-        <span class="when">Feb 2025</span>
-        <span class="what">
-          <span data-lang-en>Joined Porto Real Asset.</span>
-          <span data-lang-pt>Entrei na Porto Real Asset.</span>
-        </span>
-        <span class="go"></span>
-      </div>
-    </div>
-  </section>
 </main>
 
 <!-- FOOTER -->
@@ -442,16 +304,10 @@
   </div>
 </footer>
 
-<div id="tweaks-mount"></div>
-
 <script src="app.js"></script>
-<script src="arch-diagram.js"></script>
+<script src="recent-work.js"></script>
 
-<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
-<script type="text/babel" src="tweaks-panel.jsx"></script>
-<script type="text/babel" src="tweaks-app.jsx"></script>
 
 </body>
 </html>
+
