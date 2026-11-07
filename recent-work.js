@@ -20,6 +20,19 @@
  */
 const RECENT_WORK = [
   {
+    date: '2026-11-06',
+    kind: 'updated',
+    title: { en: 'MyCSTheories: computation theory, tested', pt: 'MyCSTheories: teoria da computação, testada' },
+    summary: {
+      en: 'A Turing machine simulator, a Brainfuck interpreter, cellular automata, stable summation and option pricing three ways (Black-Scholes, binomial tree, Monte Carlo) with measured convergence rates, all covered by a 25-test suite and CI.',
+      pt: 'Um simulador de Máquina de Turing, um interpretador de Brainfuck, autômatos celulares, soma numericamente estável e precificação de opções de três formas (Black-Scholes, árvore binomial, Monte Carlo) com taxas de convergência medidas, tudo coberto por 25 testes e CI.',
+    },
+    links: [
+      { href: 'https://github.com/Andrade020/MyCSTheories', en: 'View code', pt: 'Ver código' },
+      { href: 'https://gist.github.com/Andrade020/769b3bb83b5fb7fe2e0bca21a124b413', en: 'Option pricing gist', pt: 'Gist de precificação' },
+    ],
+  },
+  {
     date: '2026-10-28',
     kind: 'trailer',
     title: { en: 'Arrakis Atlas', pt: 'Atlas de Arrakis' },
